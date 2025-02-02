@@ -1,17 +1,16 @@
-"use client";
-
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   UserRegistrationFormSchema,
   type UserRegFormSchemaType,
-} from "./components/FormSchema";
+} from "@/components/Auth/FormSchema";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { toast } from "react-toastify";
 import {
   Card,
   CardContent,
@@ -21,9 +20,15 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import "animate.css";
+import axios from "axios";
+import { setUser } from "@/redux/slices/user";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { GoogleButton } from "@/components/Auth/GoogleButton";
 
 export default function UserRegister() {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const {
     register,
     handleSubmit,
@@ -37,10 +42,38 @@ export default function UserRegister() {
     data: UserRegFormSchemaType
   ) => {
     setIsSubmitting(true);
-    console.log(data, " submit user register");
-    // Here you would typically send the data to your API
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulating API call
-    setIsSubmitting(false);
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/user/auth/signup`,
+        data
+      );
+
+      if (response.status === 201) {
+        dispatch(setUser(response.data.user));
+        navigate("/");
+        toast.success("Signed in successfully", {
+          position: "top-center",
+          theme: "light",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleGoogleSignUp = async () => {
+    try {
+      const redirectUrl = "http://localhost:5173/user/auth/user-details";
+      const userType = "user";
+
+      window.location.href = `http://localhost:8000/api/auth/google?redirectUrl=${encodeURIComponent(
+        redirectUrl
+      )}&userType=${encodeURIComponent(userType)}`;
+    } catch (error: any) {
+      console.log(error);
+    }
   };
 
   return (
@@ -143,17 +176,17 @@ export default function UserRegister() {
               </div>
 
               <div className="space-y-2 sm:col-span-2">
-                <Label htmlFor="securityQuestion">Security Question</Label>
+                <Label htmlFor="answer">Security Question</Label>
                 <Input
-                  id="securityQuestion"
-                  {...register("securityQuestion", {
+                  id="answer"
+                  {...register("answer", {
                     required: "Security question is required",
                   })}
                   placeholder="What is your favorite word?"
                 />
-                {errors.securityQuestion && (
+                {errors.answer && (
                   <p className="text-red-500 text-sm">
-                    {errors.securityQuestion.message}
+                    {errors.answer.message}
                   </p>
                 )}
               </div>
@@ -177,6 +210,22 @@ export default function UserRegister() {
               {isSubmitting ? "Signing Up..." : "Sign Up"}
             </Button>
           </form>
+
+          <div className="relative my-3">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          <GoogleButton
+            onClick={handleGoogleSignUp}
+            text="Sign Up with Google"
+          />
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <p className="text-center text-sm">

@@ -1,5 +1,5 @@
 import { serviceContain } from "@/assets/assets";
-import AllProducts from "@/components/AllProducts";
+import AllProducts from "@/components/Home/AllProducts";
 import 'animate.css';
 
 const Home = () => {

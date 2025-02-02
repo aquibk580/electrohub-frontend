@@ -1,62 +1,60 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Loader2, Star } from 'lucide-react';
+import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
+import { Loader2, Star } from "lucide-react"
 
 interface Product {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  image: string;
-  category: string;
+  id: number
+  title: string
+  price: number
+  description: string
+  image: string
+  category: string
 }
 
 const AllProducts = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [category, setCategory] = useState<string>('All');
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+  const [category, setCategory] = useState<string>("All")
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      setLoading(true)
       try {
-        const response = await fetch('https://fakestoreapi.in/api/products');
-        const result = await response.json();
-        setProducts(result.products);
-        console.log(result.products);
+        const response = await fetch("https://fakestoreapi.in/api/products")
+        const result = await response.json()
+        setProducts(result.products)
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
-      setLoading(false);
-    };
+      setLoading(false)
+    }
 
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
-    );
+    )
   }
 
   // Filter products based on the selected category
   const filteredProducts =
-    category === 'All' ? products : products.filter((p) => p.category === category.toLowerCase());
-
+    category.toLowerCase() === "all"
+      ? products
+      : products.filter((p) => p.category.toLowerCase() === category.toLowerCase())
 
   return (
     <div className="container mx-auto px-4 sm:px-8 md:px-16 lg:px-32 py-8">
-      <h1 className="text-3xl font-bold mb-6 text-center sm:text-left">
-        Our Products
-      </h1>
+      <h1 className="text-3xl font-bold mb-6 text-center sm:text-left">Our Products</h1>
       <ul className="mt-2 flex p-2 gap-2">
-        {['All', 'Audio', 'Tv', 'Gaming', 'Mobile'].map((item, index) => (
+        {["All", "Audio", "Tv", "Gaming", "Mobile"].map((item, index) => (
           <li
             onClick={() => setCategory(item)}
             className={`px-2 py-1.5 cursor-pointer border rounded-full w-[80px] text-center ${
-              category === item ? 'bg-green-900 text-white' : ''
+              category === item ? "bg-green-900 text-white" : ""
             }`}
             key={index}
           >
@@ -70,7 +68,7 @@ const AllProducts = () => {
             <Link to={`/product/${product.id}`}>
               <div className="w-full bg-[#9797970f] p-2 rounded-lg overflow-hidden aspect-square">
                 <img
-                  src={product.image}
+                  src={product.image || "/placeholder.svg"}
                   alt={product.title}
                   className="object-contain w-full mix-blend-multiply h-full hover:scale-110 transition-transform duration-300"
                 />
@@ -82,15 +80,13 @@ const AllProducts = () => {
                   {product.title}
                 </h2>
               </Link>
-              <p className="text-gray-600 mb-2 text-sm line-clamp-1">
-                {product.description}
-              </p>
+              <p className="text-gray-600 mb-2 text-sm line-clamp-1">{product.description}</p>
               <div className="flex">
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
                     className="fill-green-700 text-green-700 text-xs"
-                    style={{ width: '14px', height: '14px' }}
+                    style={{ width: "14px", height: "14px" }}
                   />
                 ))}
               </div>
@@ -106,7 +102,8 @@ const AllProducts = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AllProducts;
+export default AllProducts
+

@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   SellerRegistrationFormSchema,
   type SellerRegFormSchemaType,
-} from "./components/FormSchema";
+} from "@/components/Auth/FormSchema";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -22,8 +22,14 @@ import {
 } from "@/components/ui/card";
 import "animate.css";
 import { assets } from "@/assets/assets";
+import axios from "../../lib/axios";
+import { setSeller } from "@/redux/slices/seller";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { GoogleButton } from "@/components/Auth/GoogleButton";
 
 export default function SellerRegister() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
     register,
@@ -45,18 +51,45 @@ export default function SellerRegister() {
   const onSubmit: SubmitHandler<SellerRegFormSchemaType> = async (data) => {
     setIsSubmitting(true);
     const formData = new FormData();
-    formData.append("file", data.pfp as File);
+    formData.append("pfp", data.pfp as File);
     formData.append("name", data.companyName);
     formData.append("email", data.email);
     formData.append("password", data.password);
     formData.append("phone", data.phone);
     formData.append("address", data.companyAddress);
     formData.append("answer", data.securityQuestion);
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/seller/auth/signup`,
+        data
+      );
 
-    console.log([...formData.entries()], " submit seller register");
-    // Here you would typically send the data to your API
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulating API call
-    setIsSubmitting(false);
+      if (response.status === 201) {
+        dispatch(setSeller(response.data.seller));
+        navigate("/");
+        toast.success("Signed in successfully", {
+          position: "top-center",
+          theme: "light",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleGoogleSignUp = async () => {
+    try {
+      const redirectUrl = "http://localhost:5173/seller/auth/seller-details";
+      const userType = "seller";
+
+      window.location.href = `http://localhost:8000/api/auth/google?redirectUrl=${encodeURIComponent(
+        redirectUrl
+      )}&userType=${encodeURIComponent(userType)}`;
+    } catch (error: any) {
+      console.log(error);
+    }
   };
 
   return (
@@ -210,6 +243,21 @@ export default function SellerRegister() {
               {isSubmitting ? "Signing Up..." : "Sign Up"}
             </Button>
           </form>
+          <div className="relative my-3">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          <GoogleButton
+            onClick={handleGoogleSignUp}
+            text="Sign Up with Google"
+          />
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <p className="text-center text-sm">

@@ -1,8 +1,21 @@
+import { RootState } from "@/redux/store";
 import { ArrowLeft } from "lucide-react";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
+  const navigate = useNavigate();
+  const isAuthenticatedUser = useSelector(
+    (state: RootState) => state.user.isAuthenticated
+  );
+
+  useEffect(() => {
+    if (isAuthenticatedUser) {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
       <nav>

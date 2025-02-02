@@ -1,13 +1,13 @@
-"use client";
-
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   LoginFormSchema,
   type LoginFormSchemaType,
-} from "./components/FormSchema";
+} from "@/components/Auth/FormSchema";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -20,8 +20,13 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import "animate.css";
+import axios from "../../lib/axios";
+import { toast } from "react-toastify";
+import { setUser } from "@/redux/slices/user";
+import { GoogleButton } from "@/components/Auth/GoogleButton";
 
 export default function UserLogin() {
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const {
     register,
@@ -34,10 +39,37 @@ export default function UserLogin() {
 
   const onSubmit: SubmitHandler<LoginFormSchemaType> = async (data) => {
     setIsSubmitting(true);
-    console.log(data);
-    // Here you would typically send the data to your API
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulating API call
-    setIsSubmitting(false);
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/user/auth/signin",
+        data
+      );
+      if (response.status === 200) {
+        dispatch(setUser(response.data.user));
+        navigate("/");
+        toast.success("Signed in successfully", {
+          position: "top-center",
+          theme: "light",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const redirectUrl = "http://localhost:5173/";
+      const userType = "user";
+
+      window.location.href = `http://localhost:8000/api/auth/google?redirectUrl=${encodeURIComponent(
+        redirectUrl
+      )}&userType=${encodeURIComponent(userType)}`;
+    } catch (error: any) {
+      console.log(error);
+    }
   };
 
   return (
@@ -111,6 +143,22 @@ export default function UserLogin() {
               {isSubmitting ? "Signing In..." : "Sign In"}
             </Button>
           </form>
+
+          <div className="relative my-3">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          <GoogleButton
+            onClick={handleGoogleSignIn}
+            text="Sign In with Google"
+          />
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <p className="text-center text-sm font-medium">

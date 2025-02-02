@@ -1,38 +1,38 @@
-// import React from 'react'
-import { Route, Routes, useLocation } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
+import { Route, Routes } from "react-router-dom";
+import Home from "./pages/Home/Home";
 import UserLogin from "./pages/Auth/UserLogin";
 import SellerLogin from "./pages/Auth/SellerLogin";
-import Cart from "./pages/Cart";
-import Footer from "./components/Footer";
+import Cart from "./pages/Cart/Cart";
 import UserRegister from "./pages/Auth/UserRegister";
 import SellerRegister from "./pages/Auth/SellerRegister";
-import ProductDisplay from "./pages/ProductDisplay";
-import AuthLayout from "./pages/Auth/components/AuthLayout";
+import ProductDisplay from "./pages/Product/Product";
+import AuthLayout from "@/pages/Auth/AuthLayout";
 import SellerForgotPassword from "./pages/Auth/SellerForgotPassword";
 import UserForgotPassword from "./pages/Auth/UserForgotPassword";
+import UserLayout from "./pages/Home/UserLayout";
+import { ToastContainer } from "react-toastify";
+import UserDetails from "./pages/Auth/UserDetails";
+import SellerLayout from "./pages/Seller/SellerLayout";
+import ProductList from "./pages/Seller/ProductList";
+import AddProduct from "./pages/Seller/AddProduct";
+import Dashboard from "./pages/Seller/Dashboard";
+import Profile from "./pages/Seller/Profile";
+import SellerDetails from "./pages/Auth/SellerDetails";
 
 const App = () => {
-  const location = useLocation();
-
-  // Define the routes where Navbar and Footer should be hidden
-  const hiddenPaths: string[] = [
-    "/user/auth/login",
-    "/seller/auth/login",
-    "/user/auth/register",
-    "/seller/auth/register",
-    "/seller/auth/forgot-password",
-    "/user/auth/forgot-password",
-  ];
-  const shouldShowLayout = !hiddenPaths.includes(location.pathname);
-
   return (
     <>
-      {shouldShowLayout && <Navbar />}
+      <ToastContainer />
 
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={
+            <UserLayout>
+              <Home />
+            </UserLayout>
+          }
+        />
         <Route path="/user">
           <Route path="auth">
             <Route
@@ -59,6 +59,15 @@ const App = () => {
                 </AuthLayout>
               }
             />
+            <Route
+              path="user-details"
+              element={
+                <AuthLayout>
+                  <UserDetails />
+                </AuthLayout>
+              }
+            />
+           
           </Route>
         </Route>
 
@@ -88,12 +97,53 @@ const App = () => {
                 </AuthLayout>
               }
             />
+             <Route
+              path="seller-details"
+              element={
+                <AuthLayout>
+                  <SellerDetails />
+                </AuthLayout>
+              }
+            />
+          </Route>
+          <Route path="dashboard">
+            <Route
+              index
+              element={
+                <SellerLayout>
+                  <Dashboard />
+                </SellerLayout>
+              }
+            />
+            <Route
+              path="products"
+              element={
+                <SellerLayout>
+                  <ProductList />
+                </SellerLayout>
+              }
+            />
+            <Route
+              path="add-product"
+              element={
+                <SellerLayout>
+                  <AddProduct />
+                </SellerLayout>
+              }
+            />
+            <Route
+              path="profile"
+              element={
+                <SellerLayout>
+                  <Profile />
+                </SellerLayout>
+              }
+            />
           </Route>
         </Route>
         <Route path="/cart" element={<Cart />} />
         <Route path="/product/:id" element={<ProductDisplay />} />
       </Routes>
-      {shouldShowLayout && <Footer />}
     </>
   );
 };
