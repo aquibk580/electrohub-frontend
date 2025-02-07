@@ -6,7 +6,7 @@ import { ShoppingCart, Gift, HelpCircle } from 'lucide-react'
 export default function Footer() {
   return (
     <footer className="w-full border-t bg-white pt-16 pb-8 px-4">
-      <div className="container mx-auto px-4">
+      <div className="px-4">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           {/* Logo and Description Section */}

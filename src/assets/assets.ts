@@ -17,6 +17,9 @@ import service1 from "./service1.png";
 import service2 from "./service2.png";
 import service3 from "./service3.png";
 import GoogleLogo from "./google.png";
+import wishList from "./wishlist.png";
+import CartEmpty from "./CartEmpty.png";
+import BannerLogo from "./banner-logo.png";
 
 // all the icons and image
 export const assets = {
@@ -33,10 +36,10 @@ export const assets = {
   monitor,
   watch,
   earbuds,
-};
-
-export const icons = {
   GoogleLogo,
+  wishList,
+  CartEmpty,
+  BannerLogo
 };
 
 //services to help you

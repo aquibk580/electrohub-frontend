@@ -1,10 +1,9 @@
 import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import React, { useEffect } from "react";
-import { AppDispatch, RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
+import React from "react";
+import { RootState } from "@/redux/store";
 import { assets } from "../../assets/assets";
-import axios from "../../lib/axios";
 
 import {
   NavigationMenu,
@@ -16,50 +15,9 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import UserProfileButton from "./UserProfileButton";
-import { setPfp, setUser } from "@/redux/slices/user";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/auth/user-data"
-        );
-
-        if (response.status === 200 && response.data?.authorized) {
-          const user = response.data.user;
-
-          dispatch(
-            setUser({
-              id: user.id,
-              email: user.email,
-              name: user.name,
-              address: user.address,
-              phone: user.phone,
-              answer: user.answer,
-            })
-          );
-          dispatch(setPfp(user.pfp));
-        }
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          if (error.response?.status === 401) {
-            console.warn("User is unauthorized.");
-          } else if (error.response?.status === 404) {
-            console.warn("User not found.");
-          } else {
-            console.error("Error fetching user data:", error);
-          }
-        }
-      }
-    };
-
-    fetchUserData();
-  }, []);
-
   const user = useSelector((state: RootState) => state.user.user);
   const pfp = useSelector((state: RootState) => state.user.pfp);
   const isAuthenticated = useSelector(

@@ -68,7 +68,7 @@ const ForgetPasswordForm = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="answer">Security quetion</Label>
+              <Label htmlFor="answer">Security question</Label>
               <Input
                 id="answer"
                 type="text"

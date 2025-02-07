@@ -13,6 +13,10 @@ export default function SellerLayout({
 }) {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const seller = useSelector((state: RootState) => state.seller.seller);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.seller.isAuthenticated
+  );
   useEffect(() => {
     const getSellerData = async () => {
       try {
@@ -36,22 +40,21 @@ export default function SellerLayout({
         console.log(error);
       }
     };
-    getSellerData();
+    if (!isAuthenticated) {
+      getSellerData();
+    }
   }, []);
 
-  const seller = useSelector((state: RootState) => state.seller.seller);
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.seller.isAuthenticated
-  );
   if (!isAuthenticated) {
-    return navigate("/");
+    navigate("/");
   }
+  
   return (
     <div className="flex min-h">
       <MainNav />
       <div className="flex-1">
         <header className="bg-[#004D00] text-white p-[0.9rem] flex justify-between items-center">
-          <h1 className="text-xl font-semibold">{seller!.name}'s Dashboard</h1>
+          <h1 className="text-xl font-semibold">{seller?.name}'s Dashboard</h1>
         </header>
         <main className="p-6">{children}</main>
       </div>

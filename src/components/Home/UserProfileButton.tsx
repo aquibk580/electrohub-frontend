@@ -13,6 +13,7 @@ import { clearUser } from "@/redux/slices/user";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 interface UserProfileButtonProps {
   name: string;
@@ -35,6 +36,8 @@ export default function UserProfileButton({
   name,
   imageUrl,
 }: UserProfileButtonProps) {
+  console.log(imageUrl);
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const initials = name
     .split(" ")
@@ -46,15 +49,14 @@ export default function UserProfileButton({
 
   const handleLogOut = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8000/api/auth/logout"
-      );
+      const response = await axios.get("http://localhost:8000/api/auth/logout");
       if (response.status === 200) {
         dispatch(clearUser());
         toast.success("Logged out successfully", {
           position: "top-center",
           theme: "light",
         });
+        navigate("/");
       }
     } catch (error: any) {
       console.log(error);
@@ -64,10 +66,10 @@ export default function UserProfileButton({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="flex items-center gap-2 px-4 py-2">
+        <Button variant="ghost" className="flex items-center gap-2 px-4 py-2 focus-visible:ring-0 hover:bg-white">
           <Avatar>
-            <AvatarImage src={imageUrl} alt="User" />
-            <AvatarFallback className={`${bgColor} text-white font-bold`}>
+            <AvatarImage src={imageUrl} alt="User" className="w-full h-full" />
+            <AvatarFallback className={`${bgColor} text-white font-extrabold`}>
               {initials}
             </AvatarFallback>
           </Avatar>
@@ -75,13 +77,22 @@ export default function UserProfileButton({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+        <DropdownMenuItem
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => navigate("/user/profile")}
+        >
           <User size={16} /> Profile
         </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+        <DropdownMenuItem
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => navigate("/user/cart")}
+        >
           <ShoppingCart size={16} /> Cart
         </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+        <DropdownMenuItem
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => navigate("/user/wishlist")}
+        >
           <Heart size={16} /> Wishlist
         </DropdownMenuItem>
 
