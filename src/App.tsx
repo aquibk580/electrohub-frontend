@@ -24,6 +24,7 @@ import UserLayout from "./pages/User/UserLayout";
 import Reviews from "./pages/User/Review";
 import UserOrders from "./pages/User/Order";
 import OrderDetails from "./pages/User/OrderDetails";
+import MobileSideBar from "./components/Home/MobileSidebar";
 
 const App = () => {
   return (

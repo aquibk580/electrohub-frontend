@@ -115,8 +115,10 @@ const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
       <div className="flex items-center gap-4 bg-white p-4 shadow-md rounded-lg">
         <div className="h-12 w-12 flex items-center justify-center rounded-full overflow-hidden">
           <Avatar>
-            <AvatarImage src={"https://lh3.googleusercontent.com/a/ACg8ocKRrEVr0zzWIOks0jQAXv4nDSSXjPaOseteXJ5_HQDlmRjO3SeX=s96-c"} alt="User" className="rounded-full" />
-            <AvatarFallback className={`${bgColor} text-white font-bold rounded-full px-3 py-[0.9rem]`}>
+            <AvatarImage src={pfp!} alt="User" className="rounded-full" />
+            <AvatarFallback
+              className={`${bgColor} text-white font-bold rounded-full px-3 py-[0.9rem]`}
+            >
               {initials}
             </AvatarFallback>
           </Avatar>

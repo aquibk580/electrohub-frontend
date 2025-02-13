@@ -36,21 +36,21 @@ const Cart = () => {
       inStock: true,
     },
     {
-      id: 3,
+      id: 4,
       name: "Samsung s24 ultra 64GB 256 GB Storage Purple",
       price: 24,
       quantity: 1,
       inStock: true,
     },
     {
-      id: 3,
+      id: 5,
       name: "Samsung s24 ultra 64GB 256 GB Storage Purple",
       price: 24,
       quantity: 1,
       inStock: true,
     },
     {
-      id: 3,
+      id: 6,
       name: "Samsung s24 ultra 64GB 256 GB Storage Purple",
       price: 24,
       quantity: 1,
@@ -94,6 +94,7 @@ const Cart = () => {
                         type="number"
                         value={item.quantity}
                         className="w-12 text-center border-0"
+                        onChange={() => {}}
                       />
                       <Button variant="ghost" size="sm">
                         <Plus className="h-4 w-4" />
@@ -131,7 +132,7 @@ const Cart = () => {
               <span>Delivery Charges</span>
               <span>+$5</span>
             </div>
-            <div className="flex justify-between items-center font-bold text-lg p-2 border-t bg-gray-100">
+            <div className="flex justify-between items-center font-bold text-lg py-2 px-1 border-t bg-gray-100 rounded-md">
               <span>Grand Total</span>
               <span>$214</span>
             </div>

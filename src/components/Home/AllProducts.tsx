@@ -47,9 +47,9 @@ const AllProducts = () => {
       : products.filter((p) => p.category.toLowerCase() === category.toLowerCase())
 
   return (
-    <div className="container mx-auto px-4 sm:px-8 md:px-16 lg:px-32 py-8">
+    <div className="sm:px-5 md:px-10 lg:px-20 py-8">
       <h1 className="text-3xl font-bold mb-6 text-center sm:text-left">Our Products</h1>
-      <ul className="mt-2 flex p-2 gap-2">
+      <ul className="mt-2 flex p-2 gap-2 justify-center sm:justify-start">
         {["All", "Audio", "Tv", "Gaming", "Mobile"].map((item, index) => (
           <li
             onClick={() => setCategory(item)}

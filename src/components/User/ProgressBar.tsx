@@ -65,7 +65,7 @@ const OrderProgress = ({ step }: { step: number }) => {
                   ? "border-green-500 bg-green-500 text-white"
                   : "border-gray-300 bg-white text-gray-400"
               )}
-              initial={{ scale: 0.5, opacity: 0 }}
+            initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{
                 duration: 1.5,

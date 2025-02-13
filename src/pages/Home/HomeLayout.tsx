@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setPfp, setUser } from "@/redux/slices/user";
 import axios from "../../lib/axios";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch<AppDispatch>();

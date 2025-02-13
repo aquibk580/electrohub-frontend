@@ -20,7 +20,7 @@ interface UserProfileButtonProps {
   imageUrl: string;
 }
 
-function getRandomColor() {
+export function getRandomColor() {
   const colors = [
     "bg-red-500",
     "bg-blue-500",
@@ -36,7 +36,6 @@ export default function UserProfileButton({
   name,
   imageUrl,
 }: UserProfileButtonProps) {
-  console.log(imageUrl);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const initials = name
@@ -66,14 +65,17 @@ export default function UserProfileButton({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="flex items-center gap-2 px-4 py-2 focus-visible:ring-0 hover:bg-white">
+        <Button
+          variant="ghost"
+          className="flex items-center gap-2 px-4 py-2 focus-visible:ring-0 hover:bg-white"
+        >
           <Avatar>
             <AvatarImage src={imageUrl} alt="User" className="w-full h-full" />
             <AvatarFallback className={`${bgColor} text-white font-extrabold`}>
               {initials}
             </AvatarFallback>
           </Avatar>
-          <span className="text-sm font-medium">{name}</span>
+          <span className="text-sm font-medium hidden lg:block">{name}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">

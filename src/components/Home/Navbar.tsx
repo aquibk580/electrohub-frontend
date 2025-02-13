@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import React from "react";
+import React, { useState } from "react";
 import { RootState } from "@/redux/store";
 import { assets } from "../../assets/assets";
 
@@ -15,8 +15,11 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import UserProfileButton from "./UserProfileButton";
+import { Menu } from "lucide-react";
+import MobileSideBar from "./MobileSidebar";
 
 const Navbar = () => {
+  const [showSidebar, setShowSidebar] = useState(false);
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user.user);
   const pfp = useSelector((state: RootState) => state.user.pfp);
@@ -75,16 +78,32 @@ const Navbar = () => {
 
   return (
     <header>
-      <div className="bg-green-950 text-white w-full items-start text-sm flex justify-between px-6 py-1 ">
+      <div className="bg-green-950 text-white w-full items-start text-sm lg:flex justify-between px-6 py-1 hidden ">
         <div className="flex items-center">
           <img className="w-4" src={assets.phone_icon} alt="" />
           <p>+91-987654321</p>
         </div>
         <p>Get 5% off on Selected Items | Shop now</p>
       </div>
-      <nav className=" w-ful border  flex justify-evenly px-12 py-4 font-medium items-center">
+      <nav className=" w-ful border flex justify-between lg:px-12 px-6 py-4 font-medium items-center">
+        <div
+          className={`fixed inset-0 bg-black bg-opacity-50 z-10 transition-opacity lg:hidden ${
+            showSidebar ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
+        >
+          <MobileSideBar
+            setShowSidebar={setShowSidebar}
+            showSidebar={showSidebar}
+          />
+        </div>
+
+        <Menu
+          className="lg:hidden"
+          size={32}
+          onClick={() => setShowSidebar(true)}
+        />
         <h1 className="font-semibold text-3xl">Electrohub</h1>
-        <NavigationMenu>
+        <NavigationMenu className="hidden lg:flex">
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuTrigger className="rounded-full">
@@ -94,10 +113,10 @@ const Navbar = () => {
                 <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                   <li className="row-span-3">
                     <NavigationMenuLink asChild>
-                      <a
+                      <Link
                         className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                        href="/"
-                      ></a>
+                        to="/"
+                      ></Link>
                     </NavigationMenuLink>
                   </li>
                   <ListItem href="/docs" title="Introduction">
@@ -148,24 +167,26 @@ const Navbar = () => {
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link to="/docs">
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Orders
-                </NavigationMenuLink>
-              </Link>
+              <NavigationMenuLink
+                href="/docs"
+                className={navigationMenuTriggerStyle()}
+              >
+                About Us
+              </NavigationMenuLink>
             </NavigationMenuItem>
 
             <NavigationMenuItem>
-              <Link to="/docs">
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  What's New
-                </NavigationMenuLink>
-              </Link>
+              <NavigationMenuLink
+                href="/docs"
+                className={navigationMenuTriggerStyle()}
+              >
+                Contact Us
+              </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
 
-        <form className="flex  items-center border px-3 py-2 rounded-full focus-within:border-green-600">
+        <form className="hidden lg:flex items-center border px-3 py-2 rounded-full focus-within:border-green-600">
           <input
             className="outline-none w-[400px] text-md"
             type="search"
@@ -182,8 +203,8 @@ const Navbar = () => {
               onClick={() => navigate("/user/auth/login")}
               className="flex gap-1 items-center  cursor-pointer hover:text-orange-600 "
             >
-              <img className="h-5" src={assets.account_icon} alt="" />
-              <p>Account</p>
+              <img className="lg:h-5 h-7" src={assets.account_icon} alt="" />
+              <p className="hidden lg:block">Account</p>
             </div>
           )}
         </div>
@@ -198,21 +219,19 @@ const ListItem = React.forwardRef<
 >(({ className, title, children, ...props }, ref) => {
   return (
     <li>
-      <NavigationMenuLink asChild>
-        <a
-          ref={ref}
-          className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
-          )}
-          {...props}
-        >
-          <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {children}
-          </p>
-        </a>
-      </NavigationMenuLink>
+      <span
+        ref={ref}
+        className={cn(
+          "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+          className
+        )}
+        {...props}
+      >
+        <div className="text-sm font-medium leading-none">{title}</div>
+        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+          {children}
+        </p>
+      </span>
     </li>
   );
 });
