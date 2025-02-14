@@ -41,7 +41,7 @@ export default function UserLogin() {
     setIsSubmitting(true);
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/user/auth/signin",
+        `${import.meta.env.VITE_API_URL}/api/user/auth/signin`,
         data
       );
       if (response.status === 200) {
@@ -61,10 +61,10 @@ export default function UserLogin() {
 
   const handleGoogleSignIn = async () => {
     try {
-      const redirectUrl = "http://localhost:5173/";
+      const redirectUrl = `${import.meta.env.VITE_FRONTEND_URL}/`;
       const userType = "user";
 
-      window.location.href = `http://localhost:8000/api/auth/google?redirectUrl=${encodeURIComponent(
+      window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google?redirectUrl=${encodeURIComponent(
         redirectUrl
       )}&userType=${encodeURIComponent(userType)}`;
     } catch (error: any) {
@@ -166,7 +166,7 @@ export default function UserLogin() {
             <Button
               variant="link"
               className="p-0 h-auto font-semibold text-green-700"
-              onClick={() => navigate("/user/auth/register")}
+              onClick={() => navigate("/user/auth/signup")}
             >
               Sign Up
             </Button>
@@ -176,7 +176,7 @@ export default function UserLogin() {
       <Button
         variant="outline"
         className="w-full shadow-md hover:shadow-lg transition-all font-semibold"
-        onClick={() => navigate("/seller/auth/login")}
+        onClick={() => navigate("/seller/auth/signin")}
       >
         Sign in to your Seller Account
       </Button>

@@ -60,13 +60,13 @@ export default function SellerRegister() {
     formData.append("answer", data.securityQuestion);
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/seller/auth/signup`,
+        `${import.meta.env.VITE_API_URL}/api/seller/auth/signup`,
         data
       );
 
       if (response.status === 201) {
         dispatch(setSeller(response.data.seller));
-        navigate("/");
+        navigate("/seller/dashboard");
         toast.success("Signed in successfully", {
           position: "top-center",
           theme: "light",
@@ -81,10 +81,14 @@ export default function SellerRegister() {
 
   const handleGoogleSignUp = async () => {
     try {
-      const redirectUrl = "http://localhost:5173/seller/auth/seller-details";
+      const redirectUrl = `${
+        import.meta.env.VITE_FRONTEND_URL
+      }/seller/auth/seller-details`;
       const userType = "seller";
 
-      window.location.href = `http://localhost:8000/api/auth/google?redirectUrl=${encodeURIComponent(
+      window.location.href = `${
+        import.meta.env.VITE_API_URL
+      }/api/auth/google?redirectUrl=${encodeURIComponent(
         redirectUrl
       )}&userType=${encodeURIComponent(userType)}`;
     } catch (error: any) {
@@ -265,7 +269,7 @@ export default function SellerRegister() {
             <Button
               variant="link"
               className="p-0 h-auto font-semibold text-green-700"
-              onClick={() => navigate("/seller/auth/login")}
+              onClick={() => navigate("/seller/auth/signin")}
             >
               Sign in
             </Button>
@@ -273,7 +277,7 @@ export default function SellerRegister() {
           <Button
             variant="outline"
             className="w-full shadow-md hover:shadow-lg transition-all font-semibold"
-            onClick={() => navigate("/user/auth/register")}
+            onClick={() => navigate("/user/auth/signup")}
           >
             Sign Up for a User Account
           </Button>

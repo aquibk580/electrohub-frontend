@@ -101,7 +101,7 @@ const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
 
   const initials = user?.name
     .split(" ")
-    .map((name) => name[0])
+    .map((name: string) => name[0])
     .join("")
     .slice(0, 2)
     .toUpperCase();

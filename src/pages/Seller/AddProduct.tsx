@@ -147,7 +147,7 @@ export default function AddProductForm() {
     const getAllCategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/categories"
+          `${import.meta.env.VITE_API_URL}/api/categories`
         );
         if (response.status === 200) {
           setCategories(response.data);

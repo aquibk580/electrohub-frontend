@@ -42,9 +42,6 @@ const ForgetPasswordForm = ({
           <CardTitle className="text-3xl font-extrabold text-center">
             Reset Password
           </CardTitle>
-          {/* <CardDescription className="text-center text-gray-800">
-            Sign in to your User Account
-          </CardDescription> */}
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -63,7 +60,9 @@ const ForgetPasswordForm = ({
                 placeholder="Email ID"
               />
               {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email.message}</p>
+                <p className="text-red-500 text-sm">
+                  {String(errors.email.message)}
+                </p>
               )}
             </div>
 
@@ -82,7 +81,9 @@ const ForgetPasswordForm = ({
                 placeholder="what is your favourite word?"
               />
               {errors.answer && (
-                <p className="text-red-500 text-sm">{errors.answer.message}</p>
+                <p className="text-red-500 text-sm">
+                  {String(errors.answer.message)}
+                </p>
               )}
             </div>
 
@@ -102,7 +103,7 @@ const ForgetPasswordForm = ({
               />
               {errors.password && (
                 <p className="text-red-500 text-sm">
-                  {errors.password.message}
+                  {String(errors.password.message)}
                 </p>
               )}
             </div>

@@ -44,7 +44,7 @@ export default function UserRegister() {
     setIsSubmitting(true);
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/user/auth/signup`,
+        `${import.meta.env.VITE_API_URL}/api/user/auth/signup`,
         data
       );
 
@@ -65,10 +65,10 @@ export default function UserRegister() {
 
   const handleGoogleSignUp = async () => {
     try {
-      const redirectUrl = "http://localhost:5173/user/auth/user-details";
+      const redirectUrl = `${import.meta.env.VITE_FRONTEND_URL}/user/auth/user-details`;
       const userType = "user";
 
-      window.location.href = `http://localhost:8000/api/auth/google?redirectUrl=${encodeURIComponent(
+      window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google?redirectUrl=${encodeURIComponent(
         redirectUrl
       )}&userType=${encodeURIComponent(userType)}`;
     } catch (error: any) {
@@ -233,7 +233,7 @@ export default function UserRegister() {
             <Button
               variant="link"
               className="p-0 h-auto font-semibold text-green-700"
-              onClick={() => navigate("/user/auth/login")}
+              onClick={() => navigate("/user/auth/signin")}
             >
               Sign in
             </Button>
@@ -241,7 +241,7 @@ export default function UserRegister() {
           <Button
             variant="outline"
             className="w-full shadow-md hover:shadow-lg transition-all font-semibold"
-            onClick={() => navigate("/seller/auth/register")}
+            onClick={() => navigate("/seller/auth/signup")}
           >
             Create a New Seller Account
           </Button>

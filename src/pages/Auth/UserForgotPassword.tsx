@@ -15,7 +15,7 @@ const UserForgotPassword = () => {
     setIsSubmitting(true);
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/user/auth/forgot-password",
+        `${import.meta.env.VITE_API_URL}/api/user/auth/forgot-password`,
         data
       );
       if (response.status === 200) {
@@ -23,7 +23,7 @@ const UserForgotPassword = () => {
           position: "top-center",
           theme: "light",
         });
-        navigate("/user/auth/login");
+        navigate("/user/auth/signin");
       }
     } catch (error) {
       console.log(error);
@@ -34,7 +34,7 @@ const UserForgotPassword = () => {
       <ForgetPasswordForm
         onSubmit={onSubmit}
         isSubmitting={isSubmitting}
-        navigateUrl={"/user/auth/login"}
+        navigateUrl={"/user/auth/signin"}
       />
     </>
   );

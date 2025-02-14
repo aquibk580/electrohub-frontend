@@ -32,9 +32,11 @@ export default function UserDetails() {
   const onSubmit: SubmitHandler<UserDetailsFormSchemaType> = async (data) => {
     setIsSubmitting(true);
     try {
-      const res = await axios.get(`http://localhost:8000/api/auth/get-id`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/auth/get-id`
+      );
       const response = await axios.patch(
-        `http://localhost:8000/api/user/${res.data}`,
+        `${import.meta.env.VITE_API_URL}/api/user/${res.data}`,
         data
       );
       if (response.status === 200) {
@@ -49,7 +51,7 @@ export default function UserDetails() {
           })
         );
         dispatch(setPfp(response.data.user.pfp));
-        navigate("/");
+        navigate("/seller/dashboard");
         toast.success("Account created successfully", {
           position: "top-center",
           theme: "light",

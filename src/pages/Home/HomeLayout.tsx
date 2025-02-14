@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setPfp, setUser } from "@/redux/slices/user";
 import axios from "../../lib/axios";
-import { SidebarProvider } from "@/components/ui/sidebar";
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -27,7 +26,7 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/auth/user-data"
+          `${import.meta.env.VITE_API_URL}/api/auth/user-data`
         );
 
         if (response.status === 200 && response.data?.authorized) {

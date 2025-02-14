@@ -21,7 +21,7 @@ export default function SellerLayout({
     const getSellerData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/auth/seller-data"
+          `${import.meta.env.VITE_API_URL}/api/auth/seller-data`
         );
         if (response.status === 200 && response.data.authorized) {
           dispatch(

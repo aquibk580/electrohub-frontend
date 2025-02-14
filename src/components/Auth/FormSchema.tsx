@@ -1,6 +1,6 @@
-import { z } from "zod";
+import { z, ZodSchema } from "zod";
 
-export const SellerRegistrationFormSchema = z.object({
+export const SellerRegistrationFormSchema: ZodSchema = z.object({
   pfp: z.instanceof(File).nullable(),
   companyName: z.string().min(1, "Company name is required"),
   email: z.string().email("Invalid email address"),
@@ -16,7 +16,7 @@ export type SellerRegFormSchemaType = z.infer<
   typeof SellerRegistrationFormSchema
 >;
 
-export const UserRegistrationFormSchema = z.object({
+export const UserRegistrationFormSchema: ZodSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 8 characters"),
@@ -29,14 +29,14 @@ export const UserRegistrationFormSchema = z.object({
 
 export type UserRegFormSchemaType = z.infer<typeof UserRegistrationFormSchema>;
 
-export const LoginFormSchema = z.object({
+export const LoginFormSchema: ZodSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 8 characters"),
 });
 
 export type LoginFormSchemaType = z.infer<typeof LoginFormSchema>;
 
-export const ForgotPasswordFormSchema = z.object({
+export const ForgotPasswordFormSchema: ZodSchema = z.object({
   email: z.string().email("Invalid email address"),
   answer: z.string().min(1, "Answer is required"),
   password: z.string().min(6, "Password must be at least 8 characters"),
@@ -46,7 +46,7 @@ export type ForgotPasswordFormSchemaType = z.infer<
   typeof ForgotPasswordFormSchema
 >;
 
-export const UserDetailsFormSchema = z.object({
+export const UserDetailsFormSchema: ZodSchema = z.object({
   password: z.string().min(6, "Password must be at least 8 characters"),
   answer: z.string().min(1, "Answer is required"),
   address: z.string().min(1, "Address is required"),
@@ -57,7 +57,7 @@ export const UserDetailsFormSchema = z.object({
 
 export type UserDetailsFormSchemaType = z.infer<typeof UserDetailsFormSchema>;
 
-export const SellerDetailsFormSchema = z.object({
+export const SellerDetailsFormSchema: ZodSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
   answer: z.string().min(1, "Answer is required"),
   address: z.string().min(1, "Address is required"),
@@ -84,4 +84,31 @@ export const SellerDetailsFormSchema = z.object({
     .optional(),
 });
 
-export type SellerDetailsFormSchemaType = z.infer<typeof SellerDetailsFormSchema>;
+export type SellerDetailsFormSchemaType = z.infer<
+  typeof SellerDetailsFormSchema
+>;
+
+export const AdminRegistrationFormSchema: ZodSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters long"),
+  secretKey: z
+    .string()
+    .min(6, "Admin scret key must be at least 6 characters long"),
+});
+
+export type AdminRegistrationFormSchemaType = z.infer<
+  typeof AdminRegistrationFormSchema
+>;
+
+export const AdminForgotPasswordFormSchema: ZodSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters long"),
+  secretKey: z
+    .string()
+    .min(6, "Admin scret key must be at least 6 characters long"),
+});
+
+export type AdminForgotPasswordFormSchemaType = z.infer<
+  typeof AdminForgotPasswordFormSchema
+>;

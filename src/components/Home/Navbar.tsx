@@ -200,7 +200,7 @@ const Navbar = () => {
             <UserProfileButton name={user.name} imageUrl={pfp!} />
           ) : (
             <div
-              onClick={() => navigate("/user/auth/login")}
+              onClick={() => navigate("/user/auth/signin")}
               className="flex gap-1 items-center  cursor-pointer hover:text-orange-600 "
             >
               <img className="lg:h-5 h-7" src={assets.account_icon} alt="" />

@@ -48,7 +48,7 @@ export default function UserProfileButton({
 
   const handleLogOut = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/auth/logout");
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/logout`);
       if (response.status === 200) {
         dispatch(clearUser());
         toast.success("Logged out successfully", {
@@ -67,7 +67,7 @@ export default function UserProfileButton({
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="flex items-center gap-2 px-4 py-2 focus-visible:ring-0 hover:bg-white"
+          className="flex items-center gap-2 py-2 focus-visible:ring-0 hover:bg-white"
         >
           <Avatar>
             <AvatarImage src={imageUrl} alt="User" className="w-full h-full" />

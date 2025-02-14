@@ -9,9 +9,12 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticatedUser = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
+  const isAuthenticatedSeller = useSelector(
+    (state: RootState) => state.seller.isAuthenticated
+  );
 
   useEffect(() => {
-    if (isAuthenticatedUser) {
+    if (isAuthenticatedUser || isAuthenticatedSeller) {
       navigate("/");
     }
   }, []);

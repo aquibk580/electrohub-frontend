@@ -38,14 +38,14 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
   const bgColor = useMemo(() => getRandomColor(), []);
   const initials = user?.name
     .split(" ")
-    .map((name) => name[0])
+    .map((name: string) => name[0])
     .join("")
     .slice(0, 2)
     .toUpperCase();
 
   const handleLogOut = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/auth/logout");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/logout`);
       if (response.status === 200) {
         dispatch(clearUser());
         toast.success("Logged out successfully", {

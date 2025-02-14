@@ -24,7 +24,30 @@ import UserLayout from "./pages/User/UserLayout";
 import Reviews from "./pages/User/Review";
 import UserOrders from "./pages/User/Order";
 import OrderDetails from "./pages/User/OrderDetails";
-import MobileSideBar from "./components/Home/MobileSidebar";
+import Signin from "./pages/Admin/Auth/Signin";
+import Signup from "./pages/Admin/Auth/Signup";
+import AdminForgotPassword from "./pages/Admin/Auth/AdminForgotPassword";
+import AdminAuthLayout from "./pages/Admin/Auth/AdminAuthLayout";
+import AdminLayout from "@/components/Admin/sidebar/SidebarLayout";
+import AdminDashboard from "./pages/Admin/Dashboard";
+import Seller from "./pages/Admin/Seller";
+import SellerInfo from "./pages/Admin/SellerInfo";
+import Buyer from "./pages/Admin/Buyer";
+import BuyerDetails from "./pages/Admin/BuyerDetails";
+import ProductManagement from "./pages/Admin/Product-Management";
+import ProductDetails from "./pages/Admin/ProductsManage";
+import Order from "./pages/Admin/Order";
+import OrderInfo from "./pages/Admin/OrdersManage";
+import Payments from "./pages/Admin/Payments";
+import PaymentDetail from "./pages/Admin/PayementDetails";
+import Reports from "./pages/Admin/Reports";
+import Messages from "./pages/Admin/Messages";
+import ChatLayout from "./components/Admin/ChatLayout";
+import ContentManagement from "./pages/Admin/ContentManagement";
+import Settings from "./pages/Admin/Settings";
+import LogsAndSecurity from "./pages/Admin/Logs";
+import Demo from "./pages/Admin/demo";
+import SellerProduct from "./pages/Admin/Seller-Product";
 
 const App = () => {
   return (
@@ -40,10 +63,20 @@ const App = () => {
             </HomeLayout>
           }
         />
+        <Route path="/product">
+          <Route
+            path=":id"
+            element={
+              <HomeLayout>
+                <ProductDisplay />
+              </HomeLayout>
+            }
+          />
+        </Route>
         <Route path="/user">
           <Route path="auth">
             <Route
-              path="login"
+              path="signin"
               element={
                 <AuthLayout>
                   <UserLogin />
@@ -51,7 +84,7 @@ const App = () => {
               }
             />
             <Route
-              path="register"
+              path="signup"
               element={
                 <AuthLayout>
                   <UserRegister />
@@ -131,7 +164,7 @@ const App = () => {
         <Route path="/seller">
           <Route path="auth">
             <Route
-              path="login"
+              path="signin"
               element={
                 <AuthLayout>
                   <SellerLogin />
@@ -139,7 +172,7 @@ const App = () => {
               }
             />
             <Route
-              path="register"
+              path="signup"
               element={
                 <AuthLayout>
                   <SellerRegister />
@@ -198,15 +231,186 @@ const App = () => {
             />
           </Route>
         </Route>
-        <Route path="/cart" element={<Cart />} />
-        <Route
-          path="/product/:id"
-          element={
-            <HomeLayout>
-              <ProductDisplay />
-            </HomeLayout>
-          }
-        />
+        <Route path="/admin">
+          <Route path="auth">
+            <Route
+              path="signin"
+              element={
+                <AdminAuthLayout>
+                  <Signin />
+                </AdminAuthLayout>
+              }
+            />
+            <Route
+              path="signup"
+              element={
+                <AdminAuthLayout>
+                  <Signup />
+                </AdminAuthLayout>
+              }
+            />
+            <Route
+              path="forgot-password"
+              element={
+                <AdminAuthLayout>
+                  <AdminForgotPassword />
+                </AdminAuthLayout>
+              }
+            />
+          </Route>
+          <Route
+            path="dashboard"
+            element={
+              <AdminLayout>
+                <AdminDashboard />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="seller"
+            element={
+              <AdminLayout>
+                <Seller />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="sellerinfo/:id"
+            element={
+              <AdminLayout>
+                <SellerInfo />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="buyer"
+            element={
+              <AdminLayout>
+                <Buyer />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="buyer/:id"
+            element={
+              <AdminLayout>
+                <BuyerDetails />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="productmanage"
+            element={
+              <AdminLayout>
+                <ProductManagement />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="productsmanage/:id"
+            element={
+              <AdminLayout>
+                <ProductDetails />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="ordersmanage"
+            element={
+              <AdminLayout>
+                <Order />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="ordersmanage/:id"
+            element={
+              <AdminLayout>
+                <OrderInfo />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="payments"
+            element={
+              <AdminLayout>
+                <Payments />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="payments/:id"
+            element={
+              <AdminLayout>
+                <PaymentDetail />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="reports"
+            element={
+              <AdminLayout>
+                <Reports />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="messages"
+            element={
+              <AdminLayout>
+                <Messages />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="messages/chat/:id"
+            element={
+              <AdminLayout>
+                <ChatLayout />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="cms"
+            element={
+              <AdminLayout>
+                <ContentManagement />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="settings"
+            element={
+              <AdminLayout>
+                <Settings />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="logs"
+            element={
+              <AdminLayout>
+                <LogsAndSecurity />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="demo"
+            element={
+              <AdminLayout>
+                <Demo />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="sellerproduct"
+            element={
+              <AdminLayout>
+                <SellerProduct />
+              </AdminLayout>
+            }
+          />
+        </Route>
       </Routes>
     </>
   );

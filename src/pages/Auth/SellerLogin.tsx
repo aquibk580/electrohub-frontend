@@ -43,7 +43,7 @@ export default function SellerLogin() {
     setIsSubmitting(true);
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/seller/auth/signin",
+        `${import.meta.env.VITE_API_URL}/api/seller/auth/signin`,
         data
       );
       if (response.status === 200) {
@@ -67,10 +67,10 @@ export default function SellerLogin() {
 
   const handleGoogleSignIn = async () => {
     try {
-      const redirectUrl = "http://localhost:5173/seller/dashboard";
+      const redirectUrl = `${import.meta.env.VITE_FRONTEND_URL}/seller/dashboard`;
       const userType = "seller";
 
-      window.location.href = `http://localhost:8000/api/auth/google?redirectUrl=${encodeURIComponent(
+      window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google?redirectUrl=${encodeURIComponent(
         redirectUrl
       )}&userType=${encodeURIComponent(userType)}`;
     } catch (error: any) {
@@ -172,7 +172,7 @@ export default function SellerLogin() {
             <Button
               variant="link"
               className="p-0 h-auto font-semibold text-green-700"
-              onClick={() => navigate("/seller/auth/register")}
+              onClick={() => navigate("/seller/auth/signup")}
             >
               Sign Up
             </Button>
@@ -182,7 +182,7 @@ export default function SellerLogin() {
       <Button
         variant="outline"
         className="w-full shadow-md hover:shadow-lg transition-all font-semibold"
-        onClick={() => navigate("/user/auth/login")}
+        onClick={() => navigate("/user/auth/signin")}
       >
         Sign in to your User Account
       </Button>

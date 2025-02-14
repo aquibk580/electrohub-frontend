@@ -43,7 +43,9 @@ export default function SellerDetails() {
   const onSubmit: SubmitHandler<SellerDetailsFormSchemaType> = async (data) => {
     setIsSubmitting(true);
     try {
-      const res = await axios.get(`http://localhost:8000/api/auth/get-id`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/auth/get-id`
+      );
       const { address, phone, answer, password, pfp } = data;
       const formData = new FormData();
       formData.append("address", address);
@@ -54,7 +56,7 @@ export default function SellerDetails() {
         formData.append("pfp", pfp);
       }
       const response = await axios.patch(
-        `http://localhost:8000/api/seller/${res.data}`,
+        `${import.meta.env.VITE_API_URL}/api/seller/${res.data}`,
         formData
       );
       if (response.status === 200) {
