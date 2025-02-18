@@ -24,25 +24,7 @@ import {
 import axios from "../../lib/axios";
 import { toast } from "react-toastify";
 import { Separator } from "@radix-ui/react-dropdown-menu";
-
-interface Category {
-  name: string;
-  imageUrl: string;
-}
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  offerPercentage: number;
-  stock: number;
-  categoryName: string;
-  status: string;
-  brand: string;
-  productInfo: { brand: string; details: { key: string; value: string }[] };
-  images: { id: number; url: string }[];
-}
+import { Category, Product } from "@/components/product/productTypes";
 
 export default function EditProduct() {
   const { id } = useParams();

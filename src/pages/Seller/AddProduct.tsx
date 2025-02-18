@@ -23,10 +23,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { Category } from "@/components/product/productTypes";
 
-interface Category {
-  name: string;
-}
+
 
 export default function AddProductForm() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);

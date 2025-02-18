@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import axios from "axios";
+import { useMediaQuery } from "react-responsive";
 
 import ProductSkeleton from "@/components/product/Product-Skeleton";
 import RelatedProducts from "@/components/product/RelatedProducts";
@@ -10,68 +12,35 @@ import ProductAddtocart from "@/components/product/Product-Addtocart";
 import ProductQuantity from "@/components/product/Product-Quantity";
 import ProductPrice from "@/components/product/Product-Price";
 import ProductTitleRating from "@/components/product/Product-Title-Rating";
-import axios from "axios";
 import ProductImage from "@/components/product/Product-Image";
+import ProductImageTablet from "@/components/product/Product-Image-Tablet";
+import { Product } from "@/components/product/productTypes";
 
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: {
-    id: number;
-    name: string;
-    image: string;
-  };
-  image: string[];
-  rating: {
-    rate: number;
-    count: number;
-  };
-}
-
-export default function Product() {
+export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<Product | null>(null);
+  const location = useLocation();
+  const [product, setProduct] = useState<Product>(location.state?.product);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedImage, setSelectedImage] = useState(0)
 
-  const nextImage = () => {
-    if (product) {
-      setSelectedImage((prev) => (prev + 1) % product.image.length)
-    }
-  };
-
-  const prevImage = () => {
-    if (product) {
-      setSelectedImage((prev) => (prev - 1 + product.image.length) % product.images.length) 
-    }
-  };
+  const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1024 });
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(
-          `https://fakestoreapi.in/api/products/${id}`,
-          {
-            withCredentials: false, // Remove credentials
-          }
+          `${import.meta.env.VITE_API_URL}/api/user/products/${id}`
         );
 
-        setProduct({
-          ...response.data.product,
-          rating: { rate: 4.5, count: 120 }, // Adding mock rating since API doesn't provide it
-        });
-        console.log(response);
-        setLoading(false);
-        console.log(response.data);
-        // Scroll to top when product loads
+        if (response.status === 200) {
+          setProduct(response.data);
+        }
+
         window.scrollTo(0, 0);
       } catch (err) {
         setError("An error occurred while fetching the product.");
+      } finally {
         setLoading(false);
-        console.error("Error fetching product:", err);
       }
     };
 
@@ -89,53 +58,51 @@ export default function Product() {
       </div>
     );
   }
+  console.log(product.reviews);
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
-        <div className="grid md:grid-cols-2 gap-8">
+      <main className="  px-4 py-8 ">
+        <div className="grid lg:grid-cols-2 gap-8">
           <div className="space-y-4">
-            {/* MAIN IMAGE  */}
-            <ProductImage
-              image={product.image.toString()}
-              title={product.title}
-              prevImage={prevImage}
-              nextImage={nextImage}
-            />
+            {/* Product Image - Different for Tablets */}
+            {isTablet ? (
+              <ProductImageTablet
+                images={product.images.map((image) => image.url)}
+                title={product.name}
+              />
+            ) : (
+              <ProductImage
+                images={product.images.map((image) => image.url)}
+                title={product.name}
+              />
+            )}
           </div>
           <div className="space-y-6">
-            {/* PRODUCT TITLE, RATINGS STARS & BATCH */}
+            {/* Product Details */}
             <ProductTitleRating
-              title={product.title}
+              title={product.name}
               description={product.description}
-              rating={product.rating}
+              reviews={product.reviews}
+              averageRating={product.averageRating}
             />
 
             <div className="space-y-4">
-              {/* PRICE & DISCOUNT */}
               <ProductPrice price={product.price} />
-
-              {/* FREE DELIVERY ICON */}
               <FreeDeliveryIcon />
-
-              {/* SPECIAL OFFERS */}
               <SpecialOffers />
-
-              {/* QUANTITY COMPONENT  +   - */}
-              <ProductQuantity />
-
-              {/* ADD TO CART, BUY NOW BUTTON & ADD TO WISHLIST BUTTON */}
               <ProductAddtocart />
             </div>
           </div>
         </div>
 
-        {/* PRODUCT DETAILS, USER REVIEWS */}
-        <ProductSpects />
-
-        {/* RELATED PRODUCTS */}
+        {/* Product Specifications and Related Products */}
+        <ProductSpects
+          reviews={product.reviews}
+          details={product.productInfo.details}
+        />
         <RelatedProducts
-          category={product.category.toString()}
+          category={product.categoryName}
           currentProductId={product.id}
         />
       </main>

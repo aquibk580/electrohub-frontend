@@ -40,31 +40,7 @@ import axios from "@/lib/axios";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { assets } from "@/assets/assets";
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  offerPercentage: number | null;
-  stock: number;
-  categoryName: string;
-  status: string;
-  images: { id: number; url: string }[];
-  productInfo: { brand: string; details: { key: string; value: string }[] };
-  reviews: [];
-}
-
-// const products = [
-//   {
-//     id: 1,
-//     name: "iPhone 13 Plus (128 GB Storage, 12 GB Ram)",
-//     image: assets.laptop,
-//     price: "68,956",
-//     stock: 10,
-//     status: "Inactive",
-//   },
-// ];
+import { Product } from "@/components/product/productTypes";
 
 export default function ProductList() {
   const seller = useSelector((state: RootState) => state.seller.seller);
@@ -237,7 +213,7 @@ export default function ProductList() {
                         />
                       </TableCell>
                       <TableCell className="whitespace-nowrap">
-                        {product.name}
+                        {product.name.substring(0,100)}
                       </TableCell>
                       <TableCell className="whitespace-nowrap text-center">
                         {" "}

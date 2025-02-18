@@ -6,7 +6,7 @@ const FreeDeliveryIcon = () => {
     <div> <div className="flex items-center text-muted-foreground space-x-4">
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger className="flex items-center text-gray-700">
+        <TooltipTrigger className="flex items-center text-gray-700 dark:text-slate-400">
           <Truck className="h-5 w-5 mr-2" />
           <span className="text-sm ">Free Delivery</span>
         </TooltipTrigger>
@@ -17,7 +17,7 @@ const FreeDeliveryIcon = () => {
     </TooltipProvider>
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger className="flex items-center text-gray-700">
+        <TooltipTrigger className="flex items-center text-gray-700 dark:text-slate-400">
           <RotateCcw className="h-5 w-5 mr-2" />
           <span className="text-sm">7 Days Return</span>
         </TooltipTrigger>

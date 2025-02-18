@@ -1,4 +1,4 @@
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@radix-ui/react-tooltip'
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '../ui/tooltip'
 import { Heart } from 'lucide-react'
 import { Button } from '../ui/button'
 import { useState } from 'react'
@@ -11,7 +11,7 @@ const ProductAddtocart = () => {
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <Button className="flex-1 hover:bg-green-950 cursor-pointer" size="lg">
+                        <Button className="flex-1 bg-green-500 hover:bg-green-600  cursor-pointer " >
                             Add to Cart
                         </Button>
                     </TooltipTrigger>
@@ -23,7 +23,7 @@ const ProductAddtocart = () => {
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <Button className="flex-1 bg-green-600 hover:bg-green-700 cursor-pointer" size="lg">
+                        <Button className="flex-1 hover:bg-amber-600 bg-amber-500 cursor-pointer " >
                             Buy Now
                         </Button>
                     </TooltipTrigger>
@@ -40,7 +40,7 @@ const ProductAddtocart = () => {
                             variant="outline"
                             size="lg"
                             onClick={() => setIsWishlisted(!isWishlisted)}
-                            className={isWishlisted ? "text-red-500 cursor-pointer" : "cursor-pointer"}
+                            className={` hidden md:block lg:block${isWishlisted ? "text-red-500 cursor-pointer" : "cursor-pointer"}`}
                         >
                             <Heart className={`h-7 w-7 ${isWishlisted ? "fill-current" : ""}`} />
                         </Button>

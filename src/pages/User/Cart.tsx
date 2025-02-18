@@ -5,14 +5,9 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import { assets } from "@/assets/assets";
 import Checkout from "@/components/User/Checkout";
 import { useEffect, useState } from "react";
-
-interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  inStock: boolean;
-}
+import axios from "@/lib/axios";
+import { toast } from "react-toastify";
+import { Product } from "@/components/product/productTypes";
 
 interface OrderInput {
   total: number;
@@ -25,53 +20,28 @@ const Cart = () => {
     items: [],
   });
   const [total, setTotal] = useState(0);
-  const [cartItems, setCartItems] = useState<Array<CartItem>>([]);
+  const [cartItems, setCartItems] = useState<
+    Array<Product & { cartItemId: number; quantity: number }>
+  >([]);
 
   useEffect(() => {
-    setCartItems([
-      {
-        id: 1,
-        name: "Samsung s24 ultra 64GB 256 GB Storage Purple",
-        price: 24000,
-        quantity: 1,
-        inStock: true,
-      },
-      {
-        id: 2,
-        name: "Samsung s24 ultra 64GB 256 GB Storage Purple",
-        price: 24000,
-        quantity: 1,
-        inStock: true,
-      },
-      {
-        id: 3,
-        name: "Samsung s24 ultra 64GB 256 GB Storage Purple",
-        price: 24000,
-        quantity: 1,
-        inStock: true,
-      },
-      {
-        id: 4,
-        name: "Samsung s24 ultra 64GB 256 GB Storage Purple",
-        price: 24000,
-        quantity: 1,
-        inStock: true,
-      },
-      {
-        id: 5,
-        name: "Samsung s24 ultra 64GB 256 GB Storage Purple",
-        price: 24000,
-        quantity: 1,
-        inStock: true,
-      },
-      {
-        id: 6,
-        name: "Samsung s24 ultra 64GB 256 GB Storage Purple",
-        price: 24000,
-        quantity: 1,
-        inStock: true,
-      },
-    ]);
+    const getAllCartItems = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/user/cart`
+        );
+        if (response.status === 200) {
+          setCartItems(response.data?.products);
+        }
+      } catch (error: any) {
+        toast.error(error.message, {
+          position: "top-center",
+          theme: "dark",
+        });
+      }
+    };
+
+    getAllCartItems();
   }, []);
 
   useEffect(() => {
@@ -92,8 +62,46 @@ const Cart = () => {
     });
   }, [total]);
 
-  const handleDelete = (id: number) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
+  const handleQuantityChange = async (
+    cartItemId: number,
+    newQuantity: number
+  ) => {
+    try {
+      if (newQuantity < 1) return;
+
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/user/cart/update/${cartItemId}`,
+        { quantity: newQuantity }
+      );
+
+      setCartItems((prevItems) =>
+        prevItems.map((item) =>
+          item.cartItemId === cartItemId
+            ? { ...item, quantity: newQuantity }
+            : item
+        )
+      );
+    } catch (error: any) {
+      toast.error(error.message, {
+        position: "top-center",
+        theme: "dark",
+      });
+    }
+  };
+
+  const handleDelete = async (cartItemId: number) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/user/cart/remove/${cartItemId}`
+      );
+
+      setCartItems(cartItems.filter((item) => item.cartItemId !== cartItemId));
+    } catch (error: any) {
+      toast.error(error.message, {
+        position: "top-center",
+        theme: "dark",
+      });
+    }
   };
 
   return (
@@ -108,39 +116,62 @@ const Cart = () => {
                   key={item.id}
                   className="flex flex-col sm:flex-row items-center justify-between border-b pb-4 gap-4"
                 >
-                  <div className="flex flex-col sm:flex-row items-center">
+                  <div className="flex flex-col sm:flex-row sm:gap-6 items-center">
                     <img
-                      src={assets.mobile}
+                      src={item.images[0].url}
                       alt={item.name}
-                      className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 object-contain rounded-lg"
+                      className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 object-cover rounded-lg"
                     />
-                    <div>
+                    <div className="space-y-4">
                       <h3 className="font-medium">{item.name}</h3>
-                      <div className="text-xl mt-1">₹{item.price}</div>
-                      {item.inStock && (
-                        <div className="text-green-600 text-sm">In Stock</div>
-                      )}
+                      <h3 className="font-medium">{item.productInfo.brand}</h3>
+                      <div className="text-xl font-semibold mt-1">
+                        ₹{item.price}
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="flex items-center border rounded">
-                      <Button variant="ghost" size="sm">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          const newQuantity =
+                            item.quantity > 1 ? item.quantity - 1 : 1; // Prevent going below 1
+                          handleQuantityChange(item.cartItemId, newQuantity);
+                        }}
+                      >
                         <Minus className="h-4 w-4" />
                       </Button>
+
                       <Input
                         type="number"
                         value={item.quantity}
                         className="w-12 text-center border-0"
-                        onChange={() => {}}
+                        onChange={(e) => {
+                          const newQuantity = parseInt(e.target.value, 10);
+                          if (newQuantity > 0) {
+                            handleQuantityChange(item.cartItemId, newQuantity);
+                          }
+                        }}
                       />
-                      <Button variant="ghost" size="sm">
+
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          const newQuantity = item.quantity + 1;
+                          handleQuantityChange(item.cartItemId, newQuantity);
+                        }}
+                      >
                         <Plus className="h-4 w-4" />
                       </Button>
                     </div>
+
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleDelete(item.id)}
+                      onClick={() => handleDelete(item.cartItemId)}
                     >
                       <Trash2 className="h-4 w-4 text-red-500" />
                     </Button>
@@ -160,7 +191,7 @@ const Cart = () => {
       <Card className="w-full lg:w-auto shrink-0">
         <CardContent className="p-6 flex flex-col w-full">
           <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-          <div className="space-y-3 lg:w-64">
+          <div className="space-y-3 w-full lg:w-64">
             <div className="flex justify-between">
               <span>SubTotal</span>
               <span>₹{total}</span>

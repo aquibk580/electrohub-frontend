@@ -2,45 +2,77 @@ import { ShoppingCart, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { assets } from "@/assets/assets";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { Product } from "@/components/product/productTypes";
 
 export function Wishlist() {
-  const wishlistItems = [
-    {
-      id: 1,
-      name: "Samsung S24 Ultra 64GB 256GB Storage Purple",
-      price: "$24",
-      image: assets.mobile,
-      inStock: true,
-    },
-    {
-      id: 2,
-      name: "Samsung S24 Ultra 64GB 256GB Storage Purple",
-      price: "$24",
-      image: assets.mobile,
-      inStock: true,
-    },
-    {
-      id: 3,
-      name: "Samsung S24 Ultra 64GB 256GB Storage Purple",
-      price: "$24",
-      image: assets.mobile,
-      inStock: true,
-    },
-    {
-      id: 4,
-      name: "Samsung S24 Ultra 64GB 256GB Storage Purple",
-      price: "$24",
-      image: assets.mobile,
-      inStock: true,
-    },
-    {
-      id: 5,
-      name: "Samsung S24 Ultra 64GB 256GB Storage Purple",
-      price: "$24",
-      image: assets.mobile,
-      inStock: true,
-    },
-  ];
+  const [wishlistItems, setWishlistItems] = useState<Array<Product>>();
+  useEffect(() => {
+    const getAllWishlistItems = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/user/wishlist`
+        );
+        if (response.status === 200) {
+          setWishlistItems(response.data.products);
+        }
+      } catch (error: any) {
+        toast.error(error.message, {
+          position: "top-center",
+          theme: "dark",
+        });
+      }
+    };
+    getAllWishlistItems();
+  }, []);
+
+  const handleAddToCart = async (productId: number) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/user/cart/add/${productId}`,
+        { quantity: "1" }
+      );
+      if (response.status === 200) {
+        toast.success(response.data?.message, {
+          position: "top-center",
+          theme: "dark",
+        });
+      }
+    } catch (error: any) {
+      toast.error(error.message, {
+        position: "top-center",
+        theme: "dark",
+      });
+    }
+  };
+
+  const handleDelete = async (productId: number) => {
+    setWishlistItems((prev) => prev?.filter((item) => item.id !== productId));
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/user/wishlist/${productId}`
+      );
+
+      if (response.status === 200) {
+        toast.success(response.data.message, {
+          position: "bottom-center",
+          theme: "dark",
+        });
+      } else {
+        toast.error("Error updating wishlist", {
+          position: "bottom-center",
+          theme: "dark",
+        });
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Error updating wishlist", {
+        position: "top-center",
+        theme: "dark",
+      });
+    }
+  };
 
   return (
     <Card className="h-full flex flex-col rounded-lg shadow-md">
@@ -56,30 +88,30 @@ export function Wishlist() {
       </CardHeader>
       <CardContent className="flex-1 overflow-y-auto">
         <div className="space-y-4">
-          {wishlistItems.map((item) => (
+          {wishlistItems?.map((item) => (
             <div
               key={item.id}
               className="flex flex-col sm:flex-row items-center gap-4 p-4 border rounded-lg bg-gray-50 shadow-sm"
             >
               {/* Product Image */}
               <img
-                src={item.image || "/placeholder.svg"}
+                src={item.images[0].url || "/placeholder.svg"}
                 alt={item.name}
-                className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg"
+                className="w-24 h-24 sm:w-32 sm:h-32 object-contain rounded-lg"
               />
 
               {/* Product Details */}
               <div className="flex-1 text-center sm:text-left">
                 <h3 className="font-medium text-lg mb-1">{item.name}</h3>
-                <div className="text-lg font-bold text-gray-800">
-                  {item.price}
-                </div>
+                <span className="text-lg font-bold">₹{item.price}</span>
                 <div
                   className={`text-sm font-medium ${
-                    item.inStock ? "text-green-600" : "text-red-600"
+                    item.status !== "OutOfStock"
+                      ? "text-green-600"
+                      : "text-red-600"
                   }`}
                 >
-                  {item.inStock ? "In Stock" : "Out of Stock"}
+                  {item.status !== "OutOfStock" ? "In Stock" : "Out of Stock"}
                 </div>
               </div>
 
@@ -90,6 +122,7 @@ export function Wishlist() {
                   variant="outline"
                   className="p-2 hover:bg-green-100"
                   aria-label="Add to Cart"
+                  onClick={() => handleAddToCart(item.id)}
                 >
                   <ShoppingCart className="h-5 w-5 text-green-600" />
                 </Button>
@@ -98,6 +131,7 @@ export function Wishlist() {
                   variant="outline"
                   className="p-2 hover:bg-red-100"
                   aria-label="Remove from Wishlist"
+                  onClick={() => handleDelete(item.id)}
                 >
                   <Trash2 className="h-5 w-5 text-red-600" />
                 </Button>

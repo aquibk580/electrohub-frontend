@@ -63,33 +63,15 @@ const RelatedProducts = ({
   }
 
   return (
-    // <section className="relative">
-    //   <h2 className="mb-4 text-xl font-bold">Related Products</h2>
-    //   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-    //     {products.map((product) => (
-    //       <Link key={product.id} to={`/product/${product.id}`} className="group" onClick={() => window.scrollTo(0, 0)}>
-    //         <div>
-    //           <img
-    //             src={product.image || "/placeholder.svg"}
-    //             alt={product.title}
-    //             className="w-full h-56 object-cover group-hover:opacity-75"
-    //           />
-    //           <h3 className="mt-2 text-lg font-medium">{product.title}</h3>
-    //           <p className="text-gray-500">₹{product.price ? product.price.toFixed(2) : "N/A"}</p>
-    //         </div>
-    //       </Link>
-    //     ))}
-    //   </div>
-    // </section>
-    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
       {products.map((product) => (
-        <div key={product.id} className="bg-white rounded-lg overflow-hidden">
+        <div key={product.id} className=" bg-accent rounded-lg overflow-hidden">
           <Link to={`/product/${product.id}`}>
-            <div className="w-full bg-[#9797970f] p-2 rounded-lg overflow-hidden aspect-square">
+            <div className="w-full p-2 rounded-lg overflow-hidden aspect-square">
               <img
                 src={product.image || "/placeholder.svg"}
                 alt={product.title}
-                className="object-contain w-full mix-blend-multiply h-full hover:scale-110 transition-transform duration-300"
+                className="object-contain w-full  h-full hover:scale-110 transition-transform duration-300 rounded-3xl"
               />
             </div>
           </Link>
@@ -99,14 +81,14 @@ const RelatedProducts = ({
                 {product.title}
               </h2>
             </Link>
-            <p className="text-gray-600 mb-2 text-sm line-clamp-1">
+            <p className="text-accent-foreground mb-2 text-sm line-clamp-1">
               {product.description}
             </p>
             <div className="flex">
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className="fill-green-700 text-green-700 text-xs"
+                  className="fill-primary text-primary text-xs"
                   style={{ width: "14px", height: "14px" }}
                 />
               ))}

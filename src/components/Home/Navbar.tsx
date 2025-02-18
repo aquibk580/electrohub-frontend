@@ -123,7 +123,7 @@ const Navbar = () => {
         <h1 className="font-semibold text-3xl hidden lg:block">Electrohub</h1>
 
         {/* Navigation Menu */}
-        <NavigationMenu>
+        <NavigationMenu className="hidden lg:flex">
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuTrigger className="rounded-full">
