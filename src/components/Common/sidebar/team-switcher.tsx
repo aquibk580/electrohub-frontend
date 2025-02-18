@@ -33,16 +33,16 @@ export function TeamSwitcher({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="hover:bg-transparent"
             >
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <activeTeam.logo className="size-4" />
+              <div className="flex aspect-square size-8  items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                <activeTeam.logo className="size-5" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold text-2xl pl-2">{activeTeam.name}</span>
-                {/* <span className="truncate text-xs">{activeTeam.plan}</span> */}
+                <span className=" font-bold text-2xl pl-2">{activeTeam.name}</span>
+               
               </div>
-              {/* <ChevronsUpDown className="ml-auto" /> */}
+             
             </SidebarMenuButton>
           </DropdownMenuTrigger>
 

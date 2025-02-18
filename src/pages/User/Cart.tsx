@@ -32,42 +32,42 @@ const Cart = () => {
       {
         id: 1,
         name: "Samsung s24 ultra 64GB 256 GB Storage Purple",
-        price: 24,
+        price: 24000,
         quantity: 1,
         inStock: true,
       },
       {
         id: 2,
         name: "Samsung s24 ultra 64GB 256 GB Storage Purple",
-        price: 24,
+        price: 24000,
         quantity: 1,
         inStock: true,
       },
       {
         id: 3,
         name: "Samsung s24 ultra 64GB 256 GB Storage Purple",
-        price: 24,
+        price: 24000,
         quantity: 1,
         inStock: true,
       },
       {
         id: 4,
         name: "Samsung s24 ultra 64GB 256 GB Storage Purple",
-        price: 24,
+        price: 24000,
         quantity: 1,
         inStock: true,
       },
       {
         id: 5,
         name: "Samsung s24 ultra 64GB 256 GB Storage Purple",
-        price: 24,
+        price: 24000,
         quantity: 1,
         inStock: true,
       },
       {
         id: 6,
         name: "Samsung s24 ultra 64GB 256 GB Storage Purple",
-        price: 24,
+        price: 24000,
         quantity: 1,
         inStock: true,
       },
@@ -116,7 +116,7 @@ const Cart = () => {
                     />
                     <div>
                       <h3 className="font-medium">{item.name}</h3>
-                      <div className="text-xl mt-1">${item.price}</div>
+                      <div className="text-xl mt-1">₹{item.price}</div>
                       {item.inStock && (
                         <div className="text-green-600 text-sm">In Stock</div>
                       )}

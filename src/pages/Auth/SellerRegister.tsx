@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,23 +43,26 @@ export default function SellerRegister() {
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     setProfileImage(file);
-    setValue("pfp", file);
+    if (file) setValue("pfp", file);
   };
 
-  const onSubmit: SubmitHandler<SellerRegFormSchemaType> = async (data) => {
+  const onSubmit: SubmitHandler<SellerRegFormSchemaType> = async (
+    data: SellerRegFormSchemaType
+  ) => {
     setIsSubmitting(true);
+    console.log(data);
     const formData = new FormData();
     formData.append("pfp", data.pfp as File);
-    formData.append("name", data.companyName);
+    formData.append("name", data.name);
     formData.append("email", data.email);
     formData.append("password", data.password);
     formData.append("phone", data.phone);
-    formData.append("address", data.companyAddress);
-    formData.append("answer", data.securityQuestion);
+    formData.append("address", data.address);
+    formData.append("answer", data.answer);
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/seller/auth/signup`,
-        data
+        formData
       );
 
       if (response.status === 201) {
@@ -140,15 +141,15 @@ export default function SellerRegister() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div className="space-y-2">
-                <Label htmlFor="companyName">Company Name</Label>
+                <Label htmlFor="name">Company Name</Label>
                 <Input
-                  id="companyName"
-                  {...register("companyName")}
+                  id="name"
+                  {...register("name")}
                   placeholder="Company Name"
                 />
-                {errors.companyName && (
+                {errors.name && (
                   <p className="text-red-500 text-sm">
-                    {errors.companyName.message}
+                    {String(errors.name.message)}
                   </p>
                 )}
               </div>
@@ -162,7 +163,9 @@ export default function SellerRegister() {
                   placeholder="Email ID"
                 />
                 {errors.email && (
-                  <p className="text-red-500 text-sm">{errors.email.message}</p>
+                  <p className="text-red-500 text-sm">
+                    {String(errors.email.message)}
+                  </p>
                 )}
               </div>
 
@@ -175,7 +178,9 @@ export default function SellerRegister() {
                   placeholder="Mobile No."
                 />
                 {errors.phone && (
-                  <p className="text-red-500 text-sm">{errors.phone.message}</p>
+                  <p className="text-red-500 text-sm">
+                    {String(errors.phone.message)}
+                  </p>
                 )}
               </div>
 
@@ -189,36 +194,36 @@ export default function SellerRegister() {
                 />
                 {errors.password && (
                   <p className="text-red-500 text-sm">
-                    {errors.password.message}
+                    {String(errors.password.message)}
                   </p>
                 )}
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="companyAddress">Company Address</Label>
+              <Label htmlFor="address">Company Address</Label>
               <Input
-                id="companyAddress"
-                {...register("companyAddress")}
+                id="address"
+                {...register("address")}
                 placeholder="Enter your company's full address"
               />
-              {errors.companyAddress && (
+              {errors.address && (
                 <p className="text-red-500 text-sm">
-                  {errors.companyAddress.message}
+                  {String(errors.address.message)}
                 </p>
               )}
             </div>
 
             <div className="space-y-2 sm:col-span-2">
-              <Label htmlFor="securityQuestion">Security Question</Label>
+              <Label htmlFor="answer">Security Question</Label>
               <Input
-                id="securityQuestion"
-                {...register("securityQuestion")}
+                id="answer"
+                {...register("answer")}
                 placeholder="What is your favorite word?"
               />
-              {errors.securityQuestion && (
+              {errors.answer && (
                 <p className="text-red-500 text-sm">
-                  {errors.securityQuestion.message}
+                  {String(errors.answer.message)}
                 </p>
               )}
             </div>

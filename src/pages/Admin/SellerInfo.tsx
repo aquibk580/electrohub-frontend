@@ -14,48 +14,25 @@ import {
 } from "recharts";
 import { Star, Package, TrendingUp, Users } from "lucide-react";
 import { mockData } from "@/data/mock-data";
+import axios from "@/lib/axios";
 
 const SellerDetails = () => {
   const { id } = useParams();
   const [seller, setSeller] = useState<any>(null);
 
   useEffect(() => {
-    if (id) {
-      // Find seller from both top sellers and all sellers
-      const foundSeller = [...mockData.topsellers, ...mockData.sellers].find(
-        (s) => s.id === id
+    const getSellerData = async () => {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/admin/sellers/${id}`
       );
-      if (foundSeller) {
-        // Enhance with additional mock data
-        setSeller({
-          ...foundSeller,
-          rating: 4.8,
-          totalOrders: 15234,
-          joinDate: "Jan 15, 2023",
-          verificationStatus: "Verified",
-          contactInfo: {
-            email: "seller@example.com",
-            phone: "+91 9876543210",
-            address: "123 Business Street, Mumbai, Maharashtra, 400001",
-          },
-          performance: {
-            monthlyData: Array.from({ length: 6 }, (_, i) => ({
-              month: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"][i],
-              sales: Math.floor(Math.random() * 50000) + 10000,
-              profit: Math.floor(Math.random() * 30000) + 5000,
-            })),
-            metrics: {
-              orderCompletion: 98.5,
-              customerSatisfaction: 4.7,
-              responseTime: "2 hours",
-              returnRate: "2.3%",
-            },
-          },
-          recentOrders: mockData.orders.slice(0, 5),
-        });
+      if (response.status === 200) {
+        setSeller(response.data);
       }
-    }
-  }, [id]);
+    };
+
+    getSellerData();
+    console.log(seller);
+  }, []);
 
   if (!seller) return null;
 
@@ -70,36 +47,36 @@ const SellerDetails = () => {
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <div>
-              <h3 className="text-2xl font-semibold">{seller.sellerName}</h3>
+              <h3 className="text-2xl font-semibold">{seller.name}</h3>
               <div className="flex items-center space-x-2 mt-2">
-                <Badge variant="secondary">{seller.sellerNiche}</Badge>
+                <Badge variant="secondary">{seller.email}</Badge>
                 <Badge
                   variant="outline"
                   className="bg-green-500/10 text-green-500"
                 >
-                  {seller.verificationStatus}
+                  {seller.phone}
                 </Badge>
               </div>
             </div>
             <div className="flex items-center space-x-4">
               <Star className="w-5 h-5 text-yellow-400 fill-current" />
-              <span>{seller.rating} Rating</span>
+              {/* <span>{seller.rating} Rating</span> */}
               <span>•</span>
-              <span>{seller.totalOrders.toLocaleString()} Orders</span>
+              {/* <span>{seller.totalOrders.toLocaleString()} Orders</span> */}
             </div>
           </div>
           <div className="space-y-2">
             <p>
-              <strong>Member Since:</strong> {seller.joinDate}
+              <strong>Member Since:</strong> {seller.createdAt}
             </p>
             <p>
-              <strong>Country:</strong> {seller.originCountry}
+              <strong>Location:</strong> {seller.address}
             </p>
             <p>
-              <strong>Total Profits:</strong> {seller.totalProfits}
+              {/* <strong>Total Profits:</strong> {seller.totalProfits} */}
             </p>
             <p>
-              <strong>Items Sold:</strong> {seller.totalItemsSold}
+              {/* <strong>Items Sold:</strong> {seller.totalItemsSold} */}
             </p>
           </div>
         </CardContent>
@@ -112,7 +89,7 @@ const SellerDetails = () => {
         </CardHeader>
         <CardContent>
           <div className="h-[300px] mt-4">
-            <ResponsiveContainer width="100%" height="100%">
+            {/* <ResponsiveContainer width="100%" height="100%">
               <LineChart data={seller.performance.monthlyData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
@@ -131,7 +108,7 @@ const SellerDetails = () => {
                   name="Profit"
                 />
               </LineChart>
-            </ResponsiveContainer>
+            </ResponsiveContainer> */}
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
             <Card>
@@ -141,7 +118,7 @@ const SellerDetails = () => {
                   <span>Order Completion</span>
                 </div>
                 <p className="text-2xl font-semibold mt-2">
-                  {seller.performance.metrics.orderCompletion}%
+                  {/* {seller.performance.metrics.orderCompletion}% */}
                 </p>
               </CardContent>
             </Card>
@@ -152,7 +129,7 @@ const SellerDetails = () => {
                   <span>Satisfaction</span>
                 </div>
                 <p className="text-2xl font-semibold mt-2">
-                  {seller.performance.metrics.customerSatisfaction}/5
+                  {/* {seller.performance.metrics.customerSatisfaction}/5 */}
                 </p>
               </CardContent>
             </Card>
@@ -163,7 +140,7 @@ const SellerDetails = () => {
                   <span>Response Time</span>
                 </div>
                 <p className="text-2xl font-semibold mt-2">
-                  {seller.performance.metrics.responseTime}
+                  {/* {seller.performance.metrics.responseTime} */}
                 </p>
               </CardContent>
             </Card>
@@ -174,7 +151,7 @@ const SellerDetails = () => {
                   <span>Return Rate</span>
                 </div>
                 <p className="text-2xl font-semibold mt-2">
-                  {seller.performance.metrics.returnRate}
+                  {/* {seller.performance.metrics.returnRate} */}
                 </p>
               </CardContent>
             </Card>
@@ -190,17 +167,17 @@ const SellerDetails = () => {
         <CardContent className="space-y-2">
           <div className="flex justify-between">
             <span>Email</span>
-            <span>{seller.contactInfo.email}</span>
+            <span>{seller.email}</span>
           </div>
           <Separator />
           <div className="flex justify-between">
             <span>Phone</span>
-            <span>{seller.contactInfo.phone}</span>
+            <span>{seller.phone}</span>
           </div>
           <Separator />
           <div className="flex justify-between">
             <span>Address</span>
-            <span>{seller.contactInfo.address}</span>
+            <span>{seller.address}</span>
           </div>
         </CardContent>
       </Card>
@@ -212,7 +189,7 @@ const SellerDetails = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {seller.recentOrders.map((order: any) => (
+            {/* {seller.recentOrders.map((order: any) => (
               <div
                 key={order.id}
                 className="flex items-center justify-between p-4 border rounded-lg"
@@ -237,7 +214,7 @@ const SellerDetails = () => {
                   </Badge>
                 </div>
               </div>
-            ))}
+            ))} */}
           </div>
         </CardContent>
       </Card>

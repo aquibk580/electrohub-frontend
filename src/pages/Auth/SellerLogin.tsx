@@ -106,7 +106,7 @@ export default function SellerLogin() {
                 placeholder="Email ID"
               />
               {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email.message}</p>
+                <p className="text-red-500 text-sm">{String(errors.email.message)}</p>
               )}
             </div>
 
@@ -126,7 +126,7 @@ export default function SellerLogin() {
               />
               {errors.password && (
                 <p className="text-red-500 text-sm">
-                  {errors.password.message}
+                  {String(errors.password.message)}
                 </p>
               )}
             </div>

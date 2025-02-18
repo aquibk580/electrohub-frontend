@@ -135,9 +135,7 @@ export default function SellerDetails() {
                 })}
                 placeholder="Phone number is required"
               />
-              {errors.phone && (
-                <p className="text-red-500 text-sm">{errors.phone.message}</p>
-              )}
+              {errors.phone && <p className="text-red-500 text-sm">{}</p>}
             </div>
 
             <div className="space-y-2">
@@ -151,7 +149,9 @@ export default function SellerDetails() {
                 placeholder="Email ID"
               />
               {errors.address && (
-                <p className="text-red-500 text-sm">{errors.address.message}</p>
+                <p className="text-red-500 text-sm">
+                  {String(errors.address.message)}
+                </p>
               )}
             </div>
 
@@ -171,7 +171,7 @@ export default function SellerDetails() {
               />
               {errors.password && (
                 <p className="text-red-500 text-sm">
-                  {errors.password.message}
+                  {String(errors.password.message)}
                 </p>
               )}
             </div>
@@ -187,7 +187,9 @@ export default function SellerDetails() {
                 placeholder="what is your favourite word"
               />
               {errors.answer && (
-                <p className="text-red-500 text-sm">{errors.answer.message}</p>
+                <p className="text-red-500 text-sm">
+                  {String(errors.answer.message)}
+                </p>
               )}
             </div>
 

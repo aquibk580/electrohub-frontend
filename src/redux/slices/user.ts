@@ -8,6 +8,7 @@ interface User {
   address: string;
   phone: string;
   answer: string;
+  gender: "Male" | "Female";
 }
 
 export interface UserState {

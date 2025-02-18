@@ -1,24 +1,63 @@
-import { useState, ReactNode } from "react";
+import { useState, ReactNode, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Plus, Edit, Trash2, Image as ImageIcon } from "lucide-react";
+import axios from "@/lib/axios";
+import DeleteCategoryButton from "@/components/Admin/CMS/DeleteCategoryButton";
+import AddCategoryDialog from "@/components/Admin/CMS/AddCategoryDialog";
+import EditCategoryDialog from "@/components/Admin/CMS/EditCategoryDialog";
+
+interface Category {
+  name: string;
+  imageUrl: string;
+}
+
+interface TableWrapperProps {
+  children: ReactNode;
+}
 
 const ContentManagement = () => {
   const isMobile = useMediaQuery({ maxWidth: 768 });
-  const [activeTab, setActiveTab] = useState("carousel");
+  const [activeTab, setActiveTab] = useState("categories");
+  const [categories, setCategories] = useState<Array<Category>>([]);
 
-  interface TableWrapperProps {
-    children: ReactNode;
-  }
+  useEffect(() => {
+    const getAllCategories = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/admin/cms/categories`
+        );
+        if (response.status === 200) {
+          setCategories(response.data);
+        }
+      } catch (error: any) {
+        console.log(error);
+      }
+    };
+
+    getAllCategories();
+  }, []);
 
   const TableWrapper = ({ children }: TableWrapperProps) => {
     if (isMobile) {
@@ -109,85 +148,6 @@ const ContentManagement = () => {
     </div>
   );
 
-  const PolicySection = () => (
-    <div className="space-y-4">
-      <div className="grid gap-4">
-        <div className="space-y-2">
-          <Label>Terms of Service</Label>
-          <Textarea className="min-h-[200px]" placeholder="Enter terms of service..." />
-        </div>
-        <div className="space-y-2">
-          <Label>Privacy Policy</Label>
-          <Textarea className="min-h-[200px]" placeholder="Enter privacy policy..." />
-        </div>
-        <div className="space-y-2">
-          <Label>Return Policy</Label>
-          <Textarea className="min-h-[200px]" placeholder="Enter return policy..." />
-        </div>
-        <Button>Save Changes</Button>
-      </div>
-    </div>
-  );
-
-  const FAQSection = () => (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium">Frequently Asked Questions</h3>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="w-4 h-4 mr-2" />
-              Add FAQ
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add New FAQ</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="grid w-full items-center gap-1.5">
-                <Label>Question</Label>
-                <Input placeholder="Enter question" />
-              </div>
-              <div className="grid w-full items-center gap-1.5">
-                <Label>Answer</Label>
-                <Textarea placeholder="Enter answer" />
-              </div>
-              <Button className="w-full">Save FAQ</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      </div>
-      <TableWrapper>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Question</TableHead>
-              <TableHead>Answer</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell>How do I track my order?</TableCell>
-              <TableCell>You can track your order in your account dashboard...</TableCell>
-              <TableCell>
-                <div className="flex space-x-2">
-                  <Button variant="ghost" size="icon">
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon">
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableWrapper>
-    </div>
-  );
-
   const DiscountSection = () => (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -261,28 +221,99 @@ const ContentManagement = () => {
     </div>
   );
 
+  const CategorySection = () => {
+    return (
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-medium">Categories</h3>
+          <AddCategoryDialog setCategories={setCategories} />
+        </div>
+        <TableWrapper>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Image</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {categories.length > 0 ? (
+                categories.map((category) => (
+                  <TableRow key={category.name}>
+                    <TableCell>
+                      <div className="w-32 h-24 bg-gray-100 rounded flex items-center justify-center">
+                        {category.imageUrl ? (
+                          <img
+                            src={category.imageUrl}
+                            className="w-full h-full object-contain"
+                            alt="Category Image"
+                          />
+                        ) : (
+                          <ImageIcon className="w-6 h-6 text-gray-400" />
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell className="font-medium">
+                      {category.name}
+                    </TableCell>
+
+                    <TableCell>
+                      <div className="flex space-x-2">
+                        <EditCategoryDialog
+                          setCategories={setCategories}
+                          categoryName={category.name}
+                          imageUrl={category.imageUrl}
+                        />
+                        <DeleteCategoryButton
+                          categoryName={category.name}
+                          setCategories={setCategories}
+                        />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <></>
+              )}
+            </TableBody>
+          </Table>
+        </TableWrapper>
+      </div>
+    );
+  };
+
   return (
     <div className="w-full px-2 py-2 sm:px-4 sm:py-4 space-y-4 ">
       <Card className="shadow-md rounded-lg">
         <CardHeader className="px-4 py-2 sm:p-5">
-          <CardTitle className="text-xl sm:text-2xl">Content Management</CardTitle>
+          <CardTitle className="text-xl sm:text-2xl">
+            Content Management
+          </CardTitle>
         </CardHeader>
         <CardContent className="p-2 sm:p-4">
-          <Tabs defaultValue="carousel" className="w-full" onValueChange={setActiveTab}>
-            <TabsList className="w-fit justify-start mb-4 bg-accent">
-              <TabsTrigger value="carousel">Carousel/Banner</TabsTrigger>
-              <TabsTrigger value="faq">FAQs</TabsTrigger>
-              <TabsTrigger value="policies">Policies</TabsTrigger>
+          <Tabs
+            defaultValue="categories"
+            className="w-full"
+            onValueChange={setActiveTab}
+          >
+            <TabsList className="w-fit justify-start mb-4 bg-accent ">
+              <TabsTrigger value="categories">Categories</TabsTrigger>
+              <TabsTrigger value="bannerCarousel">Banner Carousel</TabsTrigger>
+              <TabsTrigger value="productCarousel">
+                Product Carousel
+              </TabsTrigger>
+
               <TabsTrigger value="discounts">Discounts</TabsTrigger>
             </TabsList>
-            <TabsContent value="carousel">
+            <TabsContent value="categories">
+              <CategorySection />
+            </TabsContent>
+            <TabsContent value="bannerCarousel">
               <CarouselSection />
             </TabsContent>
-            <TabsContent value="faq">
-              <FAQSection />
-            </TabsContent>
-            <TabsContent value="policies">
-              <PolicySection />
+            <TabsContent value="productCarousel">
+              <CarouselSection />
             </TabsContent>
             <TabsContent value="discounts">
               <DiscountSection />

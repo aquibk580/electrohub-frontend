@@ -7,6 +7,7 @@ import { mockData, tableHeaders } from "@/data/mock-data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "@/lib/axios";
 
 const breadcrumbs = [
   { href: "#", label: "User Management" },
@@ -15,7 +16,7 @@ const breadcrumbs = [
 
 const Seller = () => {
   const navigate = useNavigate();
-
+  const [users, setUsers] = useState([]);
   const location = useLocation();
   const isMobile = useMediaQuery({ maxWidth: 768 });
   // const [currentPage, setCurrentPage] = useState(1);
@@ -25,7 +26,7 @@ const Seller = () => {
   const [sortBy, setSortBy] = useState("");
   const [filterBy, setFilterBy] = useState("");
   const searchParams = new URLSearchParams(location.search);
-  const initialPage = parseInt(searchParams.get('page') || '1');
+  const initialPage = parseInt(searchParams.get("page") || "1");
 
   const [currentPage, setCurrentPage] = useState(initialPage);
 
@@ -68,7 +69,7 @@ const Seller = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     const params = new URLSearchParams(location.search);
-    params.set('page', page.toString());
+    params.set("page", page.toString());
     navigate(`${location.pathname}?${params.toString()}`, { replace: true });
   };
 
@@ -79,12 +80,14 @@ const Seller = () => {
 
   // Reset to stored page when returning from detail view
   useEffect(() => {
-    const returnPage = searchParams.get('returnPage');
+    const returnPage = searchParams.get("returnPage");
     if (returnPage) {
       setCurrentPage(parseInt(returnPage));
       // Clean up the return page parameter
-      searchParams.delete('returnPage');
-      navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
+      searchParams.delete("returnPage");
+      navigate(`${location.pathname}?${searchParams.toString()}`, {
+        replace: true,
+      });
     }
   }, [location.search]);
   const paginatedData = useMemo(() => {
@@ -100,9 +103,7 @@ const Seller = () => {
     if (isMobile) {
       return (
         <ScrollArea className="w-[calc(100vw-2rem)] max-w-full rounded-md">
-          <div className="min-w-[600px]">
-            {children}
-          </div>
+          <div className="min-w-[600px]">{children}</div>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       );
@@ -110,40 +111,61 @@ const Seller = () => {
     return <>{children}</>;
   };
 
+  useEffect(() => {
+    const getAllUsers = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/admin/users`
+        );
+        if (response.status === 200) {
+          setUsers(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getAllUsers();
+  }, []);
+
   return (
     // <SidebarLayout breadcrumbs={breadcrumbs}>
-        <div className="w-full px-2 py-2 sm:px-4 sm:py-4">
-          <Card className="shadow-md rounded-lg py-4">
-            <CardHeader className="px-4 py-2 sm:p-5">
-              <CardTitle className="text-xl sm:text-2xl">Buyers</CardTitle>
-            </CardHeader>
-            <CardContent className="p-2 sm:p-4 space-y-3">
-              <SearchFilterSort
-                onSearch={setSearchTerm}
-                onSort={setSortBy}
-                onFilter={setFilterBy}
-                sortOptions={[{ value: "Spend", label: "Spend" }, { value: "Purchased", label: "Purchased" }]}
-                filterOptions={[{ value: "Electronics", label: "Electronics" }, { value: "Clothing", label: "Clothing" }]}
-              />
-              <TableWrapper>
-              <DataTable
-                headers={tableHeaders.buyer}
-                data={paginatedData}
-                type="topSeller"
-                onRowClick={handleRowClick}
-              />
-              </TableWrapper>
-              <PaginationControls
-                currentPage={currentPage}
-                totalPages={Math.ceil(filteredData.length / itemsPerPage)}
-                itemsPerPage={itemsPerPage}
-                onPageChange={handlePageChange }
-                onItemsPerPageChange={setItemsPerPage}
-              />
-            </CardContent>
-          </Card>
-
-        </div>
+    <div className="w-full px-2 py-2 sm:px-4 sm:py-4">
+      <Card className="shadow-md rounded-lg py-4">
+        <CardHeader className="px-4 py-2 sm:p-5">
+          <CardTitle className="text-xl sm:text-2xl">Buyers</CardTitle>
+        </CardHeader>
+        <CardContent className="p-2 sm:p-4 space-y-3">
+          <SearchFilterSort
+            onSearch={setSearchTerm}
+            onSort={setSortBy}
+            onFilter={setFilterBy}
+            sortOptions={[
+              { value: "Spend", label: "Spend" },
+              { value: "Purchased", label: "Purchased" },
+            ]}
+            filterOptions={[
+              { value: "Electronics", label: "Electronics" },
+              { value: "Clothing", label: "Clothing" },
+            ]}
+          />
+          <TableWrapper>
+            <DataTable
+              headers={tableHeaders.buyer}
+              data={users}
+              type="topSeller"
+              onRowClick={handleRowClick}
+            />
+          </TableWrapper>
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={Math.ceil(filteredData.length / itemsPerPage)}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+            onItemsPerPageChange={setItemsPerPage}
+          />
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

@@ -1,32 +1,150 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "@/redux/store";
+import axios from "@/lib/axios";
+import { clearUser, setUser } from "@/redux/slices/user";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const PersonalInfo = () => {
-  const { register, handleSubmit } = useForm({
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector((state: RootState) => state.user.user);
+  const [editingField, setEditingField] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+
+  const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
-      name: "Raihan Shaikh",
-      phone: "9090909090",
-      gender: "male",
-      address: "Mumbra, Kausa",
-      securityAnswer: "Gold",
+      name: user!.name,
+      phone: user!.phone,
+      gender: user!.gender || "Male",
+      address: user!.address,
+      answer: user!.answer,
     },
   });
 
   interface FormData {
     name: string;
     phone: string;
-    gender: string;
+    gender: "Male" | "Female";
     address: string;
-    securityAnswer: string;
+    answer: string;
   }
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
+  interface User {
+    id: string;
+    name: string;
+    email: string;
+    address: string;
+    phone: string;
+    answer: string;
+    gender: "Male" | "Female";
+  }
+
+  const onSubmit = (data: FormData) => {};
+
+  const handleEdit = (field: string) => {
+    setEditingField(field);
   };
+
+  type FieldType = "name" | "address" | "phone" | "gender" | "answer";
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/user/${user!.id}`
+      );
+      if (response.status === 200) {
+        dispatch(clearUser());
+        navigate("/");
+        toast.success(
+          `${response.data?.user?.name}'s account deleted successfully`,
+          { position: "top-center", theme: "dark" }
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleSave = async (field: FieldType) => {
+    setEditingField(null);
+    try {
+      const response = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/api/user/${user!.id}`,
+        { [field]: watch(field as keyof FormData) }
+      );
+
+      if (response.status === 200) {
+        dispatch(
+          setUser({
+            ...user!,
+            [field]: response.data?.user[field],
+          })
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(`Saving ${field}:`, watch(field as keyof FormData));
+  };
+
+  const renderField = (field: keyof FormData, label: string) => (
+    <div className="space-y-2">
+      <div className="flex justify-between items-center">
+        <Label>{label}</Label>
+        {editingField === field ? (
+          <div className="space-x-2">
+            <Button
+              variant="secondary"
+              className="bg-blue-600 text-white hover:bg-blue-500"
+              size="sm"
+              onClick={() => handleSave(field)}
+            >
+              Save
+            </Button>
+            <Button
+              variant="secondary"
+              className="bg-blue-600 text-white hover:bg-blue-500"
+              size="sm"
+              onClick={() => setEditingField("")}
+            >
+              Cancel
+            </Button>
+          </div>
+        ) : (
+          <Button
+            variant="link"
+            className="text-blue-600 h-auto p-0"
+            onClick={() => handleEdit(field)}
+          >
+            Edit
+          </Button>
+        )}
+      </div>
+      <Input {...register(field)} disabled={editingField !== field} />
+    </div>
+  );
 
   return (
     <Card className="rounded-lg shadow-md">
@@ -35,75 +153,96 @@ const PersonalInfo = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <Label>Name</Label>
-                <Button variant="link" className="text-blue-600 h-auto p-0">
-                  Edit
-                </Button>
-              </div>
-              <Input {...register("name")} />
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <Label>Phone</Label>
-                <Button variant="link" className="text-blue-600 h-auto p-0">
-                  Edit
-                </Button>
-              </div>
-              <Input {...register("phone")} />
-            </div>
+            {renderField("name", "Name")}
+            {renderField("phone", "Phone")}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <Label>Your Gender</Label>
-                <Button variant="link" className="text-blue-600 h-auto p-0">
-                  Edit
-                </Button>
+                {editingField === "gender" ? (
+                  <div className="space-x-2">
+                    <Button
+                      variant="secondary"
+                      className="bg-blue-600 text-white hover:bg-blue-500"
+                      size="sm"
+                      onClick={() => handleSave("gender")}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      className="bg-blue-600 text-white hover:bg-blue-500"
+                      size="sm"
+                      onClick={() => setEditingField("")}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    variant="link"
+                    className="text-blue-600 h-auto p-0"
+                    onClick={() => handleEdit("gender")}
+                  >
+                    Edit
+                  </Button>
+                )}
               </div>
-              <RadioGroup defaultValue="male" className="flex gap-4">
+              <RadioGroup
+                defaultValue={watch("gender")}
+                className="flex gap-4"
+                disabled={editingField !== "gender"}
+                onValueChange={(value: "Male" | "Female") =>
+                  setValue("gender", value)
+                }
+              >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="male" id="male" />
-                  <Label htmlFor="male">Male</Label>
+                  <RadioGroupItem value="Male" id="Male" />
+                  <Label htmlFor="Male">Male</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="female" id="female" />
-                  <Label htmlFor="female">Female</Label>
+                  <RadioGroupItem value="Female" id="Female" />
+                  <Label htmlFor="Female">Female</Label>
                 </div>
               </RadioGroup>
             </div>
 
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <Label>Address</Label>
-                <Button variant="link" className="text-blue-600 h-auto p-0">
-                  Edit
-                </Button>
-              </div>
-              <Input {...register("address")} />
-            </div>
+            {renderField("address", "Address")}
           </div>
 
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <Label>Answer to security question</Label>
-              <Button variant="link" className="text-blue-600 h-auto p-0">
-                Edit
+          {renderField("answer", "Answer to security question")}
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                type="button"
+                variant="destructive"
+                className="w-full sm:w-auto"
+              >
+                {!isDeleting ? "Delete Account": "Deleting..."}
               </Button>
-            </div>
-            <Input {...register("securityAnswer")} />
-          </div>
-
-          <Button
-            type="button"
-            variant="destructive"
-            className="w-full sm:w-auto"
-          >
-            Delete Account
-          </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your account and remove your data from our servers.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  className="bg-red-500 text-white"
+                  onClick={handleDelete}
+                >
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </form>
       </CardContent>
     </Card>

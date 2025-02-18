@@ -1,14 +1,13 @@
 import { Outlet } from "react-router-dom";
-import SidebarLayout from "@/components/Admin/sidebar/SidebarLayout";
+import SidebarLayout from "@/components/Common/sidebar/SidebarLayout";
 
 const AdminLayout = () => {
   return (
-    <div className="admin-container">
+    <div>
       <SidebarLayout>
-      <div className="admin-content">
-        <Outlet /> {/* This will render the nested routes */}
-
-      </div>
+        <div>
+          <Outlet />
+        </div>
       </SidebarLayout>
     </div>
   );

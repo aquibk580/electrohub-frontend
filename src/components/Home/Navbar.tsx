@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+  import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import React, { useState } from "react";
@@ -17,6 +17,7 @@ import {
 import UserProfileButton from "./UserProfileButton";
 import { Menu } from "lucide-react";
 import MobileSideBar from "./MobileSidebar";
+import { Input } from "../ui/input";
 
 const Navbar = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -77,33 +78,52 @@ const Navbar = () => {
   ];
 
   return (
-    <header>
-      <div className="bg-green-950 text-white w-full items-start text-sm lg:flex justify-between px-6 py-1 hidden ">
-        <div className="flex items-center">
-          <img className="w-4" src={assets.phone_icon} alt="" />
+    <header className="fixed z-50 w-full border-b shadow-sm bg-white">
+      {/* Top Banner */}
+      <div className="bg-green-950 text-white text-sm py-1 px-6 lg:flex justify-between hidden">
+        <div className="flex items-center gap-2 w-full">
+          <img className="w-4" src={assets.phone_icon} alt="Phone" />
           <p>+91-987654321</p>
         </div>
-        <p>Get 5% off on Selected Items | Shop now</p>
+        <p className="text-center w-full">
+          Get 5% off on Selected Items | Shop now
+        </p>
       </div>
-      <nav className=" w-ful border flex justify-between lg:px-12 px-6 py-4 font-medium items-center">
-        <div
-          className={`fixed inset-0 bg-black bg-opacity-50 z-10 transition-opacity lg:hidden ${
-            showSidebar ? "opacity-100 visible" : "opacity-0 invisible"
-          }`}
-        >
-          <MobileSideBar
-            setShowSidebar={setShowSidebar}
-            showSidebar={showSidebar}
+
+      {/* Main Navbar */}
+      <nav className="w-full flex items-center justify-between px-6 lg:px-12 py-4">
+        {/* Mobile Sidebar Toggle */}
+        <div className="lg:hidden flex items-center w-full justify-between">
+          <Menu
+            size={32}
+            className="cursor-pointer"
+            onClick={() => setShowSidebar(true)}
           />
+          <h1 className="font-semibold text-3xl">Electrohub</h1>
+          <div>
+            {isAuthenticated && user ? (
+              <UserProfileButton name={user.name} imageUrl={pfp!} />
+            ) : (
+              <div
+                onClick={() => navigate("/user/auth/signin")}
+                className="flex gap-1 items-center cursor-pointer hover:text-orange-600"
+              >
+                <img
+                  className="lg:h-5 h-7"
+                  src={assets.account_icon}
+                  alt="Account"
+                />
+                <p className="hidden lg:block">Account</p>
+              </div>
+            )}
+          </div>
         </div>
 
-        <Menu
-          className="lg:hidden"
-          size={32}
-          onClick={() => setShowSidebar(true)}
-        />
-        <h1 className="font-semibold text-3xl">Electrohub</h1>
-        <NavigationMenu className="hidden lg:flex">
+        {/* Desktop Logo */}
+        <h1 className="font-semibold text-3xl hidden lg:block">Electrohub</h1>
+
+        {/* Navigation Menu */}
+        <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuTrigger className="rounded-full">
@@ -113,10 +133,10 @@ const Navbar = () => {
                 <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                   <li className="row-span-3">
                     <NavigationMenuLink asChild>
-                      <Link
+                      <a
                         className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                        to="/"
-                      ></Link>
+                        href="/"
+                      ></a>
                     </NavigationMenuLink>
                   </li>
                   <ListItem href="/docs" title="Introduction">
@@ -167,48 +187,64 @@ const Navbar = () => {
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink
-                href="/docs"
-                className={navigationMenuTriggerStyle()}
-              >
-                About Us
-              </NavigationMenuLink>
+              <Link to="/docs">
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Orders
+                </NavigationMenuLink>
+              </Link>
             </NavigationMenuItem>
 
             <NavigationMenuItem>
-              <NavigationMenuLink
-                href="/docs"
-                className={navigationMenuTriggerStyle()}
-              >
-                Contact Us
-              </NavigationMenuLink>
+              <Link to="/docs">
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  What's New
+                </NavigationMenuLink>
+              </Link>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
 
-        <form className="hidden lg:flex items-center border px-3 py-2 rounded-full focus-within:border-green-600">
-          <input
-            className="outline-none w-[400px] text-md"
+        {/* Search Bar */}
+        <form className="hidden lg:flex items-center w-full max-w-lg border px-3 py-1 mx-5 rounded-full focus-within:border-green-600">
+          <Input
+            className="outline-none w-full text-md border-none focus-visible:ring-0"
             type="search"
             placeholder="Search your products"
           />
-          <img className="h-5" src={assets.search_icon} alt="" />
+          <img className="h-5" src={assets.search_icon} alt="Search" />
         </form>
 
-        <div className="flex gap-6">
+        {/* User Account/Profile */}
+        <div className="hidden lg:flex gap-6">
           {isAuthenticated && user ? (
             <UserProfileButton name={user.name} imageUrl={pfp!} />
           ) : (
             <div
               onClick={() => navigate("/user/auth/signin")}
-              className="flex gap-1 items-center  cursor-pointer hover:text-orange-600 "
+              className="flex gap-1 items-center cursor-pointer hover:text-orange-600"
             >
-              <img className="lg:h-5 h-7" src={assets.account_icon} alt="" />
+              <img
+                className="lg:h-5 h-7"
+                src={assets.account_icon}
+                alt="Account"
+              />
               <p className="hidden lg:block">Account</p>
             </div>
           )}
         </div>
       </nav>
+
+      {/* Mobile Sidebar Overlay */}
+      <div
+        className={`fixed inset-0 transition-opacity duration-300 lg:hidden ${
+          showSidebar ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
+      >
+        <MobileSideBar
+          showSidebar={showSidebar}
+          setShowSidebar={setShowSidebar}
+        />
+      </div>
     </header>
   );
 };

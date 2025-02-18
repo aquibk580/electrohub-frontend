@@ -1,6 +1,6 @@
 "use client";
 
-import type * as React from "react";
+import * as React from "react";
 import {
   GalleryVerticalEnd,
   Settings2,
@@ -14,6 +14,10 @@ import {
   BarChart2,
   Bell,
   Shield,
+  PackageSearch,
+  BadgePlus,
+  CircleUserRound,
+  Home,
 } from "lucide-react";
 
 import { NavMain } from "./nav-main";
@@ -24,12 +28,11 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail,
 } from "@/components/ui/sidebar";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
-type UserRole = "admin";
+type UserRole = "admin" | "seller";
 
 interface RoleData {
   user: {
@@ -51,12 +54,13 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 }
 
 export function AppSidebar({ userRole, ...props }: AppSidebarProps) {
+  const seller = useSelector((state: RootState) => state.seller.seller);
   const admin = useSelector((state: RootState) => state.admin.admin);
   const data: Record<UserRole, RoleData> = {
     admin: {
       user: {
-        name: admin!.name,
-        email: admin!.email,
+        name: admin?.name ?? "Admin",
+        email: admin?.email ?? "admin@example.com",
         avatar: "/avatars/admin.jpg",
         role: "admin",
       },
@@ -133,21 +137,58 @@ export function AppSidebar({ userRole, ...props }: AppSidebarProps) {
         },
       ],
     },
+    seller: {
+      user: {
+        name: seller?.name ?? "Seller",
+        email: seller?.email ?? "seller@example.com",
+        avatar: seller?.pfp ?? "/avatars/seller.jpg",
+        role: "seller",
+      },
+      teams: [
+        {
+          name: "Electrohub",
+          logo: Store,
+          plan: "Basic",
+        },
+      ],
+      navItems: [
+        {
+          title: "Home",
+          url: "/seller/dashboard",
+          icon: Home,
+          isActive: true,
+        },
+        {
+          title: "Profile",
+          url: "/seller/dashboard/profile",
+          icon: CircleUserRound,
+        },
+        {
+          title: "Add Products",
+          url: "/seller/dashboard/add-product",
+          icon: BadgePlus,
+        },
+        {
+          title: "Product List",
+          url: "/seller/dashboard/products",
+          icon: PackageSearch,
+        },
+      ],
+    },
   };
   const roleData = data[userRole];
 
   return (
-    <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
+    <Sidebar className="min-h-screen  bg-white" collapsible="icon" {...props}>
+      <SidebarHeader className="bg-white">
         <TeamSwitcher teams={roleData.teams} />
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="bg-white">
         <NavMain items={roleData.navItems} />
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="bg-white">
         <NavUser user={roleData.user} userRole={userRole} />
       </SidebarFooter>
-      <SidebarRail />
     </Sidebar>
   );
 }

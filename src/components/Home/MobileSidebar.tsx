@@ -21,6 +21,7 @@ import axios from "../../lib/axios";
 import { clearUser } from "@/redux/slices/user";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import { assets } from "@/assets/assets";
 
 interface MobileSidebarProps {
   setShowSidebar: (state: boolean) => void;
@@ -45,7 +46,9 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
 
   const handleLogOut = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/logout`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/auth/logout`
+      );
       if (response.status === 200) {
         dispatch(clearUser());
         toast.success("Logged out successfully", {
@@ -99,7 +102,13 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
             </p>
           </div>
         ) : (
-          <div className="w-full h-32 border-2 rounded-md mt-6">Login Karo</div>
+          <div className="w-fit h-fit rounded-md mt-6 mx-4">
+            <img
+              src={assets.shoppingBoyGif}
+              className="object-contain w-44 h-44"
+              alt=""
+            />
+          </div>
         )}
 
         <div className="flex flex-col justify-between flex-1 mt-6">

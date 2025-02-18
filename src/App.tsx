@@ -28,7 +28,7 @@ import Signin from "./pages/Admin/Auth/Signin";
 import Signup from "./pages/Admin/Auth/Signup";
 import AdminForgotPassword from "./pages/Admin/Auth/AdminForgotPassword";
 import AdminAuthLayout from "./pages/Admin/Auth/AdminAuthLayout";
-import AdminLayout from "@/components/Admin/sidebar/SidebarLayout";
+import AdminLayout from "@/components/Common/sidebar/SidebarLayout";
 import AdminDashboard from "./pages/Admin/Dashboard";
 import Seller from "./pages/Admin/Seller";
 import SellerInfo from "./pages/Admin/SellerInfo";
@@ -48,6 +48,9 @@ import Settings from "./pages/Admin/Settings";
 import LogsAndSecurity from "./pages/Admin/Logs";
 import Demo from "./pages/Admin/demo";
 import SellerProduct from "./pages/Admin/Seller-Product";
+import ViewProduct from "./pages/Seller/ViewProduct";
+import EditProduct from "./pages/Seller/EditProduct";
+import ViewOrder from "./pages/Seller/ViewOrder";
 
 const App = () => {
   return (
@@ -206,13 +209,39 @@ const App = () => {
               }
             />
             <Route
-              path="products"
+              path="order/:orderId"
               element={
                 <SellerLayout>
-                  <ProductList />
+                  <ViewOrder />
                 </SellerLayout>
               }
             />
+            <Route path="products">
+              <Route
+                index
+                element={
+                  <SellerLayout>
+                    <ProductList />
+                  </SellerLayout>
+                }
+              />
+              <Route
+                path="view-product/:id"
+                element={
+                  <SellerLayout>
+                    <ViewProduct />
+                  </SellerLayout>
+                }
+              />
+              <Route
+                path="edit-product/:id"
+                element={
+                  <SellerLayout>
+                    <EditProduct />
+                  </SellerLayout>
+                }
+              />
+            </Route>
             <Route
               path="add-product"
               element={

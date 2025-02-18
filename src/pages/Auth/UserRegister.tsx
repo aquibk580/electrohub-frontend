@@ -65,7 +65,7 @@ export default function UserRegister() {
 
   const handleGoogleSignUp = async () => {
     try {
-      const redirectUrl = `${import.meta.env.VITE_FRONTEND_URL}/user/auth/user-details`;
+      const redirectUrl = `${import.meta.env.VITE_FRONTEND_URL}/user/auth/user-details`;  
       const userType = "user";
 
       window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google?redirectUrl=${encodeURIComponent(
@@ -98,7 +98,7 @@ export default function UserRegister() {
                   placeholder="Full Name"
                 />
                 {errors.name && (
-                  <p className="text-red-500 text-sm">{errors.name.message}</p>
+                  <p className="text-red-500 text-sm">{String(errors.name.message)}</p>
                 )}
               </div>
 
@@ -117,7 +117,7 @@ export default function UserRegister() {
                   placeholder="Email Address"
                 />
                 {errors.email && (
-                  <p className="text-red-500 text-sm">{errors.email.message}</p>
+                  <p className="text-red-500 text-sm">{String(errors.email.message)}</p>
                 )}
               </div>
 
@@ -136,7 +136,7 @@ export default function UserRegister() {
                   placeholder="Phone Number"
                 />
                 {errors.phone && (
-                  <p className="text-red-500 text-sm">{errors.phone.message}</p>
+                  <p className="text-red-500 text-sm">{String(errors.phone.message)}</p>
                 )}
               </div>
 
@@ -156,7 +156,7 @@ export default function UserRegister() {
                 />
                 {errors.password && (
                   <p className="text-red-500 text-sm">
-                    {errors.password.message}
+                    {String(errors.password.message)}
                   </p>
                 )}
               </div>
@@ -170,7 +170,7 @@ export default function UserRegister() {
                 />
                 {errors.address && (
                   <p className="text-red-500 text-sm">
-                    {errors.address.message}
+                    {String(errors.address.message)}
                   </p>
                 )}
               </div>
@@ -186,7 +186,7 @@ export default function UserRegister() {
                 />
                 {errors.answer && (
                   <p className="text-red-500 text-sm">
-                    {errors.answer.message}
+                    {String(errors.answer.message)}
                   </p>
                 )}
               </div>

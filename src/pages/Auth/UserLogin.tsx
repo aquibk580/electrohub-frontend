@@ -61,6 +61,7 @@ export default function UserLogin() {
 
   const handleGoogleSignIn = async () => {
     try {
+      
       const redirectUrl = `${import.meta.env.VITE_FRONTEND_URL}/`;
       const userType = "user";
 
@@ -100,7 +101,7 @@ export default function UserLogin() {
                 placeholder="Email ID"
               />
               {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email.message}</p>
+                <p className="text-red-500 text-sm">{String(errors.email.message)}</p>
               )}
             </div>
 
@@ -120,7 +121,7 @@ export default function UserLogin() {
               />
               {errors.password && (
                 <p className="text-red-500 text-sm">
-                  {errors.password.message}
+                  {String(errors.password.message)}
                 </p>
               )}
             </div>

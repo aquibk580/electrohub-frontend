@@ -20,7 +20,7 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     if (isSellerAuthenticated) {
       navigate("/seller/dashboard");
     }
-  }, []);
+  }, [isSellerAuthenticated, navigate]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -40,6 +40,7 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
               address: user.address,
               phone: user.phone,
               answer: user.answer,
+              gender: user.gender,
             })
           );
           dispatch(setPfp(user.pfp));
@@ -59,11 +60,11 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     if (!isAuthenticated) {
       fetchUserData();
     }
-  }, []);
+  }, [isAuthenticated, dispatch]);
   return (
     <>
       <Navbar />
-      {children}
+      <div className="pt-[4rem] lg:pt-[6.7rem]">{children}</div>
       <Footer />
     </>
   );

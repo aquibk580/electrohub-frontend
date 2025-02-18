@@ -26,9 +26,9 @@ const SidebarLayout = ({ children }: SidebarLayoutProps) => {
   const breadcrumbs = breadcrumbConfig[location.pathname] || [];
 
   return (
-    <SidebarProvider>
-      <AppSidebar userRole="admin" />
-      <SidebarInset>
+    <SidebarProvider className="flex h-screen">
+      <AppSidebar userRole="admin" className="w-64 border-r" />
+      <SidebarInset className="flex-1 overflow-auto">
         <BreadcrumbHeader items={breadcrumbs} />
         <div className="bg-primary/5">{children}</div>
       </SidebarInset>

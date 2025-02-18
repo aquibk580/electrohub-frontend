@@ -63,11 +63,11 @@ export default function UserProfileButton({
   };
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="flex items-center gap-2 py-2 focus-visible:ring-0 hover:bg-white"
+          className="flex items-center gap-2 py-2 px-0 focus-visible:ring-0 hover:bg-white"
         >
           <Avatar>
             <AvatarImage src={imageUrl} alt="User" className="w-full h-full" />

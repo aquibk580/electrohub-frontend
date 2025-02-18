@@ -6,7 +6,7 @@ interface WrapperProps {
   children: ReactNode;
 }
 const SelectorWrapper = ({ children }: WrapperProps) => {
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isMobile = useMediaQuery({ maxWidth: 1150 });
 
   if (isMobile) {
     return (
@@ -22,13 +22,13 @@ const SelectorWrapper = ({ children }: WrapperProps) => {
 // export { SelectorWrapper };
 
 const TableWrapper = ({ children }: WrapperProps) => {
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isMobile = useMediaQuery({ maxWidth: 1150 });
 
   if (isMobile) {
     return (
       <ScrollArea className="w-[calc(100vw-2rem)] max-w-full rounded-md">
         <div className="min-w-[600px]">{children}</div>
-        <ScrollBar className="mt-9" orientation="horizontal" />
+        <ScrollBar className="mt-9 scrollbar-x" orientation="horizontal" />
       </ScrollArea>
     );
   }

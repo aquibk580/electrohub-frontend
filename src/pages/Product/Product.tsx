@@ -35,17 +35,17 @@ export default function Product() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  // const [selectedImage, setSelectedImage] = useState(0)
+  const [selectedImage, setSelectedImage] = useState(0)
 
   const nextImage = () => {
     if (product) {
-      // setSelectedImage((prev) => (prev + 1) % product.image.length)
+      setSelectedImage((prev) => (prev + 1) % product.image.length)
     }
   };
 
   const prevImage = () => {
     if (product) {
-      // setSelectedImage((prev) => (prev - 1 + product.image.length) % product.images.length)
+      setSelectedImage((prev) => (prev - 1 + product.image.length) % product.images.length) 
     }
   };
 

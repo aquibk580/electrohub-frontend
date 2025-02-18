@@ -8,8 +8,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "@/lib/axios";
 
 const Seller = () => {
+  const [seller, setSeller] = useState([]);
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const navigate = useNavigate();
   const location = useLocation();
@@ -98,6 +100,23 @@ const Seller = () => {
     }
   }, [location.search]);
 
+  useEffect(() => {
+    const getAllSellers = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/admin/sellers`
+        );
+
+        if (response.status === 200) {
+          setSeller(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getAllSellers();
+  }, []);
+
   const TableWrapper = ({ children }: TableWrapperProps) => {
     if (isMobile) {
       return (
@@ -155,7 +174,7 @@ const Seller = () => {
               <TableWrapper>
                 <DataTable
                   headers={tableHeaders.topSeller}
-                  data={paginatedData}
+                  data={seller}
                   type="topSeller"
                   onRowClick={handleRowClick}
                 />
@@ -189,7 +208,14 @@ const Seller = () => {
                   { value: "Clothing", label: "Clothing" },
                 ]}
               />
-
+              <TableWrapper>
+                <DataTable
+                  headers={tableHeaders.topSeller}
+                  data={seller}
+                  type="topSeller"
+                  onRowClick={handleRowClick}
+                />
+              </TableWrapper>
               <PaginationControls
                 currentPage={currentPage}
                 totalPages={Math.ceil(filteredData.length / itemsPerPage)}

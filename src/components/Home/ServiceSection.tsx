@@ -8,7 +8,7 @@ const ServiceSection = () => {
         Services to help you shop
       </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 items-start">
         {serviceContain.map((item) => (
           <div
             className="animate__animated animate__zoomIn rounded-xl bg-slate-50 shadow-lg hover:shadow-2xl transition-shadow"
@@ -22,10 +22,10 @@ const ServiceSection = () => {
                 {item.desc}
               </h2>
             </div>
-            <div className="overflow-hidden mt-4 rounded-b-xl">
+            <div className="w-full mt-4 rounded-b-xl">
               <img
                 src={item.img}
-                className="hover:scale-110 transition-transform duration-300 ease-in-out object-cover max-w-full h-auto rounded-b-xl"
+                className="hover:scale-100 transition-transform duration-300 ease-in-out object-cover max-w-full w-full h-auto rounded-b-xl"
                 alt={item.title}
               />
             </div>

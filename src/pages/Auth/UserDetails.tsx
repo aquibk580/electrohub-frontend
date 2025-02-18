@@ -47,11 +47,12 @@ export default function UserDetails() {
             email: response.data.user.email,
             address: response.data.user.address,
             answer: response.data.user.answer,
-            phone: response.data.user.address,
+            phone: response.data.user.phone,
+            gender: response.data.user.gender,
           })
         );
         dispatch(setPfp(response.data.user.pfp));
-        navigate("/seller/dashboard");
+        navigate("/");
         toast.success("Account created successfully", {
           position: "top-center",
           theme: "light",
@@ -88,7 +89,7 @@ export default function UserDetails() {
                 placeholder="Phone number is required"
               />
               {errors.phone && (
-                <p className="text-red-500 text-sm">{errors.phone.message}</p>
+                <p className="text-red-500 text-sm">{String(errors.phone.message)}</p>
               )}
             </div>
 
@@ -103,7 +104,7 @@ export default function UserDetails() {
                 placeholder="Email ID"
               />
               {errors.address && (
-                <p className="text-red-500 text-sm">{errors.address.message}</p>
+                <p className="text-red-500 text-sm">{String(errors.address.message)}</p>
               )}
             </div>
 
@@ -123,7 +124,7 @@ export default function UserDetails() {
               />
               {errors.password && (
                 <p className="text-red-500 text-sm">
-                  {errors.password.message}
+                  {String(errors.password.message)}
                 </p>
               )}
             </div>
@@ -139,7 +140,7 @@ export default function UserDetails() {
                 placeholder="what is your favourite word"
               />
               {errors.answer && (
-                <p className="text-red-500 text-sm">{errors.answer.message}</p>
+                <p className="text-red-500 text-sm">{String(errors.answer.message)}</p>
               )}
             </div>
 
