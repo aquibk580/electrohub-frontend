@@ -199,7 +199,7 @@ export default function Profile() {
                 htmlFor="profile-pic-input"
                 className="absolute  top-1  cursor-pointer right-2 p-1 bg-white rounded-full shadow-sm"
               >
-                <Pencil className="h-5 w-5" />
+                <Pencil className="h-5 w-5 text-black" />
                 <input
                   id="profile-pic-input"
                   type="file"
