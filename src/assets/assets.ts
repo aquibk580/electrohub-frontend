@@ -32,6 +32,7 @@ import banner from "./banner.png";
 import verify from "./verify.png";
 import bannerdash from "./orderbanner.png";
 import demoimg from "./demopimg.png";
+import paymentOptions from "./payment-options.png";
 
 // all the icons and image
 export const assets = {
@@ -64,6 +65,7 @@ export const assets = {
   pfpimg,
   bannerdash,
   demoimg,
+  paymentOptions,
 };
 
 //services to help you

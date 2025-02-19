@@ -5,6 +5,17 @@ export interface Review {
   user: User;
 }
 
+export interface User {
+  userId: number;
+  name: string;
+  pfp?: string;
+}
+
+export interface Category {
+  name: string;
+}
+
+
 export interface Product {
   id: number;
   name: string;
@@ -18,14 +29,28 @@ export interface Product {
   images: { id: number; url: string }[];
   reviews: Array<Review> | [];
   averageRating: number;
+  seller: { name: string };
 }
 
-export interface User {
-  userId: number;
-  name: string;
-  pfp?: string;
+
+export interface OrderItem {
+  id: number
+  orderId: number
+  productId: number
+  quantity: number
+  status: string
+  paymentStatus: string
+  product: Product
 }
 
-export interface Category {
-  name: string;
+export interface Order {
+  id: number
+  userId: number
+  total: number
+  createdAt: string
+  updatedAt: string
+  orderItems: OrderItem[]
 }
+
+
+

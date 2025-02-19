@@ -21,7 +21,7 @@ import { Checkbox } from "../ui/checkbox";
 
 export function FilterDropDown() {
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button variant="outline">
           {" "}

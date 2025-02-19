@@ -1,13 +1,18 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { MapPin, Minus, Phone, Plus, Trash2 } from "lucide-react";
 import { assets } from "@/assets/assets";
 import Checkout from "@/components/User/Checkout";
 import { useEffect, useState } from "react";
 import axios from "@/lib/axios";
 import { toast } from "react-toastify";
 import { Product } from "@/components/product/productTypes";
+import { formatPrice } from "@/utils/FormatPrice";
+import { Separator } from "@radix-ui/react-select";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { Link } from "react-router-dom";
 
 interface OrderInput {
   total: number;
@@ -15,6 +20,7 @@ interface OrderInput {
 }
 
 const Cart = () => {
+  const user = useSelector((state: RootState) => state.user.user);
   const [orderData, setOrderData] = useState<OrderInput>({
     total: 0,
     items: [],
@@ -46,7 +52,10 @@ const Cart = () => {
 
   useEffect(() => {
     const newTotal = cartItems.reduce(
-      (acc, item) => acc + item.price * item.quantity,
+      (acc, item) =>
+        acc +
+        (item.price - (item.price / 100) * item.offerPercentage) *
+          item.quantity,
       0
     );
     setTotal(newTotal);
@@ -126,7 +135,10 @@ const Cart = () => {
                       <h3 className="font-medium">{item.name}</h3>
                       <h3 className="font-medium">{item.productInfo.brand}</h3>
                       <div className="text-xl font-semibold mt-1">
-                        ₹{item.price}
+                        ₹
+                        {formatPrice(
+                          item.price - (item.price / 100) * item.offerPercentage
+                        )}
                       </div>
                     </div>
                   </div>
@@ -179,38 +191,84 @@ const Cart = () => {
                 </div>
               ))
             ) : (
-              <div className="flex flex-col justify-center items-center h-full">
-                <img src={assets.CartEmpty} alt="Empty_Cart" />
+              <div className="flex flex-col justify-center items-center h-full gap-2  ">
+                <img src={assets.CartEmpty} className="" alt="Empty_Cart" />
                 <h1 className="font-semibold text-2xl">Your Cart is empty</h1>
+                <Link
+                  to="/"
+                  className="bg-green-700 p-2 px-3 rounded-md text-white"
+                >
+                  Shop Now
+                </Link>
               </div>
             )}
           </div>
         </CardContent>
       </Card>
 
-      <Card className="w-full lg:w-auto shrink-0">
-        <CardContent className="p-6 flex flex-col w-full">
-          <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-          <div className="space-y-3 w-full lg:w-64">
+      <Card className="w-full max-w-sm mx-auto overflow-y-auto">
+        <CardContent className="p-6">
+          <h2 className="text-2xl font-semibold mb-4">Order Summary</h2>
+          <div className="space-y-3">
+            {cartItems.length > 0 && (
+              <div className="flex flex-col space-y-3">
+                {cartItems.map((item) => (
+                  <div className="flex justify-between">
+                    <span>{item.productInfo.brand}</span>
+                    <span>
+                      ₹
+                      {formatPrice(
+                        item.price - (item.price / 100) * item.offerPercentage
+                      )}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
             <div className="flex justify-between">
-              <span>SubTotal</span>
-              <span>₹{total}</span>
-            </div>
-            <div className="flex justify-between text-red-500 ">
-              <span>Discount</span>
-              <span>-₹20</span>
+              <span className="text-muted-foreground">Subtotal</span>
+              <span>₹{formatPrice(total)}</span>
             </div>
             <div className="flex justify-between text-green-600">
               <span>Delivery Charges</span>
-              <span>+₹20</span>
+              <span>Free</span>
             </div>
-            <div className="flex justify-between items-center font-bold text-lg py-2 px-1 border-t bg-gray-100 rounded-md">
+            <Separator className="my-2" />
+            <div className="flex justify-between items-center font-bold text-lg">
               <span>Grand Total</span>
-              <span>₹{total}</span>
+              <span>₹{formatPrice(total)}</span>
             </div>
           </div>
-          <Checkout orderData={orderData} />
+
+          <Separator className="my-6" />
+
+          <img src={assets.paymentOptions} alt="Payment-Options" />
+
+          <Separator className="my-6" />
+
+          <div className="space-y-4">
+            <div className="flex items-start space-x-3">
+              <MapPin className="w-5 h-5 text-muted-foreground mt-0.5" />
+              <div>
+                <h3 className="font-semibold mb-1">Shipping Address</h3>
+                <p className="text-sm text-muted-foreground">{user?.address}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <Phone className="w-5 h-5 text-muted-foreground" />
+              <div>
+                <h3 className="font-semibold mb-1">Contact Number</h3>
+                <p className="text-sm text-muted-foreground">
+                  +91 {user?.phone}
+                </p>
+              </div>
+            </div>
+          </div>
         </CardContent>
+        <CardFooter>
+          <Checkout orderData={orderData} />
+        </CardFooter>
       </Card>
     </div>
   );

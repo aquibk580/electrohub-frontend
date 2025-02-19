@@ -3,6 +3,7 @@ import axios from "../../lib/axios";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { RootState } from "@/redux/store";
+import { toast } from "react-toastify";
 
 interface OrderInput {
   total: number;
@@ -14,10 +15,17 @@ const Checkout = ({ orderData }: { orderData: OrderInput }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handlePayment = async () => {
+    if (orderData.total <= 0) {
+      toast.warn("Your cart is empty", {
+        position: "top-center",
+        theme: "dark",
+      });
+      return;
+    }
     setIsLoading(true);
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/user/order/place-order`,
+        `${import.meta.env.VITE_API_URL}/api/user/orders/place-order`,
         orderData
       );
 
@@ -30,7 +38,7 @@ const Checkout = ({ orderData }: { orderData: OrderInput }) => {
         order_id: data.order.id,
         handler: async function (response: any) {
           const verifyRes = await axios.post(
-            `${import.meta.env.VITE_API_URL}/api/user/order/verify-payment`,
+            `${import.meta.env.VITE_API_URL}/api/user/orders/verify-payment`,
             {
               ...response,
               orderData: data.orderData,
@@ -38,9 +46,15 @@ const Checkout = ({ orderData }: { orderData: OrderInput }) => {
           );
 
           if (verifyRes.data.success) {
-            alert("Payment Successful!");
+            toast.success("Payment Successful!", {
+              position: "top-center",
+              theme: "dark",
+            });
           } else {
-            alert("Payment Verification Failed!");
+            toast.error("Payment Verification Failed!", {
+              position: "top-center",
+              theme: "dark",
+            });
           }
         },
         prefill: {
@@ -64,15 +78,13 @@ const Checkout = ({ orderData }: { orderData: OrderInput }) => {
   };
 
   return (
-    <div className="my-7 text-white">
-      <Button
-        className="w-full bg-green-800 hover:bg-green-700"
-        onClick={handlePayment}
-        disabled={isLoading}
-      >
-        {isLoading ? "Processing..." : "Place Order"}
-      </Button>
-    </div>
+    <Button
+      className="w-full bg-green-800 hover:bg-green-700"
+      onClick={handlePayment}
+      disabled={isLoading}
+    >
+      {isLoading ? "Processing..." : "Proceed to Checkout"}
+    </Button>
   );
 };
 

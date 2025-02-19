@@ -18,6 +18,7 @@ import { clearUser } from "@/redux/slices/user";
 import { toast } from "react-toastify";
 import axios from "../../lib/axios";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import Logo from "../logo";
 
 const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
   const navigate = useNavigate();
@@ -156,7 +157,7 @@ const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
           onClick={handleLogOut}
         >
           <LogOut className="w-6 h-6 min-w-[24px] min-h-[24px] text-red-600" />
-          <span>Log Out</span>
+          <span className="text-black">Log Out</span>
         </Button>
       </div>
     </div>
