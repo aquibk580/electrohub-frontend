@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -137,7 +139,7 @@ export default function ViewProduct() {
     <div className=" p-1.5 space-y-6">
       <div className="flex justify-between items-center">
         <Button
-          className="text-sm bg-transparent shadow-none text-gray-700 rounded-full hover:bg-zinc-50"
+          className="text-sm bg-transparent text-muted-foreground rounded-full hover:bg-accent shadow-none"
           onClick={() => navigate(-1)}
         >
           <MoveLeft className="h-4 w-4" /> Back to Products
@@ -225,90 +227,78 @@ export default function ViewProduct() {
       </div>
 
       <Tabs defaultValue="details" className="w-full space-y-4">
-        <TabsList className="grid w-full grid-cols-3 space-x-1 bg-gray-50">
-          <TabsTrigger
-            className="hover:bg-gray-200/80  data-[state=active]:shadow data-[state=active]:bg-green-900 data-[state=active]:text-white text-gray-800"
-            value="details"
-          >
-            Details
-          </TabsTrigger>
-          <TabsTrigger
-            className="hover:bg-gray-200/80  data-[state=active]:shadow data-[state=active]:bg-green-900 data-[state=active]:text-white text-gray-800"
-            value="images"
-          >
-            Images
-          </TabsTrigger>
-          <TabsTrigger
-            className="hover:bg-gray-200/80  data-[state=active]:shadow data-[state=active]:bg-green-900 data-[state=active]:text-white text-gray-800"
-            value="reviews"
-          >
-            Reviews
-          </TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 space-x-1 ">
+          <TabsTrigger value="details"> Details </TabsTrigger>
+          <TabsTrigger value="images" > Images </TabsTrigger>
+          <TabsTrigger value="reviews" > Reviews </TabsTrigger>
         </TabsList>
 
         {/* Product Details Tab */}
         <TabsContent value="details" className="space-y-4 ">
-          <Card className="shadow-sm">
+          <Card className="shadow-sm"> 
             <CardHeader>
-              <CardTitle className="bg-gray-50 py-3 px-2 rounded-md">
+              <CardTitle className="bg-primary text-primary-foreground py-3 px-2 rounded-md">
                 Product Information
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 ">
-              <div className="grid grid-cols-1 md:grid-cols-2 px-2 gap-4">
-                <div className="space-y-2 flex flex-col">
-                  <Label htmlFor="name">Product Name</Label>
-                  <input
-                    id="name"
-                    value={product.name}
-                    disabled
-                    className="outline-none bg-transparent text-gray-600 font-medium "
-                  />
-                </div>
-                <div className="space-y-2 flex flex-col">
-                  <Label htmlFor="price">Price (₹)</Label>
-                  <input
-                    id="price"
-                    value={product.price}
-                    disabled
-                    className="outline-none bg-transparent text-gray-600 font-medium "
-                  />
-                </div>
-                <div className="space-y-2 flex flex-col">
-                  <Label htmlFor="category">Category</Label>
-                  <input
-                    disabled
-                    value={product.categoryName}
-                    className="outline-none bg-transparent text-gray-600 font-medium "
-                  />
-                </div>
-                <div className="space-y-2 flex flex-col">
-                  <Label htmlFor="status">Status</Label>
-                  <label
-                    className={cn(
-                      product.status === "Discontinued"
-                        ? "text-red-600 bg-red-100"
-                        : "text-green-800 bg-green-100",
-                      "outline-none  w-fit px-3 py-1  text-[14px] rounded-lg"
-                    )}
-                  >
-                    {product.status}
-                  </label>
-                </div>
-              </div>
+               {/* Grid Layout for Product Details */}
+    <div className="grid grid-cols-1 md:grid-cols-2 px-2 gap-4">
+      {/* Product Name - Full width on small screens, 1st column on md */}
+      <div className="space-y-2 flex flex-col md:col-span-1">
+        <Label htmlFor="name">Product Name</Label>
+        <div className="outline-none bg-transparent  font-medium break-words">
+          {product.name}
+        </div>
+      </div>
+
+      {/* Remaining Details - 2nd column on md */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:col-span-1">
+        <div className="space-y-2 flex flex-col">
+          <Label htmlFor="price">Price (₹)</Label>
+          <input
+            id="price"
+            value={product.price}
+            disabled
+            className="outline-none bg-transparent  font-medium"
+          />
+        </div>
+        <div className="space-y-2 flex flex-col">
+          <Label htmlFor="category">Category</Label>
+          <input
+            disabled
+            value={product.categoryName}
+            className="outline-none bg-transparent  font-medium"
+          />
+        </div>
+        <div className="space-y-2 flex flex-col">
+          <Label htmlFor="status">Status</Label>
+          <label
+            className={cn(
+              product.status === "Discontinued"
+                ? "text-red-600 bg-red-100"
+                : "text-green-800 bg-green-100",
+              "outline-none w-fit px-3 py-1 text-[14px] rounded-lg"
+            )}
+          >
+            {product.status}
+          </label>
+        </div>
+      </div>
+    </div>
 
               <div className="space-y-2 flex flex-col  px-2">
                 <Label htmlFor="description">Description</Label>
                 <label
                   id="description"
-                  className="outline-none bg-transparent w-full  text-gray-600 font-medium "
+                  className="outline-none bg-transparent w-full  text-card-foreground/80 font-medium "
                 >
                   {product.description}
                 </label>
               </div>
               <hr />
               <div className="space-y-4 grid grid-cols ">
-                <Label className="font-semibold text-md bg-gray-50 py-2 rounded-md px-2">
+                <Label className="font-semibold text-md bg-primary text-primary-foreground py-2 rounded-md px-2">
                   Specifications
                 </Label>
                 {detailsArray.length > 0 ? (
@@ -324,7 +314,7 @@ export default function ViewProduct() {
                         <input
                           value={detail.value}
                           disabled
-                          className="outline-none w-full  bg-transparent text-gray-600 font-medium "
+                          className="outline-none w-full  bg-transparent text-muted-foreground font-medium "
                         />
                       </div>
                     )

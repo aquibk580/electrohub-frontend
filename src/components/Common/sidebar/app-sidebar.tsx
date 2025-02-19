@@ -179,16 +179,16 @@ export function AppSidebar({ userRole, ...props }: AppSidebarProps) {
   const roleData = data[userRole];
 
   return (
-    <Sidebar className="min-h-screen  bg-white" collapsible="icon" {...props}>
-      <SidebarHeader className="bg-white">
-        <TeamSwitcher teams={roleData.teams} />
-      </SidebarHeader>
-      <SidebarContent className="bg-white">
-        <NavMain items={roleData.navItems} />
-      </SidebarContent>
-      <SidebarFooter className="bg-white">
-        <NavUser user={roleData.user} userRole={userRole} />
-      </SidebarFooter>
-    </Sidebar>
+    <Sidebar className="min-h-screen  " collapsible="icon" {...props}>
+    <SidebarHeader >
+      <TeamSwitcher teams={roleData.teams} />
+    </SidebarHeader>
+    <SidebarContent >
+      <NavMain items={roleData.navItems} />
+    </SidebarContent>
+    <SidebarFooter >
+      <NavUser user={roleData.user} userRole={userRole} />
+    </SidebarFooter>
+  </Sidebar>
   );
 }

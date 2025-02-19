@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTheme } from "../theme-provider";
-
+import { debounce } from "lodash";
 interface IndiaMapProps {
   salesData: { [key: string]: number };
   title?: string;
@@ -106,32 +106,42 @@ const IndiaSalesMap: React.FC<IndiaMapProps> = ({
   };
 
   useEffect(() => {
-    fetch("/india.svg")
-      .then((response) => response.text())
-      .then((data) => {
-        setSvgContent(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error loading SVG:", error);
-        setLoading(false);
-      });
-  }, []);
-
-  useEffect(() => {
-    if (svgContent) {
-      let modifiedSvg = svgContent;
-      Object.entries(salesData).forEach(([stateCode, sales]) => {
-        const color = getColorForSales(sales);
-        const regex = new RegExp(`id=\\"${stateCode}\\"`, "g");
-        modifiedSvg = modifiedSvg.replace(
-          regex, 
-          `id="${stateCode}" data-state="${stateCode}" data-sales="${sales}" style="fill:${color};transition:fill 0.3s ease" class="hover:brightness-110 cursor-pointer"`
-        );
-      });
-      setSvgContent(modifiedSvg);
+    if (typeof window !== "undefined") {
+      fetch("/india.svg")
+        .then((response) => response.text())
+        .then((data) => {
+          setSvgContent(data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error loading SVG:", error);
+          setLoading(false);
+        });
     }
+  }, []);
+  
+
+ // Install lodash if not already
+  useEffect(() => {
+    const updateSvg = debounce(() => {
+      if (svgContent) {
+        let modifiedSvg = svgContent;
+        Object.entries(salesData).forEach(([stateCode, sales]) => {
+          const color = getColorForSales(sales);
+          const regex = new RegExp(`id=\\"${stateCode}\\"`, "g");
+          modifiedSvg = modifiedSvg.replace(
+            regex, 
+            `id="${stateCode}" data-state="${stateCode}" data-sales="${sales}" style="fill:${color};transition:fill 0.3s ease" class="hover:brightness-110 cursor-pointer"`
+          );
+        });
+        setSvgContent(modifiedSvg);
+      }
+    }, 200);
+    
+    updateSvg();
+    return () => updateSvg.cancel();
   }, [salesData, svgContent, color, theme]);
+  
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!containerRef.current) return;
@@ -186,17 +196,17 @@ const IndiaSalesMap: React.FC<IndiaMapProps> = ({
             />
             {tooltip.visible && tooltip.content && (
               <div
-                className="absolute pointer-events-none bg-gray-900 text-white rounded-lg shadow-lg p-2 z-50"
+                className="absolute pointer-events-none bg-card text-primary rounded-lg shadow-lg p-2 z-50"
                 style={{
                   left: `${tooltip.x}px`,
                   top: `${tooltip.y - 60}px`,
                   transform: 'translate(-50%, -50%)',
                 }}
               >
-                <div className="text-sm text-gray-400">{tooltip.content.state}</div>
+                <div className="text-sm text-secondary-foreground">{tooltip.content.state}</div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm">Sales:</span>
-                  <span className="font-medium text-blue-400">
+                  <span className="text-sm text-muted-foreground">Sales:</span>
+                  <span className="font-medium text-primary">
                     ₹{tooltip.content.sales.toLocaleString()}
                   </span>
                 </div>
