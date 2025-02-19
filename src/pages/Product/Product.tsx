@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useMediaQuery } from "react-responsive";
 
@@ -9,18 +9,27 @@ import FreeDeliveryIcon from "@/components/product/Free-Delivery-Icon";
 import SpecialOffers from "@/components/product/Special-Offers";
 import ProductSpects from "@/components/product/Product-Spects";
 import ProductAddtocart from "@/components/product/Product-Addtocart";
-import ProductQuantity from "@/components/product/Product-Quantity";
 import ProductPrice from "@/components/product/Product-Price";
 import ProductTitleRating from "@/components/product/Product-Title-Rating";
 import ProductImage from "@/components/product/Product-Image";
 import ProductImageTablet from "@/components/product/Product-Image-Tablet";
 import { Product } from "@/components/product/productTypes";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { Button } from "@/components/ui/button";
 
 export default function ProductPage() {
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.user.isAuthenticated
+  );
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const [product, setProduct] = useState<Product>(location.state?.product);
   const [loading, setLoading] = useState(true);
+  const [wishlist, setWishlist] = useState<Set<number>>(
+    location.state?.wishlist
+  );
   const [error, setError] = useState<string | null>(null);
 
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1024 });
@@ -28,12 +37,24 @@ export default function ProductPage() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/user/products/${id}`
-        );
+        const [productRes] = await Promise.all([
+          axios.get(`${import.meta.env.VITE_API_URL}/api/user/products/${id}`),
+        ]);
 
-        if (response.status === 200) {
-          setProduct(response.data);
+        if (productRes.status === 200) {
+          setProduct(productRes.data);
+        }
+
+        if (isAuthenticated) {
+          const wishlistRes = await axios.get(
+            `${import.meta.env.VITE_API_URL}/api/user/wishlist/wishlistproducts`
+          );
+
+          if (wishlistRes.status === 200) {
+            setWishlist(new Set(wishlistRes.data.wishlist || []));
+          } else [setWishlist(new Set())];
+        } else {
+          setWishlist(new Set());
         }
 
         window.scrollTo(0, 0);
@@ -88,10 +109,23 @@ export default function ProductPage() {
             />
 
             <div className="space-y-4">
-              <ProductPrice price={product.price} />
+              <ProductPrice
+                price={product.price}
+                offer={product.offerPercentage}
+              />
               <FreeDeliveryIcon />
               <SpecialOffers />
-              <ProductAddtocart />
+              {isAuthenticated ? (
+                <ProductAddtocart
+                  id={product.id}
+                  wishlist={wishlist}
+                  setWishlist={setWishlist}
+                />
+              ) : (
+                <Button onClick={() => navigate("/user/auth/signin")}>
+                  Login to Purchase
+                </Button>
+              )}
             </div>
           </div>
         </div>

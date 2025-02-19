@@ -27,7 +27,7 @@ export default function ProductTitleRating({
       <Badge variant="destructive" className="mb-2 text-xs sm:text-sm">
         Limited time deal
       </Badge>
-      <h1 className="text-xl sm:text-xl md:text-2xl font-bold text-foreground">
+      <h1 className="text-xl sm:text-xl md:text-2xl font-semibold text-foreground">
         {title}
       </h1>
       <h3

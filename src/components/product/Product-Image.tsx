@@ -23,17 +23,17 @@ export default function ProductImage({ images, title }: ProductImageProps) {
   return (
     <div className="space-y-4 flex flex-col">
       {/* Main Image */}
-      <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-900">
+      <div className="relative w-full max-w-fit overflow rounded-lg bg-gray-100 dark:bg-gray-900 place-self-center">
         <Lens hovering={hovering} setHovering={setHovering}>
-          <div className="bg-primary/50">
+          <div className="bg-primary/50 flex justify-center items-center w-fit h-fit">
             <img
               src={images[currentIndex]}
               alt={title}
-              className="object-contain w-full h-full  cursor-pointer "
+              className="w-auto h-[400px] object-contain cursor-pointer"
             />
           </div>
         </Lens>
-        <Button
+        {/* <Button
           variant="ghost"
           size="icon"
           className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white dark:bg-black/80 dark:hover:bg-black/80"
@@ -48,7 +48,7 @@ export default function ProductImage({ images, title }: ProductImageProps) {
           onClick={nextImage}
         >
           <ChevronRight className="h-6 w-6" />
-        </Button>
+        </Button> */}
       </div>
 
       {/* Thumbnail Images */}
@@ -68,3 +68,4 @@ export default function ProductImage({ images, title }: ProductImageProps) {
     </div>
   );
 }
+

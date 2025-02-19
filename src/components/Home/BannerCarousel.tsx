@@ -3,41 +3,69 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { assets } from "@/assets/assets";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { BannerCrousel } from "@/pages/Admin/ContentManagement";
+import axios from "@/lib/axios";
+import { useNavigate } from "react-router-dom";
 
-export default function AutoCarousel() {
+export default function BannerCarouselComponent() {
+  const navigate = useNavigate();
   const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState(1); 
-
-  const Banners = [
-    assets.samsungs25Banner,
-    assets.iphone16Banner,
-    assets.PS5Banner,
-  ];
+  const [bannerCarousels, setBannerCarousels] = useState<Array<BannerCrousel>>(
+    []
+  );
+  const [direction, setDirection] = useState(1);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      changeSlide(1);
-    }, 5000);
-
-    return () => clearInterval(interval);
+    const getAllBannerCarousel = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/banner-carousels`
+        );
+        if (response.status === 200) {
+          setBannerCarousels(response.data);
+        }
+      } catch (error: any) {
+        console.log(error);
+      }
+    };
+    getAllBannerCarousel();
   }, []);
 
+  const Banners = bannerCarousels.map((banner) => banner.imageUrl);
+
+  useEffect(() => {
+    if (bannerCarousels.length > 0) {
+      const interval = setInterval(() => {
+        changeSlide(1);
+      }, 5000);
+
+      return () => clearInterval(interval);
+    }
+  }, [bannerCarousels]);
+
   const changeSlide = (dir: number) => {
+    if (Banners.length === 0) return;
     setDirection(dir);
     setIndex((prev) => (prev + dir + Banners.length) % Banners.length);
   };
 
+  if (bannerCarousels.length === 0) {
+    return;
+  }
+
   return (
     <div className="relative w-full mx-auto overflow-hidden rounded-md shadow-lg h-96">
-      <div className="relative w-full h-full">
+      <div
+        className="relative w-full h-full cursor-pointer"
+        onClick={() => navigate(bannerCarousels[index].href)}
+      >
         <AnimatePresence initial={false} custom={direction}>
           <motion.img
             key={index}
             src={Banners[index]}
             alt={`Slide ${index}`}
-            className="absolute w-full h-96 object-fill"
+            className="absolute w-full h-96 object-contain sm:object-fill"
             initial={{ x: direction === 1 ? "100%" : "-100%", opacity: 0.5 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: direction === 1 ? "-100%" : "100%", opacity: 0.5 }}
@@ -68,7 +96,7 @@ export default function AutoCarousel() {
               "h-2 w-2 rounded-full transition focus-visible:ring-0",
               i === index ? "bg-white" : "bg-gray-400"
             )}
-            onClick={() => changeSlide(i - index)}
+            onClick={() => setIndex(i)}
           />
         ))}
       </div>

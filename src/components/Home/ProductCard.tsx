@@ -5,6 +5,9 @@ import { Heart, Star } from "lucide-react";
 import { Button } from "../ui/button";
 import { toast } from "react-toastify";
 import axios from "@/lib/axios";
+import { formatPrice } from "@/utils/FormatPrice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 type ProductCardProps = {
   product: Product;
@@ -14,6 +17,9 @@ type ProductCardProps = {
 
 const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
   const navigate = useNavigate();
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.user.isAuthenticated
+  );
   const isWishlisted = wishlist.has(product.id);
 
   const stars = useMemo(() => {
@@ -99,7 +105,9 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
   };
 
   const handleNavigate = async () => {
-    navigate(`/product/${product.id}`, { state: { product } }); 
+    navigate(`/product/${product.id}`, {
+      state: { product, wishlist },
+    });
   };
 
   return (
@@ -117,33 +125,40 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
       </div>
 
       <div className="sm:p-2">
-        <Link to={`/product/${product.id}`}>
+        <div onClick={handleNavigate}>
           <h2 className="text-lg font-semibold mb-1 group-hover:text-blue-600 transition-colors duration-300 ease-in-out line-clamp-1">
             {product.name}
           </h2>
-        </Link>
+        </div>
         <p className="text-gray-600 mb-2 text-sm line-clamp-1">
           {product.description}
         </p>
         <div className="flex">{stars}</div>
         <div className="flex py-2 justify-between items-center flex-wrap-reverse">
-          <div className="sm:space-x-4 space-x-2 flex">
-            <Button
-              onClick={() => handleAddToCart(product.id)}
-              className="bg-white text-black text-xs sm:text-base font-medium border-black border px-3 py-1.5 hover:bg-green-900 hover:border-green-900 hover:text-white transition-all rounded-full"
-            >
-              Add to Cart
-            </Button>
-            <Button
-              onClick={() => handleToggleWishlist(product.id)}
-              className={`rounded-full p-3 ${
-                isWishlisted ? "text-red-500" : "text-gray-500"
-              }`}
-            >
-              <Heart className={`${isWishlisted ? "fill-current" : ""}`} />
-            </Button>
-          </div>
-          <span className="text-lg font-bold">₹{product.price}</span>
+          {isAuthenticated && (
+            <div className="sm:space-x-4 space-x-2 flex">
+              <Button
+                onClick={() => handleAddToCart(product.id)}
+                className="bg-white text-black text-xs sm:text-base font-medium border-black border px-3 py-1.5 hover:bg-green-900 hover:border-green-900 hover:text-white transition-all rounded-full"
+              >
+                Add to Cart
+              </Button>
+              <Button
+                onClick={() => handleToggleWishlist(product.id)}
+                className={`rounded-full p-3 bg-white ${
+                  isWishlisted ? "text-red-500" : "text-gray-500"
+                }`}
+              >
+                <Heart className={`${isWishlisted ? "fill-current" : ""}`} />
+              </Button>
+            </div>
+          )}
+          <span className="text-lg font-bold">
+            ₹
+            {formatPrice(
+              product.price - (product.price / 100) * product.offerPercentage
+            )}
+          </span>
         </div>
       </div>
     </div>

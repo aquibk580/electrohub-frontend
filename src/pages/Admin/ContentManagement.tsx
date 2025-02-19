@@ -27,10 +27,34 @@ import axios from "@/lib/axios";
 import DeleteCategoryButton from "@/components/Admin/CMS/DeleteCategoryButton";
 import AddCategoryDialog from "@/components/Admin/CMS/AddCategoryDialog";
 import EditCategoryDialog from "@/components/Admin/CMS/EditCategoryDialog";
+import AddBannerCarousel from "@/components/Admin/CMS/AddBannerCarousel";
+import DeleteBannerCarouselButton from "@/components/Admin/CMS/DeleteBannerCarousel";
+import EditBannerCarouselDialog from "@/components/Admin/CMS/EditBannerCarousel";
+import AddProductCarousel from "@/components/Admin/CMS/AddProductCarousel";
+import { formatPrice } from "@/utils/FormatPrice";
+import DeleteProductCarouselButton from "@/components/Admin/CMS/DeleteProductCarousel";
+import EditProductCarouselButton from "@/components/Admin/CMS/EditProductCarousel";
 
 interface Category {
   name: string;
   imageUrl: string;
+}
+
+export interface BannerCrousel {
+  id: number;
+  title: string;
+  imageUrl: string;
+  href: string;
+  isActive: boolean;
+}
+
+export interface ProductCrousel {
+  id: number;
+  name: string;
+  price: number;
+  imageUrl: string;
+  href: string;
+  isActive: boolean;
 }
 
 interface TableWrapperProps {
@@ -40,6 +64,12 @@ interface TableWrapperProps {
 const ContentManagement = () => {
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [activeTab, setActiveTab] = useState("categories");
+  const [productCarousels, setProductCarousels] = useState<
+    Array<ProductCrousel>
+  >([]);
+  const [bannerCarousels, setBannerCarousels] = useState<Array<BannerCrousel>>(
+    []
+  );
   const [categories, setCategories] = useState<Array<Category>>([]);
 
   useEffect(() => {
@@ -59,6 +89,38 @@ const ContentManagement = () => {
     getAllCategories();
   }, []);
 
+  useEffect(() => {
+    const getAllBannerCarousels = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/admin/cms/banner-carousels`
+        );
+        if (response.status === 200) {
+          setBannerCarousels(response.data);
+        }
+      } catch (error: any) {
+        console.log(error);
+      }
+    };
+    getAllBannerCarousels();
+  }, []);
+
+  useEffect(() => {
+    const getAllProductCarousels = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/admin/cms/product-carousels`
+        );
+        if (response.status === 200) {
+          setProductCarousels(response.data);
+        }
+      } catch (error: any) {
+        console.log(error);
+      }
+    };
+    getAllProductCarousels();
+  }, []);
+
   const TableWrapper = ({ children }: TableWrapperProps) => {
     if (isMobile) {
       return (
@@ -70,151 +132,132 @@ const ContentManagement = () => {
     }
     return <>{children}</>;
   };
-
-  const CarouselSection = () => (
+  const BannerCarouselSection = () => (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-medium">Banner Images</h3>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="w-4 h-4 mr-2" />
-              Add Banner
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add New Banner</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="grid w-full items-center gap-1.5">
-                <Label>Title</Label>
-                <Input placeholder="Enter banner title" />
-              </div>
-              <div className="grid w-full items-center gap-1.5">
-                <Label>Image</Label>
-                <Input type="file" accept="image/*" />
-              </div>
-              <div className="grid w-full items-center gap-1.5">
-                <Label>Link URL</Label>
-                <Input placeholder="Enter banner link" />
-              </div>
-              <div className="flex items-center space-x-2">
-                <Switch id="active" />
-                <Label htmlFor="active">Active</Label>
-              </div>
-              <Button className="w-full">Save Banner</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <AddBannerCarousel setBannerCarousels={setBannerCarousels} />
       </div>
       <TableWrapper>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Image</TableHead>
+              <TableHead>Sr no</TableHead>
               <TableHead>Title</TableHead>
+              <TableHead>Image</TableHead>
               <TableHead>Link</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>
-                <div className="w-16 h-12 bg-gray-100 rounded flex items-center justify-center">
-                  <ImageIcon className="w-6 h-6 text-gray-400" />
-                </div>
-              </TableCell>
-              <TableCell>Summer Sale</TableCell>
-              <TableCell>/summer-sale</TableCell>
-              <TableCell>
-                <Switch checked={true} />
-              </TableCell>
-              <TableCell>
-                <div className="flex space-x-2">
-                  <Button variant="ghost" size="icon">
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon">
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
+            {bannerCarousels.length > 0 ? (
+              bannerCarousels.map((bannerCarousel, index) => (
+                <TableRow key={bannerCarousel.id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{bannerCarousel.title}</TableCell>
+                  <TableCell>
+                    <div className="w-32 h-24 bg-gray-100 rounded flex items-center justify-center">
+                      {bannerCarousel.imageUrl ? (
+                        <img
+                          src={bannerCarousel.imageUrl}
+                          className="w-full h-full object-contain"
+                          alt="Banner Image"
+                        />
+                      ) : (
+                        <ImageIcon className="w-6 h-6 text-gray-400" />
+                      )}
+                    </div>
+                  </TableCell>
+
+                  <TableCell>{bannerCarousel.href}</TableCell>
+                  <TableCell>
+                    {bannerCarousel.isActive === true ? "Active" : "Inactive"}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex space-x-2">
+                      <EditBannerCarouselDialog
+                        bannerCarousel={bannerCarousel}
+                        setBannerCarousels={setBannerCarousels}
+                      />
+                      <DeleteBannerCarouselButton
+                        id={bannerCarousel.id}
+                        setBannerCarousel={setBannerCarousels}
+                      />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <h1 className="text-xl font-medium p-4">No Banners found</h1>
+            )}
           </TableBody>
         </Table>
       </TableWrapper>
     </div>
   );
 
-  const DiscountSection = () => (
+  const ProductCarouselSection = () => (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium">Discount Codes</h3>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="w-4 h-4 mr-2" />
-              Add Discount
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add New Discount</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="grid w-full items-center gap-1.5">
-                <Label>Code</Label>
-                <Input placeholder="Enter discount code" />
-              </div>
-              <div className="grid w-full items-center gap-1.5">
-                <Label>Discount Amount (%)</Label>
-                <Input type="number" placeholder="Enter discount percentage" />
-              </div>
-              <div className="grid w-full items-center gap-1.5">
-                <Label>Valid Until</Label>
-                <Input type="date" />
-              </div>
-              <div className="flex items-center space-x-2">
-                <Switch id="active" />
-                <Label htmlFor="active">Active</Label>
-              </div>
-              <Button className="w-full">Save Discount</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <h3 className="text-lg font-medium">Product Slider Images</h3>
+        <AddProductCarousel setProductCarousels={setProductCarousels} />
       </div>
       <TableWrapper>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Code</TableHead>
-              <TableHead>Discount</TableHead>
-              <TableHead>Valid Until</TableHead>
+              <TableHead>Sr no</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Image</TableHead>
+              <TableHead>Price</TableHead>
+              <TableHead>Link</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>SUMMER2025</TableCell>
-              <TableCell>20%</TableCell>
-              <TableCell>2025-08-31</TableCell>
-              <TableCell>
-                <Switch checked={true} />
-              </TableCell>
-              <TableCell>
-                <div className="flex space-x-2">
-                  <Button variant="ghost" size="icon">
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon">
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
+            {productCarousels.length > 0 ? (
+              productCarousels.map((productCarousel, index) => (
+                <TableRow key={productCarousel.id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{productCarousel.name}</TableCell>
+                  <TableCell>
+                    <div className="w-32 h-24 bg-gray-100 rounded flex items-center justify-center">
+                      {productCarousel.imageUrl ? (
+                        <img
+                          src={productCarousel.imageUrl}
+                          className="w-full h-full object-contain"
+                          alt="Banner Image"
+                        />
+                      ) : (
+                        <ImageIcon className="w-6 h-6 text-gray-400" />
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>₹{formatPrice(productCarousel.price)}</TableCell>
+                  <TableCell>{productCarousel.href}</TableCell>
+                  <TableCell>
+                    {productCarousel.isActive === true ? "Active" : "Inactive"}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex space-x-2">
+                      <EditProductCarouselButton
+                        key={productCarousel.id}
+                        productCarousel={productCarousel}
+                        setProductCarousels={setProductCarousels}
+                      />
+                      <DeleteProductCarouselButton
+                        id={productCarousel.id}
+                        setProductCarousels={setProductCarousels}
+                      />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <h1 className="text-xl font-medium p-4">No Products found</h1>
+            )}
           </TableBody>
         </Table>
       </TableWrapper>
@@ -232,6 +275,7 @@ const ContentManagement = () => {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>Sr no</TableHead>
                 <TableHead>Image</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Actions</TableHead>
@@ -239,8 +283,9 @@ const ContentManagement = () => {
             </TableHeader>
             <TableBody>
               {categories.length > 0 ? (
-                categories.map((category) => (
+                categories.map((category, index) => (
                   <TableRow key={category.name}>
+                    <TableCell>{index + 1}</TableCell>
                     <TableCell>
                       <div className="w-32 h-24 bg-gray-100 rounded flex items-center justify-center">
                         {category.imageUrl ? (
@@ -299,24 +344,17 @@ const ContentManagement = () => {
           >
             <TabsList className="w-fit justify-start mb-4 bg-accent ">
               <TabsTrigger value="categories">Categories</TabsTrigger>
-              <TabsTrigger value="bannerCarousel">Banner Carousel</TabsTrigger>
-              <TabsTrigger value="productCarousel">
-                Product Carousel
-              </TabsTrigger>
-
-              <TabsTrigger value="discounts">Discounts</TabsTrigger>
+              <TabsTrigger value="bannerCarousel">Banners</TabsTrigger>
+              <TabsTrigger value="productCarousel">Product Slider</TabsTrigger>
             </TabsList>
             <TabsContent value="categories">
               <CategorySection />
             </TabsContent>
             <TabsContent value="bannerCarousel">
-              <CarouselSection />
+              <BannerCarouselSection />
             </TabsContent>
             <TabsContent value="productCarousel">
-              <CarouselSection />
-            </TabsContent>
-            <TabsContent value="discounts">
-              <DiscountSection />
+              <ProductCarouselSection />
             </TabsContent>
           </Tabs>
         </CardContent>

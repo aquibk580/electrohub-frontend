@@ -21,7 +21,7 @@ interface Category {
   imageUrl: string;
 }
 // Define schema using Zod for validation
-const categorySchema = z.object({
+const categorySchema: z.ZodSchema = z.object({
   name: z.string().min(1, "Category name is required"),
   image: z.any().refine((file) => file.length > 0, "Image is required"),
 });

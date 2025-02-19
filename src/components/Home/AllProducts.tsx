@@ -4,6 +4,8 @@ import { Loader2, Star } from "lucide-react";
 import { Category, Review, Product } from "../product/productTypes";
 import axios from "@/lib/axios";
 import ProductCard from "./ProductCard";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 const AllProducts = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -11,16 +13,16 @@ const AllProducts = () => {
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState<string>("All");
   const [wishlist, setWishlist] = useState<Set<number>>(new Set());
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.user.isAuthenticated
+  );
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [categoriesRes, productsRes, wishlistRes] = await Promise.all([
+        const [categoriesRes, productsRes] = await Promise.all([
           axios.get(`${import.meta.env.VITE_API_URL}/api/categories`),
           axios.get(`${import.meta.env.VITE_API_URL}/api/user/products`),
-          axios.get(
-            `${import.meta.env.VITE_API_URL}/api/user/wishlist/wishlistproducts`
-          ),
         ]);
 
         if (categoriesRes.status === 200) setCategories(categoriesRes.data);
@@ -43,8 +45,19 @@ const AllProducts = () => {
           );
           setProducts(productsWithRatings);
         }
-        if (wishlistRes.status === 200)
-          setWishlist(new Set(wishlistRes.data.wishlist || []));
+        if (isAuthenticated) {
+          const wishlistRes = await axios.get(
+            `${import.meta.env.VITE_API_URL}/api/user/wishlist/wishlistproducts`
+          );
+
+          if (wishlistRes.status === 200 && wishlistRes.data?.wishlist) {
+            setWishlist(new Set(wishlistRes.data.wishlist));
+          } else {
+            setWishlist(new Set());
+          }
+        } else {
+          setWishlist(new Set());
+        }
       } catch (error: any) {
         console.error(error);
       } finally {
@@ -107,6 +120,7 @@ const AllProducts = () => {
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <ProductCard
+              key={product.id}
               product={product}
               wishlist={wishlist}
               setWishlist={setWishlist}
