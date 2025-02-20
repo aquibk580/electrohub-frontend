@@ -56,28 +56,97 @@ export default function AddProductForm() {
     name: "details",
   })
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const file = e.target.files?.[0] || null
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        const newPreviews = [...previews]
+  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  //   const file = e.target.files?.[0] || null
+  //   if (file) {
+  //     const reader = new FileReader()
+  //     reader.onloadend = () => {
+  //       const newPreviews = [...previews]
 
-        newPreviews[index] = reader.result as string
+  //       newPreviews[index] = reader.result as string
 
-        const newFileNames = [...fileNames]
-        newFileNames[index] = file.name
+  //       const newFileNames = [...fileNames]
+  //       newFileNames[index] = file.name
 
-        setPreviews(newPreviews)
-        setFileNames(newFileNames)
+  //       setPreviews(newPreviews)
+  //       setFileNames(newFileNames)
+  //     }
+  //     reader.readAsDataURL(file)
+
+  //     const newImages = [...images]
+  //     newImages[index] = file
+  //     setImages(newImages)
+  //   }
+  // }
+  const handleImageChange = async (
+    e: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>,
+    index: number
+  ) => {
+    let file: File | null = null;
+
+    if ("dataTransfer" in e) {
+      e.preventDefault();
+      const items = e.dataTransfer.items;
+
+      for (const item of items) {
+        if (item.kind === "file") {
+          file = item.getAsFile();
+        } else if (item.kind === "string") {
+          // Handle image dragged from a website (URL)
+          item.getAsString(async (url) => {
+            if (url.startsWith("http")) {
+              try {
+                const downloadedFile = await urlToFile(url);
+                updateImageState(downloadedFile, index);
+              } catch (error) {
+                console.error("Failed to download image:", error);
+              }
+            }
+          });
+          return; // Exit early as URL fetching is async
+        }
       }
-      reader.readAsDataURL(file)
-
-      const newImages = [...images]
-      newImages[index] = file
-      setImages(newImages)
+    } else {
+      file = e.target.files?.[0] || null;
     }
-  }
+
+    if (file) {
+      updateImageState(file, index);
+    }
+  };
+
+  const urlToFile = async (imageUrl: string) => {
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    return new File([blob], "dropped-image.jpg", { type: blob.type });
+  };
+
+  const updateImageState = (file: File | null, index: number) => {
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreviews((prevPreviews) => {
+        const newPreviews = [...prevPreviews];
+        newPreviews[index] = reader.result as string;
+        return newPreviews;
+      });
+
+      setFileNames((prevFileNames) => {
+        const newFileNames = [...prevFileNames];
+        newFileNames[index] = file.name;
+        return newFileNames;
+      });
+
+      setImages((prevImages) => {
+        const newImages = [...prevImages];
+        newImages[index] = file;
+        return newImages;
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
 
   const onSubmit = async (data: AddProductSchematype) => {
     setIsSubmitting(true)
@@ -175,24 +244,27 @@ export default function AddProductForm() {
                 </li>
               </p>
 
-              <div className="relative w-[21rem] h-64 md:h-48 md:w-48 lg:w-52  lg:h-52 sm:h-64 sm:w-64 p-2 rounded-lg  bg-card text-card-foreground  ">
+              <div
+                className="relative w-[21rem] h-64 md:h-48 md:w-48 lg:w-52 lg:h-52 sm:h-64 sm:w-64 p-2 rounded-lg bg-card text-card-foreground"
+                onDrop={(e) => handleImageChange(e, index)}
+                onDragOver={(e) => e.preventDefault()} // Prevent default to allow drop
+              >
                 <input
                   type="file"
                   accept="image/*"
                   onChange={(e) => handleImageChange(e, index)}
                   className="absolute inset-0 opacity-0 cursor-pointer z-10"
-                  required={index < 3}
+                  required={index < 3 && !previews[index]} // Only require if there's no preview
                   title=""
                 />
-                {preview ? (
+                {previews[index] ? (
                   <img
-                    src={preview || "/placeholder.svg"}
+                    src={previews[index]}
                     alt={`Preview ${index + 1}`}
                     className="w-full h-full rounded-md object-cover"
                   />
                 ) : (
-                  <div className="flex flex-col justify-center shadow-sm   border-dashed border-2 rounded-md border-gray-400 items-center w-full h-full ">
-                    {/* <img className="w-full" src={assets.image || "/placeholder.svg"} alt="" /> */}
+                  <div className="flex flex-col justify-center shadow-sm border-dashed border-2 rounded-md border-gray-400 items-center w-full h-full">
                     <svg
                       viewBox="0 0 24 24"
                       fill="none"
@@ -207,11 +279,11 @@ export default function AddProductForm() {
                         strokeLinejoin="round"
                       />
                     </svg>
-
                     <p className="text-center text-sm text-primary">Browse File to upload!</p>
                   </div>
                 )}
               </div>
+
               <div className="p-1 px-2 w-full flex shadow-sm items-center justify-between rounded-md  bg-card">
                 <div className=" rounded-full  bg-muted p-1">
                   {" "}

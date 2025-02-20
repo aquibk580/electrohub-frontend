@@ -71,10 +71,10 @@ export const SellerDetailsFormSchema: ZodSchema = z.object({
       if (!(file instanceof File)) {
         throw new Error("Invalid file");
       }
-      const allowedTypes = ["image/jpeg", "image/png"];
-      if (!allowedTypes.includes(file.type)) {
-        throw new Error("Only JPEG and PNG files are allowed");
-      }
+      // const allowedTypes = ["image/jpeg", "image/png"];
+      // if (!allowedTypes.includes(file.type)) {
+      //   throw new Error("Only JPEG and PNG files are allowed");
+      // }
 
       const maxSize = 2 * 1024 * 1024;
       if (file.size > maxSize) {
