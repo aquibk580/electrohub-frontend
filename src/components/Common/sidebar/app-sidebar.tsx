@@ -175,7 +175,7 @@ export function AppSidebar({ userRole, ...props }: AppSidebarProps) {
         },
         {
           title: "Settings",
-          url: "/seller/dashboard/settings",
+          url: "/seller/settings",
           icon: Settings2,
         },
       ],

@@ -40,10 +40,7 @@ const Cart = () => {
           setCartItems(response.data?.products);
         }
       } catch (error: any) {
-        toast.error(error.message, {
-          position: "top-center",
-          theme: "dark",
-        });
+        console.warn(error.message);
       }
     };
 
@@ -115,7 +112,7 @@ const Cart = () => {
 
   return (
     <div className="flex flex-col xl:flex-row gap-6 h-full">
-      <Card className="flex-1 flex flex-col overflow-hidden rounded-lg shadow-md">
+      <Card className="flex flex-col overflow-hidden rounded-lg shadow-md w-full">
         <CardContent className="p-6 flex flex-col h-full">
           <h2 className="text-2xl font-semibold mb-4">Shopping Cart</h2>
           <div className="space-y-6 overflow-y-auto flex-1">
@@ -192,7 +189,7 @@ const Cart = () => {
               ))
             ) : (
               <div className="flex flex-col justify-center items-center h-full gap-2  ">
-                <img src={assets.CartEmpty} className="" alt="Empty_Cart" />
+                <img src={assets.CartEmpty} className="h-44" alt="Empty_Cart" />
                 <h1 className="font-semibold text-2xl">Your Cart is empty</h1>
                 <Link
                   to="/"
@@ -206,7 +203,7 @@ const Cart = () => {
         </CardContent>
       </Card>
 
-      <Card className="w-full max-w-sm mx-auto overflow-y-auto">
+      <Card className="w-full xl:max-w-sm overflow-y-auto">
         <CardContent className="p-6">
           <h2 className="text-2xl font-semibold mb-4">Order Summary</h2>
           <div className="space-y-3">
@@ -242,7 +239,7 @@ const Cart = () => {
 
           <Separator className="my-6" />
 
-          <img src={assets.paymentOptions} alt="Payment-Options" />
+          <img src={assets.paymentOptions} className="hidden xl:block" alt="Payment-Options" />
 
           <Separator className="my-6" />
 

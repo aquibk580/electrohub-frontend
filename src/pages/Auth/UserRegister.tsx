@@ -56,8 +56,18 @@ export default function UserRegister() {
           theme: "light",
         });
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.response.data?.flag === "UserExists") {
+        toast.error("User already exists", {
+          position: "top-center",
+          theme: "light",
+        });
+      } else {
+        toast.error(error.message, {
+          position: "top-center",
+          theme: "light",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -65,10 +75,14 @@ export default function UserRegister() {
 
   const handleGoogleSignUp = async () => {
     try {
-      const redirectUrl = `${import.meta.env.VITE_FRONTEND_URL}/user/auth/user-details`;  
+      const redirectUrl = `${
+        import.meta.env.VITE_FRONTEND_URL
+      }/user/auth/user-details`;
       const userType = "user";
 
-      window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google?redirectUrl=${encodeURIComponent(
+      window.location.href = `${
+        import.meta.env.VITE_API_URL
+      }/api/auth/google?redirectUrl=${encodeURIComponent(
         redirectUrl
       )}&userType=${encodeURIComponent(userType)}`;
     } catch (error: any) {
@@ -98,7 +112,9 @@ export default function UserRegister() {
                   placeholder="Full Name"
                 />
                 {errors.name && (
-                  <p className="text-red-500 text-sm">{String(errors.name.message)}</p>
+                  <p className="text-red-500 text-sm">
+                    {String(errors.name.message)}
+                  </p>
                 )}
               </div>
 
@@ -117,7 +133,9 @@ export default function UserRegister() {
                   placeholder="Email Address"
                 />
                 {errors.email && (
-                  <p className="text-red-500 text-sm">{String(errors.email.message)}</p>
+                  <p className="text-red-500 text-sm">
+                    {String(errors.email.message)}
+                  </p>
                 )}
               </div>
 
@@ -136,7 +154,9 @@ export default function UserRegister() {
                   placeholder="Phone Number"
                 />
                 {errors.phone && (
-                  <p className="text-red-500 text-sm">{String(errors.phone.message)}</p>
+                  <p className="text-red-500 text-sm">
+                    {String(errors.phone.message)}
+                  </p>
                 )}
               </div>
 

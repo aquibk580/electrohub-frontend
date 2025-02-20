@@ -47,8 +47,23 @@ const UserForgotPassword = () => {
         });
         navigate("/admin/auth/signin");
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.response.data?.flag === "AdminNotFound") {
+        toast.error("Admin not found", {
+          position: "top-center",
+          theme: "dark",
+        });
+      } else if (error.response.data?.flag === "InvadlidCredentials") {
+        toast.error("Invalid Credentials", {
+          position: "top-center",
+          theme: "dark",
+        });
+      } else {
+        toast.error(error.message, {
+          position: "top-center",
+          theme: "dark",
+        });
+      }
     }
   };
   return (

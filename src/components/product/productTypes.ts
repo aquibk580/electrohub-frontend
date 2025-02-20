@@ -15,7 +15,6 @@ export interface Category {
   name: string;
 }
 
-
 export interface Product {
   id: number;
   name: string;
@@ -32,25 +31,23 @@ export interface Product {
   seller: { name: string };
 }
 
-
 export interface OrderItem {
-  id: number
-  orderId: number
-  productId: number
-  quantity: number
-  status: string
-  paymentStatus: string
-  product: Product
+  id: number;
+  orderId: number;
+  productId: number;
+  quantity: number;
+  status: string;
+  paymentStatus: string;
+  product: Product;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Order {
-  id: number
-  userId: number
-  total: number
-  createdAt: string
-  updatedAt: string
-  orderItems: OrderItem[]
+  id: number;
+  userId: number;
+  total: number;
+  createdAt: string;
+  updatedAt: string;
+  orderItems: OrderItem[];
 }
-
-
-

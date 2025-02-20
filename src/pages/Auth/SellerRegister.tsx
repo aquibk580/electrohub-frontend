@@ -73,8 +73,23 @@ export default function SellerRegister() {
           theme: "light",
         });
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.response.data?.flag === "SellerExists") {
+        toast.error("Seller already exists", {
+          position: "top-center",
+          theme: "dark",
+        });
+      } else if (error.response.data?.flag === "PFPIsRequired") {
+        toast.error("Profile picture is required", {
+          position: "top-center",
+          theme: "dark",
+        });
+      } else {
+        toast.error(error.message, {
+          position: "top-center",
+          theme: "dark",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }

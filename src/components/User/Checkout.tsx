@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { RootState } from "@/redux/store";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 interface OrderInput {
   total: number;
@@ -11,6 +12,7 @@ interface OrderInput {
 }
 
 const Checkout = ({ orderData }: { orderData: OrderInput }) => {
+  const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user.user);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -46,10 +48,11 @@ const Checkout = ({ orderData }: { orderData: OrderInput }) => {
           );
 
           if (verifyRes.data.success) {
-            toast.success("Payment Successful!", {
+            toast.success("Order Placed Successfully", {
               position: "top-center",
               theme: "dark",
             });
+            navigate("/user/orders");
           } else {
             toast.error("Payment Verification Failed!", {
               position: "top-center",

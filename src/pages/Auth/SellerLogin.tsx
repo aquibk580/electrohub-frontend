@@ -56,10 +56,22 @@ export default function SellerLogin() {
       }
     } catch (error: any) {
       console.log(error);
-      toast.error(error, {
-        position: "top-center",
-        theme: "light",
-      });
+      if (error.response.data?.flag === "InvalidCredentials") {
+        toast.error("Invalid Credentials", {
+          position: "top-center",
+          theme: "dark",
+        });
+      } else if (error.response.data?.flga === "SellerNotFound") {
+        toast.error("Seller not found", {
+          position: "top-center",
+          theme: "dark",
+        });
+      } else {
+        toast.error(error.message, {
+          position: "top-center",
+          theme: "light",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -67,10 +79,14 @@ export default function SellerLogin() {
 
   const handleGoogleSignIn = async () => {
     try {
-      const redirectUrl = `${import.meta.env.VITE_FRONTEND_URL}/seller/dashboard`;
+      const redirectUrl = `${
+        import.meta.env.VITE_FRONTEND_URL
+      }/seller/dashboard`;
       const userType = "seller";
 
-      window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google?redirectUrl=${encodeURIComponent(
+      window.location.href = `${
+        import.meta.env.VITE_API_URL
+      }/api/auth/google?redirectUrl=${encodeURIComponent(
         redirectUrl
       )}&userType=${encodeURIComponent(userType)}`;
     } catch (error: any) {
@@ -106,7 +122,9 @@ export default function SellerLogin() {
                 placeholder="Email ID"
               />
               {errors.email && (
-                <p className="text-red-500 text-sm">{String(errors.email.message)}</p>
+                <p className="text-red-500 text-sm">
+                  {String(errors.email.message)}
+                </p>
               )}
             </div>
 

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogTrigger,
@@ -23,7 +23,7 @@ interface Category {
 // Define schema using Zod for validation
 const categorySchema: z.ZodSchema = z.object({
   name: z.string().min(1, "Category name is required"),
-  image: z.any().refine((file) => file.length > 0, "Image is required"),
+  image: z.any().refine((file) => file instanceof File, "Image is required"),
 });
 
 type CategorySchemaType = z.infer<typeof categorySchema>;
@@ -37,18 +37,40 @@ export default function AddCategoryDialog({
 
   const {
     register,
-    handleSubmit, // ✅ Correct way to handle form submission
+    handleSubmit,
     formState: { errors, isSubmitting },
     reset,
+    setValue,
+    clearErrors,
   } = useForm({
     resolver: zodResolver(categorySchema),
   });
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [fileName, setFileName] = useState<string>("");
+
+  useEffect(() => {
+    if (!open) {
+      reset();
+      setPreviewImage(null);
+      setFileName("");
+    }
+  }, [open]);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file));
+      setFileName(file.name);
+      setValue("image", file);
+      clearErrors("image");
+    }
+  };
 
   const onSubmit = async (data: CategorySchemaType) => {
     try {
       const formData = new FormData();
       formData.append("name", data.name);
-      formData.append("image", data.image[0]);
+      formData.append("image", data.image);
 
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/admin/cms/categories`,
@@ -111,11 +133,37 @@ export default function AddCategoryDialog({
           </div>
           <div className="grid w-full items-center gap-1.5">
             <Label>Image</Label>
-            <Input type="file" accept="image/*" {...register("image")} />
-            {errors.image && (
-              <p className="text-red-500 text-sm">
-                {String(errors.image.message)}
-              </p>
+            <div className="flex items-center gap-2">
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  handleImageChange(e);
+                }}
+                className="hidden"
+                id="fileInput"
+              />
+              <label
+                htmlFor="fileInput"
+                className="cursor-pointer px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md"
+              >
+                Choose File
+              </label>
+              <span className="text-gray-600 dark:text-gray-300">
+                {fileName || "No file chosen"}
+              </span>
+              {errors.image && (
+                <p className="text-red-500 text-sm">
+                  {String(errors.image.message)}
+                </p>
+              )}
+            </div>
+            {previewImage && (
+              <img
+                src={previewImage}
+                alt="Selected Preview"
+                className="mt-2 w-32 h-32 object-cover rounded-lg shadow"
+              />
             )}
           </div>
           <Button type="submit" className="w-full" disabled={isSubmitting}>

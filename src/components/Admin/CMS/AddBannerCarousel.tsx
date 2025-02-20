@@ -76,7 +76,6 @@ export default function AddBannerCarousel({
 
   const onSubmit = async (data: BannerCarouselSchemaType) => {
     try {
-      console.log(data);
       const formData = new FormData();
       formData.append("title", data.title);
       formData.append("image", data.image);

@@ -59,7 +59,23 @@ const Signup = () => {
           theme: "light",
         });
       }
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response.data?.flag === "AdminExists") {
+        toast.error("Admin already exists", {
+          position: "top-center",
+          theme: "light",
+        });
+      } else if (error.response.data?.flag === "InvadlidCredentials") {
+        toast.error("Invalid Credentials", {
+          position: "top-center",
+          theme: "light",
+        });
+      } else {
+        toast.error(error.message, {
+          position: "top-center",
+          theme: "light",
+        });
+      }
       console.log(error);
     } finally {
       setIsSubmitting(false);

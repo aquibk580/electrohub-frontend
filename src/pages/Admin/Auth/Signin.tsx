@@ -57,8 +57,23 @@ const Signin = () => {
           theme: "light",
         });
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.response.data?.flag === "AdminNotFound") {
+        toast.error("Admin not found", {
+          position: "top-center",
+          theme: "light",
+        });
+      } else if (error.response.data?.flag === "InvadlidCredentials") {
+        toast.error("Invalid Credentials", {
+          position: "top-center",
+          theme: "light",
+        });
+      } else {
+        toast.error(error.message, {
+          position: "top-center",
+          theme: "light",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }

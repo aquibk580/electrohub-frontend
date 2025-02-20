@@ -57,23 +57,108 @@ const OrderDetails = () => {
     };
     getAllOrders();
   }, []);
+  const steps: Array<{ title: string; description: string }> = [
+    { title: "Order Confirmed", description: "Your order has been placed" },
+    { title: "Shipped", description: "Your order has been shipped" },
+    {
+      title: "Out for Delivery",
+      description: "Your order is out for delivery",
+    },
+    { title: "Delivered", description: "Your order has been delivered" },
+  ];
 
-  const getorderTrackingSteps = (): number => {
-    let result = 0;
+  const getorderTrackingSteps = (
+    orderItem: OrderItem
+  ): {
+    steps: Array<{ title: string; description: string }>;
+    step: number;
+    date: Date;
+  } => {
+    let result: {
+      steps: Array<{ title: string; description: string }>;
+      step: number;
+      date: Date;
+    };
     switch (orderItem.status) {
       case "OrderConfirmed":
-        result = 0;
+        result = {
+          steps,
+          step: 0,
+          date: orderItem.createdAt || new Date(),
+        };
         break;
       case "Shipped":
-        result = 1;
+        result = {
+          steps,
+          step: 1,
+          date: orderItem.updatedAt || new Date(),
+        };
         break;
       case "Delivered":
-        result = 3;
+        result = {
+          steps,
+          step: 3,
+          date: orderItem.updatedAt || new Date(),
+        };
+        break;
+      case "Cancelled":
+        result = {
+          steps: [
+            {
+              title: "Order Confirmed",
+              description: "Your order has been placed",
+            },
+            {
+              title: "Order Cancelled",
+              description: "Your Order has been Cancelled",
+            },
+          ],
+          step: 1,
+          date: orderItem.updatedAt || new Date(),
+        };
+        break;
+      case "Returned":
+        result = {
+          steps: steps,
+          step: 4,
+          date: orderItem.updatedAt || new Date(),
+        };
+        result.steps.push({
+          title: "Order Returned",
+          description: "Your Order has been Returned",
+        });
         break;
       default:
-        result = 0;
+        result = {
+          steps,
+          step: 0,
+          date: orderItem.updatedAt || new Date(),
+        };
     }
+
     return result;
+  };
+
+  const handleOrderStatusUpdate = async (status: string) => {
+    try {
+      const response = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/api/user/orders/${orderItem.id}`,
+        { status: status }
+      );
+      if (response.status === 200) {
+        setOrderItem((prev) => ({ ...prev, status }));
+        toast.success("Order status updated", {
+          position: "top-center",
+          theme: "dark",
+        });
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.message, {
+        position: "top-center",
+        theme: "dark",
+      });
+    }
   };
 
   const handleSubmitReview = () => {
@@ -83,18 +168,14 @@ const OrderDetails = () => {
     setReview("");
   };
 
-  useEffect(() => {
-    console.log(orderItem); // Check if it's correctly received
-  }, [orderItem]);
-
   return (
-    <div className="grid md:grid-cols-2 gap-6">
+    <div className="grid md:grid-cols-2 gap-6 ">
       {/* Order Details */}
-      <Card>
+      <Card className="max-h-screen overflow-y-auto">
         <CardContent className="pt-6 grid grid-cols-2">
           <div>
             <h2 className="text-base md:text-lg font-semibold mb-4">
-              {orderItem.product.name.substring(0,100) + "..."}
+              {orderItem.product.name.substring(0, 100) + "..."}
             </h2>
 
             <div className="text-sm mb-4">
@@ -116,60 +197,71 @@ const OrderDetails = () => {
           />
         </CardContent>
         <CardFooter className="grid grid-rows-1">
-          <OrderProgress step={getorderTrackingSteps()} />
+          <OrderProgress trackingSteps={getorderTrackingSteps(orderItem)} />
           {orderItem.status === "Delivered" && (
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="bg-yellow-400 hover:bg-yellow-300">
-                  Write a Review
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-full sm:max-w-lg md:max-w-2xl w-full">
-                <DialogHeader>
-                  <DialogTitle>Write a Review</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div>
-                    <Label>Rating</Label>
-                    <div className="flex gap-1 mt-2">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <button
-                          key={star}
-                          onClick={() => setRating(star)}
-                          className="focus:outline-none"
-                        >
-                          <StarIcon
-                            className={`sm:w-8 sm:h-8 w-6 h-6 m-1 ${
-                              star <= rating
-                                ? "fill-yellow-400 text-yellow-400"
-                                : "text-gray-300"
-                            }`}
-                          />
-                        </button>
-                      ))}
+            <div className="flex flex-col gap-4">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="bg-yellow-400 hover:bg-yellow-300">
+                    Write a Review
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-full sm:max-w-lg md:max-w-2xl w-full">
+                  <DialogHeader>
+                    <DialogTitle>Write a Review</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label>Rating</Label>
+                      <div className="flex gap-1 mt-2">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            onClick={() => setRating(star)}
+                            className="focus:outline-none"
+                          >
+                            <StarIcon
+                              className={`sm:w-8 sm:h-8 w-6 h-6 m-1 ${
+                                star <= rating
+                                  ? "fill-yellow-400 text-yellow-400"
+                                  : "text-gray-300"
+                              }`}
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <Label>Your Review</Label>
+                      <Textarea
+                        value={review}
+                        onChange={(e) => setReview(e.target.value)}
+                        placeholder="Share your experience with this product..."
+                        className="mt-2 h-24 sm:h-28 w-full"
+                      />
                     </div>
                   </div>
-                  <div>
-                    <Label>Your Review</Label>
-                    <Textarea
-                      value={review}
-                      onChange={(e) => setReview(e.target.value)}
-                      placeholder="Share your experience with this product..."
-                      className="mt-2 h-24 sm:h-28 w-full"
-                    />
-                  </div>
-                </div>
-                <DialogFooter className="mt-4">
-                  <Button
-                    onClick={handleSubmitReview}
-                    disabled={!rating}
-                    className="bg-primary text-primary-foreground w-full sm:w-auto"
-                  >
-                    Submit Review
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+                  <DialogFooter className="mt-4">
+                    <Button
+                      onClick={handleSubmitReview}
+                      disabled={!rating}
+                      className="bg-primary text-primary-foreground w-full sm:w-auto"
+                    >
+                      Submit Review
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+              <Button onClick={() => handleOrderStatusUpdate("Returned")}>
+                Return Order
+              </Button>
+            </div>
+          )}
+          {(orderItem.status === "OrderConfirmed" ||
+            orderItem.status === "Shipped") && (
+            <Button onClick={() => handleOrderStatusUpdate("Cancelled")}>
+              Cancel Order
+            </Button>
           )}
         </CardFooter>
       </Card>
@@ -204,7 +296,7 @@ const OrderDetails = () => {
               <div className="flex justify-between">
                 <span>List Price</span>
                 <span className="line-through text-gray-500">
-                  ₹${orderItem.product.price}
+                  ₹{orderItem.product.price}
                 </span>
               </div>
               <div className="flex justify-between">
