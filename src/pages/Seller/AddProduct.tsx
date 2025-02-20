@@ -31,12 +31,7 @@ export default function AddProductForm() {
   const [previews, setPreviews] = useState<string[]>(["", "", "", "", ""])
   const [fileNames, setFileNames] = useState<string[]>(Array(previews.length).fill("No Selected File"))
 
-  const {
-    control,
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm<AddProductSchematype>({
+  const { control, handleSubmit, register, formState: { errors }, } = useForm<AddProductSchematype>({
     resolver: zodResolver(AddProductSchema),
     defaultValues: {
       name: "",
@@ -56,28 +51,94 @@ export default function AddProductForm() {
     name: "details",
   })
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const file = e.target.files?.[0] || null
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        const newPreviews = [...previews]
+  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  //   const file = e.target.files?.[0] || null
+  //   if (file) {
+  //     const reader = new FileReader()
+  //     reader.onloadend = () => {
+  //       const newPreviews = [...previews]
 
-        newPreviews[index] = reader.result as string
+  //       newPreviews[index] = reader.result as string
 
-        const newFileNames = [...fileNames]
-        newFileNames[index] = file.name
+  //       const newFileNames = [...fileNames]
+  //       newFileNames[index] = file.name
 
-        setPreviews(newPreviews)
-        setFileNames(newFileNames)
+  //       setPreviews(newPreviews)
+  //       setFileNames(newFileNames)
+  //     }
+  //     reader.readAsDataURL(file)
+
+  //     const newImages = [...images]
+  //     newImages[index] = file
+  //     setImages(newImages)
+  //   }
+  // }
+  const handleImageChange = async (
+    e: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>,
+    index: number
+  ) => {
+    let file: File | null = null;
+
+    if ("dataTransfer" in e) {
+      // Handle Drag and Drop
+      e.preventDefault();
+      const items = e.dataTransfer.items;
+
+      for (const item of items) {
+        if (item.kind === "file") {
+          file = item.getAsFile();
+        } else if (item.kind === "string") {
+          // Handle dragging an image from a website
+          item.getAsString(async (url) => {
+            if (url.startsWith("http")) {
+              try {
+                file = await urlToFile(url);
+                updateImageState(file, index);
+              } catch (error) {
+                console.error("Failed to download image:", error);
+              }
+            }
+          });
+          return;
+        }
       }
-      reader.readAsDataURL(file)
-
-      const newImages = [...images]
-      newImages[index] = file
-      setImages(newImages)
+    } else {
+      // Handle File Input
+      file = e.target.files?.[0] || null;
     }
-  }
+
+    if (file) {
+      updateImageState(file, index);
+    }
+  };
+
+  const urlToFile = async (imageUrl: string) => {
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    return new File([blob], "dropped-image.jpg", { type: blob.type });
+  };
+
+  const updateImageState = (file: File | null, index: number) => {
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const newPreviews = [...previews];
+      newPreviews[index] = reader.result as string;
+
+      const newFileNames = [...fileNames];
+      newFileNames[index] = file.name;
+
+      setPreviews(newPreviews);
+      setFileNames(newFileNames);
+    };
+    reader.readAsDataURL(file);
+
+    const newImages = [...images];
+    newImages[index] = file;
+    setImages(newImages);
+  };
+
 
   const onSubmit = async (data: AddProductSchematype) => {
     setIsSubmitting(true)
@@ -175,7 +236,11 @@ export default function AddProductForm() {
                 </li>
               </p>
 
-              <div className="relative w-[21rem] h-64 md:h-48 md:w-48 lg:w-52  lg:h-52 sm:h-64 sm:w-64 p-2 rounded-lg  bg-card text-card-foreground  ">
+              <div
+                className="relative w-[21rem] h-64 md:h-48 md:w-48 lg:w-52 lg:h-52 sm:h-64 sm:w-64 p-2 rounded-lg bg-card text-card-foreground"
+                onDrop={(e) => handleImageChange(e, index)}
+                onDragOver={(e) => e.preventDefault()} // Prevent default to allow drop
+              >
                 <input
                   type="file"
                   accept="image/*"
