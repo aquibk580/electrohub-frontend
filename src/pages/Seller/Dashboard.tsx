@@ -117,7 +117,7 @@ export default function Dashboard() {
         <h2 className="text-2xl text-accent-foreground font-semibold">Orders</h2>
 
         {/* Stats Section */}
-        <Card className="w-full lg:w-[95%] flex flex-nowrap gap-4  text-secondary-foreground border-accent bg-muted/50 rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x mx-auto">
+        <Card className="w-full lg:w-[95%] flex flex-nowrap gap-4  text-secondary-foreground border-accent bg-muted rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x mx-auto">
           <div className="flex items-center pl-6  space-x-2 text-primary">
             <CalendarCheck className="w-6 h-6" />
             <span className="font-semibold text-lg">Today</span>
