@@ -51,6 +51,7 @@ import SellerProduct from "./pages/Admin/Seller-Product";
 import ViewProduct from "./pages/Seller/ViewProduct";
 import EditProduct from "./pages/Seller/EditProduct";
 import ViewOrder from "./pages/Seller/ViewOrder";
+import SellerSettings from "./pages/Seller/Settings";
 
 const App = () => {
   return (
@@ -255,6 +256,14 @@ const App = () => {
               element={
                 <SellerLayout>
                   <Profile />
+                </SellerLayout>
+              }
+            />
+            <Route
+              path="settings"
+              element={
+                <SellerLayout>
+                  <SellerSettings />
                 </SellerLayout>
               }
             />
