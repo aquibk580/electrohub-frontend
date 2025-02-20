@@ -57,7 +57,7 @@ export default function SellerLayout({
 
   return (
     <MainNav>
-      <div className=" p-1.5 md:p-6">{children}</div>
+      <div className=" p-1.5 md:p-6 bg-accent">{children}</div>
     </MainNav>
   );
 }

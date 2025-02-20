@@ -105,7 +105,7 @@ export default function Dashboard() {
 
   const navigate = useNavigate();
   return (
-    <div className="space-y-5 h-screen ">
+    <div className="space-y-5  ">
 
       <div className="bg-[#FFC444] border rounded-xl">
         <img className="w-full h-full object-cover animate__animated animate__fadeIn" src={assets.bannerdash} alt="" />
