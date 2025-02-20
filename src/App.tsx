@@ -52,7 +52,10 @@ import ViewProduct from "./pages/Seller/ViewProduct";
 import EditProduct from "./pages/Seller/EditProduct";
 import ViewOrder from "./pages/Seller/ViewOrder";
 import SellerSettings from "./pages/Seller/Settings";
+<<<<<<< HEAD
 import UserSettings from "./pages/User/Settings";
+=======
+>>>>>>> f2a4b14eb508dedd6864ca596633f2d6d06ebf4c
 
 const App = () => {
   return (
@@ -172,6 +175,14 @@ const App = () => {
               </UserLayout>
             }
           />
+          <Route
+            path="settings"
+            element={
+              <UserLayout>
+                <SellerSettings />
+              </UserLayout>
+            }
+          />
         </Route>
 
         <Route path="/seller">
@@ -265,6 +276,14 @@ const App = () => {
               element={
                 <SellerLayout>
                   <Profile />
+                </SellerLayout>
+              }
+            />
+            <Route
+              path="settings"
+              element={
+                <SellerLayout>
+                  <SellerSettings />
                 </SellerLayout>
               }
             />
