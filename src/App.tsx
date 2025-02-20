@@ -219,7 +219,7 @@ const App = () => {
               }
             />
             <Route
-              path="orders/:orderId"
+              path="orders/:id"
               element={
                 <SellerLayout>
                   <ViewOrder />

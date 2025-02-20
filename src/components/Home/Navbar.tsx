@@ -1,4 +1,4 @@
-  import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import React, { useState } from "react";
@@ -18,6 +18,7 @@ import UserProfileButton from "./UserProfileButton";
 import { Menu } from "lucide-react";
 import MobileSideBar from "./MobileSidebar";
 import { Input } from "../ui/input";
+import Logo from "../Logo";
 
 const Navbar = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -78,7 +79,7 @@ const Navbar = () => {
   ];
 
   return (
-    <header className="fixed z-50 w-full border-b shadow-sm bg-white">
+    <header className="fixed z-50 w-full border-b shadow-sm bg-white dark:bg-black">
       {/* Top Banner */}
       <div className="bg-green-950 text-white text-sm py-1 px-6 lg:flex justify-between hidden">
         <div className="flex items-center gap-2 w-full">
@@ -99,7 +100,15 @@ const Navbar = () => {
             className="cursor-pointer"
             onClick={() => setShowSidebar(true)}
           />
-          <h1 className="font-semibold text-3xl">Electrohub</h1>
+          <h1 className="font-semibold text-3xl flex items-center">
+           
+            <Logo
+              containerClass="w-6 h-6 mr-[0.1rem]"
+              polygonClass="fill-black dark:fill-white"
+              frameClass="fill-black dark:fill-white"
+            />
+             lectrohub
+          </h1>
           <div>
             {isAuthenticated && user ? (
               <UserProfileButton name={user.name} imageUrl={pfp!} />
@@ -120,7 +129,14 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Logo */}
-        <h1 className="font-semibold text-3xl hidden lg:block">Electrohub</h1>
+        <h1 className="font-semibold text-3xl hidden lg:flex items-center">
+          <Logo
+            containerClass="w-6 h-6  mr-[0.1rem]"
+            polygonClass="fill-black dark:fill-white"
+            frameClass="fill-black dark:fill-white"
+          />
+          lectrohub
+        </h1>
 
         {/* Navigation Menu */}
         <NavigationMenu className="hidden lg:flex">

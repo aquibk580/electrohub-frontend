@@ -264,10 +264,11 @@ export default function Dashboard() {
                             .toUpperCase()}
                         </span>
                         <span>
-                          {orders.map(
-                            (order) =>
-                              order.id === orderItem.orderId && order.user.name
-                          )}
+                          {
+                            orders.find(
+                              (order) => order.id === orderItem.orderId
+                            )?.user.name
+                          }
                         </span>
                       </TableCell>
                       <TableCell className="whitespace-nowrap">
@@ -306,11 +307,17 @@ export default function Dashboard() {
                           variant="ghost"
                           className="hover:bg-accent"
                           onClick={() =>
-                            navigate(`/seller/orders/${orderItem.id}`, {
-                              state: {
-                                orderItem,
-                              },
-                            })
+                            navigate(
+                              `/seller/dashboard/orders/${orderItem.id}`,
+                              {
+                                state: {
+                                  user: orders.find(
+                                    (order) => order.id === orderItem.orderId
+                                  )?.user,
+                                  orderItem,
+                                },
+                              }
+                            )
                           }
                         >
                           <ChevronRight />

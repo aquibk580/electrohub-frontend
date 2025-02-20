@@ -27,6 +27,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { toast } from "react-toastify";
 import axios from "@/lib/axios";
+import ReviewForm from "@/components/User/ReviewForm";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -35,8 +36,6 @@ const OrderDetails = () => {
   const [orderItem, setOrderItem] = useState<OrderItem>(
     location.state?.orderItem
   );
-  const [rating, setRating] = useState(0);
-  const [review, setReview] = useState("");
 
   useEffect(() => {
     const getAllOrders = async () => {
@@ -161,13 +160,6 @@ const OrderDetails = () => {
     }
   };
 
-  const handleSubmitReview = () => {
-    console.log({ rating, review });
-
-    setRating(0);
-    setReview("");
-  };
-
   return (
     <div className="grid md:grid-cols-2 gap-6 ">
       {/* Order Details */}
@@ -200,58 +192,7 @@ const OrderDetails = () => {
           <OrderProgress trackingSteps={getorderTrackingSteps(orderItem)} />
           {orderItem.status === "Delivered" && (
             <div className="flex flex-col gap-4">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="bg-yellow-400 hover:bg-yellow-300">
-                    Write a Review
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-full sm:max-w-lg md:max-w-2xl w-full">
-                  <DialogHeader>
-                    <DialogTitle>Write a Review</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <div>
-                      <Label>Rating</Label>
-                      <div className="flex gap-1 mt-2">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <button
-                            key={star}
-                            onClick={() => setRating(star)}
-                            className="focus:outline-none"
-                          >
-                            <StarIcon
-                              className={`sm:w-8 sm:h-8 w-6 h-6 m-1 ${
-                                star <= rating
-                                  ? "fill-yellow-400 text-yellow-400"
-                                  : "text-gray-300"
-                              }`}
-                            />
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <Label>Your Review</Label>
-                      <Textarea
-                        value={review}
-                        onChange={(e) => setReview(e.target.value)}
-                        placeholder="Share your experience with this product..."
-                        className="mt-2 h-24 sm:h-28 w-full"
-                      />
-                    </div>
-                  </div>
-                  <DialogFooter className="mt-4">
-                    <Button
-                      onClick={handleSubmitReview}
-                      disabled={!rating}
-                      className="bg-primary text-primary-foreground w-full sm:w-auto"
-                    >
-                      Submit Review
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+              <ReviewForm productId={orderItem.productId} />
               <Button onClick={() => handleOrderStatusUpdate("Returned")}>
                 Return Order
               </Button>

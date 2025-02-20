@@ -79,7 +79,6 @@ export default function ProductPage() {
       </div>
     );
   }
-  console.log(product.reviews);
 
   return (
     <div className="min-h-screen bg-background">

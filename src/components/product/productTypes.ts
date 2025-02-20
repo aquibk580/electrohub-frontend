@@ -9,6 +9,9 @@ export interface User {
   userId: number;
   name: string;
   pfp?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
 }
 
 export interface Category {
@@ -29,6 +32,11 @@ export interface Product {
   reviews: Array<Review> | [];
   averageRating: number;
   seller: { name: string };
+}
+
+export interface Detail {
+  key: string;
+  value: string;
 }
 
 export interface OrderItem {
