@@ -25,8 +25,23 @@ const SellerForgotPassword = () => {
         });
         navigate("/seller/auth/signin");
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.response.data?.flag === "InvalidCredentials") {
+        toast.error("Invalid Credentials", {
+          position: "top-center",
+          theme: "light",
+        });
+      } else if (error.response.data?.flag === "SellerNotFound") {
+        toast.error("Seller not found", {
+          position: "top-center",
+          theme: "light",
+        });
+      } else {
+        toast.error(error.message, {
+          position: "top-center",
+          theme: "light",
+        });
+      }
     }
   };
   return (

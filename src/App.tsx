@@ -44,13 +44,15 @@ import Reports from "./pages/Admin/Reports";
 import Messages from "./pages/Admin/Messages";
 import ChatLayout from "./components/Admin/ChatLayout";
 import ContentManagement from "./pages/Admin/ContentManagement";
-import Settings from "./pages/Admin/Settings";
+import AdminSettings from "./pages/Admin/Settings";
 import LogsAndSecurity from "./pages/Admin/Logs";
 import Demo from "./pages/Admin/demo";
 import SellerProduct from "./pages/Admin/Seller-Product";
 import ViewProduct from "./pages/Seller/ViewProduct";
 import EditProduct from "./pages/Seller/EditProduct";
 import ViewOrder from "./pages/Seller/ViewOrder";
+import SellerSettings from "./pages/Seller/Settings";
+import UserSettings from "./pages/User/Settings";
 
 const App = () => {
   return (
@@ -132,6 +134,14 @@ const App = () => {
             element={
               <UserLayout>
                 <UserProfile />
+              </UserLayout>
+            }
+          />
+          <Route
+            path="settings"
+            element={
+              <UserLayout>
+                <UserSettings />
               </UserLayout>
             }
           />
@@ -259,6 +269,14 @@ const App = () => {
               }
             />
           </Route>
+          <Route
+            path="settings"
+            element={
+              <SellerLayout>
+                <SellerSettings />
+              </SellerLayout>
+            }
+          />
         </Route>
         <Route path="/admin">
           <Route path="auth">
@@ -411,7 +429,7 @@ const App = () => {
             path="settings"
             element={
               <AdminLayout>
-                <Settings />
+                <AdminSettings />
               </AdminLayout>
             }
           />

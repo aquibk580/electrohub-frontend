@@ -52,8 +52,28 @@ export default function UserLogin() {
           theme: "light",
         });
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.response.data?.flag === "UserNotFound") {
+        toast.error("User not found", {
+          position: "top-center",
+          theme: "light",
+        });
+      } else if (error.response.data?.flag === "PasswordNotFound") {
+        toast.error("Password not found in the db", {
+          position: "top-center",
+          theme: "light",
+        });
+      } else if (error.response.data?.flag === "InvalidCredentials") {
+        toast.error("Invalid Credentials", {
+          position: "top-center",
+          theme: "light",
+        });
+      } else {
+        toast.error(error.message, {
+          position: "top-center",
+          theme: "light",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -61,11 +81,12 @@ export default function UserLogin() {
 
   const handleGoogleSignIn = async () => {
     try {
-      
       const redirectUrl = `${import.meta.env.VITE_FRONTEND_URL}/`;
       const userType = "user";
 
-      window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google?redirectUrl=${encodeURIComponent(
+      window.location.href = `${
+        import.meta.env.VITE_API_URL
+      }/api/auth/google?redirectUrl=${encodeURIComponent(
         redirectUrl
       )}&userType=${encodeURIComponent(userType)}`;
     } catch (error: any) {
@@ -101,7 +122,9 @@ export default function UserLogin() {
                 placeholder="Email ID"
               />
               {errors.email && (
-                <p className="text-red-500 text-sm">{String(errors.email.message)}</p>
+                <p className="text-red-500 text-sm">
+                  {String(errors.email.message)}
+                </p>
               )}
             </div>
 

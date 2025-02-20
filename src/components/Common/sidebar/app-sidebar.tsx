@@ -173,6 +173,11 @@ export function AppSidebar({ userRole, ...props }: AppSidebarProps) {
           url: "/seller/dashboard/products",
           icon: PackageSearch,
         },
+        {
+          title: "Settings",
+          url: "/seller/settings",
+          icon: Settings2,
+        },
       ],
     },
   };

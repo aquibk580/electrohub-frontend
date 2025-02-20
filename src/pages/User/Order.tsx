@@ -134,8 +134,8 @@ export default function Orders() {
                             className={`w-3 h-3 rounded-full ${
                               orderItem.status === "Delivered" && "bg-green-500"
                             } ${
-                              orderItem.status === "Cancelled" ||
-                              (orderItem.status === "Returned" && "bg-red-500")
+                             ( orderItem.status === "Cancelled" ||
+                              orderItem.status === "Returned") && "bg-red-500"
                             }  ${
                               orderItem.status === "Shipped" && "bg-yellow-500"
                             } ${

@@ -319,7 +319,7 @@ const ContentManagement = () => {
                   </TableRow>
                 ))
               ) : (
-                <></>
+                <h1 className="text-xl font-medium p-4">No Categories found</h1>
               )}
             </TableBody>
           </Table>

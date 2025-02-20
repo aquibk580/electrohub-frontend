@@ -106,16 +106,16 @@ export function NavUser({ user, userRole }: NavUserProps) {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="  hover:bg-gray-100 focus-visible:ring-0"
+              className=" focus-visible:ring-0"
             >
               <Avatar className="h-8 w-8 rounded-full bg-red-600">
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="bg-green-950 text-white font-semibold">
-                  {user.name.slice(0, 2).toUpperCase()}
+                  {user.name.slice(0, 2).toUpperCase()} 
                 </AvatarFallback>
               </Avatar>
               <div className=" flex flex-col text-left text-sm  leading-tight">
-                <span className="text-black font-semibold">{user.name}</span>
+                <span className=" font-semibold">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
             </SidebarMenuButton>
@@ -146,7 +146,7 @@ export function NavUser({ user, userRole }: NavUserProps) {
             <DropdownMenuItem className="font-medium">
               <Button
                 variant="outline"
-                className="hover:bg-white"
+                className=""
                 onClick={() =>
                   user.role === "seller"
                     ? handleSellerLogout()
