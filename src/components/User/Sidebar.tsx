@@ -9,6 +9,7 @@ import {
   Star,
   Heart,
   LogOut,
+  SettingsIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,7 +19,7 @@ import { clearUser } from "@/redux/slices/user";
 import { toast } from "react-toastify";
 import axios from "../../lib/axios";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import Logo from "../logo";
+// import Logo from "../logo";
 
 const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
   const navigate = useNavigate();
@@ -58,6 +59,11 @@ const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
       path: "/user/reviews",
       text: "My Reviews & Ratings",
       icon: Star,
+    },
+    {
+      path: "/user/settings",
+      text: "Settings",
+      icon: SettingsIcon,
     },
   ];
 

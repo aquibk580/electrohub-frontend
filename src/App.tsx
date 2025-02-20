@@ -163,6 +163,14 @@ const App = () => {
               </UserLayout>
             }
           />
+          <Route
+            path="settings"
+            element={
+              <UserLayout>
+                <SellerSettings />
+              </UserLayout>
+            }
+          />
         </Route>
 
         <Route path="/seller">
