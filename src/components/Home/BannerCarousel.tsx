@@ -1,6 +1,4 @@
-"use client";
 import { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -87,19 +85,6 @@ export default function BannerCarouselComponent() {
       >
         <ChevronRight className="w-6 h-6 text-black" />
       </Button>
-
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {Banners.map((_, i) => (
-          <Button
-            key={i}
-            className={cn(
-              "h-2 w-2 rounded-full transition focus-visible:ring-0",
-              i === index ? "bg-white" : "bg-gray-400"
-            )}
-            onClick={() => setIndex(i)}
-          />
-        ))}
-      </div>
     </div>
   );
 }
