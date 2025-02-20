@@ -259,7 +259,7 @@ export default function ProductList() {
                         <div className="flex  items-center justify-center">
                           <Button
                             onClick={() =>
-                              navigate(`view-product/${product.id}`, {
+                              navigate(`/seller/dashboard/products/view-product/${product.id}`, {
                                 state: {
                                   product,
                                 },
