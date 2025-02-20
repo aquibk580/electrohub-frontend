@@ -55,7 +55,7 @@ export default function BannerCarouselComponent() {
   }
 
   return (
-    <div className="relative w-full mx-auto overflow-hidden rounded-md shadow-lg h-40 sm:h-60 md:h-80 lg:h-96 bg-accent">
+    <div className="relative w-full mx-auto overflow-hidden rounded-md shadow-lg h-96">
       <div
         className="relative w-full h-full cursor-pointer"
         onClick={() => navigate(bannerCarousels[index].href)}
@@ -65,7 +65,7 @@ export default function BannerCarouselComponent() {
             key={index}
             src={Banners[index]}
             alt={`Slide ${index}`}
-            className="absolute w-full h-full object-contain sm:object-fill"
+            className="absolute w-full h-96 object-contain sm:object-fill"
             initial={{ x: direction === 1 ? "100%" : "-100%", opacity: 0.5 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: direction === 1 ? "-100%" : "100%", opacity: 0.5 }}
