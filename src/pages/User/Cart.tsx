@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { MapPin, Minus, Phone, Plus, Trash2 } from "lucide-react";
+import { Loader2, MapPin, Minus, Phone, Plus, Trash2 } from "lucide-react";
 import { assets } from "@/assets/assets";
 import Checkout from "@/components/User/Checkout";
 import { useEffect, useState } from "react";
@@ -25,6 +25,7 @@ const Cart = () => {
     total: 0,
     items: [],
   });
+  const [isLoading, setIsLoading] = useState(true);
   const [total, setTotal] = useState(0);
   const [cartItems, setCartItems] = useState<
     Array<Product & { cartItemId: number; quantity: number }>
@@ -41,6 +42,8 @@ const Cart = () => {
         }
       } catch (error: any) {
         console.warn(error.message);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -116,7 +119,11 @@ const Cart = () => {
         <CardContent className="p-6 flex flex-col h-full">
           <h2 className="text-2xl font-semibold mb-4">Shopping Cart</h2>
           <div className="space-y-6 overflow-y-auto flex-1">
-            {cartItems.length > 0 ? (
+            {isLoading ? (
+              <div className="flex justify-center items-center min-h-screen">
+                <Loader2 className="h-8 w-8 animate-spin" />
+              </div>
+            ) : cartItems.length > 0 ? (
               cartItems.map((item) => (
                 <div
                   key={item.id}
@@ -239,7 +246,11 @@ const Cart = () => {
 
           <Separator className="my-6" />
 
-          <img src={assets.paymentOptions} className="hidden xl:block" alt="Payment-Options" />
+          <img
+            src={assets.paymentOptions}
+            className="hidden xl:block"
+            alt="Payment-Options"
+          />
 
           <Separator className="my-6" />
 
@@ -264,7 +275,11 @@ const Cart = () => {
           </div>
         </CardContent>
         <CardFooter>
-          <Checkout orderData={orderData} />
+          <Checkout
+            orderData={orderData}
+            text="Proceed to Checkout"
+            styles="w-full bg-green-800 hover:bg-green-700"
+          />
         </CardFooter>
       </Card>
     </div>

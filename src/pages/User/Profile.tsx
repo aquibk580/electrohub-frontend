@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
+  
 const PersonalInfo = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();

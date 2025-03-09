@@ -119,6 +119,7 @@ export default function ProductPage() {
                   id={product.id}
                   wishlist={wishlist}
                   setWishlist={setWishlist}
+                  total={product.price - (product.price / 100 * product.offerPercentage)}
                 />
               ) : (
                 <Button onClick={() => navigate("/user/auth/signin")}>

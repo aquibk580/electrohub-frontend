@@ -11,12 +11,26 @@ interface OrderInput {
   items: { productId: number; quantity: number }[];
 }
 
-const Checkout = ({ orderData }: { orderData: OrderInput }) => {
+interface CheckoutProps {
+  orderData: OrderInput;
+  styles: string;
+  text: string;
+}
+
+const Checkout = ({ orderData, styles, text }: CheckoutProps) => {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user.user);
   const [isLoading, setIsLoading] = useState(false);
 
   const handlePayment = async () => {
+    if (!user?.address || !user?.phone) {
+      toast.warn("Address and contact details are required", {
+        position: "top-center",
+        theme: "dark",
+      });
+      navigate("/user/profile");
+      return;
+    }
     if (orderData.total <= 0) {
       toast.warn("Your cart is empty", {
         position: "top-center",
@@ -81,12 +95,8 @@ const Checkout = ({ orderData }: { orderData: OrderInput }) => {
   };
 
   return (
-    <Button
-      className="w-full bg-green-800 hover:bg-green-700"
-      onClick={handlePayment}
-      disabled={isLoading}
-    >
-      {isLoading ? "Processing..." : "Proceed to Checkout"}
+    <Button className={styles} onClick={handlePayment} disabled={isLoading}>
+      {isLoading ? "Processing..." : text}
     </Button>
   );
 };

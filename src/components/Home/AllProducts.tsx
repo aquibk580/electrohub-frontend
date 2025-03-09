@@ -1,50 +1,45 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { Link } from "react-router-dom";
-import { Loader2, Star } from "lucide-react";
-import { Category, Review, Product } from "../product/productTypes";
+import { Loader2 } from "lucide-react";
+import { Category, Product } from "../product/productTypes";
 import axios from "@/lib/axios";
 import ProductCard from "./ProductCard";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
+const PRODUCTS_PER_PAGE = 16;
+
 const AllProducts = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [category, setCategory] = useState<string>("All");
   const [wishlist, setWishlist] = useState<Set<number>>(new Set());
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchInitialData = async () => {
       try {
         const [categoriesRes, productsRes] = await Promise.all([
           axios.get(`${import.meta.env.VITE_API_URL}/api/categories`),
-          axios.get(`${import.meta.env.VITE_API_URL}/api/user/products`),
+          axios.get(
+            `${
+              import.meta.env.VITE_API_URL
+            }/api/user/products?page=1&limit=${PRODUCTS_PER_PAGE}`
+          ),
         ]);
 
         if (categoriesRes.status === 200) setCategories(categoriesRes.data);
         if (productsRes.status === 200) {
-          const productsWithRatings = productsRes.data.products.map(
-            (product: Product) => {
-              const totalRating =
-                product?.reviews?.length > 0
-                  ? product.reviews.reduce(
-                      (acc, review) => acc + review.rating,
-                      0
-                    )
-                  : 0;
-              const averageRating =
-                product.reviews.length > 0
-                  ? totalRating / product.reviews.length
-                  : 0;
-              return { ...product, averageRating };
-            }
-          );
-          setProducts(productsWithRatings);
+          processProducts(productsRes.data.products);
+          setHasMore(productsRes.data.products.length === PRODUCTS_PER_PAGE);
         }
+
         if (isAuthenticated) {
           const wishlistRes = await axios.get(
             `${import.meta.env.VITE_API_URL}/api/user/wishlist/wishlistproducts`
@@ -52,11 +47,7 @@ const AllProducts = () => {
 
           if (wishlistRes.status === 200 && wishlistRes.data?.wishlist) {
             setWishlist(new Set(wishlistRes.data.wishlist));
-          } else {
-            setWishlist(new Set());
           }
-        } else {
-          setWishlist(new Set());
         }
       } catch (error: any) {
         console.error(error);
@@ -65,21 +56,89 @@ const AllProducts = () => {
       }
     };
 
-    fetchData();
+    fetchInitialData();
   }, []);
 
-  const filteredProducts = useMemo(() => {
-    if (category === "All") {
-      return products;
+  const processProducts = (newProducts: Product[]) => {
+    const updatedProducts = newProducts.map((product) => {
+      const totalRating = product?.reviews?.reduce(
+        (acc, review) => acc + review.rating,
+        0
+      );
+      const averageRating =
+        product.reviews.length > 0 ? totalRating / product.reviews.length : 0;
+      return { ...product, averageRating };
+    });
+
+    setProducts((prevProducts) => [...prevProducts, ...updatedProducts]);
+  };
+
+  const loadMoreProducts = async () => {
+    if (!hasMore) return;
+    setLoadingMore(true);
+
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/user/products?page=${
+          page + 1
+        }&limit=${PRODUCTS_PER_PAGE}`
+      );
+
+      if (response.status === 200) {
+        processProducts(response.data.products);
+        setPage((prevPage) => prevPage + 1);
+        setHasMore(response.data.products.length === PRODUCTS_PER_PAGE);
+      }
+    } catch (error) {
+      console.error("Error loading more products:", error);
+    } finally {
+      setLoadingMore(false);
     }
+  };
+
+  const filteredProducts = useMemo(() => {
+    if (category === "All") return products;
     return products.filter(
       (p) => p.categoryName.toLowerCase() === category.toLowerCase()
     );
   }, [category, products]);
 
-  const handleCategoryChange = useCallback((category: string) => {
-    setCategory(category);
-  }, []);
+  const [categoryProductsCache, setCategoryProductsCache] = useState<Record<string, Product[]>>({});
+
+  const handleCategoryChange = useCallback(async (selectedCategory: string) => {
+    setCategory(selectedCategory);
+    setProducts([]); 
+    setPage(1);
+    setHasMore(true);
+    setLoading(true);
+  
+    // If category data is already cached, use it
+    if (categoryProductsCache[selectedCategory]) {
+      setProducts(categoryProductsCache[selectedCategory]);
+      setLoading(false);
+      return;
+    }
+  
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/user/products?page=1&limit=${PRODUCTS_PER_PAGE}&category=${selectedCategory}`
+      );
+  
+      if (response.status === 200) {
+        processProducts(response.data.products);
+        setCategoryProductsCache(prevCache => ({
+          ...prevCache,
+          [selectedCategory]: response.data.products,
+        }));
+        setHasMore(response.data.products.length === PRODUCTS_PER_PAGE);
+      }
+    } catch (error) {
+      console.error("Error fetching products for category:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [categoryProductsCache]);
+  
 
   if (loading) {
     return (
@@ -116,6 +175,7 @@ const AllProducts = () => {
           </li>
         ))}
       </ul>
+
       <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-6">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
@@ -132,6 +192,19 @@ const AllProducts = () => {
           </h1>
         )}
       </div>
+
+      {/* Load More Button */}
+      {hasMore && (
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={loadMoreProducts}
+            className="px-4 py-2 bg-green-900 text-white rounded-md"
+            disabled={loadingMore}
+          >
+            {loadingMore ? "Loading..." : "Load More"}
+          </button>
+        </div>
+      )}
     </div>
   );
 };

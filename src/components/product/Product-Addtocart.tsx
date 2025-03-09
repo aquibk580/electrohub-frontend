@@ -6,21 +6,34 @@ import {
 } from "../ui/tooltip";
 import { Heart } from "lucide-react";
 import { Button } from "../ui/button";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import axios from "@/lib/axios";
 import { toast } from "react-toastify";
+import Checkout from "../User/Checkout";
 
 type ProductAddtocartProps = {
   id: number;
   wishlist: Set<number>;
   setWishlist: Dispatch<SetStateAction<Set<number>>>;
+  total: number;
 };
+
+interface OrderInput {
+  total: number;
+  items: Array<{ productId: number; quantity: number }>;
+}
 
 const ProductAddtocart = ({
   id,
   wishlist,
   setWishlist,
+  total,
 }: ProductAddtocartProps) => {
+  const [orderData, setOrderData] = useState<OrderInput>({
+    total: 0,
+    items: [],
+  });
+
   const isWishlisted = wishlist.has(id);
   const handleAddToCart = async (productId: number) => {
     try {
@@ -87,6 +100,13 @@ const ProductAddtocart = ({
     }
   };
 
+  useEffect(() => {
+    setOrderData({
+      total: total,
+      items: [{ productId: id, quantity: 1 }],
+    });
+  }, []);
+
   return (
     <div>
       <div className="flex space-x-4">
@@ -108,9 +128,11 @@ const ProductAddtocart = ({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button className="flex-1 hover:bg-amber-600 bg-amber-500 cursor-pointer ">
-                Buy Now
-              </Button>
+              <Checkout
+                orderData={orderData}
+                styles="flex-1 hover:bg-amber-600 bg-amber-500 cursor-pointer"
+                text="Buy now"
+              />
             </TooltipTrigger>
             <TooltipContent>
               <p>Buy This Item Now</p>

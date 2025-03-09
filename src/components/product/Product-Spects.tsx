@@ -5,6 +5,7 @@ import { Badge } from "../ui/badge";
 import { Review } from "./productTypes";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useMemo } from "react";
+import { formatDate } from "@/lib/utils";
 interface ProductSpectsProps {
   reviews: Array<Review>;
   details: { key: string; value: string }[];
@@ -91,17 +92,20 @@ const ProductSpects = ({ reviews, details }: ProductSpectsProps) => {
                         {review?.user?.name || "Unknow"}
                       </span>
                     </div>
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-4 w-4 ${
-                            i < review.rating
-                              ? "fill-yellow-400 text-yellow-400"
-                              : "fill-gray-200 text-gray-200"
-                          }`}
-                        />
-                      ))}
+                    <div className="flex flex-col ">
+                      <span>{formatDate(review.createdAt)}</span>
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`h-4 w-4 ${
+                              i < review.rating
+                                ? "fill-yellow-400 text-yellow-400"
+                                : "fill-gray-200 text-gray-200"
+                            }`}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
                   <p className="mt-2 text-gray-600 px-12">{review.content}</p>

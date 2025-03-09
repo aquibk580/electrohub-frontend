@@ -3,6 +3,8 @@ export interface Review {
   rating: number;
   content: string;
   user: User;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface User {
@@ -32,6 +34,8 @@ export interface Product {
   reviews: Array<Review> | [];
   averageRating: number;
   seller: { name: string };
+  createAt: Date;
+  updatedAt: Date;
 }
 
 export interface Detail {
