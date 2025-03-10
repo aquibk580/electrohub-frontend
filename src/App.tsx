@@ -53,13 +53,16 @@ import EditProduct from "./pages/Seller/EditProduct";
 import ViewOrder from "./pages/Seller/ViewOrder";
 import SellerSettings from "./pages/Seller/Settings";
 import UserSettings from "./pages/User/Settings";
+import ScrollToTop from "./components/Common/Scroll-To-Top";
 
 const App = () => {
   return (
     <>
       <ToastContainer />
 
+      <ScrollToTop />
       <Routes>
+
         <Route
           path="/"
           element={
