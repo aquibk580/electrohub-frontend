@@ -25,25 +25,25 @@ const OrderProgress = ({ trackingSteps }: OrderProgressProps) => {
   }, [trackingSteps.step]);
 
   return (
-    <div className="w-full bg-white md:p-4 rounded-lg">
+    <div className="w-full bg-background md:p-4 rounded-lg">
       <div className="relative">
-        {/* Animated Gray Background Line */}
+        {/* Animated Background Line */}
         <motion.div
-          className="absolute left-[13px] top-0 w-[3px] bg-gray-300 rounded-lg"
+          className="absolute left-[13px] top-0 w-[3px] bg-muted rounded-lg"
           initial={{ height: 0 }}
           animate={{ height: "calc(100% - 40px)" }}
           transition={{ duration: 1.5, ease: "easeInOut" }}
         ></motion.div>
-
-        {/* Animated Green Progress Line */}
+  
+        {/* Animated Progress Line */}
         <motion.div
-          className="absolute left-[13px] top-0 w-[3px] bg-green-500 rounded-lg"
+          className="absolute left-[13px] top-0 w-[3px] bg-primary rounded-lg"
           initial={{ height: 0 }}
           animate={{ height: `${progressHeight}%` }}
           transition={{ duration: 1.5, ease: "easeInOut" }}
           style={{ maxHeight: "calc(100% - 36px)" }}
         ></motion.div>
-
+  
         {trackingSteps.steps.map((item, index) => (
           <motion.div
             key={index}
@@ -61,8 +61,8 @@ const OrderProgress = ({ trackingSteps }: OrderProgressProps) => {
               className={cn(
                 "w-7 h-7 flex items-center justify-center rounded-full border-2 text-sm font-bold transition-colors ease-in-out",
                 index <= trackingSteps.step
-                  ? "border-green-500 bg-green-500 text-white"
-                  : "border-gray-300 bg-white text-gray-400"
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-muted-foreground/30 bg-background text-muted-foreground"
               )}
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -76,11 +76,11 @@ const OrderProgress = ({ trackingSteps }: OrderProgressProps) => {
                 <Check size={20} />
               ) : (
                 <>
-                  <Clock />
+                  <Clock size={16} />
                 </>
               )}
             </motion.div>
-
+  
             {/* Step Details */}
             <motion.div
               className="ml-4"
@@ -97,16 +97,16 @@ const OrderProgress = ({ trackingSteps }: OrderProgressProps) => {
                   className={cn(
                     "font-medium",
                     index <= trackingSteps.step
-                      ? "text-green-500"
-                      : "text-gray-500"
+                      ? "text-primary"
+                      : "text-muted-foreground"
                   )}
                 >
                   {item.title}
                 </h3>
-                <p className="text-sm text-gray-400">{item.description}</p>
+                <p className="text-sm text-muted-foreground/70">{item.description}</p>
               </div>
               {index <= trackingSteps.step && (
-                <h1>{formatDate(trackingSteps.date)}</h1>
+                <h1 className="text-foreground">{formatDate(trackingSteps.date)}</h1>
               )}
             </motion.div>
           </motion.div>

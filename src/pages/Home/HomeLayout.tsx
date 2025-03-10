@@ -64,7 +64,7 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Navbar />
-      <div className="pt-[4rem] lg:pt-[6.7rem]">{children}</div>
+      <div className="pt-[4rem] lg:pt-[6.7rem] ">{children}</div>
       <Footer />
     </>
   );
