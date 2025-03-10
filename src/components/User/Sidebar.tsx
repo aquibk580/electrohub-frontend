@@ -100,9 +100,9 @@ const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
   return (
     <div ref={ref} className="w-64 h-fit m-6 mr-0 hidden lg:grid grid-rows-[auto_1fr_auto] gap-6">
       {/* User profile card */}
-      <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-4 shadow-md rounded-lg">
-        <div className="h-12 w-12 flex items-center justify-center rounded-full overflow-hidden">
-          <Avatar>
+      <div className="flex items-center gap-4 bg-white dark:bg-black p-4 shadow-md rounded-lg">
+        <div className="h-12 w-12 flex items-center justify-center ">
+          <Avatar className="rounded-full">
             <AvatarImage src={pfp!} alt="User" className="rounded-full" />
             <AvatarFallback className={`${bgColor} text-white font-bold rounded-full px-3 py-[0.9rem]`}>
               {initials}
@@ -116,14 +116,14 @@ const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
       </div>
 
       {/* Navigation menu */}
-      <nav className="grid grid-rows-6 h-fit gap-1 text-sm font-medium py-4 bg-white dark:bg-gray-800 shadow-md rounded-lg items-center justify-center">
+      <nav className="grid grid-rows-6 h-fit gap-1 text-sm font-medium py-4 bg-white dark:bg-black shadow-md rounded-lg items-center justify-center">
         {sidebarData.map((item, index) => (
           <Link
             key={index}
             to={item.path}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg h-fit text-gray-800 dark:text-gray-200 
-              hover:bg-gray-100 dark:hover:bg-gray-700 
-              ${activeItem === item.text && "bg-gray-100 dark:bg-gray-700"}`}
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg h-fit text-accent-foreground 
+              hover:bg-accent
+              ${activeItem === item.text && "bg-primary/25 hover:bg-primary/35 "}`}
           >
             <item.icon className="h-5 w-5" />
             <span>{item.text}</span>

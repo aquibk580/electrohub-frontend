@@ -81,7 +81,7 @@ const Navbar = () => {
   return (
     <header className="fixed z-50 w-full border-b shadow-sm bg-white dark:bg-black">
       {/* Top Banner */}
-      <div className="bg-green-950 text-white text-sm py-1 px-6 lg:flex justify-between hidden">
+      <div className="bg-primary text-primary-foreground text-sm py-1 px-6 lg:flex justify-between hidden">
         <div className="flex items-center gap-2 w-full">
           <img className="w-4" src={assets.phone_icon} alt="Phone" />
           <p>+91-987654321</p>
@@ -231,7 +231,7 @@ const Navbar = () => {
         </form>
 
         {/* User Account/Profile */}
-        <div className="hidden lg:flex gap-6">
+        <div className="hidden lg:flex gap-6 ">
           {isAuthenticated && user ? (
             <UserProfileButton name={user.name} imageUrl={pfp!} />
           ) : (

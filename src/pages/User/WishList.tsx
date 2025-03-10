@@ -95,7 +95,7 @@ export function Wishlist() {
             wishlistItems?.map((item) => (
               <div
                 key={item.id}
-                className="flex flex-col sm:flex-row items-center gap-4 p-4 border rounded-lg bg-gray-50 shadow-sm"
+                className="flex flex-col sm:flex-row items-center gap-4 p-4 border rounded-lg bg-primary/5 hover:bg-primary/10 shadow-sm"
               >
                 {/* Product Image */}
                 <img

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { assets } from "@/assets/assets";
 import {
   Card,
   CardContent,
@@ -8,17 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { StarIcon } from "lucide-react";
 import OrderProgress from "@/components/User/ProgressBar";
 import { useLocation, useParams } from "react-router-dom";
 import { OrderItem } from "@/components/product/productTypes";
