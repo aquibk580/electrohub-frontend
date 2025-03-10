@@ -31,7 +31,7 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
         key={i}
         className={
           i < filledStars
-            ? "fill-green-700 text-green-700"
+            ? "fill-primary text-primary"
             : "fill-gray-400 text-gray-400"
         }
         style={{ width: "14px", height: "14px" }}
@@ -111,7 +111,7 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
   };
 
   return (
-    <div className="bg-white rounded-lg overflow-hidden">
+    <div className="bg-white dark:bg-gray-900 rounded-lg overflow-hidden">
       <div
         className="w-full bg-[#9797970f] p-2 rounded-lg overflow-hidden aspect-square"
         onClick={handleNavigate}
@@ -120,7 +120,7 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
           loading="lazy"
           src={product.images[0]?.url || "/placeholder.svg"}
           alt={product.name}
-          className="object-contain w-full mix-blend-multiply h-full hover:scale-110 transition-transform duration-300"
+          className="object-contain w-full  h-full hover:scale-110 transition-transform duration-300"
         />
       </div>
 
@@ -134,6 +134,12 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
           {product.description}
         </p>
         <div className="flex">{stars}</div>
+        <span className="text-lg font-bold mt-4 ml-1">
+            ₹
+            {formatPrice(
+              product.price - (product.price / 100) * product.offerPercentage
+            )}
+          </span>
         <div className="flex py-2 justify-between items-center flex-wrap-reverse">
           {isAuthenticated && (
             <div className="sm:space-x-4 space-x-2 flex">
@@ -145,7 +151,7 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
               </Button>
               <Button
                 onClick={() => handleToggleWishlist(product.id)}
-                className={`rounded-full p-3 bg-white ${
+                className={`rounded-full p-3 bg-white hover:bg-primary/30 ${
                   isWishlisted ? "text-red-500" : "text-gray-500"
                 }`}
               >
@@ -153,12 +159,7 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
               </Button>
             </div>
           )}
-          <span className="text-lg font-bold">
-            ₹
-            {formatPrice(
-              product.price - (product.price / 100) * product.offerPercentage
-            )}
-          </span>
+          
         </div>
       </div>
     </div>

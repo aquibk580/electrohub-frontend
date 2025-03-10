@@ -53,18 +53,19 @@ export default function ProductImage({ images, title }: ProductImageProps) {
 
       {/* Thumbnail Images */}
       <div className="flex justify-left gap-2">
-        {images.map((img, index) => (
-          <img
-            key={index}
-            src={img}
-            alt={`Thumbnail ${index}`}
-            className={`w-14 sm:w-20 lg:w-28 h-auto rounded-lg border ${
-              index === currentIndex ? "border-blue-500" : "border-transparent"
-            } cursor-pointer`}
-            onClick={() => setCurrentIndex(index)}
-          />
-        ))}
-      </div>
+  {images
+    .filter((_, index) => index !== currentIndex)
+    .map((img, index) => (
+      <img
+        key={index}
+        src={img}
+        alt={`Thumbnail ${index}`}
+        className="w-14 sm:w-20 lg:w-28 h-auto rounded-lg border border-transparent cursor-pointer"
+        onClick={() => setCurrentIndex(images.indexOf(img))} 
+      />
+    ))}
+</div>
+
     </div>
   );
 }

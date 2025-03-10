@@ -157,8 +157,8 @@ const AllProducts = () => {
       <ul className="mt-2 flex p-2 gap-2 justify-center sm:justify-start flex-wrap">
         <li
           onClick={() => handleCategoryChange("All")}
-          className={`px-2 py-1.5 cursor-pointer border rounded-full w-fit text-center ${
-            category === "All" ? "bg-green-900 text-white" : ""
+          className={`px-2 py-1.5 cursor-pointer border rounded-full w-fit text-center hover:bg-accent ${
+            category === "All" ? "bg-primary  text-primary-foreground" : ""
           }`}
         >
           All
@@ -166,8 +166,8 @@ const AllProducts = () => {
         {categories.map((item) => (
           <li
             onClick={() => handleCategoryChange(item.name)}
-            className={`px-2 py-1.5 cursor-pointer border rounded-full w-fit text-center ${
-              category === item.name ? "bg-green-900 text-white" : ""
+            className={`px-2 py-1.5 cursor-pointer border rounded-full w-fit text-center hover:bg-accent ${
+              category === item.name ? "bg-primary  text-primary-foreground" : ""
             }`}
             key={item.name}
           >
@@ -176,7 +176,7 @@ const AllProducts = () => {
         ))}
       </ul>
 
-      <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-6">
+      <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-6 bg-primary/5">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <ProductCard
@@ -198,7 +198,7 @@ const AllProducts = () => {
         <div className="flex justify-center mt-6">
           <button
             onClick={loadMoreProducts}
-            className="px-4 py-2 bg-green-900 text-white rounded-md"
+            className="px-4 py-2 bg-primary hover:bg-accent text-primary-foreground rounded-md"
             disabled={loadingMore}
           >
             {loadingMore ? "Loading..." : "Load More"}
