@@ -32,6 +32,7 @@ const breadcrumbConfig: Record<string, { href: string; label: string }[]> = {
   "/seller/dashboard/products/edit-product/:id": [{href: "/seller/dashboard", label:"Dashboard"},{ href: "/seller/dashboard/products", label: "Products" },{ href: "/seller/dashboard/products/edit-product/:id", label: "Edit Product" }],
   "/seller/dashboard/add-product": [{ href: "/seller/dashboard", label: "Dashboard" },{ href: "/seller/dashboard/add-product", label: "Add Product" }],
   "/seller/dashboard/profile": [{ href: "/seller/dashboard", label: "Dashboard" },{ href: "/seller/dashboard/profile", label: "Profile" }],
+  "/seller/settings": [{ href: "/seller/dashboard", label: "Dashboard" },{ href: "/seller/settings", label: "Settings" }],
 
 
   "/user/auth/signin": [{ href: "/user/auth/signin", label: "Sign In" }],
