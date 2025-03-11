@@ -34,6 +34,13 @@ export default function ProductPage() {
 
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1024 });
 
+  const totalRating = product?.reviews?.reduce(
+    (acc, review) => acc + review.rating,
+    0
+  );
+  const averageRating =
+    product.reviews.length > 0 ? totalRating / product.reviews.length : 0;
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -52,7 +59,7 @@ export default function ProductPage() {
 
           if (wishlistRes.status === 200) {
             setWishlist(new Set(wishlistRes.data.wishlist || []));
-          } else [setWishlist(new Set())];
+          } else[setWishlist(new Set())];
         } else {
           setWishlist(new Set());
         }
@@ -104,7 +111,7 @@ export default function ProductPage() {
               title={product.name}
               description={product.description}
               reviews={product.reviews}
-              averageRating={product.averageRating}
+              averageRating={averageRating}
             />
 
             <div className="space-y-4">

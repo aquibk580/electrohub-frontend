@@ -85,7 +85,7 @@ const ProductSpects = ({ reviews, details }: ProductSpectsProps) => {
                         <AvatarFallback
                           className={`${bgColor} text-white font-extrabold`}
                         >
-                          {getInitials(review.user.name)}
+                          {getInitials(review.user?.name)}
                         </AvatarFallback>
                       </Avatar>
                       <span className="font-medium">
