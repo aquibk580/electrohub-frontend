@@ -1,5 +1,6 @@
 import AllProducts from "@/components/Home/AllProducts";
 import BannerCarousel from "@/components/Home/BannerCarousel";
+import BrandSelector from "@/components/Home/Brand-Selector";
 import ProductCarousel from "@/components/Home/ProductCarousel";
 import ServiceSection from "@/components/Home/ServiceSection";
 import "animate.css";
@@ -10,6 +11,7 @@ const Home = () => {
       <BannerCarousel />
       <ProductCarousel />
       <AllProducts />
+      <BrandSelector/>
       <ServiceSection />
     </div>
   );
