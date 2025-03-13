@@ -101,7 +101,7 @@ export default function UserLogin() {
           <CardTitle className="text-3xl font-extrabold text-center">
             Sign In
           </CardTitle>
-          <CardDescription className="text-center text-gray-800">
+          <CardDescription className="text-center text-gray-800 dark:text-gray-100">
             Sign in to your User Account
           </CardDescription>
         </CardHeader>
@@ -152,7 +152,7 @@ export default function UserLogin() {
             <div className="flex items-center justify-start">
               <Button
                 variant="link"
-                className="p-0 h-auto font-medium text-blue-950"
+                className="p-0 h-auto font-medium text-blue-950 dark:text-blue-500"
                 onClick={() => navigate("/user/auth/forgot-password")}
               >
                 Forgot password?

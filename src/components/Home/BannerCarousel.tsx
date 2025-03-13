@@ -63,7 +63,7 @@ export default function BannerCarouselComponent() {
             key={index}
             src={Banners[index]}
             alt={`Slide ${index}`}
-            className="absolute w-full h-full object-contain sm:object-fill"
+            className="absolute w-full h-full object-cover sm:object-cover"
             initial={{ x: direction === 1 ? "100%" : "-100%", opacity: 0.5 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: direction === 1 ? "-100%" : "100%", opacity: 0.5 }}
