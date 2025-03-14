@@ -35,7 +35,7 @@ const ProductSpects = ({ reviews, details, loading }: ProductSpectsProps) => {
   };
   const bgColor = useMemo(() => getRandomColor(), []);
   return (
-    <div className="mt-12 h-[500px] overflow-hidden">
+    <div className="my-12 overflow-hidden">
       <Tabs defaultValue="details">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="details">Specifications</TabsTrigger>
@@ -44,7 +44,7 @@ const ProductSpects = ({ reviews, details, loading }: ProductSpectsProps) => {
 
         <TabsContent
           value="details"
-          className="mt-6 h-[400px] overflow-y-auto overflow-x-hidden"
+          className="mt-6 overflow-y-auto overflow-x-hidden"
         >
           <div className="prose px-5 sm:px-10 dark:prose-invert">
             <div className="grid gap-4">
@@ -69,7 +69,7 @@ const ProductSpects = ({ reviews, details, loading }: ProductSpectsProps) => {
 
         <TabsContent
           value="reviews"
-          className="mt-6 h-[400px] px-6 overflow-y-auto overflow-x-hidden"
+          className="mt-6 px-6 overflow-y-auto overflow-x-hidden"
         >
           <div className="space-y-6">
             {!loading ? (

@@ -7,7 +7,7 @@ import "animate.css";
 
 const Home = () => {
   return (
-    <div className="px-4 sm:px-2 py-10 flex flex-col items-center">
+    <div className="px-4 sm:px-2 py-10 flex flex-col">
       <BannerCarousel />
       <ProductCarousel />
       <AllProducts />
