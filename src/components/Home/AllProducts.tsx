@@ -39,16 +39,6 @@ const AllProducts = () => {
           processProducts(productsRes.data.products);
           setHasMore(productsRes.data.products.length === PRODUCTS_PER_PAGE);
         }
-
-        if (isAuthenticated) {
-          const wishlistRes = await axios.get(
-            `${import.meta.env.VITE_API_URL}/api/user/wishlist/wishlistproducts`
-          );
-
-          if (wishlistRes.status === 200 && wishlistRes.data?.wishlist) {
-            setWishlist(new Set(wishlistRes.data.wishlist));
-          }
-        }
       } catch (error: any) {
         console.error(error);
       } finally {
@@ -58,6 +48,27 @@ const AllProducts = () => {
 
     fetchInitialData();
   }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+  
+    const fetchWishlist = async () => {
+      try {
+        const wishlistRes = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/user/wishlist/wishlistproducts`
+        );
+  
+        if (wishlistRes.status === 200 && wishlistRes.data?.wishlist) {
+          setWishlist(new Set(wishlistRes.data.wishlist));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    fetchWishlist();
+  }, [isAuthenticated]);
+  
 
   const processProducts = (newProducts: Product[]) => {
     const updatedProducts = newProducts.map((product) => {
@@ -97,48 +108,54 @@ const AllProducts = () => {
   };
 
   const filteredProducts = useMemo(() => {
-    if (category === "All") return products;
+    if (category === "All") return products
     return products.filter(
       (p) => p.categoryName.toLowerCase() === category.toLowerCase()
     );
   }, [category, products]);
 
-  const [categoryProductsCache, setCategoryProductsCache] = useState<Record<string, Product[]>>({});
+  const [categoryProductsCache, setCategoryProductsCache] = useState<
+    Record<string, Product[]>
+  >({});
 
-  const handleCategoryChange = useCallback(async (selectedCategory: string) => {
-    setCategory(selectedCategory);
-    setProducts([]); 
-    setPage(1);
-    setHasMore(true);
-    setLoading(true);
-  
-    // If category data is already cached, use it
-    if (categoryProductsCache[selectedCategory]) {
-      setProducts(categoryProductsCache[selectedCategory]);
-      setLoading(false);
-      return;
-    }
-  
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/user/products?page=1&limit=${PRODUCTS_PER_PAGE}&category=${selectedCategory}`
-      );
-  
-      if (response.status === 200) {
-        processProducts(response.data.products);
-        setCategoryProductsCache(prevCache => ({
-          ...prevCache,
-          [selectedCategory]: response.data.products,
-        }));
-        setHasMore(response.data.products.length === PRODUCTS_PER_PAGE);
+  const handleCategoryChange = useCallback(
+    async (selectedCategory: string) => {
+      setCategory(selectedCategory);
+      setProducts([]);
+      setPage(1);
+      setHasMore(true);
+      setLoading(true);
+
+      // If category data is already cached, use it
+      if (categoryProductsCache[selectedCategory]) {
+        setProducts(categoryProductsCache[selectedCategory]);
+        setLoading(false);
+        return;
       }
-    } catch (error) {
-      console.error("Error fetching products for category:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [categoryProductsCache]);
-  
+
+      try {
+        const response = await axios.get(
+          `${
+            import.meta.env.VITE_API_URL
+          }/api/user/products?page=1&limit=${PRODUCTS_PER_PAGE}&category=${selectedCategory}`
+        );
+
+        if (response.status === 200) {
+          processProducts(response.data.products);
+          setCategoryProductsCache((prevCache) => ({
+            ...prevCache,
+            [selectedCategory]: response.data.products,
+          }));
+          setHasMore(response.data.products.length === PRODUCTS_PER_PAGE);
+        }
+      } catch (error) {
+        console.error("Error fetching products for category:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [categoryProductsCache]
+  );
 
   if (loading) {
     return (
@@ -167,7 +184,9 @@ const AllProducts = () => {
           <li
             onClick={() => handleCategoryChange(item.name)}
             className={`px-2 py-1.5 cursor-pointer border rounded-full w-fit text-center hover:bg-accent ${
-              category === item.name ? "bg-primary  text-primary-foreground" : ""
+              category === item.name
+                ? "bg-primary  text-primary-foreground"
+                : ""
             }`}
             key={item.name}
           >

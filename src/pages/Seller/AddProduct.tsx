@@ -55,29 +55,7 @@ export default function AddProductForm() {
     control,
     name: "details",
   })
-
-  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-  //   const file = e.target.files?.[0] || null
-  //   if (file) {
-  //     const reader = new FileReader()
-  //     reader.onloadend = () => {
-  //       const newPreviews = [...previews]
-
-  //       newPreviews[index] = reader.result as string
-
-  //       const newFileNames = [...fileNames]
-  //       newFileNames[index] = file.name
-
-  //       setPreviews(newPreviews)
-  //       setFileNames(newFileNames)
-  //     }
-  //     reader.readAsDataURL(file)
-
-  //     const newImages = [...images]
-  //     newImages[index] = file
-  //     setImages(newImages)
-  //   }
-  // }
+  
   const handleImageChange = async (
     e: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>,
     index: number

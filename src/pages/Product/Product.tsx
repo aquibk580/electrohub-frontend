@@ -37,24 +37,11 @@ export default function ProductPage() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const [productRes] = await Promise.all([
-          axios.get(`${import.meta.env.VITE_API_URL}/api/user/products/${id}`),
-        ]);
-
-        if (productRes.status === 200) {
-          setProduct(productRes.data);
-        }
-
-        if (isAuthenticated) {
-          const wishlistRes = await axios.get(
-            `${import.meta.env.VITE_API_URL}/api/user/wishlist/wishlistproducts`
-          );
-
-          if (wishlistRes.status === 200) {
-            setWishlist(new Set(wishlistRes.data.wishlist || []));
-          } else [setWishlist(new Set())];
-        } else {
-          setWishlist(new Set());
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/user/products/${id}`
+        );
+        if (response.status === 200) {
+          setProduct(response.data);
         }
 
         window.scrollTo(0, 0);
@@ -68,9 +55,36 @@ export default function ProductPage() {
     fetchProduct();
   }, [id]);
 
-  if (loading) {
-    return <ProductSkeleton />;
-  }
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      if (isAuthenticated) {
+        const wishlistRes = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/user/wishlist/wishlistproducts`
+        );
+
+        if (wishlistRes.status === 200) {
+          setWishlist(new Set(wishlistRes.data.wishlist || []));
+        } else [setWishlist(new Set())];
+      } else {
+        setWishlist(new Set());
+      }
+    };
+    fetchWishlist();
+  }, [isAuthenticated]);
+
+  // if (loading) {
+  //   return <ProductSkeleton />;
+  // }
+
+  const getAverageProductRating = (): number => {
+    const totalRating = product?.reviews?.reduce(
+      (acc, review) => acc + review.rating,
+      0
+    );
+    return product?.reviews?.length > 0
+      ? totalRating / product.reviews.length
+      : 0;
+  };
 
   if (error || !product) {
     return (
@@ -104,7 +118,11 @@ export default function ProductPage() {
               title={product.name}
               description={product.description}
               reviews={product.reviews}
-              averageRating={product.averageRating}
+              averageRating={
+                !product.averageRating
+                  ? getAverageProductRating()
+                  : product.averageRating
+              }
             />
 
             <div className="space-y-4">
@@ -119,7 +137,10 @@ export default function ProductPage() {
                   id={product.id}
                   wishlist={wishlist}
                   setWishlist={setWishlist}
-                  total={product.price - (product.price / 100 * product.offerPercentage)}
+                  total={
+                    product.price -
+                    (product.price / 100) * product.offerPercentage
+                  }
                 />
               ) : (
                 <Button onClick={() => navigate("/user/auth/signin")}>
@@ -134,6 +155,7 @@ export default function ProductPage() {
         <ProductSpects
           reviews={product.reviews}
           details={product.productInfo.details}
+          loading={loading}
         />
         <RelatedProducts
           category={product.categoryName}

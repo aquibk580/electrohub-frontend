@@ -1,6 +1,6 @@
 import { specifications } from "@/assets/assets";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
-import { Star } from "lucide-react";
+import { Loader2, Star } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Review } from "./productTypes";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -9,9 +9,10 @@ import { formatDate } from "@/lib/utils";
 interface ProductSpectsProps {
   reviews: Array<Review>;
   details: { key: string; value: string }[];
+  loading: boolean;
 }
 
-const ProductSpects = ({ reviews, details }: ProductSpectsProps) => {
+const ProductSpects = ({ reviews, details, loading }: ProductSpectsProps) => {
   function getRandomColor() {
     const colors = [
       "bg-red-500",
@@ -71,50 +72,56 @@ const ProductSpects = ({ reviews, details }: ProductSpectsProps) => {
           className="mt-6 h-[400px] px-6 overflow-y-auto overflow-x-hidden"
         >
           <div className="space-y-6">
-            {reviews.length > 0 ? (
-              reviews.map((review) => (
-                <div key={review.id} className="border-b pb-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Avatar>
-                        <AvatarImage
-                          src={review.user?.pfp}
-                          alt="User"
-                          className="w-full h-full"
-                        />
-                        <AvatarFallback
-                          className={`${bgColor} text-white font-extrabold`}
-                        >
-                          {getInitials(review.user.name)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="font-medium">
-                        {review?.user?.name || "Unknow"}
-                      </span>
-                    </div>
-                    <div className="flex flex-col ">
-                      <span>{formatDate(review.createdAt)}</span>
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`h-4 w-4 ${
-                              i < review.rating
-                                ? "fill-yellow-400 text-yellow-400"
-                                : "fill-gray-200 text-gray-200"
-                            }`}
+            {!loading ? (
+              reviews.length > 0 ? (
+                reviews.map((review) => (
+                  <div key={review.id} className="border-b pb-6">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Avatar>
+                          <AvatarImage
+                            src={review.user?.pfp}
+                            alt="User"
+                            className="w-full h-full"
                           />
-                        ))}
+                          <AvatarFallback
+                            className={`${bgColor} text-white font-extrabold`}
+                          >
+                            {getInitials(review.user.name)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="font-medium">
+                          {review?.user?.name || "Unknow"}
+                        </span>
+                      </div>
+                      <div className="flex flex-col ">
+                        <span>{formatDate(review.createdAt)}</span>
+                        <div className="flex">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`h-4 w-4 ${
+                                i < review.rating
+                                  ? "fill-yellow-400 text-yellow-400"
+                                  : "fill-gray-200 text-gray-200"
+                              }`}
+                            />
+                          ))}
+                        </div>
                       </div>
                     </div>
+                    <p className="mt-2 text-gray-600 px-12">{review.content}</p>
                   </div>
-                  <p className="mt-2 text-gray-600 px-12">{review.content}</p>
-                </div>
-              ))
+                ))
+              ) : (
+                <h1 className="text-xl font-semibold">
+                  No Reviews available for this product
+                </h1>
+              )
             ) : (
-              <h1 className="text-xl font-semibold">
-                No Reviews available for this product
-              </h1>
+              <div className="flex justify-center items-center">
+                <Loader2 className="h-8 w-8 animate-spin" />
+              </div>
             )}
           </div>
         </TabsContent>

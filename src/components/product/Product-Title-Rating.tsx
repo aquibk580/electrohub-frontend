@@ -17,7 +17,7 @@ export default function ProductTitleRating({
   averageRating,
 }: ProductTitleRatingProps) {
   const [showDescription, setShowDescription] = useState(false);
-
+  
   const displayDescription = () => {
     showDescription ? setShowDescription(false) : setShowDescription(true);
   };
