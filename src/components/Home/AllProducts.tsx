@@ -185,17 +185,10 @@ const AllProducts = () => {
         {categories.map((item) => (
           <li
             onClick={() => handleCategoryChange(item.name)}
-<<<<<<< HEAD
             className={`px-2 py-1.5 cursor-pointer border rounded-full w-fit text-center hover:bg-accent ${
               category === item.name
                 ? "bg-primary  text-primary-foreground"
                 : ""
-=======
-            className={`px-3 py-1.5 cursor-pointer border border-border rounded-full w-fit text-center transition-colors duration-200 ${
-              category === item.name 
-                ? "bg-primary text-primary-foreground" 
-                : "hover:bg-accent/10 text-foreground"
->>>>>>> 50aba440c7b3fcc049d75febdb80b7b2d1150158
             }`}
             key={item.name}
           >
