@@ -16,6 +16,7 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
   const [contentHeight, setContentHeight] = useState<number | null>(null);
 
   useEffect(() => {
+    
     const adjustHeight = () => {
       setTimeout(() => {
         if (sidebarRef.current) {
@@ -32,6 +33,8 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
       window.removeEventListener("resize", adjustHeight);
     };
   }, []);
+
+
 
   useEffect(() => {
     if (!isAuthenticated) {

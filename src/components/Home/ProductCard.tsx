@@ -111,55 +111,54 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg overflow-hidden">
+    <div className="bg-card text-card-foreground rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-border">
       <div
-        className="w-full bg-[#9797970f] p-2 rounded-lg overflow-hidden aspect-square"
+        className="w-full bg-muted p-2 rounded-lg overflow-hidden aspect-square"
         onClick={handleNavigate}
       >
         <img
           loading="lazy"
           src={product.images[0]?.url || "/placeholder.svg"}
           alt={product.name}
-          className="object-contain w-full  h-full hover:scale-110 transition-transform duration-300"
+          className="object-contain w-full h-full hover:scale-110 transition-transform duration-300 cursor-pointer"
         />
       </div>
-
-      <div className="sm:p-2">
-        <div onClick={handleNavigate}>
-          <h2 className="text-lg font-semibold mb-1 group-hover:text-blue-600 transition-colors duration-300 ease-in-out line-clamp-1">
+  
+      <div className="p-3">
+        <div onClick={handleNavigate} className="cursor-pointer">
+          <h2 className="text-lg font-semibold mb-1 hover:text-primary transition-colors duration-300 ease-in-out line-clamp-1">
             {product.name}
           </h2>
         </div>
-        <p className="text-gray-600 mb-2 text-sm line-clamp-1">
+        <p className="text-muted-foreground mb-2 text-sm line-clamp-1">
           {product.description}
         </p>
-        <div className="flex">{stars}</div>
-        <span className="text-lg font-bold mt-4 ml-1">
-            ₹
-            {formatPrice(
-              product.price - (product.price / 100) * product.offerPercentage
-            )}
-          </span>
-        <div className="flex py-2 justify-between items-center flex-wrap-reverse">
+        <div className="flex text-amber-500">{stars}</div>
+        <span className="text-lg font-bold mt-4 text-foreground">
+          ₹
+          {formatPrice(
+            product.price - (product.price / 100) * product.offerPercentage
+          )}
+        </span>
+        <div className="flex py-2 justify-between items-center mt-1">
           {isAuthenticated && (
-            <div className="sm:space-x-4 space-x-2 flex">
+            <div className="space-x-2 flex">
               <Button
                 onClick={() => handleAddToCart(product.id)}
-                className="bg-white text-black text-xs sm:text-base font-medium border-black border px-3 py-1.5 hover:bg-green-900 hover:border-green-900 hover:text-white transition-all rounded-full"
+                className="bg-background hover:bg-primary hover:text-primary-foreground text-foreground text-xs sm:text-sm font-medium border border-input px-3 py-1.5 transition-colors rounded-full"
               >
                 Add to Cart
               </Button>
               <Button
                 onClick={() => handleToggleWishlist(product.id)}
-                className={`rounded-full p-3 bg-white hover:bg-primary/30 ${
-                  isWishlisted ? "text-red-500" : "text-gray-500"
+                className={`rounded-full p-2 bg-background border border-input hover:bg-primary/10 ${
+                  isWishlisted ? "text-red-500" : "text-muted-foreground"
                 }`}
               >
-                <Heart className={`${isWishlisted ? "fill-current" : ""}`} />
+                <Heart size={18} className={`${isWishlisted ? "fill-current" : ""}`} />
               </Button>
             </div>
           )}
-          
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { Star } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Review } from "./productTypes";
 
 interface ProductTitleRatingProps {
@@ -22,6 +22,25 @@ export default function ProductTitleRating({
     showDescription ? setShowDescription(false) : setShowDescription(true);
   };
 
+  
+
+   const stars = useMemo(() => {
+      const totalStars = 5;
+      const filledStars = Math.round(averageRating);
+  
+      return [...Array(totalStars)].map((_, i) => (
+        <Star
+          key={i}
+          className={
+            i < filledStars
+              ? "fill-primary text-primary"
+              : "fill-gray-400 text-gray-400"
+          }
+          style={{ width: "14px", height: "14px" }}
+        />
+      ));
+    }, [averageRating]);
+
   return (
     <div>
       <Badge variant="destructive" className="mb-2 text-xs sm:text-sm">
@@ -40,16 +59,7 @@ export default function ProductTitleRating({
       </h3>
       <div className="mt-3 flex items-center space-x-2 sm:space-x-4">
         <div className="flex gap-0.5 sm:gap-1">
-          {[...Array(5)].map((_, i) => (
-            <Star
-              key={i}
-              className={`h-4 w-4 sm:h-5 sm:w-5 ${
-                i < Math.round(averageRating)
-                  ? "fill-primary text-primary"
-                  : "fill-gray-200 text-gray-200"
-              }`}
-            />
-          ))}
+          {stars}
         </div>
         <span className="text-xs sm:text-sm text-muted-foreground">
           ({averageRating} rating, {reviews.length} reviews)

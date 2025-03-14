@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setPfp, setUser } from "@/redux/slices/user";
 import axios from "../../lib/axios";
+import ChatBot from "@/components/Home/ChatBot";
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -64,7 +65,8 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Navbar />
-      <div className="pt-[4rem] lg:pt-[6.7rem]">{children}</div>
+      <div className="pt-[4rem] lg:pt-[6.7rem] ">{children}</div>
+      <ChatBot/>
       <Footer />
     </>
   );

@@ -20,13 +20,13 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
       <nav>
         <div className="flex items-center justify-start mb-8">
           <Link to="/" className="text-gray-600 hover:text-gray-900">
-            <ArrowLeft className="h-8 w-8 text-black" />
+            <ArrowLeft className="h-8 w-8 text-black dark:text-white" />
           </Link>
-          <h2 className="text-3xl font-extrabold text-gray-900 flex-grow text-center">
+          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-inherit flex-grow text-center">
             Electrohub
           </h2>
           <div className="w-6"></div>

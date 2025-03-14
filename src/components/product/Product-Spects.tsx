@@ -72,6 +72,17 @@ const ProductSpects = ({ reviews, details, loading }: ProductSpectsProps) => {
           className="mt-6 h-[400px] px-6 overflow-y-auto overflow-x-hidden"
         >
           <div className="space-y-6">
+
+
+
+
+
+
+
+
+
+            
+<<<<<<< HEAD
             {!loading ? (
               reviews.length > 0 ? (
                 reviews.map((review) => (
@@ -83,6 +94,40 @@ const ProductSpects = ({ reviews, details, loading }: ProductSpectsProps) => {
                             src={review.user?.pfp}
                             alt="User"
                             className="w-full h-full"
+=======
+            {reviews.length > 0 ? (
+              reviews.map((review) => (
+                <div key={review.id} className="border-b pb-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Avatar>
+                        <AvatarImage
+                          src={review.user?.pfp}
+                          alt="User"
+                          className="w-full h-full"
+                        />
+                        <AvatarFallback
+                          className={`${bgColor} text-white font-extrabold`}
+                        >
+                          {getInitials(review.user?.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="font-medium">
+                        {review?.user?.name || "Unknow"}
+                      </span>
+                    </div>
+                    <div className="flex flex-col ">
+                      <span>{formatDate(review.createdAt)}</span>
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`h-4 w-4 ${
+                              i < review.rating
+                                ? "fill-yellow-400 text-yellow-400"
+                                : "fill-gray-200 text-gray-200"
+                            }`}
+>>>>>>> 50aba440c7b3fcc049d75febdb80b7b2d1150158
                           />
                           <AvatarFallback
                             className={`${bgColor} text-white font-extrabold`}

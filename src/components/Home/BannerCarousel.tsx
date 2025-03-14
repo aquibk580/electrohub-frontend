@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import { BannerCrousel } from "@/pages/Admin/ContentManagement";
 import axios from "@/lib/axios";
 import { useNavigate } from "react-router-dom";
@@ -9,10 +9,10 @@ import { useNavigate } from "react-router-dom";
 export default function BannerCarouselComponent() {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
-  const [bannerCarousels, setBannerCarousels] = useState<Array<BannerCrousel>>(
-    []
-  );
+  const [bannerCarousels, setBannerCarousels] = useState<Array<BannerCrousel>>([]);
   const [direction, setDirection] = useState(1);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const intervalRef = useRef<number | null>(null);
 
   useEffect(() => {
     const getAllBannerCarousel = async () => {
@@ -33,14 +33,32 @@ export default function BannerCarouselComponent() {
   const Banners = bannerCarousels.map((banner) => banner.imageUrl);
 
   useEffect(() => {
-    if (bannerCarousels.length > 0) {
-      const interval = setInterval(() => {
-        changeSlide(1);
-      }, 5000);
+    // Clear any existing interval when component unmounts or dependencies change
+    return () => {
+      if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
 
-      return () => clearInterval(interval);
+  useEffect(() => {
+    if (bannerCarousels.length > 0) {
+      if (isPlaying) {
+        intervalRef.current = window.setInterval(() => {
+          changeSlide(1);
+        }, 5000);
+      } else if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
     }
-  }, [bannerCarousels]);
+    
+    return () => {
+      if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isPlaying, bannerCarousels]);
 
   const changeSlide = (dir: number) => {
     if (Banners.length === 0) return;
@@ -48,8 +66,12 @@ export default function BannerCarouselComponent() {
     setIndex((prev) => (prev + dir + Banners.length) % Banners.length);
   };
 
+  const togglePlayPause = () => {
+    setIsPlaying(prev => !prev);
+  };
+
   if (bannerCarousels.length === 0) {
-    return;
+    return null;
   }
 
   return (
@@ -63,7 +85,7 @@ export default function BannerCarouselComponent() {
             key={index}
             src={Banners[index]}
             alt={`Slide ${index}`}
-            className="absolute w-full h-full object-contain sm:object-fill"
+            className="absolute w-full h-full object-cover sm:object-cover"
             initial={{ x: direction === 1 ? "100%" : "-100%", opacity: 0.5 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: direction === 1 ? "-100%" : "100%", opacity: 0.5 }}
@@ -74,16 +96,36 @@ export default function BannerCarouselComponent() {
 
       <Button
         className="absolute top-1/2 left-2 -translate-y-1/2 bg-white/30 p-[0.6rem] rounded-full hover:bg-white transition focus-visible:ring-0"
-        onClick={() => changeSlide(-1)}
+        onClick={(e) => {
+          e.stopPropagation();
+          changeSlide(-1);
+        }}
       >
         <ChevronLeft className="w-6 h-6 text-black" />
       </Button>
 
       <Button
         className="absolute top-1/2 right-2 -translate-y-1/2 bg-white/30 p-[0.6rem] rounded-full hover:bg-white transition focus-visible:ring-0"
-        onClick={() => changeSlide(1)}
+        onClick={(e) => {
+          e.stopPropagation();
+          changeSlide(1);
+        }}
       >
         <ChevronRight className="w-6 h-6 text-black" />
+      </Button>
+      
+      <Button 
+        className="absolute bottom-2 right-2 bg-white/30 p-[0.6rem] rounded-full hover:bg-white transition focus-visible:ring-0"
+        onClick={(e) => {
+          e.stopPropagation();
+          togglePlayPause();
+        }}
+      >
+        {isPlaying ? (
+          <Pause className="w-6 h-6 text-black" />
+        ) : (
+          <Play className="w-6 h-6 text-black" />
+        )}
       </Button>
     </div>
   );

@@ -25,7 +25,7 @@ export default function ProductImage({ images, title }: ProductImageProps) {
       {/* Main Image */}
       <div className="relative w-full max-w-fit overflow rounded-lg bg-gray-100 dark:bg-gray-900 place-self-center">
         <Lens hovering={hovering} setHovering={setHovering}>
-          <div className="bg-primary/50 flex justify-center items-center w-fit h-fit">
+          <div className="bg-white dark:bg-black flex justify-center items-center w-fit h-fit">
             <img
               src={images[currentIndex]}
               alt={title}
@@ -40,8 +40,8 @@ export default function ProductImage({ images, title }: ProductImageProps) {
           onClick={prevImage}
         >
           <ChevronLeft className="h-6 w-6" />
-        </Button>
-        <Button
+        </Button> */}
+        {/* <Button
           variant="ghost"
           size="icon"
           className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white dark:bg-black/80 dark:hover:bg-black/80"
@@ -52,19 +52,19 @@ export default function ProductImage({ images, title }: ProductImageProps) {
       </div>
 
       {/* Thumbnail Images */}
-      <div className="flex justify-left gap-2">
-  {images
-    .filter((_, index) => index !== currentIndex)
-    .map((img, index) => (
-      <img
-        key={index}
-        src={img}
-        alt={`Thumbnail ${index}`}
-        className="w-14 sm:w-20 lg:w-28 h-auto rounded-lg border border-transparent cursor-pointer"
-        onClick={() => setCurrentIndex(images.indexOf(img))} 
-      />
-    ))}
-</div>
+      <div className="flex justify-left gap-2 ">
+        {images
+          .filter((_, index) => index !== currentIndex)
+          .map((img, index) => (
+            <img
+              key={index}
+              src={img}
+              alt={`Thumbnail ${index}`}
+              className="w-14 sm:w-20 lg:w-28 h-auto rounded-lg border bg-background cursor-pointer "
+              onClick={() => setCurrentIndex(images.indexOf(img))}
+            />
+          ))}
+      </div>
 
     </div>
   );

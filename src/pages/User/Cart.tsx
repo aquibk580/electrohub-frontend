@@ -278,7 +278,7 @@ const Cart = () => {
           <Checkout
             orderData={orderData}
             text="Proceed to Checkout"
-            styles="w-full bg-green-800 hover:bg-green-700"
+            styles="w-full bg-primary/80 hover:bg-primary text-primary-foreground text-sm"
           />
         </CardFooter>
       </Card>

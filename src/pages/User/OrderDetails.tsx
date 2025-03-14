@@ -176,23 +176,31 @@ const OrderDetails = () => {
             className="object-contain w-52 xl:place-self-end"
           />
         </CardContent>
-        <CardFooter className="grid grid-rows-1">
-          <OrderProgress trackingSteps={getorderTrackingSteps(orderItem)} />
-          {orderItem.status === "Delivered" && (
-            <div className="flex flex-col gap-4">
-              <ReviewForm productId={orderItem.productId} />
-              <Button onClick={() => handleOrderStatusUpdate("Returned")}>
-                Return Order
-              </Button>
-            </div>
-          )}
-          {(orderItem.status === "OrderConfirmed" ||
-            orderItem.status === "Shipped") && (
-            <Button onClick={() => handleOrderStatusUpdate("Cancelled")}>
-              Cancel Order
-            </Button>
-          )}
-        </CardFooter>
+        <CardFooter className="grid grid-rows-1 gap-4 border-t border-border pt-4">
+  <OrderProgress trackingSteps={getorderTrackingSteps(orderItem)} />
+  {orderItem.status === "Delivered" && (
+    <div className="flex flex-col gap-4">
+      <ReviewForm productId={orderItem.productId} />
+      <Button 
+        variant="outline" 
+        className="bg-background text-foreground hover:bg-destructive/10 hover:text-destructive border border-input transition-colors"
+        onClick={() => handleOrderStatusUpdate("Returned")}
+      >
+        Return Order
+      </Button>
+    </div>
+  )}
+  {(orderItem.status === "OrderConfirmed" ||
+    orderItem.status === "Shipped") && (
+    <Button 
+      variant="outline"
+      className="bg-background text-foreground hover:bg-destructive/10 hover:text-destructive border border-input transition-colors"
+      onClick={() => handleOrderStatusUpdate("Cancelled")}
+    >
+      Cancel Order
+    </Button>
+  )}
+</CardFooter>
       </Card>
 
       {/* Right Column */}

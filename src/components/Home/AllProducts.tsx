@@ -166,16 +166,18 @@ const AllProducts = () => {
   }
 
   return (
-    <div className="sm:px-5 md:px-10 py-8">
-      <h1 className="text-3xl font-bold mb-6 text-center sm:text-left">
+    <div className="sm:px-5 md:px-10 py-8 bg-background">
+      <h1 className="text-3xl font-bold mb-6 text-center sm:text-left text-foreground">
         Our Products
       </h1>
       {/* Categories List */}
       <ul className="mt-2 flex p-2 gap-2 justify-center sm:justify-start flex-wrap">
         <li
           onClick={() => handleCategoryChange("All")}
-          className={`px-2 py-1.5 cursor-pointer border rounded-full w-fit text-center hover:bg-accent ${
-            category === "All" ? "bg-primary  text-primary-foreground" : ""
+          className={`px-3 py-1.5 cursor-pointer border border-border rounded-full w-fit text-center transition-colors duration-200 ${
+            category === "All" 
+              ? "bg-primary text-primary-foreground" 
+              : "hover:bg-accent/10 text-foreground"
           }`}
         >
           All
@@ -183,10 +185,17 @@ const AllProducts = () => {
         {categories.map((item) => (
           <li
             onClick={() => handleCategoryChange(item.name)}
+<<<<<<< HEAD
             className={`px-2 py-1.5 cursor-pointer border rounded-full w-fit text-center hover:bg-accent ${
               category === item.name
                 ? "bg-primary  text-primary-foreground"
                 : ""
+=======
+            className={`px-3 py-1.5 cursor-pointer border border-border rounded-full w-fit text-center transition-colors duration-200 ${
+              category === item.name 
+                ? "bg-primary text-primary-foreground" 
+                : "hover:bg-accent/10 text-foreground"
+>>>>>>> 50aba440c7b3fcc049d75febdb80b7b2d1150158
             }`}
             key={item.name}
           >
@@ -194,8 +203,8 @@ const AllProducts = () => {
           </li>
         ))}
       </ul>
-
-      <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-6 bg-primary/5">
+  
+      <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <ProductCard
@@ -206,21 +215,35 @@ const AllProducts = () => {
             />
           ))
         ) : (
-          <h1 className="text-2xl font-semibold">
-            No products found for this category
-          </h1>
+          <div className="col-span-full py-12 text-center">
+            <h1 className="text-2xl font-semibold text-foreground">
+              No products found for this category
+            </h1>
+            <p className="mt-2 text-muted-foreground">
+              Try selecting a different category
+            </p>
+          </div>
         )}
       </div>
-
+  
       {/* Load More Button */}
       {hasMore && (
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center mt-8">
           <button
             onClick={loadMoreProducts}
-            className="px-4 py-2 bg-primary hover:bg-accent text-primary-foreground rounded-md"
+            className={`px-5 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-md transition-colors duration-200 ${
+              loadingMore ? "opacity-70 cursor-not-allowed" : ""
+            }`}
             disabled={loadingMore}
           >
-            {loadingMore ? "Loading..." : "Load More"}
+            {loadingMore ? (
+              <span className="flex items-center gap-2">
+                <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full"></span>
+                Loading...
+              </span>
+            ) : (
+              "Load More"
+            )}
           </button>
         </div>
       )}

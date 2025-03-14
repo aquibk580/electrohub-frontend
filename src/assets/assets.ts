@@ -90,6 +90,33 @@ export const serviceContain = [
   },
 ];
 
+export const BackContent = {
+  0: { // FAQ
+    faqs: [
+      { question: "How do I create an account?", answer: "Click on the 'Sign Up' button in the top right corner of our website and follow the prompts." },
+      { question: "What are your store hours?", answer: "Our stores are open Monday to Saturday from 9AM to 9PM, and Sunday from 10AM to 7PM." },
+      { question: "Do you offer international shipping?", answer: "Yes, we ship to most countries worldwide. Shipping costs and delivery times vary by location." },
+    ],
+    additionalInfo: "For more information, please contact our customer service team."
+  },
+  1: { // Online Payment
+    faqs: [
+      { question: "What payment methods do you accept?", answer: "We accept Visa, Mastercard, American Express, PayPal, and Apple Pay." },
+      { question: "Is it safe to use my credit card on your website?", answer: "Yes, our website uses SSL encryption to protect your payment information." },
+      { question: "When will my card be charged?", answer: "Your card will be charged when your order is processed, typically within 24 hours of placing the order." }
+    ],
+    additionalInfo: "We never store your full credit card information on our servers."
+  },
+  2: { // Delivery
+    faqs: [
+      { question: "How much does delivery cost?", answer: "Delivery costs start at $5.99 and vary based on location and order size. Orders over $50 qualify for free delivery." },
+      { question: "How long does delivery take?", answer: "Standard delivery takes 3-5 business days. Express delivery (1-2 business days) is available for an additional fee." },
+      { question: "Can I change my delivery address after placing an order?", answer: "You can change your delivery address within 2 hours of placing your order by contacting customer service." }
+    ],
+    additionalInfo: "We deliver to all mainland addresses and select international destinations."
+  }
+};
+
 // interface and associative array from ProductDisplay.tsx  Page for singlwe products
 
 interface Review {

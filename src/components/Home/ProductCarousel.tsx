@@ -23,7 +23,7 @@ export default function ProductCarousel() {
     const getAllProductCarousels = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/admin/cms/product-carousels`
+          `${import.meta.env.VITE_API_URL}/api/product-carousels`
         );
         if (response.status === 200) {
           setProductCarousels(response.data);

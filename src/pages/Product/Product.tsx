@@ -34,14 +34,42 @@ export default function ProductPage() {
 
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1024 });
 
+  const totalRating = product?.reviews?.reduce(
+    (acc, review) => acc + review.rating,
+    0
+  );
+  const averageRating =
+    product.reviews.length > 0 ? totalRating / product.reviews.length : 0;
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+<<<<<<< HEAD
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/user/products/${id}`
         );
         if (response.status === 200) {
           setProduct(response.data);
+=======
+        const [productRes] = await Promise.all([
+          axios.get(`${import.meta.env.VITE_API_URL}/api/user/products/${id}`),
+        ]);
+
+        if (productRes.status === 200) {
+          setProduct(productRes.data);
+        }
+
+        if (isAuthenticated) {
+          const wishlistRes = await axios.get(
+            `${import.meta.env.VITE_API_URL}/api/user/wishlist/wishlistproducts`
+          );
+
+          if (wishlistRes.status === 200) {
+            setWishlist(new Set(wishlistRes.data.wishlist || []));
+          } else[setWishlist(new Set())];
+        } else {
+          setWishlist(new Set());
+>>>>>>> 50aba440c7b3fcc049d75febdb80b7b2d1150158
         }
 
         window.scrollTo(0, 0);
@@ -118,11 +146,15 @@ export default function ProductPage() {
               title={product.name}
               description={product.description}
               reviews={product.reviews}
+<<<<<<< HEAD
               averageRating={
                 !product.averageRating
                   ? getAverageProductRating()
                   : product.averageRating
               }
+=======
+              averageRating={averageRating}
+>>>>>>> 50aba440c7b3fcc049d75febdb80b7b2d1150158
             />
 
             <div className="space-y-4">
