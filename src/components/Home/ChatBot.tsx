@@ -132,71 +132,273 @@
 
 // export default ChatBot;
 
-declare global {
-  interface Window {
-    botpressWebChat: any;
+
+
+
+
+
+"use client"
+
+import type React from "react"
+
+import { useEffect, useState, useRef } from "react"
+import { MessageSquare, X, Send, Loader2 } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Avatar } from "@/components/ui/avatar"
+import { cn } from "@/lib/utils"
+
+interface ChatBotProps {
+//   clientId: string
+  botName?: string
+  welcomeMessage?: string
+}
+
+interface Message {
+  id: string
+  content: string
+  role: "user" | "bot"
+  timestamp: Date
+}
+
+export function ChatBot({
+//   clientId,
+  botName = "Assistant",
+  welcomeMessage = "Hello! How can I help you today?",
+}: ChatBotProps) {
+  const [isOpen, setIsOpen] = useState(false)
+  const [messages, setMessages] = useState<Message[]>([])
+  const [inputValue, setInputValue] = useState("")
+  const [isConnected, setIsConnected] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const clientRef = useRef<any>(null)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const clientId = import.meta.env.VITE_CHATBOT_CLIENT_KEY
+
+  useEffect(() => {
+    import("@botpress/webchat")
+      .then(({ getClient }) => {
+        clientRef.current = getClient({ clientId })
+
+        // Initialize the client
+        const initClient = async () => {
+          try {
+            // Listen for messages from the bot
+            clientRef.current.on("message", (message: any) => {
+              // console.log("Raw message from Botpress:", message)
+
+              // Extract the message content properly based on the message structure
+              let content = ""
+
+              // Handle the specific format you're receiving
+              if (message.payload && typeof message.payload === "object") {
+                if (message.payload.block && message.payload.block.text) {
+                  // Extract from the block.text format
+                  content = message.payload.block.text
+                } else if (message.payload.type === "text") {
+                  content = message.payload.text
+                } else if (message.payload.text) {
+                  content = message.payload.text
+                } else {
+                  // Fallback for other message types - display in a readable format
+                  try {
+                    content = JSON.stringify(message.payload, null, 2)
+                  } catch (e) {
+                    content = "Received a message (unable to display)"
+                  }
+                }
+              } else if (typeof message.payload === "string") {
+                try {
+                  const parsedPayload = JSON.parse(message.payload)
+                  if (parsedPayload.block && parsedPayload.block.text) {
+                    content = parsedPayload.block.text
+                  } else {
+                    content = message.payload
+                  }
+                } catch (e) {
+                  // If it's not valid JSON, use it as is
+                  content = message.payload
+                }
+              } else {
+                content = "Received a message"
+              }
+
+              setMessages((prev) => [
+                ...prev,
+                {
+                  id: Date.now().toString(),
+                  content: content,
+                  role: "bot",
+                  timestamp: new Date(),
+                },
+              ])
+              setIsLoading(false)
+            })
+
+            // Connect to the Botpress server
+            await clientRef.current.connect()
+            setIsConnected(true)
+
+            setMessages([
+              {
+                id: "welcome",
+                content: welcomeMessage,
+                role: "bot",
+                timestamp: new Date(),
+              },
+            ])
+          } catch (error) {
+            console.error("Failed to initialize Botpress client:", error)
+          }
+        }
+
+        initClient()
+      })
+      .catch((error) => {
+        console.error("Failed to load Botpress webchat client:", error)
+      })
+
+    return () => {
+      if (clientRef.current) {
+        clientRef.current.disconnect()
+      }
+    }
+  }, [clientId, welcomeMessage])
+
+  // Scroll to bottom when messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [messages])
+
+  const handleSendMessage = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+
+    if (!inputValue.trim() || !isConnected || !clientRef.current) return
+
+    // Add user message to the chat
+    const userMessage = {
+      id: Date.now().toString(),
+      content: inputValue,
+      role: "user" as const,
+      timestamp: new Date(),
+    }
+
+    setMessages((prev) => [...prev, userMessage])
+    setInputValue("")
+    setIsLoading(true)
+
+    try {
+      await clientRef.current.sendMessage({
+        type: "text",
+        text: inputValue,
+        metadata: {},
+      })
+    } catch (error) {
+      console.error("Failed to send message:", error)
+      setIsLoading(false)
+    }
   }
+
+  const toggleChat = () => {
+    setIsOpen((prev) => !prev)
+  }
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+  }
+
+  return (
+    <div className="fixed bottom-4 right-4 z-50">
+      {isOpen ? (
+        <Card className="w-80 md:w-96 shadow-lg">
+          <CardHeader className="p-4 flex flex-row items-center justify-between space-y-0 bg-primary text-primary-foreground rounded-t-lg">
+            <CardTitle className="text-base font-medium">{botName}</CardTitle>
+            <Button variant="ghost" size="icon" onClick={toggleChat} className="h-8 w-8 text-primary-foreground">
+              <X className="h-4 w-4" />
+            </Button>
+          </CardHeader>
+          <CardContent className="p-0">
+            <ScrollArea className="h-[350px] p-4">
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={cn("flex mb-4", message.role === "user" ? "justify-end" : "justify-start")}
+                >
+                  {message.role === "bot" && (
+                    <Avatar className="h-8 w-8 mr-2">
+                      <div className="flex h-full w-full items-center justify-center bg-primary text-primary-foreground text-xs font-bold">
+                        {botName.charAt(0)}
+                      </div>
+                    </Avatar>
+                  )}
+                  <div>
+                    <div
+                      className={cn(
+                        "max-w-[80%] rounded-lg p-3",
+                        message.role === "user" ? "bg-primary text-primary-foreground ml-auto" : "bg-muted",
+                      )}
+                    >
+                      {message.content}
+                    </div>
+                    <div
+                      className={cn(
+                        "text-xs text-muted-foreground mt-1",
+                        message.role === "user" ? "text-right" : "text-left",
+                      )}
+                    >
+                      {formatTime(message.timestamp)}
+                    </div>
+                  </div>
+                  {message.role === "user" && (
+                    <Avatar className="h-8 w-8 ml-2">
+                      <div className="flex h-full w-full items-center justify-center bg-zinc-500 text-primary-foreground text-xs font-bold">
+                        U
+                      </div>
+                    </Avatar>
+                  )}
+                </div>
+              ))}
+              {isLoading && (
+                <div className="flex justify-start mb-4">
+                  <Avatar className="h-8 w-8 mr-2">
+                    <div className="flex h-full w-full items-center justify-center bg-primary text-primary-foreground text-xs font-bold">
+                      {botName.charAt(0)}
+                    </div>
+                  </Avatar>
+                  <div className="bg-muted p-3 rounded-lg">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </ScrollArea>
+          </CardContent>
+          <CardFooter className="p-3 border-t">
+            <form onSubmit={handleSendMessage} className="flex w-full gap-2">
+              <Input
+                placeholder="Type a message..."
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                disabled={!isConnected}
+                className="flex-1"
+              />
+              <Button type="submit" size="icon" disabled={!isConnected || !inputValue.trim()}>
+                <Send className="h-4 w-4" />
+              </Button>
+            </form>
+          </CardFooter>
+        </Card>
+      ) : (
+        <Button onClick={toggleChat} size="icon" className="h-12 w-12 rounded-full shadow-lg">
+          <MessageSquare className="h-6 w-6" />
+        </Button>
+      )}
+    </div>
+  )
 }
 
 
-import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Bot, MessageCircle } from "lucide-react";
-import { Webchat, WebchatProvider, Fab, getClient } from "@botpress/webchat";
-import { buildTheme } from "@botpress/webchat-generator";
 
-// Generate the Botpress theme
-const { theme, style } = buildTheme({
-  themeName: "prism",
-  themeColor: "#634433",
-});
-
-// Client ID for Botpress
-const clientId = import.meta.env.VITE_CHATBOT_CLIENT_KEY
-
-const ChatBot = () => {
-  const [isBotpressOpen, setIsBotpressOpen] = useState(false);
-
-  // Initialize Botpress Webchat
-  useEffect(() => {
-    if (window.botpressWebChat) {
-      window.botpressWebChat.init({
-        clientId,
-        theme,
-      });
-    }
-  }, []);
-
-  return (
-    <div className="fixed bottom-4 right-4 flex flex-col gap-2">
-      {/* Live Chat Button */}
-      <Button
-        onClick={() => setIsBotpressOpen(!isBotpressOpen)}
-        className="rounded-full"
-        variant="secondary"
-      >
-        <MessageCircle className="mr-2" /> Live Chat
-      </Button>
-
-      {/* Botpress Webchat Window */}
-      {isBotpressOpen && (
-        <WebchatProvider client={getClient({ clientId })}>
-          <style>{style}</style>
-          <div
-            className="fixed bottom-20 right-4 w-[350px] h-[500px] bg-white rounded-xl shadow-lg overflow-hidden"
-            style={{ zIndex: 1000 }}
-          >
-            <Webchat />
-          </div>
-          {/* Close Button */}
-          <Fab
-            className="fixed bottom-[470px] right-[10px] bg-red-500 text-white rounded-full p-2 cursor-pointer"
-            onClick={() => setIsBotpressOpen(false)}
-          />
-        </WebchatProvider>
-      )}
-    </div>
-  );
-};
-
-export default ChatBot;
