@@ -1,6 +1,6 @@
 import { AppDispatch, RootState } from "@/redux/store";
 import {
-  CircleHelp,
+  Settings,
   Contact,
   Heart,
   Home,
@@ -180,6 +180,15 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
               <Contact size={20} />
 
               <span className="mx-4 font-medium">Contact Us</span>
+            </Link>
+            <Link
+              to="/user/settings"
+              onClick={() => setShowSidebar(false)}
+              className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200"
+            >
+              <Settings size={20} />
+
+              <span className="mx-4 font-medium">Settings</span>
             </Link>
           </nav>
           <div>

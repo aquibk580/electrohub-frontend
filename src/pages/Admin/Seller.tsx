@@ -9,9 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "@/lib/axios";
+import { Seller as S } from "@/components/product/productTypes";
 
 const Seller = () => {
-  const [seller, setSeller] = useState([]);
+  const [sellers, setSellers] = useState<S[]>([]);
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,6 +31,17 @@ const Seller = () => {
   const initialPage = parseInt(searchParams.get("page") || "1");
 
   const [currentPage, setCurrentPage] = useState(initialPage);
+
+  const sellerData = sellers.map((seller, index) => {
+    return {
+      id: seller.id,
+      srNumber: index + 1,
+      name: seller.name,
+      email: seller.email,
+      phone: seller.phone ? seller.phone : "-",
+      address: seller.address ? seller.address.substring(0, 40) + "..." : "-",
+    };
+  });
 
   const filteredData = useMemo(() => {
     let result = activeTab === "top" ? mockData.topsellers : mockData.sellers;
@@ -70,11 +82,6 @@ const Seller = () => {
     return filteredData.slice(startIndex, startIndex + itemsPerPage);
   }, [filteredData, currentPage, itemsPerPage]);
 
-  // useEffect(() => {
-  //   setCurrentPage(1);
-  // }, [activeTab, searchTerm, sortBy, filterBy]);
-
-  // Update URL when page changes
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     const params = new URLSearchParams(location.search);
@@ -108,7 +115,7 @@ const Seller = () => {
         );
 
         if (response.status === 200) {
-          setSeller(response.data);
+          setSellers(response.data);
         }
       } catch (error) {
         console.log(error);
@@ -173,8 +180,15 @@ const Seller = () => {
               />
               <TableWrapper>
                 <DataTable
-                  headers={tableHeaders.topSeller}
-                  data={seller}
+                  headers={[
+                    { key: "srNumber", label: "Sr No." },
+                    { key: "name", label: "Seller Name" },
+                    { key: "email", label: "Seller Email" },
+                    { key: "phone", label: "Contact" },
+                    { key: "address", label: "Location" },
+                    { key: "id", label: "ID" }
+                  ]}
+                  data={sellerData}
                   type="topSeller"
                   onRowClick={handleRowClick}
                 />
@@ -211,7 +225,7 @@ const Seller = () => {
               <TableWrapper>
                 <DataTable
                   headers={tableHeaders.topSeller}
-                  data={seller}
+                  data={sellers}
                   type="topSeller"
                   onRowClick={handleRowClick}
                 />

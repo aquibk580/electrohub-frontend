@@ -34,6 +34,10 @@ export interface Product {
   reviews: Array<Review> | [];
   averageRating: number;
   seller: { name: string };
+  orderItems: OrderItem[];
+  _count: {
+    orderItems: number;
+  };
   createAt: Date;
   updatedAt: Date;
 }
@@ -70,8 +74,11 @@ export interface Seller {
   name: string;
   email: string;
   password: string;
+  address: string;
   pfp: string;
   phone: string;
   answer: string;
   products: Product[];
+  createdAt: Date;
+  updatedAt: Date;
 }
