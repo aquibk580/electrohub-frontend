@@ -55,6 +55,8 @@ import SellerSettings from "./pages/Seller/Settings";
 import UserSettings from "./pages/User/Settings";
 import ScrollToTop from "./components/Common/Scroll-To-Top";
 import TopSellers from "./pages/Home/TopSellers";
+import AboutUs from "./pages/Home/Aboutus";
+import ContactUs from "./pages/Home/Contactus";
 
 const App = () => {
   return (
@@ -68,6 +70,22 @@ const App = () => {
           element={
             <HomeLayout>
               <Home />
+            </HomeLayout>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <HomeLayout>
+              <AboutUs />
+            </HomeLayout>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <HomeLayout>
+              <ContactUs />
             </HomeLayout>
           }
         />
