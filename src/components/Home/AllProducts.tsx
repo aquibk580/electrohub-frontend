@@ -51,13 +51,13 @@ const AllProducts = () => {
 
   useEffect(() => {
     if (!isAuthenticated) return;
-  
+
     const fetchWishlist = async () => {
       try {
         const wishlistRes = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/user/wishlist/wishlistproducts`
         );
-  
+
         if (wishlistRes.status === 200 && wishlistRes.data?.wishlist) {
           setWishlist(new Set(wishlistRes.data.wishlist));
         }
@@ -65,10 +65,9 @@ const AllProducts = () => {
         console.error(error);
       }
     };
-  
+
     fetchWishlist();
   }, [isAuthenticated]);
-  
 
   const processProducts = (newProducts: Product[]) => {
     const updatedProducts = newProducts.map((product) => {
@@ -108,7 +107,7 @@ const AllProducts = () => {
   };
 
   const filteredProducts = useMemo(() => {
-    if (category === "All") return products
+    if (category === "All") return products;
     return products.filter(
       (p) => p.categoryName.toLowerCase() === category.toLowerCase()
     );
@@ -159,8 +158,9 @@ const AllProducts = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
+      <div className="flex flex-col justify-center items-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+        <p className="text-muted-foreground">Loading Products...</p>
       </div>
     );
   }
@@ -175,8 +175,8 @@ const AllProducts = () => {
         <li
           onClick={() => handleCategoryChange("All")}
           className={`px-3 py-1.5 cursor-pointer border border-border rounded-full w-fit text-center transition-colors duration-200 ${
-            category === "All" 
-              ? "bg-primary text-primary-foreground" 
+            category === "All"
+              ? "bg-primary text-primary-foreground"
               : "hover:bg-accent/10 text-foreground"
           }`}
         >
@@ -196,7 +196,7 @@ const AllProducts = () => {
           </li>
         ))}
       </ul>
-  
+
       <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
@@ -218,7 +218,7 @@ const AllProducts = () => {
           </div>
         )}
       </div>
-  
+
       {/* Load More Button */}
       {hasMore && (
         <div className="flex justify-center mt-8">

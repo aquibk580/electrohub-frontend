@@ -19,6 +19,7 @@ import { Menu } from "lucide-react";
 import MobileSideBar from "./MobileSidebar";
 import { Input } from "../ui/input";
 import Logo from "../Logo";
+import SearchBar from "./Searchbar";
 
 const Navbar = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -101,13 +102,12 @@ const Navbar = () => {
             onClick={() => setShowSidebar(true)}
           />
           <h1 className="font-semibold text-3xl flex items-center">
-           
             <Logo
               containerClass="w-6 h-6 mr-[0.1rem]"
               polygonClass="fill-black dark:fill-white"
               frameClass="fill-black dark:fill-white"
             />
-             lectrohub
+            lectrohub
           </h1>
           <div>
             {isAuthenticated && user ? (
@@ -203,17 +203,17 @@ const Navbar = () => {
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link to="/docs">
+              <Link to="/about">
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Orders
+                  About
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
 
             <NavigationMenuItem>
-              <Link to="/docs">
+              <Link to="/contact">
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  What's New
+                  Contact
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
@@ -221,14 +221,7 @@ const Navbar = () => {
         </NavigationMenu>
 
         {/* Search Bar */}
-        <form className="hidden lg:flex items-center w-full max-w-lg border px-3 py-1 mx-5 rounded-full focus-within:border-green-600">
-          <Input
-            className="outline-none w-full text-md border-none focus-visible:ring-0"
-            type="search"
-            placeholder="Search your products"
-          />
-          <img className="h-5" src={assets.search_icon} alt="Search" />
-        </form>
+        <SearchBar />
 
         {/* User Account/Profile */}
         <div className="hidden lg:flex gap-6 ">

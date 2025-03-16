@@ -54,6 +54,7 @@ import ViewOrder from "./pages/Seller/ViewOrder";
 import SellerSettings from "./pages/Seller/Settings";
 import UserSettings from "./pages/User/Settings";
 import ScrollToTop from "./components/Common/Scroll-To-Top";
+import TopSellers from "./pages/Home/TopSellers";
 
 const App = () => {
   return (
@@ -62,7 +63,6 @@ const App = () => {
 
       <ScrollToTop />
       <Routes>
-
         <Route
           path="/"
           element={
@@ -77,6 +77,16 @@ const App = () => {
             element={
               <HomeLayout>
                 <ProductDisplay />
+              </HomeLayout>
+            }
+          />
+        </Route>
+        <Route path="/topsellers">
+          <Route
+            path=":sellerId"
+            element={
+              <HomeLayout>
+                <TopSellers />
               </HomeLayout>
             }
           />

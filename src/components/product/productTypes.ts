@@ -64,3 +64,14 @@ export interface Order {
   updatedAt: string;
   orderItems: OrderItem[];
 }
+
+export interface Seller {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  pfp: string;
+  phone: string;
+  answer: string;
+  products: Product[];
+}
