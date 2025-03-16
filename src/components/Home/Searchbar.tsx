@@ -7,6 +7,7 @@ import { Loader2, Search, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "@/lib/axios";
 import { Product } from "../product/productTypes";
+import { formatPrice } from "@/utils/FormatPrice";
 
 export default function SearchBar() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -75,7 +76,7 @@ export default function SearchBar() {
   };
 
   return (
-    <div ref={searchRef} className="relative w-full max-w-md">
+    <div ref={searchRef} className="relative w-full max-w-md hidden lg:flex">
       <div className="relative flex items-center">
         <div className="absolute left-3 text-muted-foreground">
           <Search size={18} />
@@ -142,7 +143,7 @@ export default function SearchBar() {
                       )}
                     </div>
                     <div className="ml-2 text-sm font-medium text-primary">
-                      ${product.price.toFixed(2)}
+                      ₹{formatPrice(product.price)}
                     </div>
                   </Link>
                 </li>
@@ -154,7 +155,7 @@ export default function SearchBar() {
             </div>
           ) : null}
 
-          {filteredProducts.length > 0 && (
+          {/* {filteredProducts.length > 0 && (
             <div className="p-2 border-t">
               <Button
                 variant="ghost"
@@ -169,7 +170,7 @@ export default function SearchBar() {
                 View all results
               </Button>
             </div>
-          )}
+          )} */}
         </div>
       )}
     </div>
