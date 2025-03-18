@@ -7,7 +7,7 @@ import { FilterDropDown } from "@/components/User/OrderFilterDropDown";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "@/lib/axios";
-import { Order } from "@/components/product/productTypes";
+import { Order } from "@/types/entityTypes";
 import { formatPrice } from "@/utils/FormatPrice";
 import { formatDate } from "@/lib/utils";
 
@@ -134,8 +134,9 @@ export default function Orders() {
                             className={`w-3 h-3 rounded-full ${
                               orderItem.status === "Delivered" && "bg-green-500"
                             } ${
-                             ( orderItem.status === "Cancelled" ||
-                              orderItem.status === "Returned") && "bg-red-500"
+                              (orderItem.status === "Cancelled" ||
+                                orderItem.status === "Returned") &&
+                              "bg-red-500"
                             }  ${
                               orderItem.status === "Shipped" && "bg-yellow-500"
                             } ${

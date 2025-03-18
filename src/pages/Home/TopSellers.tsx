@@ -6,7 +6,8 @@ import { Package, Star, ShoppingCart, Loader2 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "@/lib/axios";
-import { Seller, Product } from "@/components/product/productTypes";
+import { Seller, Product } from "@/types/entityTypes";
+import { formatPrice } from "@/utils/FormatPrice";
 
 const TopSellerPage: React.FC = () => {
   const { sellerId } = useParams();
@@ -113,7 +114,11 @@ const TopSellerPage: React.FC = () => {
                   <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
                   <div className="flex justify-between items-center">
                     <span className="text-xl font-bold">
-                      ${product.price.toFixed(2)}
+                      ₹
+                      {formatPrice(
+                        product.price -
+                          (product.offerPercentage / 100) * product.price
+                      )}
                     </span>
                     <div className="flex items-center">
                       <Star className="w-4 h-4 text-yellow-500 fill-yellow-500 mr-1" />

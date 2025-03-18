@@ -34,7 +34,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { Order, OrderItem } from "@/components/product/productTypes";
+import { Order, OrderItem } from "@/types/entityTypes";
 import { assets } from "@/assets/assets";
 import axios from "@/lib/axios";
 import { formatDate } from "@/lib/utils";

@@ -2,7 +2,7 @@ import { specifications } from "@/assets/assets";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
 import { Loader2, Star } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { Review } from "./productTypes";
+import { Review } from "../../types/entityTypes";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useMemo } from "react";
 import { formatDate } from "@/lib/utils";

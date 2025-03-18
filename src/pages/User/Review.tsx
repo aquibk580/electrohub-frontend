@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import ReviewEditModel from "@/components/User/ReviewEditModel";
 import axios from "@/lib/axios";
 import { formatDate } from "@/lib/utils";
-import { Product } from "@/components/product/productTypes";
+import { Product } from "@/types/entityTypes";
 import { toast } from "react-toastify";
 
 export interface ReviewType {

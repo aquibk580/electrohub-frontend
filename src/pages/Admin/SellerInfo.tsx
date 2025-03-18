@@ -3,17 +3,18 @@ import { useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Star, Package, Users } from "lucide-react";
+import { Star, Package, Users, Loader2 } from "lucide-react";
 import axios from "@/lib/axios";
 import { formatDate } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { OrderItem, Product, Seller } from "@/components/product/productTypes";
+import { OrderItem, Product, Seller } from "@/types/entityTypes";
 import { getRandomColor } from "@/components/Home/UserProfileButton";
 import { formatPrice } from "@/utils/FormatPrice";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const SellerDetails = () => {
   const { id } = useParams();
+  const [loading, setLoading] = useState(true);
   const [seller, setSeller] = useState<Seller | null>(null);
   const [averageRating, setAverageRating] = useState<number>(0);
   const [totalSales, setTotalSales] = useState<number>(0);
@@ -23,16 +24,22 @@ const SellerDetails = () => {
 
   useEffect(() => {
     const getSellerData = async () => {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/admin/sellers/${id}`
-      );
-      if (response.status === 200) {
-        setSeller(response.data.seller);
-        setAverageRating(response.data.averageRating);
-        setTotalSales(response.data.totalSales);
-        setSellerProducts(response.data.sellerProducts);
-        setTotalReturns(response.data.totalReturns);
-        setOrders(response.data.orders);
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/admin/sellers/${id}`
+        );
+        if (response.status === 200) {
+          setSeller(response.data.seller);
+          setAverageRating(response.data.averageRating);
+          setTotalSales(response.data.totalSales);
+          setSellerProducts(response.data.sellerProducts);
+          setTotalReturns(response.data.totalReturns);
+          setOrders(response.data.orders);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -48,7 +55,14 @@ const SellerDetails = () => {
     .toUpperCase();
   const bgColor = useMemo(() => getRandomColor(), []);
 
-  if (!seller) return null;
+  if (loading) {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+        <p className="text-muted-foreground">Loading Seller Details...</p>
+      </div>
+    );
+  }
 
   return (
     //<SidbarLayout breadcrumbs={breadcrumbs}>
@@ -73,7 +87,7 @@ const SellerDetails = () => {
                   {initials}
                 </AvatarFallback>
               </Avatar>
-              <h3 className="text-2xl font-semibold">{seller.name}</h3>
+              <h3 className="text-2xl font-semibold">{seller?.name}</h3>
               {/* <div className="flex items-center space-x-2 mt-2">
                 <Badge variant="secondary">{seller.email}</Badge>
                 <Badge
@@ -87,16 +101,13 @@ const SellerDetails = () => {
           </div>
           <div className="space-y-2">
             <p>
-              <strong>Member Since : </strong> {formatDate(seller.createdAt)}
+              <strong>Member Since : </strong> {formatDate(seller!?.createdAt)}
             </p>
             <p>
-              <strong>Location : </strong> {seller.address}
+              <strong>Email : </strong> {seller?.email}
             </p>
             <p>
-              <strong>Email : </strong> {seller.email}
-            </p>
-            <p>
-              <strong>Address : </strong> {seller.address}
+              <strong>Address : </strong> {seller?.address}
             </p>
             <div className="flex">
               <strong>Average Rating : </strong>
@@ -119,7 +130,7 @@ const SellerDetails = () => {
             <Card>
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-2">
-                <Package className="w-4 h-4" />
+                  <Package className="w-4 h-4" />
                   <span>Total Products</span>
                 </div>
                 <p className="text-2xl font-semibold mt-2">
@@ -166,17 +177,17 @@ const SellerDetails = () => {
         <CardContent className="space-y-2">
           <div className="flex justify-between">
             <span>Email</span>
-            <span>{seller.email}</span>
+            <span>{seller?.email}</span>
           </div>
           <Separator />
           <div className="flex justify-between">
             <span>Phone</span>
-            <span>{seller.phone}</span>
+            <span>{seller?.phone}</span>
           </div>
           <Separator />
           <div className="flex justify-between">
             <span>Address</span>
-            <span>{seller.address}</span>
+            <span>{seller?.address}</span>
           </div>
         </CardContent>
       </Card>

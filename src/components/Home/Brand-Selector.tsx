@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "@/components/theme-provider";
 import axios from "@/lib/axios";
-import { Seller } from "../product/productTypes";
+import { Seller } from "../../types/entityTypes";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 

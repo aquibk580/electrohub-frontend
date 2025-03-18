@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { MoveLeft } from "lucide-react";
-import { OrderItem, User } from "@/components/product/productTypes";
+import { OrderItem, User } from "@/types/entityTypes";
 import { formatDate } from "@/lib/utils";
 import { formatPrice } from "@/utils/FormatPrice";
 import { toast } from "react-toastify";

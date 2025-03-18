@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Product } from "@/components/product/productTypes";
+import { Product } from "@/types/entityTypes";
 
 export function Wishlist() {
   const [wishlistItems, setWishlistItems] = useState<Array<Product>>();

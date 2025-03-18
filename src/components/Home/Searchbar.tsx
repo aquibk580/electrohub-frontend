@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Search, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "@/lib/axios";
-import { Product } from "../product/productTypes";
+import { Product } from "../../types/entityTypes";
 import { formatPrice } from "@/utils/FormatPrice";
 
 export default function SearchBar() {

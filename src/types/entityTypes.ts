@@ -3,6 +3,8 @@ export interface Review {
   rating: number;
   content: string;
   user: User;
+  productId: number;
+  product: Product;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -14,6 +16,11 @@ export interface User {
   email?: string;
   phone?: string;
   address?: string;
+  gender?: "Male" | "Female" | "Other";
+  reviews: Review[];
+  orders: Array<Order>;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Category {
@@ -53,7 +60,7 @@ export interface OrderItem {
   productId: number;
   quantity: number;
   status: string;
-  paymentStatus: string;
+  paymentStatus: "Completed" | "Pending";
   product: Product;
   createdAt: Date;
   updatedAt: Date;
@@ -64,8 +71,8 @@ export interface Order {
   userId: number;
   user: User;
   total: number;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   orderItems: OrderItem[];
 }
 

@@ -9,10 +9,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "@/lib/axios";
-import { Seller as S } from "@/components/product/productTypes";
+import { Seller as S } from "@/types/entityTypes";
+import { Loader2 } from "lucide-react";
 
 const Seller = () => {
   const [sellers, setSellers] = useState<S[]>([]);
+  const [topSellers, setTopSellers] = useState<S[]>([]);
+  const [loading, setLoading] = useState(true);
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,16 +35,33 @@ const Seller = () => {
 
   const [currentPage, setCurrentPage] = useState(initialPage);
 
-  const sellerData = sellers.map((seller, index) => {
-    return {
-      id: seller.id,
-      srNumber: index + 1,
-      name: seller.name,
-      email: seller.email,
-      phone: seller.phone ? seller.phone : "-",
-      address: seller.address ? seller.address.substring(0, 40) + "..." : "-",
-    };
-  });
+  const sellerData = sellers?.map(
+    (seller: S & { productsCount?: number }, index) => {
+      return {
+        id: seller.id,
+        srNumber: index + 1,
+        name: seller.name,
+        email: seller.email,
+        phone: seller.phone ? seller.phone : "-",
+        address: seller.address ? seller.address.substring(0, 20) + "..." : "-",
+        productsCount: seller.productsCount,
+      };
+    }
+  );
+
+  const topSellerData = topSellers?.map(
+    (seller: S & { productsCount?: number }, index) => {
+      return {
+        id: seller.id,
+        srNumber: index + 1,
+        name: seller.name,
+        email: seller.email,
+        phone: seller.phone ? seller.phone : "-",
+        address: seller.address ? seller.address.substring(0, 20) + "..." : "-",
+        productsCount: seller.productsCount,
+      };
+    }
+  );
 
   const filteredData = useMemo(() => {
     let result = activeTab === "top" ? mockData.topsellers : mockData.sellers;
@@ -110,15 +130,23 @@ const Seller = () => {
   useEffect(() => {
     const getAllSellers = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/admin/sellers`
-        );
+        const [sellerRes, topSellerRes] = await Promise.all([
+          axios.get(`${import.meta.env.VITE_API_URL}/api/admin/sellers`),
+          axios.get(
+            `${import.meta.env.VITE_API_URL}/api/admin/sellers/topsellers`
+          ),
+        ]);
 
-        if (response.status === 200) {
-          setSellers(response.data);
+        if (sellerRes.status === 200) {
+          setSellers(sellerRes.data);
+        }
+        if (topSellerRes.status === 200) {
+          setTopSellers(topSellerRes.data);
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
     getAllSellers();
@@ -135,6 +163,15 @@ const Seller = () => {
     }
     return <>{children}</>;
   };
+
+  if (loading) {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+        <p className="text-muted-foreground">Loading Sellers...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full px-2 py-2 sm:px-4 sm:py-4">
@@ -186,9 +223,10 @@ const Seller = () => {
                     { key: "email", label: "Seller Email" },
                     { key: "phone", label: "Contact" },
                     { key: "address", label: "Location" },
-                    { key: "id", label: "ID" }
+                    { key: "productsCount", label: "Products" },
+                    { key: "id", label: "ID" },
                   ]}
-                  data={sellerData}
+                  data={topSellerData}
                   type="topSeller"
                   onRowClick={handleRowClick}
                 />
@@ -224,9 +262,17 @@ const Seller = () => {
               />
               <TableWrapper>
                 <DataTable
-                  headers={tableHeaders.topSeller}
-                  data={sellers}
-                  type="topSeller"
+                  headers={[
+                    { key: "srNumber", label: "Sr No." },
+                    { key: "name", label: "Seller Name" },
+                    { key: "email", label: "Seller Email" },
+                    { key: "phone", label: "Contact" },
+                    { key: "address", label: "Location" },
+                    { key: "productsCount", label: "Products" },
+                    { key: "id", label: "ID" },
+                  ]}
+                  data={sellerData}
+                  type="allSeller"
                   onRowClick={handleRowClick}
                 />
               </TableWrapper>

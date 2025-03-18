@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Loader2 } from "lucide-react";
-import { Category, Product } from "../product/productTypes";
+import { Category, Product } from "../../types/entityTypes";
 import axios from "@/lib/axios";
 import ProductCard from "./ProductCard";
 import { useSelector } from "react-redux";

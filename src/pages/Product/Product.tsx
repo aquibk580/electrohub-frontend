@@ -13,7 +13,7 @@ import ProductPrice from "@/components/product/Product-Price";
 import ProductTitleRating from "@/components/product/Product-Title-Rating";
 import ProductImage from "@/components/product/Product-Image";
 import ProductImageTablet from "@/components/product/Product-Image-Tablet";
-import type { Product } from "@/components/product/productTypes";
+import type { Product } from "@/types/entityTypes";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/redux/store";
 import { Button } from "@/components/ui/button";

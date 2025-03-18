@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useMemo } from "react";
-import { Product } from "../product/productTypes";
+import { Product } from "../../types/entityTypes";
 import { Link, useNavigate } from "react-router-dom";
 import { Heart, Star } from "lucide-react";
 import { Button } from "../ui/button";
@@ -123,7 +123,7 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
           className="object-contain w-full h-full hover:scale-110 transition-transform duration-300 cursor-pointer"
         />
       </div>
-  
+
       <div className="p-3">
         <div onClick={handleNavigate} className="cursor-pointer">
           <h2 className="text-lg font-semibold mb-1 hover:text-primary transition-colors duration-300 ease-in-out line-clamp-1">
@@ -155,7 +155,10 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
                   isWishlisted ? "text-red-500" : "text-muted-foreground"
                 }`}
               >
-                <Heart size={18} className={`${isWishlisted ? "fill-current" : ""}`} />
+                <Heart
+                  size={18}
+                  className={`${isWishlisted ? "fill-current" : ""}`}
+                />
               </Button>
             </div>
           )}

@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import OrderProgress from "@/components/User/ProgressBar";
 import { useLocation, useParams } from "react-router-dom";
-import { OrderItem } from "@/components/product/productTypes";
+import { OrderItem } from "@/types/entityTypes";
 import { formatPrice } from "@/utils/FormatPrice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -177,30 +177,30 @@ const OrderDetails = () => {
           />
         </CardContent>
         <CardFooter className="grid grid-rows-1 gap-4 border-t border-border pt-4">
-  <OrderProgress trackingSteps={getorderTrackingSteps(orderItem)} />
-  {orderItem.status === "Delivered" && (
-    <div className="flex flex-col gap-4">
-      <ReviewForm productId={orderItem.productId} />
-      <Button 
-        variant="outline" 
-        className="bg-background text-foreground hover:bg-destructive/10 hover:text-destructive border border-input transition-colors"
-        onClick={() => handleOrderStatusUpdate("Returned")}
-      >
-        Return Order
-      </Button>
-    </div>
-  )}
-  {(orderItem.status === "OrderConfirmed" ||
-    orderItem.status === "Shipped") && (
-    <Button 
-      variant="outline"
-      className="bg-background text-foreground hover:bg-destructive/10 hover:text-destructive border border-input transition-colors"
-      onClick={() => handleOrderStatusUpdate("Cancelled")}
-    >
-      Cancel Order
-    </Button>
-  )}
-</CardFooter>
+          <OrderProgress trackingSteps={getorderTrackingSteps(orderItem)} />
+          {orderItem.status === "Delivered" && (
+            <div className="flex flex-col gap-4">
+              <ReviewForm productId={orderItem.productId} />
+              <Button
+                variant="outline"
+                className="bg-background text-foreground hover:bg-destructive/10 hover:text-destructive border border-input transition-colors"
+                onClick={() => handleOrderStatusUpdate("Returned")}
+              >
+                Return Order
+              </Button>
+            </div>
+          )}
+          {(orderItem.status === "OrderConfirmed" ||
+            orderItem.status === "Shipped") && (
+            <Button
+              variant="outline"
+              className="bg-background text-foreground hover:bg-destructive/10 hover:text-destructive border border-input transition-colors"
+              onClick={() => handleOrderStatusUpdate("Cancelled")}
+            >
+              Cancel Order
+            </Button>
+          )}
+        </CardFooter>
       </Card>
 
       {/* Right Column */}

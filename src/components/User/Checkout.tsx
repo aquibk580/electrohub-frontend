@@ -21,6 +21,7 @@ const Checkout = ({ orderData, styles, text }: CheckoutProps) => {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user.user);
   const [isLoading, setIsLoading] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
 
   const handlePayment = async () => {
     if (!user?.address || !user?.phone) {
@@ -53,25 +54,35 @@ const Checkout = ({ orderData, styles, text }: CheckoutProps) => {
         description: "Order Payment",
         order_id: data.order.id,
         handler: async function (response: any) {
-          const verifyRes = await axios.post(
-            `${import.meta.env.VITE_API_URL}/api/user/orders/verify-payment`,
-            {
-              ...response,
-              orderData: data.orderData,
-            }
-          );
+          setIsVerifying(true);
+          try {
+            const verifyRes = await axios.post(
+              `${import.meta.env.VITE_API_URL}/api/user/orders/verify-payment`,
+              {
+                ...response,
+                orderData: data.orderData,
+              }
+            );
 
-          if (verifyRes.data.success) {
-            toast.success("Order Placed Successfully", {
+            if (verifyRes.data.success) {
+              toast.success("Order Placed Successfully", {
+                position: "top-center",
+                theme: "dark",
+              });
+              navigate("/user/orders");
+            } else {
+              toast.error("Payment Verification Failed!", {
+                position: "top-center",
+                theme: "dark",
+              });
+            }
+          } catch (error) {
+            toast.error("Error verifying payment!", {
               position: "top-center",
               theme: "dark",
             });
-            navigate("/user/orders");
-          } else {
-            toast.error("Payment Verification Failed!", {
-              position: "top-center",
-              theme: "dark",
-            });
+          } finally {
+            setIsVerifying(false);
           }
         },
         prefill: {
@@ -95,8 +106,16 @@ const Checkout = ({ orderData, styles, text }: CheckoutProps) => {
   };
 
   return (
-    <Button className={styles} onClick={handlePayment} disabled={isLoading}>
-      {isLoading ? "Processing..." : text}
+    <Button
+      className={styles}
+      onClick={handlePayment}
+      disabled={isLoading || isVerifying}
+    >
+      {isLoading
+        ? "Processing..."
+        : isVerifying
+        ? "Verifying Payment..."
+        : text}
     </Button>
   );
 };

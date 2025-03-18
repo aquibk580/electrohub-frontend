@@ -7,7 +7,7 @@ import Checkout from "@/components/User/Checkout";
 import { useEffect, useState } from "react";
 import axios from "@/lib/axios";
 import { toast } from "react-toastify";
-import { Product } from "@/components/product/productTypes";
+import { Product } from "@/types/entityTypes";
 import { formatPrice } from "@/utils/FormatPrice";
 import { Separator } from "@radix-ui/react-select";
 import { useSelector } from "react-redux";
