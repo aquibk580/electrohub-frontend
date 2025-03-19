@@ -16,6 +16,7 @@ type ProductAddtocartProps = {
   wishlist: Set<number>;
   setWishlist: Dispatch<SetStateAction<Set<number>>>;
   total: number;
+  status: string;
 };
 
 interface OrderInput {
@@ -28,6 +29,7 @@ const ProductAddtocart = ({
   wishlist,
   setWishlist,
   total,
+  status,
 }: ProductAddtocartProps) => {
   const [orderData, setOrderData] = useState<OrderInput>({
     total: 0,
@@ -109,37 +111,49 @@ const ProductAddtocart = ({
 
   return (
     <div>
-      <div className="flex space-x-4">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                className="flex-1 bg-green-500 hover:bg-green-600  cursor-pointer"
-                onClick={() => handleAddToCart(id)}
-              >
-                Add to Cart
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Add this item to your cart</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Checkout
-                orderData={orderData}
-                flag="buy"
-                styles="flex-1 hover:bg-amber-600 bg-amber-500 cursor-pointer"
-                text="Buy now"
-              />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Buy This Item Now</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+      <div
+        className={`flex space-x-4 ${
+          status === "OutOfStock" && "justify-between"
+        }`}
+      >
+        {status !== "OutOfStock" ? (
+          <>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    className="flex-1 bg-green-500 hover:bg-green-600  cursor-pointer"
+                    onClick={() => handleAddToCart(id)}
+                  >
+                    Add to Cart
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Add this item to your cart</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Checkout
+                    orderData={orderData}
+                    flag="buy"
+                    styles="flex-1 hover:bg-amber-600 bg-amber-500 cursor-pointer"
+                    text="Buy now"
+                  />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Buy This Item Now</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </>
+        ) : (
+          <h1 className="font-medium text-red-500 text-lg">
+            This product is currently out of stock
+          </h1>
+        )}
 
         <TooltipProvider>
           <Tooltip>

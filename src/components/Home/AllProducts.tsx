@@ -153,7 +153,7 @@ const AllProducts = () => {
         setLoading(false);
       }
     },
-    [categoryProductsCache]
+    [categoryProductsCache] 
   );
 
   if (loading) {

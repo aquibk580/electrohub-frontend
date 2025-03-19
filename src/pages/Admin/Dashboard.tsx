@@ -30,7 +30,6 @@ const IndiaSalesMap = React.lazy(
 );
 
 const Dashboard = () => {
-  const [orderChartData, setorderChartData] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [statisticsLoading, setStatisticsLoading] = useState(true);
   const [stats, setStats] = useState<
@@ -42,26 +41,6 @@ const Dashboard = () => {
   const [topSellingProducts, setTopSellingProducts] = useState<Array<Product>>(
     []
   );
-
-  useEffect(() => {
-    const fetchdata = async () => {
-      try {
-        const response = await fetch(
-          `https://electrohub-express.onrender.com/admin/dashboard/ordervalues`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch buyers");
-        }
-        const data = await response.json();
-        console.log(data);
-        setorderChartData(data);
-      } catch (err) {
-        console.log("An error Occured", err);
-      }
-    };
-
-    fetchdata();
-  }, []);
   const salesData = {
     "IN-AN": 12000,
     "IN-AP": 800,

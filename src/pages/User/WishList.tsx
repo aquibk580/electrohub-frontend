@@ -121,15 +121,17 @@ export function Wishlist() {
 
                 {/* Action Buttons */}
                 <div className="flex gap-2">
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    className="p-2 hover:bg-green-100"
-                    aria-label="Add to Cart"
-                    onClick={() => handleAddToCart(item.id)}
-                  >
-                    <ShoppingCart className="h-5 w-5 text-green-600" />
-                  </Button>
+                  {item.status !== "OutOfStock" && (
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="p-2 hover:bg-green-100"
+                      aria-label="Add to Cart"
+                      onClick={() => handleAddToCart(item.id)}
+                    >
+                      <ShoppingCart className="h-5 w-5 text-green-600" />
+                    </Button>
+                  )}
                   <Button
                     size="icon"
                     variant="outline"

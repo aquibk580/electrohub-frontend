@@ -141,27 +141,30 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
           )}
         </span>
         <div className="flex py-2 justify-between items-center mt-1">
-          {isAuthenticated && (
-            <div className="space-x-2 flex">
-              <Button
-                onClick={() => handleAddToCart(product.id)}
-                className="bg-background hover:bg-primary hover:text-primary-foreground text-foreground text-xs sm:text-sm font-medium border border-input px-3 py-1.5 transition-colors rounded-full"
-              >
-                Add to Cart
-              </Button>
-              <Button
-                onClick={() => handleToggleWishlist(product.id)}
-                className={`rounded-full p-2 bg-background border border-input hover:bg-primary/10 ${
-                  isWishlisted ? "text-red-500" : "text-muted-foreground"
-                }`}
-              >
-                <Heart
-                  size={18}
-                  className={`${isWishlisted ? "fill-current" : ""}`}
-                />
-              </Button>
-            </div>
-          )}
+          {isAuthenticated &&
+            (product?.status !== "OutOfStock" ? (
+              <div className="space-x-2 flex">
+                <Button
+                  onClick={() => handleAddToCart(product.id)}
+                  className="bg-background hover:bg-primary hover:text-primary-foreground text-foreground text-xs sm:text-sm font-medium border border-input px-3 py-1.5 transition-colors rounded-full"
+                >
+                  Add to Cart
+                </Button>
+              </div>
+            ) : (
+              <h1 className="font-medium text-red-500">Out of Stock</h1>
+            ))}
+          <Button
+            onClick={() => handleToggleWishlist(product.id)}
+            className={`rounded-full p-2 bg-background border border-input hover:bg-primary/10 ${
+              isWishlisted ? "text-red-500" : "text-muted-foreground"
+            }`}
+          >
+            <Heart
+              size={18}
+              className={`${isWishlisted ? "fill-current" : ""}`}
+            />
+          </Button>
         </div>
       </div>
     </div>

@@ -180,6 +180,7 @@ export default function ProductPage() {
               {isAuthenticated ? (
                 <ProductAddtocart
                   id={product.id}
+                  status={product?.status}
                   wishlist={wishlist}
                   setWishlist={setWishlist}
                   total={
