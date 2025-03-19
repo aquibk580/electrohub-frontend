@@ -61,7 +61,7 @@ export default function SellerLogin() {
           position: "top-center",
           theme: "dark",
         });
-      } else if (error.response.data?.flga === "SellerNotFound") {
+      } else if (error.response.data?.flag === "SellerNotFound") {
         toast.error("Seller not found", {
           position: "top-center",
           theme: "dark",

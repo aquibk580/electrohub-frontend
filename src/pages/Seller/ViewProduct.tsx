@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
@@ -13,6 +13,7 @@ import {
   Boxes,
   ShoppingBag,
   TrendingUp,
+  Loader2,
 } from "lucide-react";
 import axios from "@/lib/axios";
 import DeleteButtonDialog from "@/components/Seller/DeleteButtonDialog";
@@ -47,12 +48,12 @@ interface Product {
 
 export default function ViewProduct() {
   const { id } = useParams();
-  const location = useLocation();
+  const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
   const [iseDeleting, setIsDeleting] = useState<boolean>(false);
-  const [product, setProduct] = useState<Product>(
-    location.state?.product || []
-  );
+  const [averageRating, setAverageRating] = useState(0);
+  const [detailsArray, setDetailsArray] = useState([]);
+  const [product, setProduct] = useState<Product | null>(null);
 
   const handleDelete = async (id: number) => {
     setIsDeleting(true);
@@ -118,22 +119,40 @@ export default function ViewProduct() {
       } catch (error: any) {
         console.log(error);
         toast.error(error.message, { position: "top-center", theme: "dark" });
+      } finally {
+        setLoading(false);
       }
     };
     getProduct();
   }, []);
 
-  const averageRating =
-    product.reviews.length > 0
-      ? product.reviews.reduce(
-          (acc: number, review: Review) => acc + review.rating,
-          0
-        ) / product.reviews.length
-      : 0.0;
+  useEffect(() => {
+    if (product) {
+      setAverageRating(
+        product!.reviews.length > 0
+          ? product!.reviews.reduce(
+              (acc: number, review: Review) => acc + review.rating,
+              0
+            ) / product!.reviews.length
+          : 0.0
+      );
 
-  const detailsArray = Array.isArray(product.productInfo.details)
-    ? product.productInfo.details
-    : JSON.parse(product.productInfo.details || "[]");
+      setDetailsArray(
+        Array.isArray(product!.productInfo.details)
+          ? product!.productInfo.details
+          : JSON.parse(product!.productInfo.details || "[]")
+      );
+    }
+  }, [product]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+        <p className="text-muted-foreground">Loading Product Details...</p>
+      </div>
+    );
+  }
 
   return (
     <div className=" p-1.5 space-y-6">
@@ -148,7 +167,7 @@ export default function ViewProduct() {
           <Button
             onClick={() =>
               navigate(
-                `/seller/dashboard/products/edit-product/${product.id}`,
+                `/seller/dashboard/products/edit-product/${product!.id}`,
                 {
                   state: {
                     product,
@@ -161,16 +180,16 @@ export default function ViewProduct() {
             <Edit className="w-5" />
             <span className="text-sm font-medium"> Edit</span>
           </Button>
-          {product.status !== "Discontinued" ? (
+          {product!.status !== "Discontinued" ? (
             <DeleteButtonDialog
-              id={product.id}
+              id={product!.id}
               text="Delete"
               handleDelete={handleDelete}
               isDeleting={iseDeleting}
             />
           ) : (
             <DeleteButtonDialog
-              id={product.id}
+              id={product!.id}
               text="Delete Permanently"
               handleDelete={handlePermanentDelete}
               isDeleting={iseDeleting}
@@ -216,7 +235,7 @@ export default function ViewProduct() {
                 <p className="text-sm font-medium text-gray-500">
                   Current Stock{" "}
                 </p>
-                <h3 className="text-2xl font-bold">{product.stock}</h3>
+                <h3 className="text-2xl font-bold">{product!.stock}</h3>
               </div>
               <div className="p-2 bg-yellow-100 rounded-full">
                 <Boxes className="h-8 w-8 lg:h-10 lg:w-10 text-yellow-600" />
@@ -229,63 +248,63 @@ export default function ViewProduct() {
       <Tabs defaultValue="details" className="w-full space-y-4">
         <TabsList className="grid w-full grid-cols-3 space-x-1 ">
           <TabsTrigger value="details"> Details </TabsTrigger>
-          <TabsTrigger value="images" > Images </TabsTrigger>
-          <TabsTrigger value="reviews" > Reviews </TabsTrigger>
+          <TabsTrigger value="images"> Images </TabsTrigger>
+          <TabsTrigger value="reviews"> Reviews </TabsTrigger>
         </TabsList>
 
         {/* Product Details Tab */}
         <TabsContent value="details" className="space-y-4 ">
-          <Card className="shadow-sm"> 
+          <Card className="shadow-sm">
             <CardHeader>
               <CardTitle className="bg-primary text-primary-foreground py-3 px-2 rounded-md">
                 Product Information
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 ">
-               {/* Grid Layout for Product Details */}
-    <div className="grid grid-cols-1 md:grid-cols-2 px-2 gap-4">
-      {/* Product Name - Full width on small screens, 1st column on md */}
-      <div className="space-y-2 flex flex-col md:col-span-1">
-        <Label htmlFor="name">Product Name</Label>
-        <div className="outline-none bg-transparent  font-medium break-words">
-          {product.name}
-        </div>
-      </div>
+              {/* Grid Layout for Product Details */}
+              <div className="grid grid-cols-1 md:grid-cols-2 px-2 gap-4">
+                {/* Product Name - Full width on small screens, 1st column on md */}
+                <div className="space-y-2 flex flex-col md:col-span-1">
+                  <Label htmlFor="name">Product Name</Label>
+                  <div className="outline-none bg-transparent  font-medium break-words">
+                    {product!.name}
+                  </div>
+                </div>
 
-      {/* Remaining Details - 2nd column on md */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:col-span-1">
-        <div className="space-y-2 flex flex-col">
-          <Label htmlFor="price">Price (₹)</Label>
-          <input
-            id="price"
-            value={product.price}
-            disabled
-            className="outline-none bg-transparent  font-medium"
-          />
-        </div>
-        <div className="space-y-2 flex flex-col">
-          <Label htmlFor="category">Category</Label>
-          <input
-            disabled
-            value={product.categoryName}
-            className="outline-none bg-transparent  font-medium"
-          />
-        </div>
-        <div className="space-y-2 flex flex-col">
-          <Label htmlFor="status">Status</Label>
-          <label
-            className={cn(
-              product.status === "Discontinued"
-                ? "text-red-600 bg-red-100"
-                : "text-green-800 bg-green-100",
-              "outline-none w-fit px-3 py-1 text-[14px] rounded-lg"
-            )}
-          >
-            {product.status}
-          </label>
-        </div>
-      </div>
-    </div>
+                {/* Remaining Details - 2nd column on md */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:col-span-1">
+                  <div className="space-y-2 flex flex-col">
+                    <Label htmlFor="price">Price (₹)</Label>
+                    <input
+                      id="price"
+                      value={product!.price}
+                      disabled
+                      className="outline-none bg-transparent  font-medium"
+                    />
+                  </div>
+                  <div className="space-y-2 flex flex-col">
+                    <Label htmlFor="category">Category</Label>
+                    <input
+                      disabled
+                      value={product!.categoryName}
+                      className="outline-none bg-transparent  font-medium"
+                    />
+                  </div>
+                  <div className="space-y-2 flex flex-col">
+                    <Label htmlFor="status">Status</Label>
+                    <label
+                      className={cn(
+                        product!.status === "Discontinued"
+                          ? "text-red-600 bg-red-100"
+                          : "text-green-800 bg-green-100",
+                        "outline-none w-fit px-3 py-1 text-[14px] rounded-lg"
+                      )}
+                    >
+                      {product!.status}
+                    </label>
+                  </div>
+                </div>
+              </div>
 
               <div className="space-y-2 flex flex-col  px-2">
                 <Label htmlFor="description">Description</Label>
@@ -293,7 +312,7 @@ export default function ViewProduct() {
                   id="description"
                   className="outline-none bg-transparent w-full  text-card-foreground/80 font-medium "
                 >
-                  {product.description}
+                  {product!.description}
                 </label>
               </div>
               <hr />
@@ -336,8 +355,8 @@ export default function ViewProduct() {
             <CardContent className=" px-4 ">
               <div className="">
                 <div className="grid grid-cols-1 md:grid-cols-3  gap-4">
-                  {product.images.length > 0 ? (
-                    product.images.map((image: Image, index: number) => (
+                  {product!.images.length > 0 ? (
+                    product!.images.map((image: Image, index: number) => (
                       <div key={index} className="group">
                         <img
                           src={image.url}
@@ -364,18 +383,18 @@ export default function ViewProduct() {
                 <div className="flex items-center gap-2">
                   <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
                   <span className="text-lg font-semibold">
-                    {averageRating.toFixed(1)}
+                    {averageRating}
                   </span>
                   <span className="text-gray-500">
-                    ({product.reviews.length} reviews)
+                    ({product!.reviews.length} reviews)
                   </span>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {product.reviews.length > 0 ? (
-                  product.reviews.map((review: Review) => (
+                {product!.reviews.length > 0 ? (
+                  product!.reviews.map((review: Review) => (
                     <Card key={review.id}>
                       <CardContent className="pt-6">
                         <div className="flex justify-between  items-start">

@@ -5,6 +5,7 @@ import {
   Filter,
   LayoutGrid,
   List,
+  Loader2,
   Search,
 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -71,6 +72,7 @@ export default function ProductList() {
   const seller = useSelector((state: RootState) => state.seller.seller);
   const navigate = useNavigate();
   const [products, setProducts] = useState<Array<Product>>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 5;
@@ -108,6 +110,8 @@ export default function ProductList() {
         }
       } catch (error: any) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
     getAllProducts();
@@ -125,10 +129,21 @@ export default function ProductList() {
     startIndex + productsPerPage
   );
 
+  if (loading) {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+        <p className="text-muted-foreground">Loading Product List...</p>
+      </div>
+    );
+  }
+
   return (
     <div className=" space-y-5 ">
       <div className="border rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm ">
-        <h2 className="text-2xl text-accent-foreground font-semibold">Products</h2>
+        <h2 className="text-2xl text-accent-foreground font-semibold">
+          Products
+        </h2>
 
         <Card className="w-full lg:w-[100%] flex flex-nowrap  text-secondary-foreground  bg-muted/50 rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x">
           <div className="flex items-center space-x-2 p-4 text-primary">
@@ -140,13 +155,24 @@ export default function ProductList() {
               key={stat.label}
               className="p-3 px-4 border-l-2 border-zinc-300 min-w-[190px]  flex flex-col"
             >
-              <div className="text-sm text-muted-foreground truncate">{stat.label}</div>
-              <div className="text-xl font-semibold truncate text-primary">{stat.value}</div>
+              <div className="text-sm text-muted-foreground truncate">
+                {stat.label}
+              </div>
+              <div className="text-xl font-semibold truncate text-primary">
+                {stat.value}
+              </div>
             </div>
           ))}
         </Card>
 
-        <Tabs defaultValue="All" onValueChange={(tab) => { setSelectedTab(tab); setCurrentPage(1); }} className="w-full lg:w-[85%] " >
+        <Tabs
+          defaultValue="All"
+          onValueChange={(tab) => {
+            setSelectedTab(tab);
+            setCurrentPage(1);
+          }}
+          className="w-full lg:w-[85%] "
+        >
           <div className="w-full overflow-x-auto  scrollbar-x">
             <TabsList className="flex min-w-max mt-4 items-center justify-start bg-transparent rounded-none  overflow-y-hidden  whitespace-nowrap">
               {["All", "Active", "Inactive", "Discontinued", "OutOfStock"].map(
@@ -171,9 +197,12 @@ export default function ProductList() {
           All Product Lists
         </h2>
         <div className="flex flex-nowrap  gap-2 items-center justify-between">
-        <div className="relative w-full sm:w-72">
+          <div className="relative w-full sm:w-72">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-secondary-foreground" />
-            <Input placeholder="Search Order..." className="pl-8 bg-background rounded-full focus:bg-secondary transition-colors" />
+            <Input
+              placeholder="Search Order..."
+              className="pl-8 bg-background rounded-full focus:bg-secondary transition-colors"
+            />
           </div>
 
           <div className="flex gap-2">
@@ -206,11 +235,21 @@ export default function ProductList() {
                     <TableHead className="text-primary-foreground text-base font-semibold text-center rounded-l-lg">
                       Sr.No.
                     </TableHead>
-                    <TableHead className="text-primary-foreground text-base font-semibold">Image</TableHead>
-                    <TableHead className="text-primary-foreground text-base font-semibold ">Product Name</TableHead>
-                    <TableHead className="text-primary-foreground text-base font-semibold text-center">Price</TableHead>
-                    <TableHead className="text-primary-foreground text-base font-semibold text-center">Stock</TableHead>
-                    <TableHead className="text-primary-foreground text-base font-semibold text-center">Status</TableHead>
+                    <TableHead className="text-primary-foreground text-base font-semibold">
+                      Image
+                    </TableHead>
+                    <TableHead className="text-primary-foreground text-base font-semibold ">
+                      Product Name
+                    </TableHead>
+                    <TableHead className="text-primary-foreground text-base font-semibold text-center">
+                      Price
+                    </TableHead>
+                    <TableHead className="text-primary-foreground text-base font-semibold text-center">
+                      Stock
+                    </TableHead>
+                    <TableHead className="text-primary-foreground text-base font-semibold text-center">
+                      Status
+                    </TableHead>
                     <TableHead className="text-primary-foreground text-base font-semibold text-center rounded-r-lg">
                       Details
                     </TableHead>
@@ -218,8 +257,13 @@ export default function ProductList() {
                 </TableHeader>
                 <TableBody>
                   {paginatedProducts.map((product, index) => (
-                    <TableRow key={product.id} className="border-b h-[60px] hover:bg-accent">
-                      <TableCell className="text-center rounded-tl-lg rounded-bl-lg">{index + 1}</TableCell>
+                    <TableRow
+                      key={product.id}
+                      className="border-b h-[60px] hover:bg-accent"
+                    >
+                      <TableCell className="text-center rounded-tl-lg rounded-bl-lg">
+                        {index + 1}
+                      </TableCell>
                       <TableCell className="text-center ">
                         {" "}
                         <img
@@ -259,11 +303,14 @@ export default function ProductList() {
                         <div className="flex  items-center justify-center">
                           <Button
                             onClick={() =>
-                              navigate(`/seller/dashboard/products/view-product/${product.id}`, {
-                                state: {
-                                  product,
-                                },
-                              })
+                              navigate(
+                                `/seller/dashboard/products/view-product/${product.id}`,
+                                {
+                                  state: {
+                                    product,
+                                  },
+                                }
+                              )
                             }
                             variant="ghost"
                             className="hover:bg-primary/10 w-10"

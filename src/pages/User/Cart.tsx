@@ -277,6 +277,7 @@ const Cart = () => {
         <CardFooter>
           <Checkout
             orderData={orderData}
+            flag="cart"
             text="Proceed to Checkout"
             styles="w-full bg-primary/80 hover:bg-primary text-primary-foreground text-sm"
           />

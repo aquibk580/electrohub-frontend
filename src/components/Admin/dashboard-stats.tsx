@@ -59,7 +59,7 @@ const StatCard = ({ icon, label, value, change, variant = "default" }: StatItem)
       {icon && <div className="p-2 bg-primary/10 rounded-full text-primary">{icon}</div>}
       <div>
         <p className="text-sm text-muted-foreground-foreground truncate">{label}</p>
-        <p className="text-2xl font-semibold truncate text-primary">{value}</p>
+        <p className="text-2xl font-semibold truncate text-primary">{value}</p> 
       </div>
     </div>
   )
@@ -79,7 +79,7 @@ export const DashboardStats = ({
         <div className={cn("flex gap-4", variant === "payment" ? "flex" : "flex-row overflow-x-auto")}>
           {stats.map((stat, index) => (
             <StatCard key={index} {...stat} variant={variant} />
-          ))}
+          ))} 
         </div>
       </SelectorWrapper>
 

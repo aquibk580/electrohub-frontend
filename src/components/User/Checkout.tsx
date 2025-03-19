@@ -15,9 +15,10 @@ interface CheckoutProps {
   orderData: OrderInput;
   styles: string;
   text: string;
+  flag: string;
 }
 
-const Checkout = ({ orderData, styles, text }: CheckoutProps) => {
+const Checkout = ({ orderData, styles, text, flag }: CheckoutProps) => {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user.user);
   const [isLoading, setIsLoading] = useState(false);
@@ -61,6 +62,7 @@ const Checkout = ({ orderData, styles, text }: CheckoutProps) => {
               {
                 ...response,
                 orderData: data.orderData,
+                flag,
               }
             );
 

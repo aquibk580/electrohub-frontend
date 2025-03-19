@@ -130,6 +130,7 @@ const ProductAddtocart = ({
             <TooltipTrigger asChild>
               <Checkout
                 orderData={orderData}
+                flag="buy"
                 styles="flex-1 hover:bg-amber-600 bg-amber-500 cursor-pointer"
                 text="Buy now"
               />

@@ -25,6 +25,9 @@ export interface User {
 
 export interface Category {
   name: string;
+  imageUrl: string;
+  products: Product[];
+  createdAt: Date;
 }
 
 export interface Product {
