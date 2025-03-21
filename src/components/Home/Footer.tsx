@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import {
   ShoppingCart,
   Gift,
@@ -18,9 +18,22 @@ import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 
-export default function Footer() {
-  const [openSections, setOpenSections] = useState<Record<string, boolean>>({})
 
+interface FooterProps {
+  activeTab?: string;
+  setActiveTab?: (tab: string) => void;
+}
+
+
+export default function Footer({ activeTab, setActiveTab }: FooterProps) {
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({})
+  const navigate = useNavigate();
+
+  const handleClick = (tab: string) => {
+    setActiveTab?.(tab);
+    navigate(`/user/info/${tab}`);
+    console.log("clicked");
+  };
   const toggleSection = (section: string) => {
     setOpenSections((prev) => ({
       ...prev,
@@ -44,26 +57,26 @@ export default function Footer() {
       "Accessories",
     ],
     aboutUs: [
-      "About ElectroHub",
-      "Careers",
-      "News & Blog",
-      "Help",
-      "Press Center",
-      "Shop By Location",
-      "ElectroHub Brands",
-      "Affiliate & Partners",
-      "Ideas & Guides",
+      { name: "About ElectroHub", path: "/about" },
+      { name: "Careers", path: "/user/info/careers" },
+      { name: "News & Blog", path: "/user/info/news-blog" },
+      { name: "Help", path: "/user/info/help-center" },
+      { name: "Press Center", path: "/user/info/press-center" },
+      { name: "Shop By Location", path: "/user/info/locations" },
+      { name: "ElectroHub Brands", path: "/user/info/brands" },
+      { name: "Affiliate & Partners", path: "/user/info/affiliate" },
+      { name: "Ideas & Guides", path: "/user/info/ideas" },
     ],
     customerService: [
-      "Contact Us",
-      "FAQs",
-      "Shipping & Delivery",
-      "Returns & Exchanges",
-      "Order Tracking",
-      "Warranty Information",
-      "Privacy Policy",
-      "Terms of Service",
-      "Financing Options",
+      { name: "Contact Us", path: "/contact" },
+      { name: "FAQs", path: "/user/info/faqs" },
+      { name: "Shipping & Delivery", path: "/user/orders" },
+      { name: "Returns & Exchanges", path: "/user/orders" },
+      { name: "Order Tracking", path: "/user/orders" },
+      { name: "Warranty Information", path: "/user/info/warranty-information" },
+      { name: "Privacy Policy", path: "/user/info/privacy-policy" },
+      { name: "Terms of Service", path: "/user/info/terms-of-service" },
+      { name: "Financing Options", path: "/user/info/financing-options" },
     ],
   }
 
@@ -191,12 +204,12 @@ export default function Footer() {
               <CollapsibleContent className="pl-2">
                 <ul className="grid grid-cols-2 gap-x-4 gap-y-2 pt-2 pb-3">
                   {footerLinks.aboutUs.map((item) => (
-                    <li key={item} className="text-sm">
+                    <li key={item.name} className="text-sm">
                       <Link
-                        to={`/about/${item.toLowerCase().replace(/ & /g, "-").replace(/\s+/g, "-")}`}
+                        to={item.path}
                         className="text-muted-foreground hover:text-primary transition-colors duration-200"
                       >
-                        {item}
+                        {item.name}
                       </Link>
                     </li>
                   ))}
@@ -216,15 +229,16 @@ export default function Footer() {
                   {openSections["customerService"] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                 </Button>
               </CollapsibleTrigger>
+
               <CollapsibleContent className="pl-2">
                 <ul className="grid grid-cols-2 gap-x-4 gap-y-2 pt-2 pb-3">
                   {footerLinks.customerService.map((item) => (
-                    <li key={item} className="text-sm">
+                    <li key={item.name} className="text-sm">
                       <Link
-                        to={`/customer-service/${item.toLowerCase().replace(" & ", "-").replace(" ", "-")}`}
+                        to={item.path}
                         className="text-muted-foreground hover:text-primary transition-colors duration-200"
                       >
-                        {item}
+                        {item.name}
                       </Link>
                     </li>
                   ))}
@@ -282,12 +296,12 @@ export default function Footer() {
             <h2 className="text-lg font-semibold mb-4 text-foreground">About Us</h2>
             <ul className="space-y-2">
               {footerLinks.aboutUs.map((item) => (
-                <li key={item} className="text-base">
+                <li key={item.name} className="text-base">
                   <Link
-                    to={`/about/${item.toLowerCase().replace(/ & /g, "-").replace(/\s+/g, "-")}`}
+                    to={item.path}
                     className="text-muted-foreground hover:text-primary transition-colors duration-200"
                   >
-                    {item}
+                    {item.name}
                   </Link>
                 </li>
               ))}
@@ -298,12 +312,13 @@ export default function Footer() {
             <h2 className="text-lg font-semibold mb-4 text-foreground">Customer Service</h2>
             <ul className="space-y-2">
               {footerLinks.customerService.map((item) => (
-                <li key={item} className="text-base">
+                <li key={item.name} className="text-base">
                   <Link
-                    to={`/customer-service/${item.toLowerCase().replace(" & ", "-").replace(" ", "-")}`}
+                    to={item.path}
+                    onClick={() => item.name === "Order Tracking" && handleClick("order-tracking")}
                     className="text-muted-foreground hover:text-primary transition-colors duration-200"
                   >
-                    {item}
+                    {item.name}
                   </Link>
                 </li>
               ))}
@@ -378,4 +393,3 @@ export default function Footer() {
     </footer>
   )
 }
-

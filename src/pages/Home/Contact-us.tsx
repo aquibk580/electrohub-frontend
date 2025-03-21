@@ -245,7 +245,7 @@ export default function ContactUs() {
               {/* <MapPin className="h-12 w-12 text-primary/50 mx-auto mb-4" /> */}
               {/* <p className="text-muted-foreground">Interactive map would be displayed here</p> */}
               <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2114.7998618700612!2d72.97680132885189!3d19.18886824421335!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b90a6d3d1c2d%3A0x239d6bfd46240353!2sSahyog%20College%20of%20IT%20and%20Management!5e0!3m2!1sen!2sin!4v1742578033064!5m2!1sen!2sin" width="1250" height="400" style={{border:0}} loading="lazy" 
-              referrerpolicy="no-referrer-when-downgrade"
+              referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
           </div>

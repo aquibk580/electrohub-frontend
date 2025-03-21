@@ -63,16 +63,15 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     }
   }, [isAuthenticated, dispatch]);
   return (
-    <>
+    <div className="selection:bg-primary selection:text-primary-foreground">
       <Navbar />
       <div className="pt-[4rem] lg:pt-[6.7rem] ">{children}</div>
-      {/* <ChatBot/> */}
       <ChatBot
         botName="Support Bot"
         welcomeMessage="👋 Hi there! How can I help you today?"
       />
       <Footer />
-    </>
+    </div>
   );
 };
 

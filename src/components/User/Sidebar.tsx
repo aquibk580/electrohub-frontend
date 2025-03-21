@@ -100,7 +100,7 @@ const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
   return (
     <div ref={ref} className="w-64 h-fit m-6 mr-0 hidden lg:grid grid-rows-[auto_1fr_auto] gap-6">
       {/* User profile card */}
-      <div className="flex items-center gap-4 bg-white dark:bg-black p-4 shadow-md rounded-lg">
+      <div className="flex items-center gap-4 bg-white dark:bg-black p-4 shadow-md rounded-xl">
         <div className="h-12 w-12 flex items-center justify-center ">
           <Avatar className="rounded-full">
             <AvatarImage src={pfp!} alt="User" className="rounded-full" />
@@ -116,7 +116,7 @@ const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
       </div>
 
       {/* Navigation menu */}
-      <nav className="grid grid-rows-6 h-fit gap-1 text-sm font-medium py-4 bg-white dark:bg-black shadow-md rounded-lg items-center justify-center">
+      <nav className="grid grid-rows-6 h-fit gap-1 text-sm font-medium py-4 bg-white dark:bg-black shadow-md rounded-xl items-center justify-center">
         {sidebarData.map((item, index) => (
           <Link
             key={index}

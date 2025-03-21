@@ -57,6 +57,7 @@ import ScrollToTop from "./components/Common/Scroll-To-Top";
 import TopSellers from "./pages/Home/TopSellers";
 import AboutUs from "./pages/Home/About-us";
 import ContactUs from "./pages/Home/Contact-us";
+import InfoPage from "./pages/Home/Footer-links";
 
 const App = () => {
   return (
@@ -200,6 +201,14 @@ const App = () => {
             element={
               <UserLayout>
                 <Reviews />
+              </UserLayout>
+            }
+          />
+          <Route
+            path="info/:section"
+            element={
+              <UserLayout>
+                <InfoPage />
               </UserLayout>
             }
           />
