@@ -19,6 +19,16 @@ const SellerCard = ({
   onClick,
 }: SellerProps) => {
   const { theme } = useTheme();
+  
+  const getFormattedLogoUrl = (logoUrl: string) => {
+    if (!logoUrl) return "/placeholder.svg";
+    
+    if (logoUrl.includes("=s") && !logoUrl.startsWith("http")) {
+      return `https://lh3.googleusercontent.com/${logoUrl}`;
+    }
+    
+    return logoUrl;
+  };
 
   return (
     <div
@@ -35,9 +45,12 @@ const SellerCard = ({
     >
       <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full overflow-hidden flex items-center justify-center bg-white flex-shrink-0">
         <img
-          src={logo || "/placeholder.svg"}
+          src={getFormattedLogoUrl(logo)}
           alt={`${name} logo`}
-          className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 object-fill rounded-full"
+          className="w-full h-full object-cover rounded-full"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "/placeholder.svg";
+          }}
         />
       </div>
       <div className="flex flex-col min-w-0">
