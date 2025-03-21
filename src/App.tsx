@@ -55,8 +55,8 @@ import SellerSettings from "./pages/Seller/Settings";
 import UserSettings from "./pages/User/Settings";
 import ScrollToTop from "./components/Common/Scroll-To-Top";
 import TopSellers from "./pages/Home/TopSellers";
-import AboutUs from "./pages/Home/Aboutus";
-import ContactUs from "./pages/Home/Contactus";
+import AboutUs from "./pages/Home/About-us";
+import ContactUs from "./pages/Home/Contact-us";
 
 const App = () => {
   return (

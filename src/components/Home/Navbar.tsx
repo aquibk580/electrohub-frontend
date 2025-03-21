@@ -101,7 +101,7 @@ const Navbar = () => {
             className="cursor-pointer"
             onClick={() => setShowSidebar(true)}
           />
-          <h1 className="font-semibold text-3xl flex items-center">
+          <h1 className="font-semibold text-3xl flex items-center cursor-pointer"  onClick={() => navigate("/")}>
             <Logo
               containerClass="w-6 h-6 mr-[0.1rem]"
               polygonClass="fill-black dark:fill-white"
@@ -129,7 +129,7 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Logo */}
-        <h1 className="font-semibold text-3xl hidden lg:flex items-center">
+        <h1 className="font-semibold text-3xl hidden lg:flex items-center cursor-pointer" onClick={() => navigate("/")}>
           <Logo
             containerClass="w-6 h-6  mr-[0.1rem]"
             polygonClass="fill-black dark:fill-white"

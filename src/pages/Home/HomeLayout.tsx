@@ -68,10 +68,9 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
       <div className="pt-[4rem] lg:pt-[6.7rem] ">{children}</div>
       {/* <ChatBot/> */}
       <ChatBot
-            // clientId="7227f08d-8688-49f6-966a-97697063ea1f"
-            botName="Support Bot"
-            welcomeMessage="👋 Hi there! How can I help you today?"
-          />
+        botName="Support Bot"
+        welcomeMessage="👋 Hi there! How can I help you today?"
+      />
       <Footer />
     </>
   );
