@@ -31,7 +31,7 @@ export default function Footer({ activeTab, setActiveTab }: FooterProps) {
 
   const handleClick = (tab: string) => {
     setActiveTab?.(tab);
-    navigate(`/user/info/${tab}`);
+    navigate(`/info/${tab}`);
     console.log("clicked");
   };
   const toggleSection = (section: string) => {
@@ -58,25 +58,25 @@ export default function Footer({ activeTab, setActiveTab }: FooterProps) {
     ],
     aboutUs: [
       { name: "About ElectroHub", path: "/about" },
-      { name: "Careers", path: "/user/info/careers" },
-      { name: "News & Blog", path: "/user/info/news-blog" },
-      { name: "Help", path: "/user/info/help-center" },
-      { name: "Press Center", path: "/user/info/press-center" },
-      { name: "Shop By Location", path: "/user/info/locations" },
-      { name: "ElectroHub Brands", path: "/user/info/brands" },
-      { name: "Affiliate & Partners", path: "/user/info/affiliate" },
-      { name: "Ideas & Guides", path: "/user/info/ideas" },
+      { name: "Careers", path: "/info/careers" },
+      { name: "News & Blog", path: "/info/news-blog" },
+      { name: "Help", path: "/info/help-center" },
+      { name: "Press Center", path: "/info/press-center" },
+      { name: "Shop By Location", path: "/info/locations" },
+      { name: "ElectroHub Brands", path: "/info/brands" },
+      { name: "Affiliate & Partners", path: "/info/affiliate" },
+      { name: "Ideas & Guides", path: "/info/ideas" },
     ],
     customerService: [
       { name: "Contact Us", path: "/contact" },
-      { name: "FAQs", path: "/user/info/faqs" },
+      { name: "FAQs", path: "/info/faqs" },
       { name: "Shipping & Delivery", path: "/user/orders" },
       { name: "Returns & Exchanges", path: "/user/orders" },
       { name: "Order Tracking", path: "/user/orders" },
-      { name: "Warranty Information", path: "/user/info/warranty-information" },
-      { name: "Privacy Policy", path: "/user/info/privacy-policy" },
-      { name: "Terms of Service", path: "/user/info/terms-of-service" },
-      { name: "Financing Options", path: "/user/info/financing-options" },
+      { name: "Warranty Information", path: "/info/warranty-information" },
+      { name: "Privacy Policy", path: "/info/privacy-policy" },
+      { name: "Terms of Service", path: "/info/terms-of-service" },
+      { name: "Financing Options", path: "/info/financing-options" },
     ],
   }
 

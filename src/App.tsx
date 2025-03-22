@@ -111,6 +111,14 @@ const App = () => {
             }
           />
         </Route>
+          <Route
+            path="/info/:section"
+            element={
+              <HomeLayout>
+                <InfoPage />
+              </HomeLayout>
+            }
+          />
         <Route path="/user">
           <Route path="auth">
             <Route
@@ -205,14 +213,14 @@ const App = () => {
               </UserLayout>
             }
           />
-          <Route
+          {/* <Route
             path="info/:section"
             element={
               <UserLayout>
                 <InfoPage />
               </UserLayout>
             }
-          />
+          /> */}
         </Route>
 
         <Route path="/seller">
