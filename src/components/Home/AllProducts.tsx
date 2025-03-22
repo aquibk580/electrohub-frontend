@@ -10,7 +10,7 @@ import type { RootState } from "@/redux/store"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-
+import ProductCardWithPreview from "./product-card-with-preview"
 const PRODUCTS_PER_PAGE = 16
 
 const AllProducts = () => {
@@ -241,6 +241,7 @@ const AllProducts = () => {
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} wishlist={wishlist} setWishlist={setWishlist} />
+              // <ProductCardWithPreview key={product.id} product={product} wishlist={wishlist} setWishlist={setWishlist} />
             ))
           ) : (
             <div className="col-span-full py-12 text-center">

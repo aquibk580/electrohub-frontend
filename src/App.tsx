@@ -58,6 +58,7 @@ import TopSellers from "./pages/Home/TopSellers";
 import AboutUs from "./pages/Home/About-us";
 import ContactUs from "./pages/Home/Contact-us";
 import InfoPage from "./pages/Home/Footer-links";
+import NotFound from "./components/ui/not-found";
 
 const App = () => {
   return (
@@ -498,6 +499,7 @@ const App = () => {
             }
           />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
