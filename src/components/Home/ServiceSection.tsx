@@ -1,46 +1,48 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { serviceContain, BackContent } from "@/assets/assets";
+"use client"
 
-// Card component
-const ServiceCard = ({ item }: { item: typeof serviceContain[0] }) => {
-  const [isFlipped, setIsFlipped] = useState(false);
+import { useState } from "react"
+import { motion } from "framer-motion"
+import { serviceContain, BackContent } from "@/assets/assets"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { HelpCircle } from "lucide-react"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+
+// Card component for desktop
+const ServiceCard = ({ item }: { item: (typeof serviceContain)[0] }) => {
+  const [isFlipped, setIsFlipped] = useState(false)
+  const [openItem, setOpenItem] = useState<string | undefined>(undefined);
 
   const handleFlip = () => {
-    setIsFlipped(!isFlipped);
-  };
+    setIsFlipped(!isFlipped)
+  }
 
   // Get the mock content based on the item id
-  const backContent = BackContent[item.id as keyof typeof BackContent];
+  const backContent = BackContent[item.id as keyof typeof BackContent]
 
   return (
-    <div className="h-96 hidden sm:block" style={{ perspective: "1000px" }}>
-      <div
-        className="relative w-72 md:w-80 lg:w-96 h-fit cursor-pointer mx-auto"
+    <div className="h-[400px] hidden md:block perspective-1000">
+      <motion.div
+        className="relative w-full h-full cursor-pointer preserve-3d"
+        initial={false}
+        animate={{ rotateY: isFlipped ? 180 : 0 }}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
         onClick={handleFlip}
-        style={{
-          transformStyle: "preserve-3d",
-          transition: "transform 0.6s",
-          transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)"
-        }}
+        style={{ transformStyle: "preserve-3d" }}
       >
         {/* Front of Card */}
         <div
-          className="absolute w-72 md:w-80 lg:w-96 h-fit rounded-xl bg-card shadow-lg border border-border overflow-hidden"
-          style={{ backfaceVisibility: "hidden", zIndex: 10 }}
+          className="absolute w-full max-w-2xl h-full rounded-xl bg-card shadow-md border border-border overflow-hidden backface-hidden"
+          style={{ backfaceVisibility: "hidden" }}
         >
-          <div className="px-4 md:px-6 py-5 md:py-7">
-            <h1 className="text-lg md:text-xl lg:text-2xl font-semibold text-card-foreground">
-              {item.title}
-            </h1>
-            <h2 className="mt-2 md:mt-3 text-xs md:text-sm lg:text-lg font-normal text-muted-foreground">
-              {item.desc}
-            </h2>
+          <div className="px-6 py-6">
+            <h1 className="text-xl font-semibold text-card-foreground">{item.title}</h1>
+            <h2 className="mt-2 text-sm text-muted-foreground">{item.desc}</h2>
           </div>
-          <div className="w-72 md:w-80 lg:w-96 mt-4 rounded-b-xl overflow-hidden">
+          <div className="w-full mt-4 rounded-b-xl overflow-hidden">
             <img
-              src={item.img}
-              className="hover:scale-105 transition-transform duration-300 ease-in-out object-cover w-72 md:w-80 lg:w-96 h-48 md:h-56 lg:h-64"
+              src={item.img || "/placeholder.svg"}
+              className="hover:scale-105 transition-transform duration-300 ease-in-out object-cover w-full h-64"
               alt={item.title}
             />
           </div>
@@ -48,63 +50,124 @@ const ServiceCard = ({ item }: { item: typeof serviceContain[0] }) => {
 
         {/* Back of Card */}
         <div
-          className="absolute w-72 md:w-80 lg:w-96 h-96 rounded-xl bg-card shadow-lg border border-border overflow-y-auto px-4 md:px-6 py-5 md:py-7"
+          className="absolute w-full h-full rounded-xl bg-card shadow-md border border-border overflow-y-auto px-6 py-6 backface-hidden"
           style={{
             backfaceVisibility: "hidden",
-            transform: "rotateY(180deg)"
+            transform: "rotateY(180deg)",
           }}
         >
-          <h1 className="text-lg md:text-xl lg:text-2xl font-semibold text-card-foreground mb-3 md:mb-4">
-            {item.title}
-          </h1>
+          <h1 className="text-xl font-semibold text-card-foreground mb-4">{item.title}</h1>
 
           {backContent.additionalInfo && (
-            <p className="text-xs md:text-sm lg:text-base text-muted-foreground mb-3 md:mb-4">
-              {backContent.additionalInfo}
-            </p>
+            <p className="text-sm text-muted-foreground mb-4">{backContent.additionalInfo}</p>
           )}
 
-          {backContent.faqs && backContent.faqs.length > 0 && (
-            <div className="space-y-3 md:space-y-4">
-              <h2 className="text-base md:text-lg font-medium">Frequently Asked Questions</h2>
-              {backContent.faqs.map((faq, index) => (
-                <div key={index} className="border-b border-border pb-2 md:pb-3 mb-2 md:mb-3">
-                  <h3 className="font-medium text-sm md:text-base text-card-foreground">{faq.question}</h3>
-                  <p className="text-xs md:text-sm text-muted-foreground mt-1">{faq.answer}</p>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <button
-            className="mt-4 md:mt-6 text-xs md:text-sm text-primary hover:underline"
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsFlipped(false);
-            }}
-          >
-            Back to service
-          </button>
+          <div className="space-y-4">
+            <h2 className="text-lg font-medium">Frequently Asked Questions</h2>
+            <Accordion
+              type="single"
+              collapsible
+              className="w-full"
+              value={openItem || undefined}
+              onValueChange={setOpenItem}
+            >
+              {backContent.faqs.map((faq, index) => {
+                const itemValue = `item-${index}`;
+                return (
+                  <AccordionItem
+                    key={index}
+                    value={itemValue}
+                    onMouseEnter={() => setOpenItem(itemValue)}
+                    onMouseLeave={() => setOpenItem(undefined)}
+                  >
+                    <AccordionTrigger className="text-sm font-medium">{faq.question}</AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground">{faq.answer}</AccordionContent>
+                  </AccordionItem>
+                );
+              })}
+            </Accordion>
+          </div>
         </div>
-      </div>
+      </motion.div>
     </div>
-  );
-};
+  )
+}
+
+// Mobile version using Tabs
+const MobileServiceSection = () => {
+  return (
+    <div className="md:hidden">
+      <Tabs defaultValue={serviceContain[0].id.toString()} className="w-full">
+        <TabsList className="grid grid-cols-3 mb-4">
+          {serviceContain.map((item) => (
+            <TabsTrigger key={item.id} value={item.id.toString()}>
+              {item.title}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+
+        {serviceContain.map((item) => {
+          const backContent = BackContent[item.id as keyof typeof BackContent]
+
+          return (
+            <TabsContent key={item.id} value={item.id.toString()}>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle>{item.title}</CardTitle>
+                  <CardDescription>{item.desc}</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="rounded-md overflow-hidden">
+                    <img src={item.img || "/placeholder.svg"} alt={item.title} className="w-full h-48 object-cover" />
+                  </div>
+
+                  {backContent.additionalInfo && (
+                    <p className="text-sm text-muted-foreground">{backContent.additionalInfo}</p>
+                  )}
+
+                  {backContent.faqs && backContent.faqs.length > 0 && (
+                    <div>
+                      <h3 className="text-sm font-medium mb-2 flex items-center gap-1">
+                        <HelpCircle className="h-4 w-4" />
+                        FAQs
+                      </h3>
+                      <Accordion type="single" collapsible className="w-full">
+                        {backContent.faqs.map((faq, index) => (
+                          <AccordionItem key={index} value={`item-${index}`}>
+                            <AccordionTrigger className="text-sm">{faq.question}</AccordionTrigger>
+                            <AccordionContent className="text-xs">{faq.answer}</AccordionContent>
+                          </AccordionItem>
+                        ))}
+                      </Accordion>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )
+        })}
+      </Tabs>
+    </div>
+  )
+}
 
 const ServiceSection = () => {
   return (
-    <div className="px-4 md:px-8 lg:px-10 py-6 md:py-8 lg:py-10 rounded-lg bg-background">
-      <h1 className="text-xl md:text-2xl lg:text-3xl font-semibold text-foreground">
-        Services to help you shop
-      </h1>
+    <div className="rounded-lg bg-background">
+      <h1 className="text-2xl md:text-3xl font-bold mb-6">Services to help you shop</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mt-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        {/* Desktop version */}
         {serviceContain.map((item) => (
           <ServiceCard key={item.id} item={item} />
         ))}
+
+        {/* Mobile version */}
+        <MobileServiceSection />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ServiceSection;
+export default ServiceSection
+

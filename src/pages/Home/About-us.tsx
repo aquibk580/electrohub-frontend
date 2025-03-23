@@ -1,9 +1,78 @@
+"use client"
+
+import { useEffect, useRef, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CheckCircle, ExternalLink, ShoppingBag, Store, TrendingUp, Users } from "lucide-react"
+
+// Counter animation component
+const AnimatedCounter = ({ end, duration = 2000, label }: { end: string; duration?: number; label: string }) => {
+  const [count, setCount] = useState(0)
+  const countRef = useRef<HTMLHeadingElement>(null)
+  const [hasAnimated, setHasAnimated] = useState(false)
+
+  // Extract the numeric part from the end value (e.g., "5,000+" -> 5000)
+  const numericValue = Number.parseInt(end.replace(/,/g, "").replace(/\+/g, "").replace(/%/g, ""))
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries
+        if (entry.isIntersecting && !hasAnimated) {
+          setHasAnimated(true)
+
+          const startTime = performance.now()
+          const updateCount = (currentTime: number) => {
+            const elapsedTime = currentTime - startTime
+            const progress = Math.min(elapsedTime / duration, 1)
+
+            // Easing function for smoother animation
+            const easeOutQuad = (t: number) => t * (2 - t)
+            const easedProgress = easeOutQuad(progress)
+
+            setCount(Math.floor(easedProgress * numericValue))
+
+            if (progress < 1) {
+              requestAnimationFrame(updateCount)
+            }
+          }
+
+          requestAnimationFrame(updateCount)
+        }
+      },
+      { threshold: 0.1 },
+    )
+
+    if (countRef.current) {
+      observer.observe(countRef.current)
+    }
+
+    return () => {
+      if (countRef.current) {
+        observer.unobserve(countRef.current)
+      }
+    }
+  }, [numericValue, duration, hasAnimated])
+
+  // Format the count with commas and add any suffix from the original end value
+  const formattedCount = count.toLocaleString()
+  const suffix = end.match(/[+%]/) ? end.match(/[+%]/)![0] : ""
+
+  return (
+    <Card className="border-primary/10 overflow-hidden">
+      <CardContent className="pt-6 text-center relative">
+        <h3 ref={countRef} className="text-3xl md:text-4xl font-bold text-primary transition-all duration-300">
+          {formattedCount}
+          {suffix}
+        </h3>
+        <p className="text-muted-foreground">{label}</p>
+      </CardContent>
+    </Card>
+  )
+}
 
 export default function AboutUs() {
   const founders = [
@@ -289,12 +358,7 @@ export default function AboutUs() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
           {stats.map((stat, index) => (
-            <Card key={index} className="border-primary/10">
-              <CardContent className="pt-6 text-center">
-                <h3 className="text-3xl md:text-4xl font-bold text-primary">{stat.value}</h3>
-                <p className="text-muted-foreground">{stat.label}</p>
-              </CardContent>
-            </Card>
+            <AnimatedCounter key={index} end={stat.value} label={stat.label} duration={1500} />
           ))}
         </div>
       </div>

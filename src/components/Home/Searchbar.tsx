@@ -85,7 +85,7 @@ export default function SearchBar() {
         <Input
           type="text"
           placeholder="Search products..."
-          className="pl-10 pr-10 h-11 rounded-full border-muted-foreground/20 focus-visible:ring-primary/30"
+          className="pl-10 pr-10 h-11 w-[450px] rounded-full border-muted-foreground/20 focus-visible:ring-primary/30"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onFocus={() => setIsFocused(true)}
@@ -106,7 +106,7 @@ export default function SearchBar() {
 
       {/* Search Results Dropdown */}
       {isFocused && (searchTerm.length > 1 || filteredProducts.length > 0) && (
-        <div className="absolute mt-1 w-full bg-background rounded-lg border border-border shadow-lg z-50 overflow-hidden transition-all duration-200 ease-in-out">
+        <div className="absolute mt-12 w-full bg-background rounded-lg border border-border shadow-lg z-50 overflow-hidden transition-all duration-200 ease-in-out">
           {isLoading ? (
             <div className="flex items-center justify-center p-4">
               <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />

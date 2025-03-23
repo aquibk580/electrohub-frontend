@@ -19,42 +19,56 @@ const SellerCard = ({
   onClick,
 }: SellerProps) => {
   const { theme } = useTheme();
+  
+  const getFormattedLogoUrl = (logoUrl: string) => {
+    if (!logoUrl) return "/placeholder.svg";
+    
+    if (logoUrl.includes("=s") && !logoUrl.startsWith("http")) {
+      return `https://lh3.googleusercontent.com/${logoUrl}`;
+    }
+    
+    return logoUrl;
+  };
 
   return (
     <div
-      onClick={onClick}
-      className={`
-      rounded-xl p-2 sm:p-3 md:p-4 flex items-center gap-2 sm:gap-3 md:gap-4 cursor-pointer transition-all duration-300
-      ${
-        theme === "dark"
-          ? "bg-gray-800 hover:bg-gray-700"
-          : "bg-gray-100 hover:bg-gray-200"
-      }
-      hover:shadow-md hover:scale-105
+    onClick={onClick}
+    className={`
+      rounded-xl p-2 sm:p-3 md:p-4 
+      flex items-center gap-2 sm:gap-3 md:gap-4 
+      cursor-pointer transition-all duration-300
+      bg-white dark:bg-gray-950
+      shadow-sm
+      hover:shadow-lg hover:scale-105
+      dark:shadow-gray-900
+      border border-gray-100 dark:border-gray-700
     `}
-    >
-      <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full overflow-hidden flex items-center justify-center bg-white flex-shrink-0">
-        <img
-          src={logo || "/placeholder.svg"}
-          alt={`${name} logo`}
-          className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 object-fill rounded-full"
-        />
-      </div>
-      <div className="flex flex-col min-w-0">
-        <h3
-          className={`font-medium text-sm sm:text-base md:text-lg lg:text-xl truncate
-          ${theme === "dark" ? "text-white" : "text-gray-900"}`}
-        >
-          {name}
-        </h3>
-        <p
-          className={`text-xs sm:text-sm md:text-base truncate
-          ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}
-        >
-          {deliveryTime}
-        </p>
-      </div>
+  >
+    <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 
+                rounded-full overflow-hidden flex-shrink-0
+                flex items-center justify-center 
+                bg-gray-50 dark:bg-gray-900
+               ">
+      <img
+        src={getFormattedLogoUrl(logo)}
+        alt={`${name} logo`}
+        className="w-full h-full object-cover rounded-full"
+        onError={(e) => {
+          (e.target as HTMLImageElement).src = "/placeholder.svg";
+        }}
+      />
     </div>
+    <div className="flex flex-col min-w-0">
+      <h3 className="font-semibold text-sm sm:text-base md:text-lg lg:text-xl truncate 
+                    text-gray-900 dark:text-white">
+        {name}
+      </h3>
+      <p className="text-xs sm:text-sm md:text-base truncate 
+                  text-gray-500 dark:text-gray-300">
+        {deliveryTime}
+      </p>
+    </div>
+  </div>
   );
 };
 
@@ -97,9 +111,7 @@ export default function TopSellers() {
 
   return (
     <section
-      className={`w-full py-4 sm:py-6 md:py-8 px-2 sm:px-3 md:px-4 lg:px-10 ${
-        theme === "dark" ? "text-white" : "bg-white text-gray-900"
-      }`}
+      className={`w-full py-4 sm:py-6 md:py-8 px-2 sm:px-3 md:px-4 lg:px-10 `}
     >
       <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-8">
         Top Sellers

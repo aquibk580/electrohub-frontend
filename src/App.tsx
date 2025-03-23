@@ -55,8 +55,10 @@ import SellerSettings from "./pages/Seller/Settings";
 import UserSettings from "./pages/User/Settings";
 import ScrollToTop from "./components/Common/Scroll-To-Top";
 import TopSellers from "./pages/Home/TopSellers";
-import AboutUs from "./pages/Home/Aboutus";
-import ContactUs from "./pages/Home/Contactus";
+import AboutUs from "./pages/Home/About-us";
+import ContactUs from "./pages/Home/Contact-us";
+import InfoPage from "./pages/Home/Footer-links";
+import NotFound from "./components/ui/not-found";
 
 const App = () => {
   return (
@@ -109,6 +111,14 @@ const App = () => {
             }
           />
         </Route>
+          <Route
+            path="/info/:section"
+            element={
+              <HomeLayout>
+                <InfoPage />
+              </HomeLayout>
+            }
+          />
         <Route path="/user">
           <Route path="auth">
             <Route
@@ -203,6 +213,14 @@ const App = () => {
               </UserLayout>
             }
           />
+          {/* <Route
+            path="info/:section"
+            element={
+              <UserLayout>
+                <InfoPage />
+              </UserLayout>
+            }
+          /> */}
         </Route>
 
         <Route path="/seller">
@@ -489,6 +507,7 @@ const App = () => {
             }
           />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
