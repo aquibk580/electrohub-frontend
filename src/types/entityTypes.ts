@@ -43,7 +43,7 @@ export interface Product {
   images: { id: number; url: string }[];
   reviews: Array<Review> | [];
   averageRating: number;
-  seller: { name: string };
+  seller: Seller;
   orderItems: OrderItem[];
   _count: {
     orderItems: number;

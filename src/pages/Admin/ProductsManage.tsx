@@ -75,7 +75,13 @@ const ProductDetails = () => {
     getProductData();
   }, [id]);
   const handleBackClick = () => {
-    navigate("/admin/productmanage");
+    const searchParams = new URLSearchParams(location.search);
+    const returnPage = searchParams.get("returnPage");
+    if (returnPage) {
+      navigate(`/admin/productmanage?page=${returnPage}`);
+    } else {
+      navigate("/admin/productmanage");
+    }
   };
 
   const handleProductStatusChange = async (newStatus: string) => {

@@ -1,101 +1,184 @@
-import { useEffect, useState } from "react";
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { mockData } from "@/data/mock-data";
-import { ArrowLeft, Check, Package, Star, Truck } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  Loader2,
+  Package,
+  Star,
+  Truck,
+  X,
+} from "lucide-react";
+import type { OrderItem, User } from "@/types/entityTypes";
+import axios from "@/lib/axios";
+import { formatPrice } from "@/utils/FormatPrice";
+import { cn, formatDate } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 const OrderDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const [order, setOrder] = useState<any>(null);
-
-  const breadcrumbs = [
-    { href: "/admin/ordersmanage", label: "Orders Management" },
-    { href: "#", label: "Order Details" },
-  ];
+  const [loading, setLoading] = useState(true);
+  const [orderItem, setOrderItem] = useState<
+    | (OrderItem & {
+        user: User;
+        sellerAverageRating: number;
+        totalSellerOrders: number;
+      })
+    | null
+  >(null);
 
   useEffect(() => {
-    if (id) {
-      const foundOrder = mockData.orders.find((o) => o.id === id);
-      setOrder(foundOrder);
-    }
+    const getOrdersData = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/admin/orders/${id}`
+        );
+        if (response.status === 200) {
+          setOrderItem(response.data);
+          console.log(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getOrdersData();
   }, [id]);
+
   const handleBackClick = () => {
     const searchParams = new URLSearchParams(location.search);
-    const returnPage = searchParams.get('returnPage');
+    const returnPage = searchParams.get("returnPage");
     if (returnPage) {
       navigate(`/admin/ordersmanage?page=${returnPage}`);
     } else {
-      navigate('/admin/ordersmanage');
+      navigate("/admin/ordersmanage");
     }
   };
 
-  if (!order) return null;
-
   const getStatusColor = (status: string) => {
     const colors = {
-      "Pending": "bg-yellow-500",
-      "Shipped": "bg-blue-500",
-      "Delivered": "bg-green-500",
-      "Cancelled": "bg-red-500",
-      "Returns": "bg-purple-500"
+      OrderConfiremed: "bg-green-500",
+      Shipped: "bg-blue-500",
+      Delivered: "bg-green-500",
+      Cancelled: "bg-red-500",
+      Returned: "bg-purple-500",
     };
     return colors[status as keyof typeof colors] || "bg-gray-500";
   };
 
-  const getPaymentStatusClass = (status: string) => {
-    return status === "Completed"
-      ? "bg-green-500/10 text-green-500 hover:bg-green-500/20"
-      : "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20";
-  };
+  const timelineSteps = useMemo(() => {
+    if (!orderItem) return [];
 
-  const timelineIcons = {
-    "Order Placed": <Package className="w-6 h-6" />,
-    "Order Confirmed": <Check className="w-6 h-6" />,
-    "Shipped": <Package className="w-6 h-6" />,
-    "Out for Delivery": <Truck className="w-6 h-6" />,
-    "Delivered": <Check className="w-6 h-6" />
-  };
+    const steps = [
+      {
+        id: "OrderConfirmed",
+        label: "Order Placed",
+        icon: <Check className="w-5 h-5" />,
+        isCompleted: true,
+        date: formatDate(orderItem!.createdAt),
+      },
+      {
+        id: "Shipped",
+        label: "Shipped",
+        icon: <Truck className="w-5 h-5" />,
+        isCompleted: ["Shipped", "Delivered", "Cancelled", "Returned"].includes(
+          orderItem?.status || ""
+        ),
+        date: ["Shipped", "Delivered", "Cancelled", "Returned"].includes(
+          orderItem?.status || ""
+        )
+          ? formatDate(orderItem!.updatedAt)
+          : null,
+      },
+      {
+        id: "Delivered",
+        label: "Delivered",
+        icon: <Check className="w-5 h-5" />,
+        isCompleted: ["Delivered", "Returned"].includes(orderItem?.status || ""),
+        date: ["Delivered", "Returned"].includes(orderItem?.status || "")
+          ? formatDate(orderItem!.updatedAt)
+          : null,
+      },
+    ];
+
+    // Add Cancelled or Returned status if applicable
+    if (orderItem?.status === "Cancelled") {
+      steps.push({
+        id: "Cancelled",
+        label: "Cancelled",
+        icon: <X className="w-5 h-5" />,
+        date: formatDate(orderItem.updatedAt),
+        isCompleted: true,
+      });
+      return steps.filter((step) => step.id !== "Delivered");
+    } else if (orderItem?.status === "Returned") {
+      steps.push({
+        id: "Returned",
+        label: "Returned",
+        icon: <Package className="w-5 h-5" />,
+        date: formatDate(orderItem.updatedAt),
+        isCompleted: true,
+      });
+    }
+
+    return steps;
+  }, [orderItem]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+        <p className="text-muted-foreground">Loading Order Details...</p>
+      </div>
+    );
+  }
 
   return (
-    // <SidebarLayout breadcrumbs={breadcrumbs}>
-    <div className="w-full px-4 py-6 space-y-6 ">
-      {/* <div className="flex items-center gap-2 group text-primary hover:text-primary/60 w-fit transition-colors">
-        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-        <a href="/admin/ordersmanage" className="font-medium">
-          Back to Orders
-        </a>
-      </div> */}
-       <button 
+    <div className="w-full px-4 py-6 space-y-6">
+      <button
         onClick={handleBackClick}
         className="flex items-center gap-2 group text-primary hover:text-primary/60 w-fit transition-colors"
       >
         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
         <span className="font-medium">Back to Orders</span>
       </button>
+
       {/* Order Summary */}
       <Card>
         <CardHeader>
-          <CardTitle>Order Details #{order.id}</CardTitle>
+          <CardTitle>Order Details #{orderItem?.id}</CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <div className="flex items-center space-x-4">
               <img
-                src={order.image}
-                alt={order.productName}
+                src={orderItem?.product?.images[0]?.url || "/placeholder.svg"}
+                alt={orderItem?.product?.name}
                 className="w-24 h-24 rounded-lg object-cover"
               />
               <div>
-                <h3 className="font-medium">{order.productName}</h3>
-                <p className="text-sm text-muted-foreground">{order.total}</p>
+                <h3 className="font-medium">{orderItem?.product?.name}</h3>
+                <p className="text-base text-muted-foreground">
+                  {"₹" +
+                    formatPrice(
+                      orderItem!.product.price -
+                        (orderItem!.product.offerPercentage / 100) *
+                          orderItem!.product.price
+                    )}
+                </p>
                 <Badge
-                  className={`${getStatusColor(order.status)} text-white mt-2`}
+                  className={`${getStatusColor(
+                    orderItem!.status
+                  )} text-white mt-2`}
                 >
-                  {order.status}
+                  {orderItem?.status}
                 </Badge>
               </div>
             </div>
@@ -104,47 +187,81 @@ const OrderDetails = () => {
           <div className="space-y-2">
             <h3 className="font-medium">Seller Information</h3>
             <div className="flex items-center space-x-2">
-              <span>{order.orderDetails.sellerInfo.name}</span>
+              <span>{orderItem?.product?.seller?.name}</span>
               <div className="flex items-center">
                 <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                <span className="ml-1">{order.orderDetails.sellerInfo.rating}</span>
+                <span className="ml-1">{orderItem?.sellerAverageRating}</span>
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
-              Total Orders: {order.orderDetails.sellerInfo.totalOrders}
+              Total Orders: {orderItem?.totalSellerOrders}
             </p>
           </div>
         </CardContent>
       </Card>
 
-      {/* Order Timeline */}
+      {/* Vertical Order Timeline */}
       <Card>
         <CardHeader>
           <CardTitle>Order Timeline</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="relative space-y-4">
-            {order.orderDetails.orderTimeline.map((event: any, index: number) => (
-              <div key={index} className="flex items-start">
-                <div className="flex flex-col items-center">
-                  <div className={`p-2 rounded-full ${index <= order.orderDetails.orderTimeline.findIndex(
-                    (e: any) => e.status === order.status
-                  )
+          <div className="relative">
+            {/* Vertical line connecting timeline steps */}
+            <div className="absolute left-[22px] top-6 bottom-6 w-[2px] bg-muted-foreground/20" />
+
+            {timelineSteps.map((step, index) => (
+              <motion.div
+                key={step.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="relative pl-12 pb-8 last:pb-0"
+              >
+                {/* Timeline dot/icon */}
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: index * 0.1 + 0.2, type: "spring" }}
+                  className={cn(
+                    "absolute left-0 w-11 h-11 rounded-full flex items-center justify-center z-10",
+                    step.isCompleted
                       ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
-                    }`}>
-                    {timelineIcons[event.status as keyof typeof timelineIcons]}
+                      : "bg-muted text-muted-foreground"
+                  )}
+                >
+                  {step.icon}
+                </motion.div>
+
+                {/* Timeline content */}
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <h4
+                      className={cn(
+                        "font-medium text-base",
+                        step.isCompleted
+                          ? "text-foreground"
+                          : "text-muted-foreground"
+                      )}
+                    >
+                      {step.label}
+                    </h4>
+                    <span className="text-sm text-muted-foreground">
+                      {step.date}
+                    </span>
                   </div>
-                  {index < order.orderDetails.orderTimeline.length - 1 && (
-                    <div className="w-px h-16 bg-border" />
+
+                  {/* Progress indicator */}
+                  {step.isCompleted && (
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: "100%" }}
+                      transition={{ delay: index * 0.1 + 0.3, duration: 0.5 }}
+                      className="h-1 bg-primary rounded-full mt-2"
+                    />
                   )}
                 </div>
-                <div className="ml-4">
-                  <h4 className="font-medium">{event.status}</h4>
-                  <p className="text-sm text-muted-foreground">{event.date}</p>
-                  <p className="text-sm">{event.description}</p>
-                </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </CardContent>
@@ -157,37 +274,9 @@ const OrderDetails = () => {
             <CardTitle>Shipping Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <p className="font-medium">{order.orderDetails.shippingAddress.name}</p>
-            <p>{order.orderDetails.shippingAddress.address}</p>
-            <p>
-              {order.orderDetails.shippingAddress.city}, {order.orderDetails.shippingAddress.state}
-            </p>
-            <p>{order.orderDetails.shippingAddress.pincode}</p>
-            <p>{order.orderDetails.shippingAddress.phone}</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Payment Details</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="flex justify-between">
-              <span>Payment Method</span>
-              <span>{order.orderDetails.paymentDetails.method}</span>
-            </div>
-            <Separator />
-            <div className="flex justify-between">
-              <span>Transaction ID</span>
-              <span>{order.orderDetails.paymentDetails.transactionId}</span>
-            </div>
-            <Separator />
-            <div className="flex justify-between">
-              <span>Status</span>
-              <Badge className={getPaymentStatusClass(order.orderDetails.paymentDetails.status)}>
-                {order.orderDetails.paymentDetails.status}
-              </Badge>
-            </div>
+            <p className="font-medium">{orderItem?.user?.name}</p>
+            <p>{orderItem?.user?.address}</p>
+            <p>{orderItem?.user?.phone}</p>
           </CardContent>
         </Card>
       </div>
