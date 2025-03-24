@@ -12,6 +12,7 @@ import { formatPrice } from "@/utils/FormatPrice";
 import { formatDate } from "@/lib/utils";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 
 export default function Orders() {
   const [orders, setOrders] = useState<Array<Order>>([]);
@@ -74,7 +75,15 @@ export default function Orders() {
 
   return (
     <div className="flex flex-col h-full gap-6">
-      <Card className="grid grid-cols-[1fr_auto] items-center p-[1.35rem] gap-4 rounded-lg shadow-md">
+      <Helmet>
+        <title>My Orders - Electrohub</title>
+        <meta
+          name="description"
+          content="Track your past and current orders at Electrohub. Stay updated with real-time order status and delivery details."
+        />
+      </Helmet>
+
+      <Card className="grid grid-cols-[1fr_auto] items-center p-[1.35rem] gap-4 rounded-xl shadow-md">
         <div className="flex items-center w-full">
           <Input
             placeholder="Search your orders here"
@@ -88,7 +97,7 @@ export default function Orders() {
         <FilterDropDown />
       </Card>
 
-      <Card className="flex-1 flex flex-col overflow-hidden rounded-lg shadow-md">
+      <Card className="flex-1 flex flex-col overflow-hidden rounded-xl shadow-md">
         <CardHeader>
           <h1 className="font-semibold text-2xl">My Orders</h1>
         </CardHeader>

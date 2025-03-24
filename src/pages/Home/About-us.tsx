@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CheckCircle, ExternalLink, ShoppingBag, Store, TrendingUp, Users } from "lucide-react"
+import { Helmet } from "react-helmet-async"
 
 // Counter animation component
 const AnimatedCounter = ({ end, duration = 2000, label }: { end: string; duration?: number; label: string }) => {
@@ -111,6 +112,10 @@ export default function AboutUs() {
 
   return (
     <div className="container mx-auto px-4 py-12">
+      <Helmet>
+        <title>About us</title>
+        <meta name="description" content="Electrohub About us Page" />
+      </Helmet>
       {/* Hero Section */}
       <div className="text-center space-y-4 mb-16">
         <Badge variant="outline" className="px-3.5 py-1.5 text-sm font-medium">

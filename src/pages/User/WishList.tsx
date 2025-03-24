@@ -6,6 +6,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Product } from "@/types/entityTypes";
+import { Helmet } from "react-helmet-async";
 
 export function Wishlist() {
   const [wishlistItems, setWishlistItems] = useState<Array<Product>>();
@@ -78,7 +79,15 @@ export function Wishlist() {
   };
 
   return (
-    <Card className="h-full flex flex-col rounded-lg shadow-md">
+    <Card className="h-full flex flex-col rounded-cl shadow-md">
+      <Helmet>
+        <title>My Wishlist - Electrohub</title>
+        <meta
+          name="description"
+          content="Save your favorite electronics for later! Easily manage and purchase your wishlist items anytime."
+        />
+      </Helmet>
+
       <CardHeader>
         <div className="flex items-center gap-4 mb-6">
           <img
@@ -109,11 +118,10 @@ export function Wishlist() {
                   <h3 className="font-medium text-lg mb-1">{item.name}</h3>
                   <span className="text-lg font-bold">₹{item.price}</span>
                   <div
-                    className={`text-sm font-medium ${
-                      item.status !== "OutOfStock"
+                    className={`text-sm font-medium ${item.status !== "OutOfStock"
                         ? "text-green-600"
                         : "text-red-600"
-                    }`}
+                      }`}
                   >
                     {item.status !== "OutOfStock" ? "In Stock" : "Out of Stock"}
                   </div>

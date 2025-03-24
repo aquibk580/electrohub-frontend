@@ -7,6 +7,7 @@ import axios from "@/lib/axios";
 import { formatDate } from "@/lib/utils";
 import { Product } from "@/types/entityTypes";
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet-async";
 
 export interface ReviewType {
   id: number;
@@ -67,7 +68,15 @@ const Reviews = () => {
   };
 
   return (
-    <Card className="h-full flex flex-col rounded-lg shadow-md">
+    <Card className="h-full flex flex-col rounded-xl shadow-md">
+      <Helmet>
+        <title>My Reviews - Electrohub</title>
+        <meta
+          name="description"
+          content="View and manage your product reviews. Share your experience and help others make informed buying decisions."
+        />
+      </Helmet>
+
       <CardHeader>
         <h1 className="text-xl sm:text-2xl font-semibold">
           My Reviews ({reviews.length})
@@ -96,11 +105,10 @@ const Reviews = () => {
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`h-4 w-4 ${
-                            i < review.rating
+                          className={`h-4 w-4 ${i < review.rating
                               ? "fill-yellow-400 text-yellow-400"
                               : "fill-gray-200 text-gray-200"
-                          }`}
+                            }`}
                         />
                       ))}
                     </div>

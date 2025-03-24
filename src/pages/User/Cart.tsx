@@ -13,6 +13,7 @@ import { Separator } from "@radix-ui/react-select";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 interface OrderInput {
   total: number;
@@ -55,7 +56,7 @@ const Cart = () => {
       (acc, item) =>
         acc +
         (item.price - (item.price / 100) * item.offerPercentage) *
-          item.quantity,
+        item.quantity,
       0
     );
     setTotal(newTotal);
@@ -115,6 +116,14 @@ const Cart = () => {
 
   return (
     <div className="flex flex-col xl:flex-row gap-6 h-full">
+      <Helmet>
+        <title>Electrohub Cart</title>
+        <meta
+          name="description"
+          content="Review and manage your selected electronics at Electrohub. Secure checkout, fast shipping, and the best tech deals!"
+        />
+      </Helmet>
+
       <Card className="flex flex-col overflow-hidden rounded-lg shadow-md w-full">
         <CardContent className="p-6 flex flex-col h-full">
           <h2 className="text-2xl font-semibold mb-4">Shopping Cart</h2>

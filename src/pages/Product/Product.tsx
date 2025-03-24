@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/redux/store";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 export default function ProductPage() {
   const isAuthenticated = useSelector(
@@ -141,6 +142,10 @@ export default function ProductPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>{product.name}</title>
+        <meta name="description" content={product.description} />
+      </Helmet>
       <main className="px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-8">
           <div className="space-y-4">

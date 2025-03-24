@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import axios from "@/lib/axios";
 import { Seller, Product } from "@/types/entityTypes";
 import { formatPrice } from "@/utils/FormatPrice";
+import { Helmet } from "react-helmet-async";
 
 const TopSellerPage: React.FC = () => {
   const { sellerId } = useParams();
@@ -59,6 +60,9 @@ const TopSellerPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <Helmet>
+              <title>{seller?.name || "Seller"}</title>
+            </Helmet>
       <Card className="p-6 mb-8">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
           <div className="relative">

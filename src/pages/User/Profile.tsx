@@ -22,13 +22,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-  
+import { Helmet } from "react-helmet-async";
+
 const PersonalInfo = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user.user);
   const [editingField, setEditingField] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  
 
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
@@ -58,7 +60,7 @@ const PersonalInfo = () => {
     gender: "Male" | "Female";
   }
 
-  const onSubmit = (data: FormData) => {};
+  const onSubmit = (data: FormData) => { };
 
   const handleEdit = (field: string) => {
     setEditingField(field);
@@ -147,7 +149,15 @@ const PersonalInfo = () => {
   );
 
   return (
-    <Card className="rounded-lg shadow-md">
+    <Card className="rounded-xl shadow-md">
+      <Helmet>
+        <title>{user?.name || `My Profile - Electrohub`}</title>
+        <meta
+          name="description"
+          content="Manage your personal details, update shipping addresses, and customize your shopping experience at Electrohub."
+        />
+      </Helmet>
+
       <CardContent className="p-6">
         <h1 className="text-2xl font-semibold mb-8">Personal Information</h1>
 
@@ -221,7 +231,7 @@ const PersonalInfo = () => {
                 variant="destructive"
                 className="w-full sm:w-auto"
               >
-                {!isDeleting ? "Delete Account": "Deleting..."}
+                {!isDeleting ? "Delete Account" : "Deleting..."}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>

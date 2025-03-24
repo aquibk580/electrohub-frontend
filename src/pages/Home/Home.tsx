@@ -5,6 +5,7 @@ import TopSellers from "@/components/Home/Brand-Selector"
 import ProductCarousel from "@/components/Home/ProductCarousel"
 import ServiceSection from "@/components/Home/ServiceSection"
 import { Loader2 } from "lucide-react"
+import { Helmet } from "react-helmet-async"
 import "animate.css"
 
 const LoadingFallback = () => (
@@ -15,7 +16,12 @@ const LoadingFallback = () => (
 
 const Home = () => {
   return (
+
     <div className="flex flex-col space-y-12 md:space-y-16 lg:space-y-20 mx-auo px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <Helmet>
+        <title>Electrohub</title>
+        <meta name="description" content="Powering Your Tech Life!" />
+      </Helmet>
       {/* Hero Banner */}
       <section className="w-full animate__animated animate__fadeIn">
         <Suspense fallback={<LoadingFallback />}>

@@ -83,8 +83,6 @@ export default function ThemeToggle() {
 
   return (
     <div className="">
-      
-
       <div className="grid gap-6 ">
         <Card>
           <CardHeader>

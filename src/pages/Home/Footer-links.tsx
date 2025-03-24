@@ -1,8 +1,7 @@
 import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
+import { Card, CardContent } from "@/components/ui/card"
 import WarrantyInformation from "@/components/Footer-Links/warranty-information"
 import PrivacyPolicy from "@/components/Footer-Links/privacy-policy"
 import TermsOfService from "@/components/Footer-Links/terms-of-service"
@@ -16,12 +15,12 @@ import ShopByLocation from "@/components/Footer-Links/shop-by-location"
 import ElectrohubBrands from "@/components/Footer-Links/electrohub-brands"
 import AffiliatePartners from "@/components/Footer-Links/affiliate-partners"
 import IdeasGuides from "@/components/Footer-Links/ideas-guides"
+import { Helmet } from "react-helmet-async"
 
 export default function InfoPage() {
   const { section } = useParams();
   const [activeTab, setActiveTab] = useState(section || "warranty-information");
-  
-  // Update activeTab when the section parameter changes
+
   useEffect(() => {
     if (section) {
       setActiveTab(section);
@@ -63,14 +62,18 @@ export default function InfoPage() {
   }
 
   return (
-    <div className="h-full flex flex-col overflow-y-auto">
+    <div className="h-full flex flex-col justify-center align-middle overflow-y-auto">
+      <Helmet>
+        <title>{renderTitle()}</title>
+        <meta name="description" content="Powering Your Tech Life!" />
+      </Helmet>
       {/* <header className="sticky top-0 z-10 border-b bg-background rounded-lg">
         <div className="container flex h-16 mx-5  items-center justify-between py-4">
           <h1 className="text-2xl font-bold">{renderTitle()}</h1>
         </div>
       </header> */}
 
-      <main className="container  ovrflow">
+      <main className="  overflow">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full ">
           <div className="flex flex-col md:flex-row gap-6">
             {/* <div className="md:w-1/4">
@@ -125,12 +128,9 @@ export default function InfoPage() {
               </Card>
             </div> */}
 
-            <div className="">
+            <div className=" w-full">
+
               <Card>
-                <CardHeader>
-                  <CardTitle className="text-2xl">{renderTitle()}</CardTitle>
-                  <Separator />
-                </CardHeader>
                 <CardContent className="pt-6">
                   <TabsContent value="warranty-information" className="mt-0">
                     <WarrantyInformation />
