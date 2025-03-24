@@ -10,13 +10,24 @@ import axios from "@/lib/axios";
 import { Order } from "@/types/entityTypes";
 import { formatPrice } from "@/utils/FormatPrice";
 import { formatDate } from "@/lib/utils";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
 
 export default function Orders() {
   const [orders, setOrders] = useState<Array<Order>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.user.isAuthenticated
+  );
+
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/user/auth/signin");
+      return;
+    }
+
     const getAllOrders = async () => {
       try {
         const response = await axios.get(
@@ -35,8 +46,10 @@ export default function Orders() {
         setIsLoading(false);
       }
     };
+
     getAllOrders();
-  }, []);
+  }, [isAuthenticated]);
+
 
   const getOrderMessage = (status: string): string => {
     let result = "";
@@ -111,8 +124,8 @@ export default function Orders() {
                           ₹
                           {formatPrice(
                             orderItem.product.price -
-                              (orderItem.product.price / 100) *
-                                orderItem.product.offerPercentage
+                            (orderItem.product.price / 100) *
+                            orderItem.product.offerPercentage
                           )}
                         </p>
                         <p className="text-gray-500">
@@ -122,27 +135,23 @@ export default function Orders() {
                           Total: ₹
                           {formatPrice(
                             orderItem.quantity *
-                              (orderItem.product.price -
-                                (orderItem.product.price / 100) *
-                                  orderItem.product.offerPercentage)
+                            (orderItem.product.price -
+                              (orderItem.product.price / 100) *
+                              orderItem.product.offerPercentage)
                           )}
                         </p>
                       </div>
                       <div className="flex flex-col items-start sm:items-center gap-2">
                         <div className="flex items-center gap-2">
                           <span
-                            className={`w-3 h-3 rounded-full ${
-                              orderItem.status === "Delivered" && "bg-green-500"
-                            } ${
-                              (orderItem.status === "Cancelled" ||
+                            className={`w-3 h-3 rounded-full ${orderItem.status === "Delivered" && "bg-green-500"
+                              } ${(orderItem.status === "Cancelled" ||
                                 orderItem.status === "Returned") &&
                               "bg-red-500"
-                            }  ${
-                              orderItem.status === "Shipped" && "bg-yellow-500"
-                            } ${
-                              orderItem.status === "OrderConfirmed" &&
+                              }  ${orderItem.status === "Shipped" && "bg-yellow-500"
+                              } ${orderItem.status === "OrderConfirmed" &&
                               "bg-blue-500"
-                            }`}
+                              }`}
                           ></span>
                           <p className="text-sm font-medium">
                             {orderItem.status === "OrderConfirmed"
