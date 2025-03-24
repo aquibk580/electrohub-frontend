@@ -18,57 +18,45 @@ const SellerCard = ({
   deliveryTime = "Delivery within 24 hours",
   onClick,
 }: SellerProps) => {
-  const { theme } = useTheme();
-  
-  const getFormattedLogoUrl = (logoUrl: string) => {
-    if (!logoUrl) return "/placeholder.svg";
-    
-    if (logoUrl.includes("=s") && !logoUrl.startsWith("http")) {
-      return `https://lh3.googleusercontent.com/${logoUrl}`;
-    }
-    
-    return logoUrl;
-  };
-
   return (
     <div
-    onClick={onClick}
-    className={`
-      rounded-xl p-2 sm:p-3 md:p-4 
-      flex items-center gap-2 sm:gap-3 md:gap-4 
-      cursor-pointer transition-all duration-300
-      bg-white dark:bg-gray-950
-      shadow-sm
-      hover:shadow-lg hover:scale-105
-      dark:shadow-gray-900
-      border border-gray-100 dark:border-gray-700
-    `}
-  >
-    <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 
-                rounded-full overflow-hidden flex-shrink-0
-                flex items-center justify-center 
-                bg-gray-50 dark:bg-gray-900
-               ">
-      <img
-        src={getFormattedLogoUrl(logo)}
-        alt={`${name} logo`}
-        className="w-full h-full object-cover rounded-full"
-        onError={(e) => {
-          (e.target as HTMLImageElement).src = "/placeholder.svg";
-        }}
-      />
+      onClick={onClick}
+      className={`
+        rounded-xl p-2 sm:p-3 md:p-4 
+        flex items-center gap-2 sm:gap-3 md:gap-4 
+        cursor-pointer transition-all duration-300
+        bg-white dark:bg-gray-950
+        shadow-sm
+        hover:shadow-lg hover:scale-105
+        dark:shadow-gray-900
+        border border-gray-100 dark:border-gray-700
+      `}
+    >
+      <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 
+                  rounded-full overflow-hidden flex-shrink-0
+                  flex items-center justify-center 
+                  bg-gray-50 dark:bg-gray-900
+                 ">
+        <img
+          src={logo || "/placeholder.svg"}
+          alt={`${name} logo`}
+          className="w-full h-full object-cover rounded-full"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "/placeholder.svg";
+          }}
+        />
+      </div>
+      <div className="flex flex-col min-w-0">
+        <h3 className="font-semibold text-sm sm:text-base md:text-lg lg:text-xl truncate 
+                      text-gray-900 dark:text-white">
+          {name}
+        </h3>
+        <p className="text-xs sm:text-sm md:text-base truncate 
+                    text-gray-500 dark:text-gray-300">
+          {deliveryTime}
+        </p>
+      </div>
     </div>
-    <div className="flex flex-col min-w-0">
-      <h3 className="font-semibold text-sm sm:text-base md:text-lg lg:text-xl truncate 
-                    text-gray-900 dark:text-white">
-        {name}
-      </h3>
-      <p className="text-xs sm:text-sm md:text-base truncate 
-                  text-gray-500 dark:text-gray-300">
-        {deliveryTime}
-      </p>
-    </div>
-  </div>
   );
 };
 

@@ -64,39 +64,40 @@ const Seller = () => {
   );
 
   const filteredData = useMemo(() => {
-    let result = activeTab === "top" ? mockData.topsellers : mockData.sellers;
-
+    let result = activeTab === "top" ? topSellerData : sellerData;
+  
     if (searchTerm) {
       result = result.filter((seller) =>
-        seller.sellerName.toLowerCase().includes(searchTerm.toLowerCase())
+        seller.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-
+  
     if (filterBy) {
-      result = result.filter((seller) => seller.sellerNiche === filterBy);
+      // Adjust the filter as needed for your actual data structure
+      // This is just an example that you may need to modify
+      result = result.filter((seller) => 
+        seller.address && seller.address.includes(filterBy)
+      );
     }
-
+  
     if (sortBy) {
+      // Adjust sorting based on your actual data
       result.sort((a, b) => {
         if (sortBy === "Profits") {
-          return (
-            parseFloat(b.totalProfits.replace(/[^0-9.-]+/g, "")) -
-            parseFloat(a.totalProfits.replace(/[^0-9.-]+/g, ""))
-          );
+          // Replace with actual profit data if available
+          // return b.productsCount - a.productsCount;
+          console.log("Profits");
         }
         if (sortBy === "Items Sold") {
-          return (
-            parseInt(b.totalItemsSold.replace(/,/g, "")) -
-            parseInt(a.totalItemsSold.replace(/,/g, ""))
-          );
+          // return b.productsCount - a.productsCount;
+          console.log("Items Sold");
         }
         return 0;
       });
     }
-
+  
     return result;
-  }, [activeTab, searchTerm, sortBy, filterBy]);
-
+  }, [activeTab, searchTerm, sortBy, filterBy, topSellerData, sellerData]);
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return filteredData.slice(startIndex, startIndex + itemsPerPage);
@@ -132,9 +133,7 @@ const Seller = () => {
       try {
         const [sellerRes, topSellerRes] = await Promise.all([
           axios.get(`${import.meta.env.VITE_API_URL}/api/admin/sellers`),
-          axios.get(
-            `${import.meta.env.VITE_API_URL}/api/admin/sellers/topsellers`
-          ),
+          axios.get( `${import.meta.env.VITE_API_URL}/api/admin/sellers/topsellers`),
         ]);
 
         if (sellerRes.status === 200) {
@@ -280,7 +279,7 @@ const Seller = () => {
                 currentPage={currentPage}
                 totalPages={Math.ceil(filteredData.length / itemsPerPage)}
                 itemsPerPage={itemsPerPage}
-                onPageChange={setCurrentPage}
+                onPageChange={handlePageChange} // This was incorrectly set to setCurrentPage
                 onItemsPerPageChange={setItemsPerPage}
               />
             </CardContent>
