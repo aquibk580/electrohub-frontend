@@ -131,12 +131,12 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
 
   return (
     <div
-      className="group bg-card text-card-foreground rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-border hover:border-primary/20"
+      className="group bg-card text-card-foreground rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-border hover:border-primary/20"
       onClick={handleNavigate}
     >
       <div className="relative">
         {/* Product image */}
-        <div className="w-full bg-muted/40 p-2 rounded-t-xl overflow-hidden aspect-square">
+        <div className="w-full bg-muted/40 p-8 rounded-t-xl overflow-hidden aspect-square">
           <img
             loading="lazy"
             src={product.images[0]?.url || "/placeholder.svg"}
@@ -147,7 +147,7 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
 
         {/* Discount badge */}
         {hasDiscount && (
-          <Badge variant="destructive" className="absolute top-2 left-2">
+          <Badge variant="destructive" className="absolute top-4 left-4 rounded-lg">
             {product.offerPercentage}% OFF
           </Badge>
         )}
@@ -159,11 +159,11 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute top-2 right-2 bg-background/80 backdrop-blur-sm hover:bg-background/90 rounded-full h-8 w-8 p-1.5 shadow-sm"
+                className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm hover:bg-white/30 rounded-full h-10 w-10 p-1.5 shadow-sm"
                 onClick={(e) => handleToggleWishlist(e, product.id)}
               >
                 <Heart
-                  size={18}
+                  size={25}
                   className={`${isWishlisted ? "fill-red-500 text-red-500" : "text-muted-foreground"}`}
                 />
                 <span className="sr-only">Add to wishlist</span>
@@ -176,7 +176,7 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
         </TooltipProvider>
       </div>
 
-      <div className="p-4">
+      <div className="px-8 py-3">
         {/* Product details */}
         <div>
           <h2 className="text-base font-medium mb-1 line-clamp-1 group-hover:text-primary transition-colors duration-300">
@@ -192,7 +192,7 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
         </div>
 
         {/* Price and actions */}
-        <div className="flex items-center justify-between mt-2">
+        <div className="flex items-center justify-between mt-2 ">
           <div className="flex flex-col">
             <span className="text-lg font-bold text-foreground">₹{formatPrice(discountedPrice)}</span>
             {hasDiscount && (
