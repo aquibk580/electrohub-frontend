@@ -9,19 +9,15 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "@/lib/axios";
 
-const breadcrumbs = [
-  { href: "#", label: "User Management" },
-  { href: "/admin/buyer", label: "Buyer" },
-];
 
-const Seller = () => {
+
+const Buyer = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const location = useLocation();
   const isMobile = useMediaQuery({ maxWidth: 768 });
-  // const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(7);
-  const [activeTab, setActiveTab] = useState("top");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [filterBy, setFilterBy] = useState("");
@@ -33,39 +29,43 @@ const Seller = () => {
   interface TableWrapperProps {
     children: ReactNode;
   }
+  
+  // Fix 1: Update filteredData to use the actual API data (users) instead of mockData
   const filteredData = useMemo(() => {
-    let result = mockData.buyers;
+    // Use the actual users data from API
+    let result = users;
 
     if (searchTerm) {
-      result = result.filter((buyers) =>
-        buyers.buyerName.toLowerCase().includes(searchTerm.toLowerCase())
+      result = result.filter((user: any) =>
+        user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    // if (filterBy) {
-    //   result = result.filter((buyers) => buyers.totalItemsPurchased === filterBy);
-    // }
+    if (filterBy) {
+      // Modify this filter based on your actual data structure
+      // This is just an example
+      result = result.filter((user: any) => 
+        user.role === filterBy || user.status === filterBy
+      );
+    }
 
     if (sortBy) {
-      result.sort((a, b) => {
+      result.sort((a: any, b: any) => {
         if (sortBy === "Spend") {
-          return (
-            parseFloat(b.totalSpend.replace(/[^0-9.-]+/g, "")) -
-            parseFloat(a.totalSpend.replace(/[^0-9.-]+/g, ""))
-          );
+          // Replace with actual spend data if available or use a suitable property
+          return (b.totalOrders || 0) - (a.totalOrders || 0);
         }
         if (sortBy === "Purchased") {
-          return (
-            parseInt(b.totalItemsPurchased.replace(/,/g, "")) -
-            parseInt(a.totalItemsPurchased.replace(/,/g, ""))
-          );
+          return (b.totalOrders || 0) - (a.totalOrders || 0);
         }
         return 0;
       });
     }
 
     return result;
-  }, [activeTab, searchTerm, sortBy, filterBy]);
+  }, [searchTerm, sortBy, filterBy, users]);
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     const params = new URLSearchParams(location.search);
@@ -90,14 +90,32 @@ const Seller = () => {
       });
     }
   }, [location.search]);
+  
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return filteredData.slice(startIndex, startIndex + itemsPerPage);
   }, [filteredData, currentPage, itemsPerPage]);
 
   // useEffect(() => {
+
   //   setCurrentPage(1);
-  // }, [activeTab, searchTerm, sortBy, filterBy]);
+    
+  //   // Update URL to page 1 when filters change
+  //   const params = new URLSearchParams(location.search);
+  //   params.set("page", "1");
+  //   navigate(`${location.pathname}?${params.toString()}`, { replace: true });
+  // }, [searchTerm, sortBy, filterBy]);
+
+  useEffect(() => {
+    const returnPage = searchParams.get("returnPage");
+    if (returnPage) {
+      setCurrentPage(parseInt(returnPage));
+      searchParams.delete("returnPage");
+      navigate(`${location.pathname}?${searchParams.toString()}`, {
+        replace: true,
+      });
+    }
+  }, [location.search]);
 
   const TableWrapper = ({ children }: TableWrapperProps) => {
     if (isMobile) {
@@ -113,6 +131,7 @@ const Seller = () => {
 
   useEffect(() => {
     const getAllUsers = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/admin/users`
@@ -122,13 +141,14 @@ const Seller = () => {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
     getAllUsers();
   }, []);
 
   return (
-    // <SidebarLayout breadcrumbs={breadcrumbs}>
     <div className="w-full px-2 py-2 sm:px-4 sm:py-4">
       <Card className="shadow-md rounded-lg py-4">
         <CardHeader className="px-4 py-2 sm:p-5">
@@ -151,8 +171,8 @@ const Seller = () => {
           <TableWrapper>
             <DataTable
               headers={tableHeaders.buyer}
-              data={users}
-              type="topSeller"
+              data={paginatedData}
+              type="allBuyer"
               onRowClick={handleRowClick}
             />
           </TableWrapper>
@@ -168,5 +188,4 @@ const Seller = () => {
     </div>
   );
 };
-
-export default Seller;
+export default Buyer;

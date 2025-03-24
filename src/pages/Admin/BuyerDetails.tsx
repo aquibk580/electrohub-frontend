@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "@/lib/axios";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -25,11 +25,13 @@ import {
   ShoppingBag,
   RefreshCcw,
   Loader2,
+  ArrowLeft,
 } from "lucide-react";
 import type { OrderItem, User } from "@/types/entityTypes";
 import { getRandomColor } from "@/components/Home/UserProfileButton";
 import { formatDate } from "@/lib/utils";
 import { formatPrice } from "@/utils/FormatPrice";
+import { Button } from "@/components/ui/button";
 
 type ExtendedUser = User & {
   totalSpend: number;
@@ -38,11 +40,14 @@ type ExtendedUser = User & {
   avgOrderValue: number;
 };
 
+
+
 const BuyerDetails = () => {
   const { id } = useParams();
   const [user, setUser] = useState<ExtendedUser | null>(null);
   const [orderItems, setOrderItems] = useState<Array<OrderItem>>([]);
   const [loading, setLoading] = useState<boolean>(true);
+    const navigate = useNavigate();
 
   const initials = user?.name
     .split(" ")
@@ -77,6 +82,16 @@ const BuyerDetails = () => {
     getUser();
   }, [id]);
 
+  const handleBackClick = () => {
+    const searchParams = new URLSearchParams(location.search);
+    const returnPage = searchParams.get("returnPage");
+    if (returnPage) {
+      navigate(`/admin/buyer?page=${returnPage}`);
+    } else {
+      navigate("/admin/buyer");
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex flex-col justify-center items-center h-screen">
@@ -89,6 +104,13 @@ const BuyerDetails = () => {
 
   return (
     <div className="container mx-auto p-4 space-y-6">
+      <button
+              onClick={handleBackClick}
+              className="flex items-center gap-2 group text-primary hover:text-primary/60 w-fit transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              <span className="font-medium">Back to Buyers</span>
+            </button>
       {/* Header Card */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">

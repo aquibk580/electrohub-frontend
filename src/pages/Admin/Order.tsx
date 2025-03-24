@@ -190,7 +190,6 @@ const Order = () => {
     const returnPage = searchParams.get("returnPage");
     if (returnPage) {
       setCurrentPage(parseInt(returnPage));
-      // Clean up the return page parameter
       searchParams.delete("returnPage");
       navigate(`${location.pathname}?${searchParams.toString()}`, {
         replace: true,

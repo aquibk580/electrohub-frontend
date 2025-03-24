@@ -73,8 +73,7 @@ const Seller = () => {
     }
   
     if (filterBy) {
-      // Adjust the filter as needed for your actual data structure
-      // This is just an example that you may need to modify
+     
       result = result.filter((seller) => 
         seller.address && seller.address.includes(filterBy)
       );
@@ -84,12 +83,9 @@ const Seller = () => {
       // Adjust sorting based on your actual data
       result.sort((a, b) => {
         if (sortBy === "Profits") {
-          // Replace with actual profit data if available
-          // return b.productsCount - a.productsCount;
           console.log("Profits");
         }
         if (sortBy === "Items Sold") {
-          // return b.productsCount - a.productsCount;
           console.log("Items Sold");
         }
         return 0;
@@ -110,7 +106,6 @@ const Seller = () => {
     navigate(`${location.pathname}?${params.toString()}`, { replace: true });
   };
 
-  // Handle row click with current page in URL
   const handleRowClick = (row: any) => {
     navigate(`/admin/sellerinfo/${row.id}?returnPage=${currentPage}`);
   };
@@ -120,7 +115,6 @@ const Seller = () => {
     const returnPage = searchParams.get("returnPage");
     if (returnPage) {
       setCurrentPage(parseInt(returnPage));
-      // Clean up the return page parameter
       searchParams.delete("returnPage");
       navigate(`${location.pathname}?${searchParams.toString()}`, {
         replace: true,
@@ -225,7 +219,7 @@ const Seller = () => {
                     { key: "productsCount", label: "Products" },
                     { key: "id", label: "ID" },
                   ]}
-                  data={topSellerData}
+                  data={paginatedData}
                   type="topSeller"
                   onRowClick={handleRowClick}
                 />

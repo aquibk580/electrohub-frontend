@@ -18,6 +18,7 @@ import axios from "@/lib/axios";
 import { formatPrice } from "@/utils/FormatPrice";
 import { cn, formatDate } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -26,10 +27,10 @@ const OrderDetails = () => {
   const [loading, setLoading] = useState(true);
   const [orderItem, setOrderItem] = useState<
     | (OrderItem & {
-        user: User;
-        sellerAverageRating: number;
-        totalSellerOrders: number;
-      })
+      user: User;
+      sellerAverageRating: number;
+      totalSellerOrders: number;
+    })
     | null
   >(null);
 
@@ -169,8 +170,8 @@ const OrderDetails = () => {
                   {"₹" +
                     formatPrice(
                       orderItem!.product.price -
-                        (orderItem!.product.offerPercentage / 100) *
-                          orderItem!.product.price
+                      (orderItem!.product.offerPercentage / 100) *
+                      orderItem!.product.price
                     )}
                 </p>
                 <Badge
@@ -200,85 +201,87 @@ const OrderDetails = () => {
         </CardContent>
       </Card>
 
-      {/* Vertical Order Timeline */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Order Timeline</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="relative">
-            {/* Vertical line connecting timeline steps */}
-            <div className="absolute left-[22px] top-6 bottom-6 w-[2px] bg-muted-foreground/20" />
+      <div className="flex flex-col w-full h-full gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
+          <Card className="lg:col-span-1 w-full h-full">
+            <CardHeader>
+              <CardTitle>Order Timeline</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="relative">
+                {/* Vertical line connecting timeline steps */}
+                <div className="absolute left-[22px] top-6 bottom-6 w-[2px] bg-muted-foreground/20" />
 
-            {timelineSteps.map((step, index) => (
-              <motion.div
-                key={step.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="relative pl-12 pb-8 last:pb-0"
-              >
-                {/* Timeline dot/icon */}
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: index * 0.1 + 0.2, type: "spring" }}
-                  className={cn(
-                    "absolute left-0 w-11 h-11 rounded-full flex items-center justify-center z-10",
-                    step.isCompleted
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-muted-foreground"
-                  )}
-                >
-                  {step.icon}
-                </motion.div>
-
-                {/* Timeline content */}
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <h4
+                {timelineSteps.map((step, index) => (
+                  <motion.div
+                    key={step.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="relative pl-12 pb-8 last:pb-0"
+                  >
+                    {/* Timeline dot/icon */}
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: index * 0.1 + 0.2, type: "spring" }}
                       className={cn(
-                        "font-medium text-base",
+                        "absolute left-0 w-11 h-11 rounded-full flex items-center justify-center z-10",
                         step.isCompleted
-                          ? "text-foreground"
-                          : "text-muted-foreground"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground"
                       )}
                     >
-                      {step.label}
-                    </h4>
-                    <span className="text-sm text-muted-foreground">
-                      {step.date}
-                    </span>
-                  </div>
+                      {step.icon}
+                    </motion.div>
 
-                  {/* Progress indicator */}
-                  {step.isCompleted && (
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: "100%" }}
-                      transition={{ delay: index * 0.1 + 0.3, duration: 0.5 }}
-                      className="h-1 bg-primary rounded-full mt-2"
-                    />
-                  )}
-                </div>
-              </motion.div>
-            ))}
+                    {/* Timeline content */}
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <h4
+                          className={cn(
+                            "font-medium text-base",
+                            step.isCompleted
+                              ? "text-foreground"
+                              : "text-muted-foreground"
+                          )}
+                        >
+                          {step.label}
+                        </h4>
+                        <span className="text-sm text-muted-foreground">
+                          {step.date}
+                        </span>
+                      </div>
+
+                      {/* Progress indicator */}
+                      {step.isCompleted && (
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: "100%" }}
+                          transition={{ delay: index * 0.1 + 0.3, duration: 0.5 }}
+                          className="h-1 bg-primary rounded-full mt-2"
+                        />
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="lg:col-span-2 w-full">
+            <Card className="h-full">
+              <CardHeader>
+                <CardTitle>Shipping Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <p className="font-medium">{orderItem?.user?.name}</p>
+                <p>{orderItem?.user?.address}</p>
+                <p>{orderItem?.user?.phone}</p>
+              </CardContent>
+            </Card>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Shipping and Payment Details */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Shipping Details</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <p className="font-medium">{orderItem?.user?.name}</p>
-            <p>{orderItem?.user?.address}</p>
-            <p>{orderItem?.user?.phone}</p>
-          </CardContent>
-        </Card>
+        </div>
       </div>
     </div>
   );
