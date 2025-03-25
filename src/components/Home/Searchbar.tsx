@@ -79,13 +79,13 @@ export default function SearchBar() {
     <div ref={searchRef} className="relative w-full max-w-md hidden lg:flex">
       <div className="relative flex items-center">
         <div className="absolute left-3 text-muted-foreground">
-          <Search size={18} />
+          <Search size={18} className="text:black dark:text-white" />
         </div>
 
         <Input
           type="text"
           placeholder="Search products..."
-          className="pl-10 pr-10 h-11 w-[450px] rounded-full border-muted-foreground/20 focus-visible:ring-primary/30"
+          className="pl-10 pr-10 h-11 w-[450px] rounded-full  focus-visible:ring-primary"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onFocus={() => setIsFocused(true)}
@@ -93,12 +93,12 @@ export default function SearchBar() {
 
         {searchTerm && (
           <Button
-            variant="ghost"
+            
             size="icon"
-            className="absolute right-2 h-7 w-7"
+            className="absolute right-2 shadow-none bg-transparent hover:bg-transparent  h-7 w-7"
             onClick={handleClearSearch}
           >
-            <X size={16} />
+            <X size={16} className="text-black dark:text-white" />
             <span className="sr-only">Clear search</span>
           </Button>
         )}

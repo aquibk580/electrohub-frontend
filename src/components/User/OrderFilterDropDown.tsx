@@ -23,12 +23,12 @@ export function FilterDropDown() {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">
+        <Button className="rounded-xl " variant="outline">
           {" "}
-          <Filter size={16} /> <span className="hidden sm:block">Filters</span>
+          <Filter size={16} /> <span className="hidden  sm:block">Filters</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
+      <DropdownMenuContent className="w-56 rounded-xl mr-1">
         <DropdownMenuLabel>Filters</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

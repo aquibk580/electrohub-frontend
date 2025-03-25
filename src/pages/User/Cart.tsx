@@ -201,7 +201,7 @@ const Cart = () => {
                 <h1 className="font-semibold text-2xl">Your Cart is empty</h1>
                 <Link
                   to="/"
-                  className="bg-green-700 p-2 px-3 rounded-md text-white"
+                  className="bg-green-700 p-1 px-3 rounded-lg text-white"
                 >
                   Shop Now
                 </Link>
@@ -238,7 +238,7 @@ const Cart = () => {
               <span>Delivery Charges</span>
               <span>Free</span>
             </div>
-            <Separator className="my-2" />
+            <Separator className="my-2 border" />
             <div className="flex justify-between items-center font-bold text-lg">
               <span>Grand Total</span>
               <span>₹{formatPrice(total)}</span>
@@ -280,7 +280,7 @@ const Cart = () => {
             orderData={orderData}
             flag="cart"
             text="Proceed to Checkout"
-            styles="w-full bg-primary/80 hover:bg-primary text-primary-foreground text-sm"
+            styles="w-full bg-primary hover:bg-primary text-primary-foreground text-sm rounded-lg"
           />
         </CardFooter>
       </Card>

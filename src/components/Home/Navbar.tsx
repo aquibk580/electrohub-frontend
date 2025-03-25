@@ -130,12 +130,8 @@ const Navbar = () => {
 
         {/* Desktop Logo */}
         <h1 className="font-semibold text-3xl hidden lg:flex items-center cursor-pointer" onClick={() => navigate("/")}>
-          <Logo
-            containerClass="w-6 h-6  mr-[0.1rem]"
-            polygonClass="fill-black dark:fill-white"
-            frameClass="fill-black dark:fill-white"
-          />
-          lectrohub
+          
+          Electrohub
         </h1>
 
         {/* Navigation Menu */}
@@ -267,7 +263,7 @@ const ListItem = React.forwardRef<
       <span
         ref={ref}
         className={cn(
-          "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+          "block select-none space-y-1 rounded-xl p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
           className
         )}
         {...props}
