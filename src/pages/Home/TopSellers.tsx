@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import axios from "@/lib/axios";
 import { Seller, Product } from "@/types/entityTypes";
 import { formatPrice } from "@/utils/FormatPrice";
+import { Helmet } from "react-helmet-async";
 
 const TopSellerPage: React.FC = () => {
   const { sellerId } = useParams();

@@ -38,7 +38,7 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate("/");
+      navigate("/user/auth/signin");
     }
   }, []);
 

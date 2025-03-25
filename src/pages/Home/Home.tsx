@@ -5,6 +5,7 @@ import TopSellers from "@/components/Home/Brand-Selector"
 import ProductCarousel from "@/components/Home/ProductCarousel"
 import ServiceSection from "@/components/Home/ServiceSection"
 import { Loader2 } from "lucide-react"
+import { Helmet } from "react-helmet-async"
 import "animate.css"
 
 const LoadingFallback = () => (

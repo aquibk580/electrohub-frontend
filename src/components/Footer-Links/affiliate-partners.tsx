@@ -3,86 +3,162 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { Check, FileText, BarChart2, HelpCircle, Quote } from "lucide-react"
 
 export default function AffiliatePartners() {
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold">Affiliate & Partners</h2>
+    <div className="container mx-auto py-8 space-y-8">
+      <div className="flex flex-col space-y-2">
+        <h1 className="text-3xl font-bold tracking-tight">Affiliate & Partners</h1>
+        <p className="text-muted-foreground text-lg">
+          Join the ElectroHub affiliate program or explore partnership opportunities to grow your business while
+          connecting your audience with the latest in electronics and technology.
+        </p>
+      </div>
 
-      <p>
-        Join the ElectroHub affiliate program or explore partnership opportunities to grow your business while
-        connecting your audience with the latest in electronics and technology.
-      </p>
-
-      <Tabs defaultValue="affiliate">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="affiliate">Affiliate Program</TabsTrigger>
-          <TabsTrigger value="partners">Business Partners</TabsTrigger>
-          <TabsTrigger value="vendors">Become a Vendor</TabsTrigger>
+      <Tabs defaultValue="affiliate" className="w-full">
+        <TabsList className="w-full grid grid-cols-1 sm:grid-cols-3 h-auto p-0 bg-transparent gap-2">
+          <TabsTrigger
+            value="affiliate"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground py-3"
+          >
+            Affiliate Program
+          </TabsTrigger>
+          <TabsTrigger
+            value="partners"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground py-3"
+          >
+            Business Partners
+          </TabsTrigger>
+          <TabsTrigger
+            value="vendors"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground py-3"
+          >
+            Become a Vendor
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="affiliate" className="pt-4">
-          <div className="grid gap-6 md:grid-cols-2">
-            <div>
-              <Card>
-                <CardHeader>
+        <TabsContent value="affiliate" className="pt-6">
+          <div className="grid gap-8 md:grid-cols-2">
+            <div className="space-y-6">
+              <Card className="overflow-hidden border-primary/20">
+                <CardHeader className="bg-primary/5 border-b">
                   <CardTitle>ElectroHub Affiliate Program</CardTitle>
                   <CardDescription>Earn commissions by promoting our products</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <p>
+                <CardContent className="pt-6 space-y-6">
+                  <p className="text-muted-foreground">
                     Our affiliate program offers competitive commissions, dedicated support, and marketing resources to
                     help you maximize your earnings.
                   </p>
 
-                  <div className="space-y-2">
-                    <h3 className="font-medium">Program Benefits:</h3>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>Up to 10% commission on qualified sales</li>
-                      <li>45-day cookie duration</li>
-                      <li>Regular payment schedule</li>
-                      <li>Real-time reporting dashboard</li>
-                      <li>Exclusive promotions and deals</li>
-                      <li>Dedicated affiliate manager</li>
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">Program Benefits:</h3>
+                    <ul className="space-y-2.5">
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Up to 10% commission on qualified sales</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>45-day cookie duration</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Regular payment schedule</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Real-time reporting dashboard</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Exclusive promotions and deals</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Dedicated affiliate manager</span>
+                      </li>
                     </ul>
                   </div>
 
-                  <div className="space-y-2">
-                    <h3 className="font-medium">Who Can Join:</h3>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>Content creators and bloggers</li>
-                      <li>Social media influencers</li>
-                      <li>Deal and coupon websites</li>
-                      <li>Technology reviewers</li>
-                      <li>Email marketers</li>
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">Who Can Join:</h3>
+                    <ul className="space-y-2.5">
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Content creators and bloggers</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Social media influencers</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Deal and coupon websites</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Technology reviewers</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Email marketers</span>
+                      </li>
                     </ul>
                   </div>
                 </CardContent>
-                <CardFooter>
-                  <Button>Apply to Affiliate Program</Button>
+                <CardFooter className="bg-muted/50 border-t">
+                  <Button className="w-full sm:w-auto">Apply to Affiliate Program</Button>
                 </CardFooter>
               </Card>
 
-              <div className="mt-6 p-4 bg-muted rounded-lg">
-                <h3 className="font-medium mb-2">Affiliate Resources</h3>
-                <ul className="space-y-2">
-                  <li>
-                    <Button variant="link" className="p-0 h-auto">
+              <div className="p-6 bg-muted rounded-lg border">
+                <h3 className="font-semibold mb-4">Affiliate Resources</h3>
+                <ul className="space-y-3">
+                  <li className="flex items-center">
+                    <FileText className="h-4 w-4 mr-2 text-primary" />
+                    <Button variant="link" className="p-0 h-auto text-primary">
                       Marketing Materials & Banners
                     </Button>
                   </li>
-                  <li>
-                    <Button variant="link" className="p-0 h-auto">
+                  <li className="flex items-center">
+                    <FileText className="h-4 w-4 mr-2 text-primary" />
+                    <Button variant="link" className="p-0 h-auto text-primary">
                       Product Data Feeds
                     </Button>
                   </li>
-                  <li>
-                    <Button variant="link" className="p-0 h-auto">
+                  <li className="flex items-center">
+                    <HelpCircle className="h-4 w-4 mr-2 text-primary" />
+                    <Button variant="link" className="p-0 h-auto text-primary">
                       Affiliate Program FAQ
                     </Button>
                   </li>
-                  <li>
-                    <Button variant="link" className="p-0 h-auto">
+                  <li className="flex items-center">
+                    <BarChart2 className="h-4 w-4 mr-2 text-primary" />
+                    <Button variant="link" className="p-0 h-auto text-primary">
                       Commission Structure
                     </Button>
                   </li>
@@ -92,68 +168,74 @@ export default function AffiliatePartners() {
 
             <div className="space-y-6">
               <Card>
-                <CardHeader>
+                <CardHeader className="bg-muted/50 border-b">
                   <CardTitle>Success Stories</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-6">
                   <div className="space-y-4">
-                    <div className="p-4 border rounded-lg">
-                      <div className="flex items-center mb-2">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                    <div className="p-5 border rounded-lg bg-background shadow-sm">
+                      <div className="flex items-center mb-3">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3 flex-shrink-0">
                           <span className="font-bold">TT</span>
                         </div>
                         <div>
-                          <h4 className="font-medium">TechTrends Blog</h4>
+                          <h4 className="font-semibold">TechTrends Blog</h4>
                           <p className="text-xs text-muted-foreground">Technology Review Site</p>
                         </div>
                       </div>
-                      <p className="text-sm">
-                        "The ElectroHub affiliate program has been a game-changer for our site. Their high-converting
-                        product links and competitive commission rates have significantly increased our revenue."
-                      </p>
+                      <div className="flex">
+                        <Quote className="h-5 w-5 mr-2 text-primary/60 flex-shrink-0 mt-1" />
+                        <p className="text-sm text-muted-foreground">
+                          The ElectroHub affiliate program has been a game-changer for our site. Their high-converting
+                          product links and competitive commission rates have significantly increased our revenue.
+                        </p>
+                      </div>
                     </div>
 
-                    <div className="p-4 border rounded-lg">
-                      <div className="flex items-center mb-2">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                    <div className="p-5 border rounded-lg bg-background shadow-sm">
+                      <div className="flex items-center mb-3">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3 flex-shrink-0">
                           <span className="font-bold">GG</span>
                         </div>
                         <div>
-                          <h4 className="font-medium">Gadget Guru</h4>
+                          <h4 className="font-semibold">Gadget Guru</h4>
                           <p className="text-xs text-muted-foreground">YouTube Channel</p>
                         </div>
                       </div>
-                      <p className="text-sm">
-                        "As a content creator, I appreciate how easy ElectroHub makes it to generate custom links and
-                        track performance. Their exclusive deals for my audience have helped grow my channel."
-                      </p>
+                      <div className="flex">
+                        <Quote className="h-5 w-5 mr-2 text-primary/60 flex-shrink-0 mt-1" />
+                        <p className="text-sm text-muted-foreground">
+                          As a content creator, I appreciate how easy ElectroHub makes it to generate custom links and
+                          track performance. Their exclusive deals for my audience have helped grow my channel.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
               <Card>
-                <CardHeader>
+                <CardHeader className="bg-muted/50 border-b">
                   <CardTitle>Affiliate FAQ</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
+                <CardContent className="pt-6">
+                  <div className="space-y-4">
                     <div>
-                      <h4 className="font-medium">How do I get paid?</h4>
-                      <p className="text-sm text-muted-foreground">
+                      <h4 className="font-semibold">How do I get paid?</h4>
+                      <p className="text-sm text-muted-foreground mt-1">
                         Payments are made monthly via PayPal, direct deposit, or check for all earnings over $50.
                       </p>
                     </div>
                     <div>
-                      <h4 className="font-medium">When do commissions get approved?</h4>
-                      <p className="text-sm text-muted-foreground">
+                      <h4 className="font-semibold">When do commissions get approved?</h4>
+                      <p className="text-sm text-muted-foreground mt-1">
                         Commissions are approved after the return period (30 days) has passed for the purchased
                         products.
                       </p>
                     </div>
                     <div>
-                      <h4 className="font-medium">Can I promote specific products?</h4>
-                      <p className="text-sm text-muted-foreground">
+                      <h4 className="font-semibold">Can I promote specific products?</h4>
+                      <p className="text-sm text-muted-foreground mt-1">
                         Yes, you can create custom links for any product on our website or use category-specific links.
                       </p>
                     </div>
@@ -164,90 +246,90 @@ export default function AffiliatePartners() {
           </div>
         </TabsContent>
 
-        <TabsContent value="partners" className="pt-4">
-          <div className="grid gap-6 md:grid-cols-2">
+        <TabsContent value="partners" className="pt-6">
+          <div className="grid gap-8 md:grid-cols-2">
             <div>
-              <Card>
-                <CardHeader>
+              <Card className="overflow-hidden border-primary/20">
+                <CardHeader className="bg-primary/5 border-b">
                   <CardTitle>Business Partnership Opportunities</CardTitle>
                   <CardDescription>Strategic alliances to grow together</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <p>
+                <CardContent className="pt-6 space-y-6">
+                  <p className="text-muted-foreground">
                     ElectroHub partners with businesses across various industries to create mutually beneficial
                     relationships that drive growth and innovation.
                   </p>
 
-                  <div className="space-y-2">
-                    <h3 className="font-medium">Partnership Types:</h3>
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">Partnership Types:</h3>
                     <div className="grid gap-3">
-                      <div className="p-3 border rounded-lg">
-                        <h4 className="font-medium">Retail Partnerships</h4>
-                        <p className="text-sm text-muted-foreground">
+                      <div className="p-4 border rounded-lg bg-background shadow-sm">
+                        <h4 className="font-semibold">Retail Partnerships</h4>
+                        <p className="text-sm text-muted-foreground mt-1">
                           Store-within-a-store concepts and retail distribution opportunities.
                         </p>
                       </div>
-                      <div className="p-3 border rounded-lg">
-                        <h4 className="font-medium">Technology Integration</h4>
-                        <p className="text-sm text-muted-foreground">
+                      <div className="p-4 border rounded-lg bg-background shadow-sm">
+                        <h4 className="font-semibold">Technology Integration</h4>
+                        <p className="text-sm text-muted-foreground mt-1">
                           API and software integration partnerships for seamless customer experiences.
                         </p>
                       </div>
-                      <div className="p-3 border rounded-lg">
-                        <h4 className="font-medium">Corporate Programs</h4>
-                        <p className="text-sm text-muted-foreground">
+                      <div className="p-4 border rounded-lg bg-background shadow-sm">
+                        <h4 className="font-semibold">Corporate Programs</h4>
+                        <p className="text-sm text-muted-foreground mt-1">
                           Employee purchase programs and B2B procurement solutions.
                         </p>
                       </div>
-                      <div className="p-3 border rounded-lg">
-                        <h4 className="font-medium">Educational Partnerships</h4>
-                        <p className="text-sm text-muted-foreground">
+                      <div className="p-4 border rounded-lg bg-background shadow-sm">
+                        <h4 className="font-semibold">Educational Partnerships</h4>
+                        <p className="text-sm text-muted-foreground mt-1">
                           Special programs for schools, universities, and educational institutions.
                         </p>
                       </div>
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter>
-                  <Button>Explore Partnership Opportunities</Button>
+                <CardFooter className="bg-muted/50 border-t">
+                  <Button className="w-full sm:w-auto">Explore Partnership Opportunities</Button>
                 </CardFooter>
               </Card>
             </div>
 
             <div className="space-y-6">
               <Card>
-                <CardHeader>
+                <CardHeader className="bg-muted/50 border-b">
                   <CardTitle>Current Partners</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-6">
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 border rounded-lg flex items-center justify-center">
+                    <div className="p-4 border rounded-lg flex items-center justify-center bg-background shadow-sm">
                       <div className="text-center">
-                        <div className="w-16 h-16 mx-auto bg-muted rounded-md flex items-center justify-center mb-2">
+                        <div className="w-16 h-16 mx-auto bg-primary/10 rounded-md flex items-center justify-center mb-2">
                           <span className="text-xl font-bold">T</span>
                         </div>
                         <p className="text-sm font-medium">TechCorp</p>
                       </div>
                     </div>
-                    <div className="p-4 border rounded-lg flex items-center justify-center">
+                    <div className="p-4 border rounded-lg flex items-center justify-center bg-background shadow-sm">
                       <div className="text-center">
-                        <div className="w-16 h-16 mx-auto bg-muted rounded-md flex items-center justify-center mb-2">
+                        <div className="w-16 h-16 mx-auto bg-primary/10 rounded-md flex items-center justify-center mb-2">
                           <span className="text-xl font-bold">I</span>
                         </div>
                         <p className="text-sm font-medium">InnovateCo</p>
                       </div>
                     </div>
-                    <div className="p-4 border rounded-lg flex items-center justify-center">
+                    <div className="p-4 border rounded-lg flex items-center justify-center bg-background shadow-sm">
                       <div className="text-center">
-                        <div className="w-16 h-16 mx-auto bg-muted rounded-md flex items-center justify-center mb-2">
+                        <div className="w-16 h-16 mx-auto bg-primary/10 rounded-md flex items-center justify-center mb-2">
                           <span className="text-xl font-bold">D</span>
                         </div>
                         <p className="text-sm font-medium">DigitalEdu</p>
                       </div>
                     </div>
-                    <div className="p-4 border rounded-lg flex items-center justify-center">
+                    <div className="p-4 border rounded-lg flex items-center justify-center bg-background shadow-sm">
                       <div className="text-center">
-                        <div className="w-16 h-16 mx-auto bg-muted rounded-md flex items-center justify-center mb-2">
+                        <div className="w-16 h-16 mx-auto bg-primary/10 rounded-md flex items-center justify-center mb-2">
                           <span className="text-xl font-bold">S</span>
                         </div>
                         <p className="text-sm font-medium">SmartSys</p>
@@ -258,10 +340,10 @@ export default function AffiliatePartners() {
               </Card>
 
               <Card>
-                <CardHeader>
+                <CardHeader className="bg-muted/50 border-b">
                   <CardTitle>Contact Our Partnership Team</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-6">
                   <form className="space-y-4">
                     <div className="grid gap-4 md:grid-cols-2">
                       <div className="space-y-2">
@@ -281,7 +363,10 @@ export default function AffiliatePartners() {
                       <label htmlFor="partnership" className="text-sm font-medium">
                         Partnership Type
                       </label>
-                      <select aria-label="Select partnership type" className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                      <select
+                        aria-label="Select partnership type"
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
                         <option>Select partnership type</option>
                         <option>Retail Partnership</option>
                         <option>Technology Integration</option>
@@ -296,7 +381,9 @@ export default function AffiliatePartners() {
                       </label>
                       <Textarea id="message" placeholder="Tell us about your partnership idea" rows={4} />
                     </div>
-                    <Button type="submit">Submit Inquiry</Button>
+                    <Button type="submit" className="w-full sm:w-auto">
+                      Submit Inquiry
+                    </Button>
                   </form>
                 </CardContent>
               </Card>
@@ -304,95 +391,145 @@ export default function AffiliatePartners() {
           </div>
         </TabsContent>
 
-        <TabsContent value="vendors" className="pt-4">
-          <div className="grid gap-6 md:grid-cols-2">
+        <TabsContent value="vendors" className="pt-6">
+          <div className="grid gap-8 md:grid-cols-2">
             <div>
-              <Card>
-                <CardHeader>
+              <Card className="overflow-hidden border-primary/20">
+                <CardHeader className="bg-primary/5 border-b">
                   <CardTitle>Become a Vendor</CardTitle>
                   <CardDescription>Sell your products through ElectroHub</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <p>
+                <CardContent className="pt-6 space-y-6">
+                  <p className="text-muted-foreground">
                     Join our network of trusted vendors and gain access to millions of customers through our retail
                     stores and online marketplace.
                   </p>
 
-                  <div className="space-y-2">
-                    <h3 className="font-medium">Vendor Benefits:</h3>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>Access to millions of customers across the country</li>
-                      <li>Dedicated vendor portal for inventory and order management</li>
-                      <li>Marketing support and product promotion</li>
-                      <li>Streamlined logistics and fulfillment options</li>
-                      <li>Transparent reporting and timely payments</li>
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">Vendor Benefits:</h3>
+                    <ul className="space-y-2.5">
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Access to millions of customers across the country</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Dedicated vendor portal for inventory and order management</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Marketing support and product promotion</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Streamlined logistics and fulfillment options</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Transparent reporting and timely payments</span>
+                      </li>
                     </ul>
                   </div>
 
-                  <div className="space-y-2">
-                    <h3 className="font-medium">What We Look For:</h3>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>Innovative electronic products and accessories</li>
-                      <li>Consistent product quality and reliability</li>
-                      <li>Competitive pricing and good margins</li>
-                      <li>Strong warranty and customer support</li>
-                      <li>Sustainable packaging and business practices</li>
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">What We Look For:</h3>
+                    <ul className="space-y-2.5">
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Innovative electronic products and accessories</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Consistent product quality and reliability</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Competitive pricing and good margins</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Strong warranty and customer support</span>
+                      </li>
+                      <li className="flex items-start">
+                        <div className="mr-3 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span>Sustainable packaging and business practices</span>
+                      </li>
                     </ul>
                   </div>
                 </CardContent>
-                <CardFooter>
-                  <Button>Apply to Become a Vendor</Button>
+                <CardFooter className="bg-muted/50 border-t">
+                  <Button className="w-full sm:w-auto">Apply to Become a Vendor</Button>
                 </CardFooter>
               </Card>
             </div>
 
             <div className="space-y-6">
               <Card>
-                <CardHeader>
+                <CardHeader className="bg-muted/50 border-b">
                   <CardTitle>Vendor Application Process</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <ol className="space-y-4">
+                <CardContent className="pt-6">
+                  <ol className="space-y-6">
                     <li className="flex">
-                      <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                      <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground flex-shrink-0">
                         1
                       </div>
                       <div>
-                        <h4 className="font-medium">Submit Application</h4>
-                        <p className="text-sm text-muted-foreground">
+                        <h4 className="font-semibold">Submit Application</h4>
+                        <p className="text-sm text-muted-foreground mt-1">
                           Complete our vendor application form with details about your company and products.
                         </p>
                       </div>
                     </li>
                     <li className="flex">
-                      <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                      <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground flex-shrink-0">
                         2
                       </div>
                       <div>
-                        <h4 className="font-medium">Product Review</h4>
-                        <p className="text-sm text-muted-foreground">
+                        <h4 className="font-semibold">Product Review</h4>
+                        <p className="text-sm text-muted-foreground mt-1">
                           Our merchandising team will evaluate your products for quality, market fit, and pricing.
                         </p>
                       </div>
                     </li>
                     <li className="flex">
-                      <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                      <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground flex-shrink-0">
                         3
                       </div>
                       <div>
-                        <h4 className="font-medium">Vendor Onboarding</h4>
-                        <p className="text-sm text-muted-foreground">
+                        <h4 className="font-semibold">Vendor Onboarding</h4>
+                        <p className="text-sm text-muted-foreground mt-1">
                           If approved, you'll complete our onboarding process and vendor agreement.
                         </p>
                       </div>
                     </li>
                     <li className="flex">
-                      <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                      <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground flex-shrink-0">
                         4
                       </div>
                       <div>
-                        <h4 className="font-medium">Integration & Launch</h4>
-                        <p className="text-sm text-muted-foreground">
+                        <h4 className="font-semibold">Integration & Launch</h4>
+                        <p className="text-sm text-muted-foreground mt-1">
                           Set up your products in our system and prepare for launch in our stores or online.
                         </p>
                       </div>
@@ -402,86 +539,39 @@ export default function AffiliatePartners() {
               </Card>
 
               <Card>
-                <CardHeader>
+                <CardHeader className="bg-muted/50 border-b">
                   <CardTitle>Vendor Resources</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-6">
                   <div className="grid gap-3">
-                    <div className="p-3 border rounded-lg flex items-center">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="lucide lucide-file-text"
-                        >
-                          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                          <polyline points="14 2 14 8 20 8" />
-                          <line x1="16" x2="8" y1="13" y2="13" />
-                          <line x1="16" x2="8" y1="17" y2="17" />
-                          <line x1="10" x2="8" y1="9" y2="9" />
-                        </svg>
+                    <div className="p-4 border rounded-lg flex items-center bg-background shadow-sm">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3 flex-shrink-0">
+                        <FileText className="h-5 w-5 text-primary" />
                       </div>
                       <div>
-                        <h4 className="font-medium">Vendor Guidelines</h4>
+                        <h4 className="font-semibold">Vendor Guidelines</h4>
                         <p className="text-xs text-muted-foreground">
                           Download our comprehensive vendor guidelines and requirements.
                         </p>
                       </div>
                     </div>
-                    <div className="p-3 border rounded-lg flex items-center">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="lucide lucide-bar-chart-2"
-                        >
-                          <line x1="18" x2="18" y1="20" y2="10" />
-                          <line x1="12" x2="12" y1="20" y2="4" />
-                          <line x1="6" x2="6" y1="20" y2="14" />
-                        </svg>
+                    <div className="p-4 border rounded-lg flex items-center bg-background shadow-sm">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3 flex-shrink-0">
+                        <BarChart2 className="h-5 w-5 text-primary" />
                       </div>
                       <div>
-                        <h4 className="font-medium">Vendor Portal Demo</h4>
+                        <h4 className="font-semibold">Vendor Portal Demo</h4>
                         <p className="text-xs text-muted-foreground">
                           See how our vendor portal works with this interactive demo.
                         </p>
                       </div>
                     </div>
-                    <div className="p-3 border rounded-lg flex items-center">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="lucide lucide-help-circle"
-                        >
-                          <circle cx="12" cy="12" r="10" />
-                          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                          <path d="M12 17h.01" />
-                        </svg>
+                    <div className="p-4 border rounded-lg flex items-center bg-background shadow-sm">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3 flex-shrink-0">
+                        <HelpCircle className="h-5 w-5 text-primary" />
                       </div>
                       <div>
-                        <h4 className="font-medium">Vendor FAQ</h4>
+                        <h4 className="font-semibold">Vendor FAQ</h4>
                         <p className="text-xs text-muted-foreground">
                           Find answers to common questions about our vendor program.
                         </p>
@@ -495,15 +585,19 @@ export default function AffiliatePartners() {
         </TabsContent>
       </Tabs>
 
-      <div className="bg-muted p-6 rounded-lg mt-8">
+      <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-8 rounded-xl mt-8 border border-primary/10">
         <div className="md:flex items-center justify-between">
-          <div className="mb-4 md:mb-0">
-            <h3 className="text-lg font-medium mb-2">Have Questions?</h3>
-            <p>Our partnership team is ready to help you explore opportunities with ElectroHub.</p>
+          <div className="mb-6 md:mb-0 md:mr-6">
+            <h3 className="text-xl font-semibold mb-2">Have Questions?</h3>
+            <p className="text-muted-foreground">
+              Our partnership team is ready to help you explore opportunities with ElectroHub.
+            </p>
           </div>
-          <div className="flex gap-4">
-            <Button>Contact Us</Button>
-            <Button variant="outline">Schedule a Call</Button>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Button className="w-full sm:w-auto">Contact Us</Button>
+            <Button variant="outline" className="w-full sm:w-auto">
+              Schedule a Call
+            </Button>
           </div>
         </div>
       </div>

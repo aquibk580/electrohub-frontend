@@ -22,13 +22,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-  
+import { Helmet } from "react-helmet-async";
+
 const PersonalInfo = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user.user);
   const [editingField, setEditingField] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  
 
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
@@ -58,7 +60,7 @@ const PersonalInfo = () => {
     gender: "Male" | "Female";
   }
 
-  const onSubmit = (data: FormData) => {};
+  const onSubmit = (data: FormData) => { };
 
   const handleEdit = (field: string) => {
     setEditingField(field);
@@ -221,7 +223,7 @@ const PersonalInfo = () => {
                 variant="destructive"
                 className="w-full sm:w-auto"
               >
-                {!isDeleting ? "Delete Account": "Deleting..."}
+                {!isDeleting ? "Delete Account" : "Deleting..."}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>

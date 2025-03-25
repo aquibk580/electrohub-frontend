@@ -6,8 +6,7 @@ const ScrollToTop = () => {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [pathname]); // Runs when the route changes
-
+  }, [pathname]); 
   return null;
 };
 

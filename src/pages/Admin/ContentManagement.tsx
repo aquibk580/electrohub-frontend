@@ -3,26 +3,8 @@ import { useMediaQuery } from "react-responsive";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Plus, Edit, Trash2, Image as ImageIcon } from "lucide-react";
+import {Table,TableBody,TableCell,TableHead,TableHeader,TableRow} from "@/components/ui/table";
+import { Image as ImageIcon } from "lucide-react";
 import axios from "@/lib/axios";
 import DeleteCategoryButton from "@/components/Admin/CMS/DeleteCategoryButton";
 import AddCategoryDialog from "@/components/Admin/CMS/AddCategoryDialog";

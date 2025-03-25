@@ -159,11 +159,11 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute top-2 right-2 bg-background/80 backdrop-blur-sm hover:bg-background/90 rounded-full h-8 w-8 p-1.5 shadow-sm"
+                className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm hover:bg-white/30 rounded-full h-10 w-10 p-1.5 shadow-sm"
                 onClick={(e) => handleToggleWishlist(e, product.id)}
               >
                 <Heart
-                  size={18}
+                  size={25}
                   className={`${isWishlisted ? "fill-red-500 text-red-500" : "text-muted-foreground"}`}
                 />
                 <span className="sr-only">Add to wishlist</span>
@@ -176,7 +176,7 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
         </TooltipProvider>
       </div>
 
-      <div className="p-4">
+      <div className="px-8 py-3">
         {/* Product details */}
         <div>
           <h2 className="text-base font-medium mb-1 line-clamp-1 group-hover:text-primary transition-colors duration-300">
@@ -192,7 +192,7 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
         </div>
 
         {/* Price and actions */}
-        <div className="flex items-center justify-between mt-2">
+        <div className="flex items-center justify-between mt-2 ">
           <div className="flex flex-col">
             <span className="text-lg font-bold text-foreground">₹{formatPrice(discountedPrice)}</span>
             {hasDiscount && (

@@ -13,6 +13,7 @@ import { Separator } from "@radix-ui/react-select";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 interface OrderInput {
   total: number;
@@ -55,7 +56,7 @@ const Cart = () => {
       (acc, item) =>
         acc +
         (item.price - (item.price / 100) * item.offerPercentage) *
-          item.quantity,
+        item.quantity,
       0
     );
     setTotal(newTotal);

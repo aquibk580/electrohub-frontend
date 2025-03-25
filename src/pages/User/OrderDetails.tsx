@@ -16,6 +16,7 @@ import { RootState } from "@/redux/store";
 import { toast } from "react-toastify";
 import axios from "@/lib/axios";
 import ReviewForm from "@/components/User/ReviewForm";
+import { Helmet } from "react-helmet-async";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -150,6 +151,14 @@ const OrderDetails = () => {
 
   return (
     <div className="grid md:grid-cols-2 gap-6 ">
+      <Helmet>
+        <title>Order- {orderItem.product.name.substring(0, 100) + "..."}</title>
+        <meta
+          name="description"
+          content="View detailed information about your order, including tracking, items purchased, and estimated delivery time."
+        />
+      </Helmet>
+
       {/* Order Details */}
       <Card className="max-h-screen overflow-y-auto">
         <CardContent className="pt-6 grid grid-cols-2">
@@ -165,8 +174,8 @@ const OrderDetails = () => {
               ₹
               {formatPrice(
                 orderItem.product.price -
-                  (orderItem.product.price / 100) *
-                    orderItem.product.offerPercentage
+                (orderItem.product.price / 100) *
+                orderItem.product.offerPercentage
               )}
             </div>
           </div>
@@ -192,14 +201,14 @@ const OrderDetails = () => {
           )}
           {(orderItem.status === "OrderConfirmed" ||
             orderItem.status === "Shipped") && (
-            <Button
-              variant="outline"
-              className="bg-background text-foreground hover:bg-destructive/10 hover:text-destructive border border-input transition-colors"
-              onClick={() => handleOrderStatusUpdate("Cancelled")}
-            >
-              Cancel Order
-            </Button>
-          )}
+              <Button
+                variant="outline"
+                className="bg-background text-foreground hover:bg-destructive/10 hover:text-destructive border border-input transition-colors"
+                onClick={() => handleOrderStatusUpdate("Cancelled")}
+              >
+                Cancel Order
+              </Button>
+            )}
         </CardFooter>
       </Card>
 
@@ -242,8 +251,8 @@ const OrderDetails = () => {
                   ₹
                   {formatPrice(
                     orderItem.product.price -
-                      (orderItem.product.price / 100) *
-                        orderItem.product.offerPercentage
+                    (orderItem.product.price / 100) *
+                    orderItem.product.offerPercentage
                   )}
                 </span>
               </div>
@@ -258,8 +267,8 @@ const OrderDetails = () => {
                   {formatPrice(
                     (orderItem.product.price -
                       (orderItem.product.price / 100) *
-                        orderItem.product.offerPercentage) *
-                      orderItem.quantity
+                      orderItem.product.offerPercentage) *
+                    orderItem.quantity
                   )}
                 </span>
               </div>
