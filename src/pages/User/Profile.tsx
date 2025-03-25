@@ -144,7 +144,7 @@ const PersonalInfo = () => {
           </Button>
         )}
       </div>
-      <Input {...register(field)} disabled={editingField !== field} />
+      <Input {...register(field)} className="bg-none  py-5 rounded-lg" disabled={editingField !== field} />
     </div>
   );
 
@@ -221,9 +221,9 @@ const PersonalInfo = () => {
               <Button
                 type="button"
                 variant="destructive"
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto bg-red-600 rounded-lg"
               >
-                {!isDeleting ? "Delete Account" : "Deleting..."}
+                {!isDeleting ? "Delete Account Permanently" : "Deleting..."}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -237,7 +237,7 @@ const PersonalInfo = () => {
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
-                  className="bg-red-500 text-white"
+                  className="bg-red-600 text-white"
                   onClick={handleDelete}
                 >
                   Continue

@@ -100,7 +100,7 @@ const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
   return (
     <div ref={ref} className="w-64 h-fit m-6 mr-0 hidden lg:grid grid-rows-[auto_1fr_auto] gap-3">
       {/* User profile card */}
-      <div className="flex items-center gap-4 bg-white dark:bg-black p-4 shadow-md rounded-xl">
+      <div className="flex items-center gap-4 bg-white border  dark:bg-black p-4 shadow-md rounded-xl">
         <div className="h-12 w-12 flex items-center justify-center ">
           <Avatar className="rounded-full">
             <AvatarImage src={pfp!} alt="User" className="rounded-full" />
@@ -110,20 +110,20 @@ const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
           </Avatar>
         </div>
         <div>
-          <div className="text-sm text-gray-500 dark:text-gray-400">Hello,</div>
+          <div className="text-sm text-gray-500 dark:text-gray-100">Hello,</div>
           <div className="font-medium dark:text-white">{user?.name}</div>
         </div>
       </div>
 
       {/* Navigation menu */}
-      <nav className="grid grid-rows-6 h-fit gap-1 text-sm font-medium py-4 bg-white dark:bg-black shadow-md rounded-xl items-center justify-center">
+      <nav className="grid grid-rows-6 h-fit gap-1 text-sm font-medium py-4 border bg-white dark:bg-black shadow-md rounded-xl items-center justify-center">
         {sidebarData.map((item, index) => (
           <Link
             key={index}
             to={item.path}
             className={`flex items-center gap-3 px-6 py-3 rounded-lg h-fit text-foreground 
               hover:bg-accent
-              ${activeItem === item.text && "bg-primary/70 hover:bg-primary/40 "}`}
+              ${activeItem === item.text && "bg-primary/90 hover:bg-primary/40 "}`}
           >
             <item.icon className="h-5 w-5" />
             <span>{item.text}</span>
@@ -132,14 +132,14 @@ const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
       </nav>
 
       {/* Banner and Logout */}
-      <div className="grid gap-6">
-        <img src={assets.BannerLogo || "/placeholder.svg"} className="rounded-lg shadow-md" alt="Banner" />
+      <div className="grid gap-4">
+        <img src={assets.BannerLogo || "/placeholder.svg"} className="rounded-xl shadow-md" alt="Banner" />
         <Button
-          variant="outline"
-          className="flex items-center w-full p-5 space-x-1 bg-white dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg shadow-md"
+          
+          className="flex items-center w-full p-5 border space-x-1 bg-white dark:bg-black hover:bg-red-600 dark:hover:bg-red-600 rounded-xl shadow-md"
           onClick={handleLogOut}
         >
-          <LogOut className="w-6 h-6 min-w-[24px] min-h-[24px] text-red-600 dark:text-red-400" />
+          <LogOut className="w-6 h-6 min-w-[24px] min-h-[24px] text-black dark:text-white " />
           <span className="text-black dark:text-white">Log Out</span>
         </Button>
       </div>
