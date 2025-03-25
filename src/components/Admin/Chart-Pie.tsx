@@ -1,8 +1,6 @@
-"use client"
-
-import * as React from "react"
-import { TrendingUp } from "lucide-react"
-import { Label, Pie, PieChart } from "recharts"
+import { useMemo, useEffect, useState } from "react";
+import { Loader2, TrendingUp } from "lucide-react";
+import { Label, Pie, PieChart } from "recharts";
 
 import {
   Card,
@@ -11,62 +9,119 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 190, fill: "var(--color-other)" },
-]
-
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
-    color: "hsl(var(--chart-1))",
-  },
-  safari: {
-    label: "Safari",
-    color: "hsl(var(--chart-2))",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
-  },
-} satisfies ChartConfig
+} from "@/components/ui/chart";
+import { toast } from "react-toastify";
+import axios from "@/lib/axios";
+import { Category } from "@/types/entityTypes";
 
 export function ChartPie() {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
-  }, [])
+  const [loading, setLoading] = useState<boolean>(true);
+  const [categories, setCategories] = useState<
+    Array<Category & { productCount: string }>
+  >([]);
+  const [highestProductCatgeory, setHighestProductCategory] = useState<{
+    name: string;
+    productCount: string;
+  } | null>(null);
+
+  useEffect(() => {
+    const getAllCategories = async () => {
+      try {
+        const response = await axios.get(
+          `${
+            import.meta.env.VITE_API_URL
+          }/api/admin/cms/categories/productCount`
+        );
+        if (response.status === 200) {
+          setCategories(response.data);
+          setHighestProductCategory(
+            response.data.reduce(
+              (
+                max: { productCount: string },
+                category: Category & { productCount: string }
+              ) =>
+                Number(category.productCount) > Number(max.productCount)
+                  ? category
+                  : max,
+              response.data[0]
+            )
+          );
+        }
+      } catch (error: any) {
+        toast.error(error.message, {
+          position: "top-center",
+          theme: "dark",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    getAllCategories();
+  }, []);
+
+  // Generate unique colors dynamically
+  const generateColors = (count: number) => {
+    const colors = [
+      "#FF6384",
+      "#36A2EB",
+      "#FFCE56",
+      "#4BC0C0",
+      "#9966FF",
+      "#FF9F40",
+      "#FF6384",
+      "#36A2EB",
+      "#FFCE56",
+      "#4BC0C0",
+    ];
+    return colors.slice(0, count);
+  };
+
+  // Convert categories to chart-friendly format
+  const chartData = categories.map((category, index) => ({
+    name: category.name,
+    value: Number(category.productCount), // Convert to number
+    fill: generateColors(categories.length)[index], // Assign unique color
+  }));
+
+  // Create Chart Config
+  const chartConfig: ChartConfig = categories.reduce((acc, category, index) => {
+    acc[category.name] = {
+      label: category.name,
+      color: generateColors(categories.length)[index],
+    };
+    return acc;
+  }, {} as ChartConfig);
+
+  // Total count calculation
+  const totalProducts = useMemo(() => {
+    return chartData.reduce((acc, curr) => acc + curr.value, 0);
+  }, [chartData]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+        <p className="text-muted-foreground">Loading Category chart...</p>
+      </div>
+    );
+  }
 
   return (
     <Card className="flex flex-col max-w-lg mx-auto px-8">
-      <CardHeader className="items-center pb-0 ">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+      <CardHeader className="items-center pb-0">
+        <CardTitle>Product Distribution</CardTitle>
+        <CardDescription>Categories and their product counts</CardDescription>
       </CardHeader>
       <CardContent className="pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square max-h-[303px]"
         >
           <PieChart>
             <ChartTooltip
@@ -75,8 +130,8 @@ export function ChartPie() {
             />
             <Pie
               data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
+              dataKey="value"
+              nameKey="name"
               innerRadius={60}
               strokeWidth={5}
             >
@@ -95,17 +150,17 @@ export function ChartPie() {
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {totalVisitors.toLocaleString()}
+                          {totalProducts.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          Products
                         </tspan>
                       </text>
-                    )
+                    );
                   }
                 }}
               />
@@ -115,12 +170,13 @@ export function ChartPie() {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          The most trending category is {highestProductCatgeory?.name}{" "}
+          <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Showing total product distribution across categories
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }

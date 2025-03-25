@@ -96,22 +96,22 @@ const Order = () => {
             {
               icon: <ListOrdered className="w-6 h-6 text-primary" />,
               label: "Orders",
-              value: response.data.orders.toString(),
+              value: response.data.orders,
             },
             {
               icon: <Package className="w-6 h-6 text-primary" />,
               label: "Order Items overtime",
-              value: response.data.orderItems.length.toString(),
+              value: response.data.orderItems.length,
             },
             {
               icon: <RotateCcw className="w-6 h-6 text-primary" />,
               label: "Returns",
-              value: response.data.returns.toString(),
+              value: response.data.returns,
             },
             {
               icon: <CheckCircle className="w-6 h-6 text-primary" />,
               label: "Fulfilled orders overtime",
-              value: response.data.fulfilledOrders.toString(),
+              value: response.data.fulfilledOrders,
             },
           ];
           setOrderStats(stats);

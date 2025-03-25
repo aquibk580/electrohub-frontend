@@ -1,323 +1,280 @@
-"use client"
+"use client";
 
-import { useState, useMemo } from "react"
-import { useNavigate } from "react-router-dom"
-import { useMediaQuery } from "react-responsive"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
+import { useState, useMemo, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { MessageSquare, Bell, Send, Trash2, Plus, Users, AlertCircle, Search } from "lucide-react"
-import { DashboardStats } from "@/components/Admin/dashboard-stats"
-import { mockData } from "@/data/mock-data"
+} from "@/components/ui/select";
+import {
+  MessageSquare,
+  Search,
+  Filter,
+  Trash2,
+  AlertCircle,
+  ChevronDown,
+  Users,
+  SortAsc,
+} from "lucide-react";
+import { toast } from "react-toastify";
+import axios from "@/lib/axios";
+import { Message } from "@/types/entityTypes";
 
 const Messages = () => {
-  const navigate = useNavigate()
-  const isMobile = useMediaQuery({ maxWidth: 768 })
-  const [emailList, setEmailList] = useState<string[]>([])
-  const [newEmail, setNewEmail] = useState("")
-  const [messageSubject, setMessageSubject] = useState("")
-  const [messageContent, setMessageContent] = useState("")
-  const [activeTab, setActiveTab] = useState("messages")
-  const [searchTerm, setSearchTerm] = useState("")
-  const [sortBy, setSortBy] = useState("default")
-  const [messageTypeFilter, setMessageTypeFilter] = useState("all")
-  const [senderTypeFilter, setSenderTypeFilter] = useState("all")
-  const [timeRangeFilter, setTimeRangeFilter] = useState("all")
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("default");
+  const [timeRangeFilter, setTimeRangeFilter] = useState("all");
+  const [senderTypeFilter, setSenderTypeFilter] = useState("all");
 
+  // Enhanced stats with more visual styling
   const statsData = [
     {
-      icon: <MessageSquare className="w-6 h-6 text-primary" />,
+      icon: <MessageSquare className="w-8 h-8 text-blue-600" />,
       label: "Total Messages",
-      value: mockData.messageStats.totalMessages,
+      value: 1254,
+      bgColor: "bg-blue-50",
     },
     {
-      icon: <Users className="w-6 h-6 text-primary" />,
+      icon: <Users className="w-8 h-8 text-green-600" />,
       label: "Active Chats",
-      value: mockData.messageStats.activeChats,
+      value: 467,
+      bgColor: "bg-green-50",
     },
     {
-      icon: <AlertCircle className="w-6 h-6 text-primary" />,
+      icon: <AlertCircle className="w-8 h-8 text-red-600" />,
       label: "Complaints",
-      value: mockData.messageStats.complaints,
+      value: 52,
+      bgColor: "bg-red-50",
     },
-  ]
+  ];
 
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/admin/messages`
+        );
+        if (response.status === 200) {
+          setMessages(response.data);
+        }
+      } catch (error: any) {
+        toast.error("Failed to load messages", {
+          position: "top-center",
+          theme: "dark",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchMessages();
+  }, []);
+
+  // Memoized filtering and sorting logic
   const filteredMessages = useMemo(() => {
-    let result = [...mockData.messages]
+    let result = [...messages];
 
     // Search filter
     if (searchTerm) {
       result = result.filter(
-        message =>
-          message.sender.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (message) =>
           message.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
           message.message.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    }
-
-    // Message type filter
-    if (messageTypeFilter !== "all") {
-      result = result.filter(message => message.messageType === messageTypeFilter)
-    }
-
-    // Sender type filter
-    if (senderTypeFilter !== "all") {
-      result = result.filter(message => message.senderType === senderTypeFilter)
+      );
     }
 
     // Time range filter
     if (timeRangeFilter !== "all") {
-      const now = new Date()
-      const messageDate = new Date()
-      result = result.filter(message => {
-        const msgDate = new Date(message.timestamp)
+      const now = new Date();
+      result = result.filter((message) => {
+        const msgDate = new Date(message.createdAt);
         switch (timeRangeFilter) {
           case "today":
-            return msgDate.toDateString() === now.toDateString()
+            return msgDate.toDateString() === now.toDateString();
           case "week":
-            const weekAgo = new Date(now.setDate(now.getDate() - 7))
-            return msgDate >= weekAgo
+            const weekAgo = new Date(now.setDate(now.getDate() - 7));
+            return msgDate >= weekAgo;
           case "month":
-            const monthAgo = new Date(now.setMonth(now.getMonth() - 1))
-            return msgDate >= monthAgo
+            const monthAgo = new Date(now.setMonth(now.getMonth() - 1));
+            return msgDate >= monthAgo;
           default:
-            return true
+            return true;
         }
-      })
+      });
     }
 
-    // Sort
+    // Sorting
     if (sortBy !== "default") {
       result.sort((a, b) => {
-        const dateA = new Date(a.timestamp)
-        const dateB = new Date(b.timestamp)
-        return sortBy === "newest" ? dateB.getTime() - dateA.getTime() : dateA.getTime() - dateB.getTime()
-      })
+        const dateA = new Date(a.createdAt);
+        const dateB = new Date(b.createdAt);
+        return sortBy === "newest"
+          ? dateB.getTime() - dateA.getTime()
+          : dateA.getTime() - dateB.getTime();
+      });
     }
 
-    return result
-  }, [searchTerm, sortBy, messageTypeFilter, senderTypeFilter, timeRangeFilter])
+    return result;
+  }, [messages, searchTerm, sortBy, timeRangeFilter]);
 
-  const handleAddEmail = () => {
-    if (newEmail && !emailList.includes(newEmail)) {
-      setEmailList([...emailList, newEmail])
-      setNewEmail("")
-    }
-  }
-
-  const handleRemoveEmail = (email: string) => {
-    setEmailList(emailList.filter(e => e !== email))
-  }
-
-  const handleMessageClick = (message: (typeof mockData.messages)[0]) => {
-    navigate(`/admin/messages/chat/${message.id}`, { state: { message } })
-  }
-
-  const MessageCard = ({ message }: { message: (typeof mockData.messages)[0] }) => (
-    <Card className="mb-4 cursor-pointer hover:bg-accent transition-colors" onClick={() => handleMessageClick(message)}>
-      <CardContent className="p-4 flex items-start justify-between">
-        <div className="flex-1">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold">{message.sender}</span>
-            {message.unread && <Badge variant="destructive" className="h-2 w-2 rounded-full p-0" />}
+  // Enhanced Message Card Component
+  const MessageCard = ({ message }: { message: Message }) => (
+    <div className="bg-white border rounded-xl shadow-sm hover:shadow-md transition-all duration-300 mb-4 overflow-hidden group">
+      <div className="p-4 flex items-start justify-between">
+        <div className="flex-1 space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <h3 className="font-semibold text-lg text-gray-800">
+                {message.name}
+              </h3>
+              <Badge variant="secondary" className="text-xs">
+                {message.email}
+              </Badge>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <Trash2 size={18} />
+            </Button>
           </div>
-          <p className="text-sm font-medium">{message.subject}</p>
-          <p className="text-sm text-muted-foreground mt-1">{message.message}</p>
-          <span className="text-xs text-muted-foreground">
-            {new Date(message.timestamp).toLocaleString()}
-          </span>
+          
+          <div className="space-y-1">
+            <p className="font-medium text-gray-700">{message.subject}</p>
+            <p className="text-sm text-gray-500 line-clamp-2">
+              {message.message}
+            </p>
+          </div>
+          
+          <div className="flex items-center justify-between text-xs text-gray-400">
+            <span>
+              {new Date(message.createdAt).toLocaleString()}
+            </span>
+          </div>
         </div>
-        <div className="flex flex-col gap-2">
-          <Badge variant={message.senderType === "Seller" ? "default" : "secondary"}>
-            {message.senderType}
-          </Badge>
-          <Badge variant="outline">{message.messageType}</Badge>
+      </div>
+    </div>
+  );
+
+  // Stats Card Component
+  const StatsCard = () => (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {statsData.map((stat, index) => (
+        <div 
+          key={index} 
+          className={`${stat.bgColor} rounded-xl p-5 flex items-center space-x-4 shadow-sm`}
+        >
+          <div className="rounded-full bg-white p-3 shadow-md">
+            {stat.icon}
+          </div>
+          <div>
+            <p className="text-sm text-gray-600 font-medium">{stat.label}</p>
+            <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
+          </div>
         </div>
-      </CardContent>
-    </Card>
-  )
+      ))}
+    </div>
+  );
 
   return (
-    <div className="w-full px-2 py-2 sm:px-4 sm:py-4 space-y-4">
-      <Tabs defaultValue="messages" className="space-y-4" onValueChange={setActiveTab}>
-        <TabsList className="w-full sm:w-auto">
-          <TabsTrigger value="messages" className="flex-1 sm:flex-none text-sm sm:text-base">
-            <MessageSquare className="w-4 h-4 mr-2" />
-            Messages
-          </TabsTrigger>
-          <TabsTrigger value="notifications" className="flex-1 sm:flex-none text-sm sm:text-base">
-            <Bell className="w-4 h-4 mr-2" />
-            Send Notifications
-          </TabsTrigger>
-        </TabsList>
+    <div className="bg-gray-50 min-h-screen p-6">
+      <div className="max-w-7xl mx-auto space-y-6">
+        <Card className="border-none shadow-lg rounded-2xl">
+          <CardContent className="p-6">
+            <StatsCard />
+          </CardContent>
+        </Card>
 
-        <TabsContent value="messages" className="space-y-4">
-          <Card className="shadow-md rounded-lg py-4">
-            <CardContent className="p-4">
-              <DashboardStats stats={statsData} showFilters={false} />
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Messages</CardTitle>
-              <div className="flex flex-col sm:flex-row gap-4 mt-4">
-                <div className="flex-1">
-                  <div className="relative">
-                    <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      placeholder="Search messages..."
-                      className="pl-8"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-[140px]">
-                      <SelectValue placeholder="Sort by" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="default">Default</SelectItem>
-                      <SelectItem value="newest">Newest First</SelectItem>
-                      <SelectItem value="oldest">Oldest First</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select value={messageTypeFilter} onValueChange={setMessageTypeFilter}>
-                    <SelectTrigger className="w-[140px]">
-                      <SelectValue placeholder="Message Type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Types</SelectItem>
-                      <SelectItem value="Question">Questions</SelectItem>
-                      <SelectItem value="Complaint">Complaints</SelectItem>
-                      <SelectItem value="Support">Support</SelectItem>
-                      <SelectItem value="Feedback">Feedback</SelectItem>
-                      <SelectItem value="Request">Requests</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select value={senderTypeFilter} onValueChange={setSenderTypeFilter}>
-                    <SelectTrigger className="w-[140px]">
-                      <SelectValue placeholder="Sender Type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Senders</SelectItem>
-                      <SelectItem value="Seller">Sellers</SelectItem>
-                      <SelectItem value="Buyer">Buyers</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select value={timeRangeFilter} onValueChange={setTimeRangeFilter}>
-                    <SelectTrigger className="w-[140px]">
-                      <SelectValue placeholder="Time Range" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Time</SelectItem>
-                      <SelectItem value="today">Today</SelectItem>
-                      <SelectItem value="week">This Week</SelectItem>
-                      <SelectItem value="month">This Month</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+        <Card className="border-none shadow-lg rounded-2xl">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-2xl font-bold text-gray-800">
+                Message Center
+              </CardTitle>
+              <div className="flex items-center space-x-2">
+                <Button variant="outline" size="sm" className="space-x-2">
+                  <Filter size={16} />
+                  <span>Filters</span>
+                </Button>
+                <Button variant="outline" size="sm" className="space-x-2">
+                  <SortAsc size={16} />
+                  <span>Sort</span>
+                </Button>
               </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <ScrollArea className="h-[500px] md:h-[550px] pr-4">
-                {filteredMessages.map((message) => (
-                  <MessageCard key={message.id} message={message} />
-                ))}
-              </ScrollArea>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </div>
+          </CardHeader>
+          
+          <CardContent className="space-y-4">
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="relative md:col-span-2">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Input
+                  placeholder="Search messages..."
+                  className="pl-10 py-2 rounded-xl border-gray-300"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              
+              <div className="flex space-x-2">
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="rounded-xl">
+                    <SelectValue placeholder="Sort">
+                      <div className="flex items-center space-x-2">
+                        <SortAsc size={16} />
+                        <span>
+                          {sortBy === "default" 
+                            ? "Default" 
+                            : sortBy === "newest" 
+                            ? "Newest" 
+                            : "Oldest"}
+                        </span>
+                      </div>
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="default">Default</SelectItem>
+                    <SelectItem value="newest">Newest First</SelectItem>
+                    <SelectItem value="oldest">Oldest First</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
 
-        <TabsContent value="notifications" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Create Notification</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
+            <ScrollArea className="h-[500px] pr-4">
               <div className="space-y-4">
-                <div>
-                  <h3 className="text-sm font-medium mb-2">Add Recipients</h3>
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="Enter email address"
-                      value={newEmail}
-                      onChange={(e) => setNewEmail(e.target.value)}
-                    />
-                    <Button onClick={handleAddEmail}>
-                      <Plus className="w-4 h-4" />
-                    </Button>
+                {isLoading ? (
+                  <div className="text-center text-gray-500 py-10">
+                    Loading messages...
                   </div>
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  {emailList.map((email) => (
-                    <Badge key={email} variant="secondary" className="py-1 px-3">
-                      {email}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="ml-2 h-4 w-4 p-0"
-                        onClick={() => handleRemoveEmail(email)}
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
-                    </Badge>
-                  ))}
-                </div>
-
-                <div className="space-y-2">
-                  <Input
-                    placeholder="Subject"
-                    value={messageSubject}
-                    onChange={(e) => setMessageSubject(e.target.value)}
-                  />
-                  <Textarea
-                    placeholder="Write your message here..."
-                    className="min-h-[200px]"
-                    value={messageContent}
-                    onChange={(e) => setMessageContent(e.target.value)}
-                  />
-                </div>
-
-                <div className="flex justify-end gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setMessageContent("")
-                      setMessageSubject("")
-                      setEmailList([])
-                    }}
-                  >
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    Clear
-                  </Button>
-                  <Button>
-                    <Send className="w-4 h-4 mr-2" />
-                    Send Notification
-                  </Button>
-                </div>
+                ) : filteredMessages.length > 0 ? (
+                  filteredMessages.map((message) => (
+                    <MessageCard key={message.id} message={message} />
+                  ))
+                ) : (
+                  <div className="text-center text-gray-500 py-10">
+                    No messages found
+                  </div>
+                )}
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Messages
-
+export default Messages;

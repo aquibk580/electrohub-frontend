@@ -19,17 +19,23 @@ import { DataTable } from "@/components/Admin/data-table";
 import { TableWrapper } from "@/components/Admin/table-wrapper";
 import DashboardStats from "@/components/Admin/dashboard-stats";
 import axios from "@/lib/axios";
-import IndiaMap from "@/components/Admin/map-skeleton";
 import { Product } from "@/types/entityTypes";
 import { formatPrice } from "@/utils/FormatPrice";
 import { Loader2 } from "lucide-react";
 import { toast } from "react-toastify";
 import { formatDate } from "@/lib/utils";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { ChartPie } from "@/components/Admin/Chart-Pie";
 const IndiaSalesMap = React.lazy(
   () => import("@/components/Admin/india-sales-map")
 );
 
 const Dashboard = () => {
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.admin.isAuthenticated
+  );
+  if (!isAuthenticated) return null;
   const [loading, setLoading] = useState(true);
   const [statisticsLoading, setStatisticsLoading] = useState(true);
   const [stats, setStats] = useState<
@@ -96,7 +102,9 @@ const Dashboard = () => {
         setLoading(false);
       }
     };
-    getTopSellingProducts();
+    if (isAuthenticated) {
+      getTopSellingProducts();
+    }
   }, []);
 
   useEffect(() => {
@@ -113,7 +121,7 @@ const Dashboard = () => {
             },
             {
               label: "Total Sales",
-              value: `₹${formatPrice(response.data.sales)}`,
+              value: response.data.sales,
             },
             {
               label: "Monthly Orders",
@@ -147,14 +155,16 @@ const Dashboard = () => {
         setStatisticsLoading(false);
       }
     };
-    getSalesStatistics();
+    if (isAuthenticated) {
+      getSalesStatistics();
+    }
   }, []);
 
   const topProducts = topSellingProducts.map((product, index) => ({
     srNumber: index + 1,
     productName: product.name.substring(0, 80) + "...",
     unitsSold: product._count.orderItems,
-    totalProfits: `₹${formatPrice(
+    totalSales: `₹${formatPrice(
       (product.price - (product.offerPercentage / 100) * product.price) *
         product._count.orderItems
     )}`,
@@ -212,19 +222,9 @@ const Dashboard = () => {
                 </ResponsiveContainer>
               </CardContent>
             </Card>
-            <Suspense
-              fallback={
-                <div>
-                  <IndiaMap />
-                </div>
-              }
-            >
-              <IndiaSalesMap
-                salesData={salesData}
-                height="450px"
-                className="border-border flex p-3 bg-white dark:bg-black stroke-black/20 "
-              />
-            </Suspense>
+            <div className="max-w-lg">
+              <ChartPie />
+            </div>
           </div>
         </>
       )}
@@ -250,7 +250,7 @@ const Dashboard = () => {
                     { key: "srNumber", label: "Sr No." },
                     { key: "productName", label: "Product Name" },
                     { key: "unitsSold", label: "Units Sold" },
-                    { key: "totalProfits", label: "Total Profits" },
+                    { key: "totalSales", label: "Total Sales" },
                   ]}
                   data={topProducts}
                   type={"seller"}

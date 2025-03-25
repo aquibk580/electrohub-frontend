@@ -10,14 +10,13 @@ import {
   User,
   ShoppingBag,
   ClipboardList,
-  Wallet,
-  BarChart2,
   Bell,
   Shield,
   PackageSearch,
   BadgePlus,
   CircleUserRound,
   Home,
+  FolderKanban
 } from "lucide-react";
 
 import { NavMain } from "./nav-main";
@@ -106,16 +105,6 @@ export function AppSidebar({ userRole, ...props }: AppSidebarProps) {
           icon: ClipboardList,
         },
         {
-          title: "Payments & Transaction",
-          url: "/admin/payments",
-          icon: Wallet,
-        },
-        {
-          title: "Reports & Analytics",
-          url: "/admin/reports",
-          icon: BarChart2,
-        },
-        {
           title: "Notification & Messages",
           url: "/admin/messages",
           icon: Bell,
@@ -123,7 +112,7 @@ export function AppSidebar({ userRole, ...props }: AppSidebarProps) {
         {
           title: "CMS",
           url: "/admin/cms",
-          icon: Bell,
+          icon: FolderKanban,
         },
         {
           title: "Settings",

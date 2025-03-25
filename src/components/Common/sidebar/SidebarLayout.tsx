@@ -15,7 +15,7 @@ const SidebarLayout = ({ children }: SidebarLayoutProps) => {
   const location = useLocation();
   const breadcrumbs = findBreadcrumbConfig(location.pathname);
   const navigate = useNavigate();
-  
+
   const isAuthenticated = useSelector(
     (state: RootState) => state.admin.isAuthenticated
   );
@@ -25,7 +25,6 @@ const SidebarLayout = ({ children }: SidebarLayoutProps) => {
       navigate("/");
     }
   }, []);
- 
 
   return (
     <SidebarProvider className="flex h-screen">

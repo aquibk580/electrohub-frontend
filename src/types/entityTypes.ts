@@ -92,3 +92,13 @@ export interface Seller {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface Message {
+  id: number;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
