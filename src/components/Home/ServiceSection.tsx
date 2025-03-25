@@ -21,7 +21,7 @@ const ServiceCard = ({ item }: { item: (typeof serviceContain)[0] }) => {
   const backContent = BackContent[item.id as keyof typeof BackContent]
 
   return (
-    <div className="h-[400px] hidden md:block perspective-1000">
+    <div className="h-[370px] hidden md:block perspective-1000">
       <motion.div
         className="relative w-full h-full cursor-pointer preserve-3d"
         initial={false}

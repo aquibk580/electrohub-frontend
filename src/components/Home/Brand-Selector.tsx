@@ -3,7 +3,7 @@ import { useTheme } from "@/components/theme-provider";
 import axios from "@/lib/axios";
 import { Seller } from "../../types/entityTypes";
 import { useNavigate } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { BadgeCheck, Loader2 } from "lucide-react";
 
 interface SellerProps {
   name: string;
@@ -22,20 +22,21 @@ const SellerCard = ({
     <div
       onClick={onClick}
       className={`
+        h-[120px]
         rounded-xl p-2 sm:p-3 md:p-4 
         flex items-center gap-2 sm:gap-3 md:gap-4 
         cursor-pointer transition-all duration-300
         bg-white dark:bg-gray-950
-        shadow-sm
+        shadow-sm 
         hover:shadow-lg hover:scale-105
         dark:shadow-gray-900
-        border border-gray-100 dark:border-gray-700
+        border  dark:border-gray-700
       `}
     >
-      <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 
+      <div className="w-16  h-16  sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-24 lg:h-24 border-2 border-primary/30 p-1 
                   rounded-full overflow-hidden flex-shrink-0
                   flex items-center justify-center 
-                  bg-gray-50 dark:bg-gray-900
+                   dark:bg-gray-900
                  ">
         <img
           src={logo || "/placeholder.svg"}
@@ -49,9 +50,10 @@ const SellerCard = ({
       <div className="flex flex-col min-w-0">
         <h3 className="font-semibold text-sm sm:text-base md:text-lg lg:text-xl truncate 
                       text-gray-900 dark:text-white">
-          {name}
+          {name}  
         </h3>
-        <p className="text-xs sm:text-sm md:text-base truncate 
+       
+        <p className="text-xs sm:text-sm  truncate 
                     text-gray-500 dark:text-gray-300">
           {deliveryTime}
         </p>
@@ -99,10 +101,10 @@ export default function TopSellers() {
 
   return (
     <section
-      className={`w-full py-4 sm:py-6 md:py-8 px-2 sm:px-3 md:px-4 lg:px-10 `}
+      className={`w-full  sm:py-6 md:py-8 px-2 sm:px-3 md:px-4 lg:px-1 `}
     >
       <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-8">
-        Top Sellers
+        Top Sellers & Brands
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
         {sellers.map((seller) => (

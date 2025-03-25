@@ -114,8 +114,8 @@ const Cart = () => {
   };
 
   return (
-    <div className="flex flex-col xl:flex-row gap-6 h-full">
-      <Card className="flex flex-col overflow-hidden rounded-lg shadow-md w-full">
+    <div className="flex flex-col xl:flex-row gap-4 h-full">
+      <Card className="flex flex-col overflow-hidden rounded-xl shadow-md w-full">
         <CardContent className="p-6 flex flex-col h-full">
           <h2 className="text-2xl font-semibold mb-4">Shopping Cart</h2>
           <div className="space-y-6 overflow-y-auto flex-1">

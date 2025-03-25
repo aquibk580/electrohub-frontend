@@ -98,7 +98,7 @@ const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
   const bgColor = useMemo(() => getRandomColor(), [])
 
   return (
-    <div ref={ref} className="w-64 h-fit m-6 mr-0 hidden lg:grid grid-rows-[auto_1fr_auto] gap-6">
+    <div ref={ref} className="w-64 h-fit m-6 mr-0 hidden lg:grid grid-rows-[auto_1fr_auto] gap-3">
       {/* User profile card */}
       <div className="flex items-center gap-4 bg-white dark:bg-black p-4 shadow-md rounded-xl">
         <div className="h-12 w-12 flex items-center justify-center ">
@@ -121,9 +121,9 @@ const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
           <Link
             key={index}
             to={item.path}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg h-fit text-accent-foreground 
+            className={`flex items-center gap-3 px-6 py-3 rounded-lg h-fit text-foreground 
               hover:bg-accent
-              ${activeItem === item.text && "bg-primary/25 hover:bg-primary/35 "}`}
+              ${activeItem === item.text && "bg-primary/70 hover:bg-primary/40 "}`}
           >
             <item.icon className="h-5 w-5" />
             <span>{item.text}</span>

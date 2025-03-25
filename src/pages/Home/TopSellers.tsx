@@ -2,7 +2,7 @@ import type React from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Package, Star, ShoppingCart, Loader2 } from "lucide-react";
+import { Package, Star, ShoppingCart, Loader2, BadgeCheck, CheckCircle } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "@/lib/axios";
@@ -58,59 +58,58 @@ const TopSellerPage: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Card className="p-6 mb-8">
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+    <div className="container mx-auto px-4 py-4">
+      <Card className="p-8 mb-10  rounded-xl relative overflow-hidden">
+        <div className="absolute "></div>
+        <div className="relative flex flex-col md:flex-row items-center gap-8">
           <div className="relative">
             <img
               src={seller?.pfp || "/placeholder.svg"}
               alt={seller?.name}
-              className="w-32 h-32 rounded-full object-contain border-4 border-primary/20"
+              className="w-40 h-40 rounded-full object-cover border-4 border-primary p-1 shadow-xl hover:scale-110 transition-transform"
             />
-            <Badge className="absolute bottom-0 right-0 px-2 py-1">
-              Top Seller
+            <Badge className="absolute bottom-1 left-5 px-3 py-1 bg-green-500 text-white flex items-center gap-1 shadow-md text-sm font-semibold">
+              <CheckCircle className="w-5 h-5" /> Top Seller
             </Badge>
           </div>
-
-          <div className="flex flex-col items-center md:items-start">
-            <h1 className="text-3xl font-bold">{seller?.name}</h1>
-            <div className="flex items-center gap-2 mt-2">
-              <Package className="w-5 h-5 text-muted-foreground" />
-              <span className="text-lg text-muted-foreground">
-                {seller?.products.length} Products
-              </span>
-            </div>
-            <div className="flex items-center gap-2 mt-1">
-              <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-              <span className="text-lg">{averageRating} Average Rating</span>
-            </div>
-            <div className="flex items-center gap-2 mt-1">
-              <ShoppingCart className="w-5 h-5 text-muted-foreground" />
-              <span className="text-lg text-muted-foreground">
-                {totalSales} Total Sales
-              </span>
+          <div className="text-center md:text-left">
+            <h1 className="text-5xl font-extrabold drop-shadow-md">{seller?.name}</h1>
+            <p className="text-lg mt-2 font-medium opacity-90">Premium Quality & Express Delivery</p>
+            <div className="flex items-center gap-6 mt-6">
+              <div className="flex items-center gap-3 bg-white border  p-2 rounded-xl ">
+                <Package className="w-7 h-7 text-yellow-300" />
+                <span className="text-xl font-bold">{seller?.products.length} Products</span>
+              </div>
+              <div className="flex items-center gap-3 bg-white border p-2 rounded-xl">
+                <Star className="w-7 h-7 text-yellow-400" />
+                <span className="text-xl font-bold">{averageRating} Avg Rating</span>
+              </div>
+              <div className="flex items-center gap-3 bg-white border p-2 rounded-xl">
+                <ShoppingCart className="w-7 h-7 text-green-300" />
+                <span className="text-xl font-bold">{totalSales} Sales</span>
+              </div>
             </div>
           </div>
         </div>
       </Card>
-
-      <div className="mb-6">
+<hr />
+      <div className="mb-6 mt-3 px-1">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold">Products</h2>
+          <h2 className="text-3xl font-bold">All Products</h2>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 cursor-pointer">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 cursor-pointer px-2">
         {seller!.products.length > 0 ? (
           seller?.products.map((product) => (
-            <Card key={product.id} className="overflow-hidden">
+            <Card key={product.id} className="border-none shadow-none overflow-hidden">
               <Link to={`/product/${product.id}`}>
                 <img
                   src={product.images[0].url || "/placeholder.svg"}
                   alt={product.name}
-                  className="w-full h-48 object-contain"
+                  className="w-full bg-muted rounded-xl object-contain"
                 />
-                <div className="p-4">
+                <div className="p-2">
                   <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
                   <div className="flex justify-between items-center">
                     <span className="text-xl font-bold">

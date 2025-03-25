@@ -15,7 +15,7 @@ const LoadingFallback = () => (
 
 const Home = () => {
   return (
-    <div className="flex flex-col space-y-12 md:space-y-16 lg:space-y-20 mx-auo px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <div className="flex flex-col space-y-12 md:space-y-1 lg:space-y-8 mx-auo px-4 sm:px-6 lg:px-5  md:py-2">
       {/* Hero Banner */}
       <section className="w-full animate__animated animate__fadeIn">
         <Suspense fallback={<LoadingFallback />}>
@@ -32,22 +32,25 @@ const Home = () => {
         <Suspense fallback={<LoadingFallback />}>
           <ProductCarousel />
         </Suspense>
+        
       </section>
-
+      <hr className="h-1 bg-black rounded-full" />
       {/* All Products */}
       <section className="w-full animate__animated animate__fadeIn animate__delay-2s">
+      
         <Suspense fallback={<LoadingFallback />}>
           <AllProducts />
         </Suspense>
       </section>
 
+<hr  className="bg-black h-1"/>
       {/* Top Sellers */}
       <section className="w-full animate__animated animate__fadeIn animate__delay-3s">
         <Suspense fallback={<LoadingFallback />}>
           <TopSellers />
         </Suspense>
       </section>
-
+      <hr  className="bg-black h-1"/>
       {/* Services */}
       <section className="w-full animate__animated animate__fadeIn animate__delay-4s">
         <Suspense fallback={<LoadingFallback />}>

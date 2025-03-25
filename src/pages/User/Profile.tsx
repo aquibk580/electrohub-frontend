@@ -110,7 +110,7 @@ const PersonalInfo = () => {
   };
 
   const renderField = (field: keyof FormData, label: string) => (
-    <div className="space-y-2">
+    <div className="space-y-2 ">
       <div className="flex justify-between items-center">
         <Label>{label}</Label>
         {editingField === field ? (
@@ -147,7 +147,7 @@ const PersonalInfo = () => {
   );
 
   return (
-    <Card className="rounded-lg shadow-md">
+    <Card className="rounded-xl shadow-md">
       <CardContent className="p-6">
         <h1 className="text-2xl font-semibold mb-8">Personal Information</h1>
 

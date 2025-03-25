@@ -78,7 +78,7 @@ export function Wishlist() {
   };
 
   return (
-    <Card className="h-full flex flex-col rounded-lg shadow-md">
+    <Card className="h-full flex flex-col rounded-xl shadow-md">
       <CardHeader>
         <div className="flex items-center gap-4 mb-6">
           <img

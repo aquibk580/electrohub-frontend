@@ -60,26 +60,26 @@ export default function ProductCarousel() {
     >
       <CarouselContent>
         {productCarousels.map((productCarousel) => (
-          <CarouselItem key={productCarousel.id} className="basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
+          <CarouselItem key={productCarousel.id} className="basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5 ">
             <Card
-              className="overflow-hidden border border-border hover:border-primary/20 transition-all duration-300 hover:shadow-md"
+              className="overflow-hidden cursor-pointer"
               onClick={() => navigate(productCarousel.href)}
             >
               <div className="relative pt-4 px-4">
-                <Badge variant="secondary" className="absolute top-2 right-2 z-10">
+                <Badge variant="secondary" className="absolute top-2 rounded-lg right-2 z-10">
                   Featured
                 </Badge>
-                <div className="aspect-square rounded-md overflow-hidden bg-muted/50 flex items-center justify-center">
+                <div className="aspect-square rounded-md overflow-hidden  flex items-center justify-center">
                   <img
                     src={productCarousel.imageUrl || "/placeholder.svg"}
                     alt={productCarousel.name}
-                    className="h-full w-full object-contain transition-transform duration-300 hover:scale-110"
+                    className="h-full w-full object-contain "
                   />
                 </div>
               </div>
               <CardContent className="p-4 text-center">
-                <h3 className="font-medium text-foreground line-clamp-1 mb-1">{productCarousel.name}</h3>
-                <p className="text-green-600 font-semibold">From ₹{formatPrice(productCarousel.price)}</p>
+                <h3 className="font-semibold p-1 border-b-2  text-foreground line-clamp-1 mb-1">{productCarousel.name}</h3>
+                <p className="text-green-600 font-semibold text-sm"> Starting From ₹{formatPrice(productCarousel.price)}</p>
               </CardContent>
             </Card>
           </CarouselItem>

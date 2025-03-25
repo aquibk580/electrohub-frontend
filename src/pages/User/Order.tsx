@@ -60,14 +60,14 @@ export default function Orders() {
   };
 
   return (
-    <div className="flex flex-col h-full gap-6">
-      <Card className="grid grid-cols-[1fr_auto] items-center p-[1.35rem] gap-4 rounded-lg shadow-md">
+    <div className="flex flex-col h-full gap-3">
+      <Card className="grid grid-cols-[1fr_auto] items-center p-[1.35rem] gap-4 rounded-xl shadow-md">
         <div className="flex items-center w-full">
           <Input
             placeholder="Search your orders here"
-            className="w-full sm:w-auto flex-1 focus-visible:ring-0"
+            className="w-full sm:w-auto flex-1 rounded-l-lg focus-visible:ring-0"
           />
-          <Button className="flex items-center gap-2 w-fit bg-green-900 text-white rounded-r-md rounded-l-none ">
+          <Button className="flex items-center gap-2 w-fit bg-green-900 text-white rounded-r-lg rounded-l-none ">
             <Search size={16} />{" "}
             <span className="hidden sm:block">Search Orders</span>
           </Button>
@@ -75,7 +75,7 @@ export default function Orders() {
         <FilterDropDown />
       </Card>
 
-      <Card className="flex-1 flex flex-col overflow-hidden rounded-lg shadow-md">
+      <Card className="flex-1 flex flex-col overflow-hidden rounded-xl shadow-md">
         <CardHeader>
           <h1 className="font-semibold text-2xl">My Orders</h1>
         </CardHeader>

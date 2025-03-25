@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import ProductCardWithPreview from "./product-card-with-preview"
-const PRODUCTS_PER_PAGE = 16
+const PRODUCTS_PER_PAGE = 12
 
 const AllProducts = () => {
   const [categories, setCategories] = useState<Category[]>([])
@@ -258,7 +258,7 @@ const AllProducts = () => {
               onClick={loadMoreProducts}
               variant="outline"
               size="lg"
-              className="min-w-[200px]"
+              className="min-w-[200px] rounded-lg bg-none hover:bg-primary hover:text-white"
               disabled={loadingMore}
             >
               {loadingMore ? (
@@ -267,7 +267,7 @@ const AllProducts = () => {
                   Loading...
                 </span>
               ) : (
-                "Load More Products"
+                "More Products"
               )}
             </Button>
           </div>

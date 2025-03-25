@@ -131,12 +131,12 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
 
   return (
     <div
-      className="group bg-card text-card-foreground rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-border hover:border-primary/20"
+      className="group bg-card text-card-foreground   overflow-hidden "
       onClick={handleNavigate}
     >
       <div className="relative">
         {/* Product image */}
-        <div className="w-full bg-muted/40 p-2 rounded-t-xl overflow-hidden aspect-square">
+        <div className="w-full bg-muted p-2   overflow-hidden aspect-square rounded-[10px] ">
           <img
             loading="lazy"
             src={product.images[0]?.url || "/placeholder.svg"}
@@ -147,7 +147,7 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
 
         {/* Discount badge */}
         {hasDiscount && (
-          <Badge variant="destructive" className="absolute top-2 left-2">
+          <Badge variant="destructive" className="absolute top-2 rounded-lg left-2">
             {product.offerPercentage}% OFF
           </Badge>
         )}
@@ -221,7 +221,7 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
             </TooltipProvider>
           ) : (
             product?.status === "OutOfStock" && (
-              <Badge variant="outline" className="text-red-500 border-red-200 bg-red-50">
+              <Badge variant="outline" className="text-red-500 border-red-200 bg-red-50 rounded-lg">
                 Out of Stock
               </Badge>
             )
