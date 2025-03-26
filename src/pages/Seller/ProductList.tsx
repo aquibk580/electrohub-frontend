@@ -140,12 +140,12 @@ export default function ProductList() {
 
   return (
     <div className=" space-y-5 ">
-      <div className="border rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm ">
-        <h2 className="text-2xl text-accent-foreground font-semibold">
+      <div className="border border-primary/30 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black  rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm ">
+        <h2 className="text-2xl text-primary font-semibold">
           Products
         </h2>
 
-        <Card className="w-full lg:w-[100%] flex flex-nowrap  text-secondary-foreground  bg-muted/50 rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x">
+        <Card className="w-full lg:w-[100%] flex flex-nowrap  border-primary/50  bg-primary/10 rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x">
           <div className="flex items-center space-x-2 p-4 text-primary">
             <CalendarCheck className="w-6 h-6" />
             <span className="font-semibold text-lg">Current Updates</span>
@@ -153,9 +153,9 @@ export default function ProductList() {
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="p-3 px-4 border-l-2 border-zinc-300 min-w-[190px]  flex flex-col"
+              className="p-3 px-4 border-l-2 border-primary/50 min-w-[190px]  flex flex-col"
             >
-              <div className="text-sm text-muted-foreground truncate">
+              <div className="text-sm truncate">
                 {stat.label}
               </div>
               <div className="text-xl font-semibold truncate text-primary">
@@ -192,7 +192,7 @@ export default function ProductList() {
           </div>
         </Tabs>
       </div>
-      <div className="space-y-3 border p-3 rounded-xl shadow-sm  bg-[#e8e8e814] animate__animated animate__fadeIn">
+      <div className="space-y-3 border p-3 rounded-xl shadow-sm border-primary/30 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black  animate__animated animate__fadeIn">
         <h2 className="text-xl pl-1 text-primary font-semibold">
           All Product Lists
         </h2>
@@ -201,18 +201,12 @@ export default function ProductList() {
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-secondary-foreground" />
             <Input
               placeholder="Search Order..."
-              className="pl-8 bg-background rounded-full focus:bg-secondary transition-colors"
+              className="pl-8 bg-transparent border-primary/50 rounded-full  transition-colors"
             />
           </div>
 
           <div className="flex gap-2">
-            <Button className="bg-primary text-primary-foreground shadow-md rounded-lg hover:bg-primary/80 p-3">
-              <LayoutGrid size={24} />
-            </Button>
-
-            <Button className="bg-primary text-primary-foreground shadow-md rounded-lg hover:bg-primary/80 p-3">
-              <List size={24} />
-            </Button>
+           
 
             <Button className="bg-primary text-primary-foreground shadow-md border rounded-lg px-5 py-3 hover:bg-primary/80 flex items-center gap-2">
               <Filter size={24} />
@@ -223,34 +217,34 @@ export default function ProductList() {
 
         {/* Orders Table */}
         {paginatedProducts.length === 0 ? (
-          <h2 className="text-muted-foreground font-bold text-center text-xl p-16">
+          <h2 className=" font-bold text-center text-xl p-16">
             No Products!
           </h2>
         ) : (
-          <Card className="p-2 md:p-4 border rounded-xl bg-background  border-zinc-200 overflow-hidden">
+          <Card className="p-2 md:p-4 border rounded-xl bg-background  border-primary/30 overflow-hidden">
             <div className="overflow-x-auto ">
               <Table className="w-full ">
                 <TableHeader className="bg-primary  rounded-lg  overflow-hidden">
-                  <TableRow className="border-none ">
-                    <TableHead className="text-primary-foreground text-base font-semibold text-center rounded-l-lg">
+                  <TableRow className="border-none hover:bg-transparent ">
+                    <TableHead className="text-primary-foreground  font-semibold text-center rounded-l-lg">
                       Sr.No.
                     </TableHead>
-                    <TableHead className="text-primary-foreground text-base font-semibold">
+                    <TableHead className="text-primary-foreground  font-semibold">
                       Image
                     </TableHead>
-                    <TableHead className="text-primary-foreground text-base font-semibold ">
+                    <TableHead className="text-primary-foreground  font-semibold ">
                       Product Name
                     </TableHead>
-                    <TableHead className="text-primary-foreground text-base font-semibold text-center">
+                    <TableHead className="text-primary-foreground  font-semibold text-center">
                       Price
                     </TableHead>
-                    <TableHead className="text-primary-foreground text-base font-semibold text-center">
+                    <TableHead className="text-primary-foreground  font-semibold text-center">
                       Stock
                     </TableHead>
-                    <TableHead className="text-primary-foreground text-base font-semibold text-center">
+                    <TableHead className="text-primary-foreground  font-semibold text-center">
                       Status
                     </TableHead>
-                    <TableHead className="text-primary-foreground text-base font-semibold text-center rounded-r-lg">
+                    <TableHead className="text-primary-foreground  font-semibold text-center rounded-r-lg">
                       Details
                     </TableHead>
                   </TableRow>
@@ -271,7 +265,7 @@ export default function ProductList() {
                             product.images?.[0]?.url || assets.shoppingBoyGif
                           }
                           alt="Product"
-                          className={`w-16 mix-blend-multiply dark:mix-blend-difference rounded-xl`}
+                          className={`w-16 md:w-20  mix-blend-multiply dark:mix-blend-difference rounded-xl`}
                         />
                       </TableCell>
                       <TableCell className="truncate max-w-[500px]">

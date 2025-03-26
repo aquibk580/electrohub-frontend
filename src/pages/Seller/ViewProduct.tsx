@@ -200,11 +200,11 @@ export default function ViewProduct() {
 
       {/* Quick Stats Cards */}
       <div className="grid grid-cols-1  md:grid-cols-3 gap-4">
-        <Card className="shadow-sm hover:shadow-md transition-all">
-          <CardContent className="pt-6">
+        <Card className="shadow-sm hover:shadow-md border-primary/50 bg-primary/5 dark:bg-gradient-to-br from-primary/15 via-primary/10 to-black   transition-all">
+          <CardContent className="pt-6 ">
             <div className="flex flex-wrap-reverse gap-2 justify-between items-center">
               <div>
-                <p className="text-sm font-medium text-gray-500">Total Sales</p>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-300">Total Sales</p>
                 <h3 className="text-2xl font-bold">₹2,45,000</h3>
               </div>
               <div className="p-2 bg-green-100 rounded-full">
@@ -213,11 +213,11 @@ export default function ViewProduct() {
             </div>
           </CardContent>
         </Card>
-        <Card className="shadow-sm hover:shadow-md transition-all">
+        <Card className="shadow-sm hover:shadow-md border-primary/50 bg-primary/5 dark:bg-gradient-to-br from-primary/15 via-primary/10 to-black   transition-all">
           <CardContent className="pt-6 ">
             <div className="flex flex-wrap-reverse gap-2 justify-between items-center">
               <div>
-                <p className="text-sm font-medium text-gray-500">
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-300">
                   Total Units Sold
                 </p>
                 <h3 className="text-2xl font-bold">157</h3>
@@ -228,11 +228,11 @@ export default function ViewProduct() {
             </div>
           </CardContent>
         </Card>
-        <Card className="shadow-sm hover:shadow-md transition-all">
+        <Card className="shadow-sm hover:shadow-md border-primary/50 bg-primary/5 dark:bg-gradient-to-br from-primary/15 via-primary/10 to-black   transition-all">
           <CardContent className="pt-6">
             <div className="flex flex-wrap-reverse gap-2 justify-between items-center">
               <div>
-                <p className="text-sm font-medium text-gray-500">
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-300">
                   Current Stock{" "}
                 </p>
                 <h3 className="text-2xl font-bold">{product!.stock}</h3>
@@ -254,13 +254,13 @@ export default function ViewProduct() {
 
         {/* Product Details Tab */}
         <TabsContent value="details" className="space-y-4 ">
-          <Card className="shadow-sm">
+          <Card className="shadow-sm border-primary/50 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black  ">
             <CardHeader>
-              <CardTitle className="bg-primary text-primary-foreground py-3 px-2 rounded-md">
+              <CardTitle className="bg-primary/30  text-primary py-3 px-2 rounded-md">
                 Product Information
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 ">
+            <CardContent className="space-y-4  ">
               {/* Grid Layout for Product Details */}
               <div className="grid grid-cols-1 md:grid-cols-2 px-2 gap-4">
                 {/* Product Name - Full width on small screens, 1st column on md */}
@@ -317,7 +317,7 @@ export default function ViewProduct() {
               </div>
               <hr />
               <div className="space-y-4 grid grid-cols ">
-                <Label className="font-semibold text-md bg-primary text-primary-foreground py-2 rounded-md px-2">
+                <Label className="font-semibold text-md bg-primary/30 text-primary py-2 rounded-md px-2">
                   Specifications
                 </Label>
                 {detailsArray.length > 0 ? (
@@ -348,7 +348,7 @@ export default function ViewProduct() {
 
         {/* Images Tab */}
         <TabsContent value="images">
-          <Card>
+          <Card className="border-primary/50 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black  ">
             <CardHeader>
               <CardTitle>Product Images</CardTitle>
             </CardHeader>
@@ -357,11 +357,11 @@ export default function ViewProduct() {
                 <div className="grid grid-cols-1 md:grid-cols-3  gap-4">
                   {product!.images.length > 0 ? (
                     product!.images.map((image: Image, index: number) => (
-                      <div key={index} className="group">
+                      <div key={index} className="group ">
                         <img
                           src={image.url}
                           alt={`Product ${index + 1}`}
-                          className="w-full h-full md:w-96 p-2 border object-contain rounded-lg"
+                          className="w-full h-full md:w-96 p-2  bg-background border border-primary/30 object-contain rounded-lg"
                         />
                       </div>
                     ))
@@ -376,7 +376,7 @@ export default function ViewProduct() {
 
         {/* Reviews Tab */}
         <TabsContent value="reviews">
-          <Card>
+          <Card className="border-primary/50 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black  ">
             <CardHeader>
               <div className="flex justify-between items-center">
                 <CardTitle>Customer Reviews</CardTitle>
