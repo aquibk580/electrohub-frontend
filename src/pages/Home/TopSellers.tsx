@@ -14,6 +14,7 @@ import {
   Calendar,
   Clock,
   ShieldCheck,
+  PackageX,
 } from "lucide-react";
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
@@ -95,8 +96,8 @@ const TopSellerPage: React.FC = () => {
 
         {/* Hero Section */}
         <div className=" dark:bg-black ">
-          <div className="container  mx-auto px-4 py-8">
-            <div className="flex gap-10 py-6 bg-slate-50/30 border dark:border-none  dark:bg-gradient-to-tl from-slate-700 via-slate-900 to-black  shadow-lg rounded-xl items-center px-16 ">
+          <div className="container  mx-auto px-4 py-6">
+            <div className="flex gap-10 py-6 bg-slate-50/30 border dark:border-slate-700    dark:bg-gradient-to-tl from-slate-700 via-slate-900 to-black  shadow-md rounded-xl items-center px-16 ">
               <div className="flex flex-col items-center  justify-center ">
                 <div className="relative ">
                   <img
@@ -111,12 +112,12 @@ const TopSellerPage: React.FC = () => {
 
 
               </div>
-              <div className="w-2/3">
+              <div className="w-4/5">
                 <h1 className="text-3xl md:text-4xl  font-bold text-gray-900 dark:text-white">{seller?.name}</h1>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">Premium Quality Products & Express Delivery</p>
+                <p className="mt-2 text-gray-600 dark:text-gray-400">Experience Premium Quality Products with Fast & Reliable Delivery!</p>
 
                 <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="flex items-center gap-3 bg-gray-50 border shadow-md dark:bg-gray-800/50   p-4 rounded-xl">
+                  <div className="flex items-center gap-3 bg-gray-50 border dark:border-slate-700 shadow-md dark:bg-gray-800/50   p-4 rounded-xl">
                     <div className="p-2">
                       <Package className="w-8 h-8 text-gray-700  dark:text-gray-300" />
                     </div>
@@ -126,7 +127,7 @@ const TopSellerPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 bg-gray-50 border shadow-md dark:bg-gray-800/50 p-4 rounded-xl">
+                  <div className="flex items-center gap-3 bg-gray-50 border  dark:border-slate-700 shadow-md dark:bg-gray-800/50 p-4 rounded-xl">
                     <div className="p-2 ">
                       <Star className="w-8 h-8 text-amber-500 fill-amber-500" />
                     </div>
@@ -136,7 +137,7 @@ const TopSellerPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 bg-gray-50 border shadow-md dark:bg-gray-800/50 p-4 rounded-xl">
+                  <div className="flex items-center gap-3 bg-gray-50 border dark:border-slate-700 shadow-md dark:bg-gray-800/50 p-4 rounded-xl">
                     <div className="p-2 ">
                       <ShoppingCart className="w-8 h-8 text-gray-700 dark:text-gray-300" />
                     </div>
@@ -149,20 +150,20 @@ const TopSellerPage: React.FC = () => {
 
                 <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="flex items-center gap-3">
-                    <MapPin className="w-5 h-5 text-gray-400" />
-                    <span className="text-gray-600 dark:text-gray-400">{seller?.location || "Mumbai, India"}</span>
+                    <MapPin className="w-8 h-8  text-gray-400" />
+                    <span className="text-gray-600  dark:text-gray-300">{seller?.address || "Mumbai, India"}</span>
                   </div>
 
                   <div className="flex items-center gap-3">
                     <Calendar className="w-5 h-5 text-gray-400" />
-                    <span className="text-gray-600 dark:text-gray-400">
-                      Member since {seller?.joinDate || "Jan 2022"}
+                    <span className="text-gray-600  dark:text-gray-300">
+                    Member since in {new Date(seller?.createdAt).getFullYear()}
                     </span>
                   </div>
 
                   <div className="flex items-center gap-3">
                     <Clock className="w-5 h-5 text-gray-400" />
-                    <span className="text-gray-600 dark:text-gray-400">Responds within 24 hrs</span>
+                    <span className="text-gray-600 dark:text-gray-300">Responds within 24 hrs</span>
                   </div>
                 </div>
               </div>
@@ -171,7 +172,7 @@ const TopSellerPage: React.FC = () => {
         </div>
 
         {/* Products Section */}
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-1">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Products by {seller?.name}</h2>
             <div className="flex items-center gap-2 border rounded-full bg-muted py-1.5 px-4 text-gray-600 dark:text-gray-400">
@@ -189,15 +190,15 @@ const TopSellerPage: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-16 px-4 text-center bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
-              <Package className="w-16 h-16 text-gray-300 dark:text-gray-700 mb-4" />
+            <div className="flex flex-col items-center justify-center py-16 px-4 text-center shadow-md bg-slate-50/30 dark:border-none dark:bg-transparent rounded-xl border border-gray-200 dark:border-gray-800">
+              <PackageX className="w-16 h-16 text-gray-900 dark:text-gray-50 mb-4" />
               <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">No Products Available</h3>
-              <p className="text-gray-600 dark:text-gray-400 max-w-md mb-6">
+              <p className="text-gray-600 dark:text-gray-300 max-w-md mb-6">
                 This seller hasn't listed any products yet. Check back soon for new items!
               </p>
               <Button
                 variant="outline"
-                className="rounded-md border-gray-300 text-gray-700 hover:text-gray-900 hover:border-gray-400 dark:border-gray-700 dark:text-gray-300 dark:hover:border-gray-600"
+                className="rounded-lg border-gray-300 text-gray-700 hover:text-gray-900 hover:border-gray-400 dark:border-gray-200 dark:text-gray-300 dark:hover:border-gray-600"
               >
                 Notify Me When Products Are Added
               </Button>

@@ -62,7 +62,7 @@ export default function ProductCarousel() {
         {productCarousels.map((productCarousel) => (
           <CarouselItem key={productCarousel.id} className="basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5 ">
             <Card
-              className="overflow-hidden shadow-sm border-2 dark:border-none dark:bg-gradient-to-br from-gray-900 via-primary/10 to-black cursor-pointer"
+              className="overflow-hidden shadow-sm border-2  dark:border-none dark:bg-gradient-to-br from-gray-900 via-primary/10 to-black cursor-pointer"
               onClick={() => navigate(productCarousel.href)}
             >
               <div className="relative pt-4 px-4">

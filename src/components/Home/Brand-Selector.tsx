@@ -26,6 +26,7 @@ const SellerCard = ({
         rounded-xl p-2 sm:p-3 md:p-4 
         flex items-center gap-2 sm:gap-3 md:gap-4 
         cursor-pointer transition-all duration-300
+        bg-slate-50/15
          dark:bg-gradient-to-r from-gray-800 to-black
         shadow-sm  border  dark:border-gray-700
         hover:shadow-lg hover:scale-105
@@ -33,7 +34,7 @@ const SellerCard = ({
         
       `}
     >
-      <div className="w-16  h-16  sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-24 lg:h-24  p-1 border-2 dark:border-white 
+      <div className="w-16  h-16  sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-24 lg:h-24  p-1 border-2 border-gray-400 dark:border-white 
                   rounded-full overflow-hidden flex-shrink-0
                   flex items-center justify-center 
                    dark:bg-gray-900
@@ -101,9 +102,9 @@ export default function TopSellers() {
 
   return (
     <section
-      className={`w-full  sm:py-6  px-2 sm:px-3 md:px-4 lg:px-1 `}
+      className={`w-full  sm:py-6  px-2 sm:px-3 md:px-4 lg:px-1`}
     >
-      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-8">
+      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-6">
         Top Sellers & Brands
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
