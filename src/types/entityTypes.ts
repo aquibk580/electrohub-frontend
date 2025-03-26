@@ -99,6 +99,7 @@ export interface Message {
   email: string;
   subject: string;
   message: string;
+  userType: "Seller" | "User";
   createdAt: Date;
   updatedAt: Date;
 }

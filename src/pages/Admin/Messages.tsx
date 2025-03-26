@@ -20,21 +20,21 @@ import {
   Search,
   Filter,
   Trash2,
-  AlertCircle,
-  ChevronDown,
   Users,
   SortAsc,
+  Loader2,
+  Store,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import axios from "@/lib/axios";
 import { Message } from "@/types/entityTypes";
+import AnimatedCounter from "@/components/Common/AnimatedCounter";
 
 const Messages = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("default");
-  const [timeRangeFilter, setTimeRangeFilter] = useState("all");
   const [senderTypeFilter, setSenderTypeFilter] = useState("all");
 
   // Enhanced stats with more visual styling
@@ -42,20 +42,21 @@ const Messages = () => {
     {
       icon: <MessageSquare className="w-8 h-8 text-blue-600" />,
       label: "Total Messages",
-      value: 1254,
+      value: messages?.length,
       bgColor: "bg-blue-50",
     },
     {
       icon: <Users className="w-8 h-8 text-green-600" />,
-      label: "Active Chats",
-      value: 467,
+      label: "User Messages",
+      value: messages?.filter((message) => message.userType === "User").length,
       bgColor: "bg-green-50",
     },
     {
-      icon: <AlertCircle className="w-8 h-8 text-red-600" />,
-      label: "Complaints",
-      value: 52,
-      bgColor: "bg-red-50",
+      icon: <Store className="w-8 h-8 text-red-600" />,
+      label: "Seller Messages",
+      value: messages?.filter((message) => message.userType === "Seller")
+        .length,
+      bgColor: "bg-green-50",
     },
   ];
 
@@ -94,26 +95,6 @@ const Messages = () => {
       );
     }
 
-    // Time range filter
-    if (timeRangeFilter !== "all") {
-      const now = new Date();
-      result = result.filter((message) => {
-        const msgDate = new Date(message.createdAt);
-        switch (timeRangeFilter) {
-          case "today":
-            return msgDate.toDateString() === now.toDateString();
-          case "week":
-            const weekAgo = new Date(now.setDate(now.getDate() - 7));
-            return msgDate >= weekAgo;
-          case "month":
-            const monthAgo = new Date(now.setMonth(now.getMonth() - 1));
-            return msgDate >= monthAgo;
-          default:
-            return true;
-        }
-      });
-    }
-
     // Sorting
     if (sortBy !== "default") {
       result.sort((a, b) => {
@@ -125,8 +106,16 @@ const Messages = () => {
       });
     }
 
+    if (senderTypeFilter !== "all") {
+      return senderTypeFilter === "User"
+        ? (result = messages?.filter((message) => message.userType === "User"))
+        : (result = messages?.filter(
+            (message) => message.userType === "Seller"
+          ));
+    }
+
     return result;
-  }, [messages, searchTerm, sortBy, timeRangeFilter]);
+  }, [messages, searchTerm, sortBy, senderTypeFilter]);
 
   // Enhanced Message Card Component
   const MessageCard = ({ message }: { message: Message }) => (
@@ -142,26 +131,24 @@ const Messages = () => {
                 {message.email}
               </Badge>
             </div>
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               className="text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <Trash2 size={18} />
             </Button>
           </div>
-          
+
           <div className="space-y-1">
             <p className="font-medium text-gray-700">{message.subject}</p>
             <p className="text-sm text-gray-500 line-clamp-2">
               {message.message}
             </p>
           </div>
-          
+
           <div className="flex items-center justify-between text-xs text-gray-400">
-            <span>
-              {new Date(message.createdAt).toLocaleString()}
-            </span>
+            <span>{new Date(message.createdAt).toLocaleString()}</span>
           </div>
         </div>
       </div>
@@ -172,16 +159,14 @@ const Messages = () => {
   const StatsCard = () => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {statsData.map((stat, index) => (
-        <div 
-          key={index} 
+        <div
+          key={index}
           className={`${stat.bgColor} rounded-xl p-5 flex items-center space-x-4 shadow-sm`}
         >
-          <div className="rounded-full bg-white p-3 shadow-md">
-            {stat.icon}
-          </div>
+          <div className="rounded-full bg-white p-3 shadow-md">{stat.icon}</div>
           <div>
             <p className="text-sm text-gray-600 font-medium">{stat.label}</p>
-            <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
+            <AnimatedCounter end={String(stat.value)} duration={500} />
           </div>
         </div>
       ))}
@@ -203,19 +188,9 @@ const Messages = () => {
               <CardTitle className="text-2xl font-bold text-gray-800">
                 Message Center
               </CardTitle>
-              <div className="flex items-center space-x-2">
-                <Button variant="outline" size="sm" className="space-x-2">
-                  <Filter size={16} />
-                  <span>Filters</span>
-                </Button>
-                <Button variant="outline" size="sm" className="space-x-2">
-                  <SortAsc size={16} />
-                  <span>Sort</span>
-                </Button>
-              </div>
             </div>
           </CardHeader>
-          
+
           <CardContent className="space-y-4">
             <div className="grid md:grid-cols-3 gap-4">
               <div className="relative md:col-span-2">
@@ -227,18 +202,42 @@ const Messages = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              
+
               <div className="flex space-x-2">
+                <Select
+                  value={senderTypeFilter}
+                  onValueChange={setSenderTypeFilter}
+                >
+                  <SelectTrigger className="rounded-xl">
+                    <SelectValue placeholder="Sort">
+                      <div className="flex items-center space-x-2">
+                        <SortAsc size={16} />
+                        <span>
+                          {senderTypeFilter === "all"
+                            ? "All"
+                            : senderTypeFilter === "User"
+                            ? "User"
+                            : "Seller"}
+                        </span>
+                      </div>
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    <SelectItem value="User">User</SelectItem>
+                    <SelectItem value="Seller">Seller</SelectItem>
+                  </SelectContent>
+                </Select>
                 <Select value={sortBy} onValueChange={setSortBy}>
                   <SelectTrigger className="rounded-xl">
                     <SelectValue placeholder="Sort">
                       <div className="flex items-center space-x-2">
                         <SortAsc size={16} />
                         <span>
-                          {sortBy === "default" 
-                            ? "Default" 
-                            : sortBy === "newest" 
-                            ? "Newest" 
+                          {sortBy === "default"
+                            ? "Default"
+                            : sortBy === "newest"
+                            ? "Newest"
                             : "Oldest"}
                         </span>
                       </div>
@@ -256,8 +255,9 @@ const Messages = () => {
             <ScrollArea className="h-[500px] pr-4">
               <div className="space-y-4">
                 {isLoading ? (
-                  <div className="text-center text-gray-500 py-10">
-                    Loading messages...
+                  <div className="flex flex-col justify-center items-center h-[300px]">
+                    <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+                    <p className="text-muted-foreground">Loading Messages...</p>
                   </div>
                 ) : filteredMessages.length > 0 ? (
                   filteredMessages.map((message) => (

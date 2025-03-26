@@ -16,7 +16,8 @@ import {
   BadgePlus,
   CircleUserRound,
   Home,
-  FolderKanban
+  FolderKanban,
+  Mail
 } from "lucide-react";
 
 import { NavMain } from "./nav-main";
@@ -105,9 +106,9 @@ export function AppSidebar({ userRole, ...props }: AppSidebarProps) {
           icon: ClipboardList,
         },
         {
-          title: "Notification & Messages",
+          title: "Messages",
           url: "/admin/messages",
-          icon: Bell,
+          icon: Mail,
         },
         {
           title: "CMS",
