@@ -91,13 +91,13 @@ export default function UserRegister() {
   };
 
   return (
-    <div className="max-w-2xl w-full mx-auto sm:px-8 lg:p-4">
+    <div className="max-w-2xl w-full mx-auto sm:px-8 lg:p-4 space-y-4">
       <Card className="animate__animated animate__fadeIn shadow-lg rounded-xl">
         <CardHeader>
           <CardTitle className="text-3xl font-extrabold text-center">
             Sign Up
           </CardTitle>
-          <CardDescription className="text-center text-gray-600">
+          <CardDescription className="text-center text-gray-800 dark:text-gray-100">
             Create your User Account
           </CardDescription>
         </CardHeader>
@@ -258,15 +258,16 @@ export default function UserRegister() {
               Sign in
             </Button>
           </p>
-          <Button
+         
+        </CardFooter>
+      </Card>
+      <Button
             variant="outline"
             className="w-full shadow-md hover:shadow-lg transition-all font-semibold"
             onClick={() => navigate("/seller/auth/signup")}
           >
             Create a New Seller Account
           </Button>
-        </CardFooter>
-      </Card>
     </div>
   );
 }

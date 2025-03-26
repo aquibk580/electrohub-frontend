@@ -25,8 +25,8 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
   const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated)
   const isWishlisted = wishlist.has(product.id)
 
-  const discountedPrice = product.price - (product.price / 100) * product.offerPercentage
   const hasDiscount = product.offerPercentage > 0
+  const discountedPrice = product.price - (product.price / 100) * product.offerPercentage
 
   const stars = useMemo(() => {
     const totalStars = 5
@@ -131,7 +131,7 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
 
   return (
     <div
-      className="group bg-card text-card-foreground   overflow-hidden "
+      className="group  text-card-foreground   overflow-hidden "
       onClick={handleNavigate}
     >
       <div className="relative">

@@ -120,12 +120,12 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="border rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm">
-        <h2 className="text-2xl text-accent-foreground font-semibold">
+      <div className="border border-primary/30 bg-primary/5 rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm">
+        <h2 className="text-2xl text-primary font-semibold">
           Orders
         </h2>
 
-        <Card className="w-full lg:w-[95%] flex flex-nowrap gap-4 text-secondary-foreground border-accent bg-muted rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x mx-auto">
+        <Card className="w-full lg:w-[95%] flex flex-nowrap gap-4 text-secondary-foreground bg-primary/15 border-primary shadow-none rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x mx-auto">
           <div className="flex items-center pl-6 space-x-2 text-primary">
             <CalendarCheck className="w-6 h-6" />
             <span className="font-semibold text-lg">Today</span>
@@ -133,9 +133,9 @@ export default function Dashboard() {
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="p-3 px-4 pr-10 border-l-2 border-zinc-300 min-w-[200px] flex flex-col"
+              className="p-3 px-4 pr-10 border-l-2 border-primary/50 min-w-[200px] flex flex-col"
             >
-              <div className="text-sm text-muted-foreground truncate">
+              <div className="text-sm  ">
                 {stat.label}
               </div>
               <div className="text-xl font-semibold truncate text-primary">
@@ -175,7 +175,7 @@ export default function Dashboard() {
         </Tabs>
       </div>
 
-      <div className="space-y-3 border p-3 rounded-xl shadow-sm bg-secondary text-secondary-foreground animate__animated animate__fadeIn">
+      <div className="space-y-3 border border-primary/30 bg-primary/5 p-3 rounded-xl shadow-sm  animate__animated animate__fadeIn">
         <h2 className="text-xl pl-2 text-primary font-semibold">
           Orders Management
         </h2>
@@ -189,13 +189,7 @@ export default function Dashboard() {
           </div>
 
           <div className="flex gap-2">
-            <Button className="bg-primary text-primary-foreground shadow-md rounded-lg hover:bg-primary/80 p-3">
-              <LayoutGrid size={24} />
-            </Button>
-            <Button className="bg-primary text-primary-foreground shadow-md rounded-lg hover:bg-primary/80 p-3">
-              <List size={24} />
-            </Button>
-            <Button className="bg-primary text-primary-foreground shadow-md border rounded-lg px-5 py-3 hover:bg-primary/80 flex items-center gap-2">
+            <Button className="bg-primary text-primary-foreground shadow-md border rounded-lg px-5 py-3 hover:bg-primary/50 flex items-center gap-2">
               <Filter size={24} />
               <span className="hidden sm:block font-medium">Filter</span>
             </Button>
@@ -207,27 +201,27 @@ export default function Dashboard() {
             No Orders!
           </h2>
         ) : (
-          <Card className="p-2 md:p-4 border rounded-xl bg-background border-border overflow-hidden">
+          <Card className="p-2 md:p-4 border border-primary/30 rounded-xl  overflow-hidden">
             <div className="overflow-x-auto">
               <Table className="w-full">
-                <TableHeader className="bg-primary overflow-hidden">
-                  <TableRow className="rounded-3xl">
-                    <TableHead className="text-primary-foreground text-base font-semibold rounded-tl-lg rounded-bl-lg">
+                <TableHeader className="bg-primary  overflow-hidden">
+                  <TableRow className="rounded-3xl border-none hover:bg-transparent">
+                    <TableHead className="text-primary-foreground  font-semibold rounded-tl-lg rounded-bl-lg">
                       Order
                     </TableHead>
-                    <TableHead className="text-primary-foreground text-base font-semibold">
+                    <TableHead className="text-primary-foreground  font-semibold">
                       Customer
                     </TableHead>
-                    <TableHead className="text-primary-foreground text-base font-semibold">
+                    <TableHead className="text-primary-foreground  font-semibold">
                       Date
                     </TableHead>
-                    <TableHead className="text-primary-foreground text-base font-semibold">
+                    <TableHead className="text-primary-foreground  font-semibold">
                       Total
                     </TableHead>
-                    <TableHead className="text-primary-foreground text-base font-semibold">
+                    <TableHead className="text-primary-foreground  font-semibold">
                       Status
                     </TableHead>
-                    <TableHead className="text-right text-primary-foreground text-base font-semibold rounded-br-lg rounded-tr-lg">
+                    <TableHead className="text-right text-primary-foreground  font-semibold rounded-br-lg rounded-tr-lg">
                       Action
                     </TableHead>
                   </TableRow>
@@ -248,7 +242,7 @@ export default function Dashboard() {
                             alt="Product"
                             width={48}
                             height={48}
-                            className="w-12"
+                            className="w-16"
                           />
                           <div className="text-sm w-56">
                             {orderItem.product.name}
@@ -257,11 +251,14 @@ export default function Dashboard() {
                       </TableCell>
                       <TableCell className="space-x-2 whitespace-nowrap">
                         <span className="p-1.5 border bg-primary/10 text-primary font-semibold rounded-full">
-                          {orderItem.product.seller.name
-                            .split(" ")
+                        {
+                            orders.find(
+                              (order) => order.id === orderItem.orderId
+                            )?.user.name.split(" ")
                             .map((letter: string) => letter[0])
                             .join("")
-                            .toUpperCase()}
+                            .toUpperCase()
+                          }
                         </span>
                         <span>
                           {

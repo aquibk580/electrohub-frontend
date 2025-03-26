@@ -101,7 +101,7 @@ export default function SellerLogin() {
           <CardTitle className="text-3xl font-extrabold text-center">
             Sign In
           </CardTitle>
-          <CardDescription className="text-center text-gray-800">
+          <CardDescription className="text-center text-gray-800 dark:text-gray-100">
             Sign in to your Seller Account
           </CardDescription>
         </CardHeader>
@@ -120,6 +120,7 @@ export default function SellerLogin() {
                   },
                 })}
                 placeholder="Email ID"
+                
               />
               {errors.email && (
                 <p className="text-red-500 text-sm">
@@ -152,7 +153,7 @@ export default function SellerLogin() {
             <div className="flex items-center justify-start">
               <Button
                 variant="link"
-                className="p-0 h-auto font-medium text-blue-950"
+                className="p-0 h-auto font-medium text-blue-950 dark:text-blue-500"
                 onClick={() => navigate("/seller/auth/forgot-password")}
               >
                 Forgot password?
@@ -160,7 +161,7 @@ export default function SellerLogin() {
             </div>
 
             <Button
-              className="w-full bg-green-700 hover:bg-green-950 text-white"
+              className="w-full bg-green-700 hover:bg-green-950 text-white rounded-lg"
               type="submit"
               disabled={isSubmitting}
             >
@@ -199,7 +200,7 @@ export default function SellerLogin() {
       </Card>
       <Button
         variant="outline"
-        className="w-full shadow-md hover:shadow-lg transition-all font-semibold"
+        className="w-full shadow-md rounded-lg hover:shadow-lg  transition-all font-semibold"
         onClick={() => navigate("/user/auth/signin")}
       >
         Sign in to your User Account

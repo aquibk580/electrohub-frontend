@@ -15,7 +15,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import UserProfileButton from "./UserProfileButton";
-import { Menu } from "lucide-react";
+import { Menu, Phone, ShoppingBag, ShoppingCart, UserRound } from "lucide-react";
 import MobileSideBar from "./MobileSidebar";
 import { Input } from "../ui/input";
 import Logo from "../Logo";
@@ -82,12 +82,12 @@ const Navbar = () => {
   return (
     <header className="fixed z-50 w-full border-b shadow-sm bg-white dark:bg-black">
       {/* Top Banner */}
-      <div className="bg-primary text-primary-foreground text-sm py-1 px-6 lg:flex justify-between hidden">
+      <div className="bg-primary dark:bg-primary/25  text-sm py-1 px-6 lg:flex items-center justify-between hidden">
         <div className="flex items-center gap-2 w-full">
-          <img className="w-4" src={assets.phone_icon} alt="Phone" />
+          <Phone className="w-4"/>
           <p>+91-987654321</p>
         </div>
-        <p className="text-center w-full">
+        <p className="text-end w-full">
           Get 5% off on Selected Items | Shop now
         </p>
       </div>
@@ -102,12 +102,8 @@ const Navbar = () => {
             onClick={() => setShowSidebar(true)}
           />
           <h1 className="font-semibold text-3xl flex items-center cursor-pointer"  onClick={() => navigate("/")}>
-            <Logo
-              containerClass="w-6 h-6 mr-[0.1rem]"
-              polygonClass="fill-black dark:fill-white"
-              frameClass="fill-black dark:fill-white"
-            />
-            lectrohub
+            
+            Electrohub
           </h1>
           <div>
             {isAuthenticated && user ? (
@@ -117,11 +113,7 @@ const Navbar = () => {
                 onClick={() => navigate("/user/auth/signin")}
                 className="flex gap-1 items-center cursor-pointer hover:text-orange-600"
               >
-                <img
-                  className="lg:h-5 h-7"
-                  src={assets.account_icon}
-                  alt="Account"
-                />
+                <UserRound className="text-black dark:text-white border-4 border-white"/>
                 <p className="hidden lg:block">Account</p>
               </div>
             )}
@@ -129,10 +121,10 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Logo */}
-        <h1 className="font-semibold text-3xl hidden lg:flex items-center cursor-pointer" onClick={() => navigate("/")}>
-          
+        <div className="font-bold text-2xl hidden lg:flex   items-center cursor-pointer" onClick={() => navigate("/")}>
+        <ShoppingCart className="text-green-500 p-[1.5px]" />
           Electrohub
-        </h1>
+        </div>
 
         {/* Navigation Menu */}
         <NavigationMenu className="hidden lg:flex">
@@ -228,11 +220,7 @@ const Navbar = () => {
               onClick={() => navigate("/user/auth/signin")}
               className="flex gap-1 items-center cursor-pointer hover:text-orange-600"
             >
-              <img
-                className="lg:h-5 h-7"
-                src={assets.account_icon}
-                alt="Account"
-              />
+               <UserRound className="text-black dark:text-white"/>
               <p className="hidden lg:block">Account</p>
             </div>
           )}

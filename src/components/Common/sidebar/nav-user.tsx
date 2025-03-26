@@ -128,7 +128,7 @@ export function NavUser({ user, userRole }: NavUserProps) {
           >
             <DropdownMenuLabel className="p-0 font-normal  ">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
+                <Avatar className="h-8 w-8 rounded-full">
                   <AvatarImage src={user.avatar} alt={user.name} />
                   <AvatarFallback className="bg-green-950 text-white font-semibold">
                     {user.name.slice(0, 2).toUpperCase()}
@@ -143,7 +143,7 @@ export function NavUser({ user, userRole }: NavUserProps) {
               </div>
             </DropdownMenuLabel>
             <hr />
-            <DropdownMenuItem className="font-medium">
+            <DropdownMenuItem className="font-medium hover:bg-transparent focus-visible:ring-0">
               <Button
                 variant="outline"
                 className=""

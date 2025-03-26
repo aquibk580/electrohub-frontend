@@ -62,11 +62,11 @@ export default function ProductCarousel() {
         {productCarousels.map((productCarousel) => (
           <CarouselItem key={productCarousel.id} className="basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5 ">
             <Card
-              className="overflow-hidden cursor-pointer"
+              className="overflow-hidden shadow-sm border-2 dark:border-none dark:bg-gradient-to-br from-gray-900 via-primary/10 to-black cursor-pointer"
               onClick={() => navigate(productCarousel.href)}
             >
               <div className="relative pt-4 px-4">
-                <Badge variant="secondary" className="absolute top-2 rounded-lg right-2 z-10">
+                <Badge variant="secondary" className="absolute dark:bg-primary/70 top-2 rounded-lg right-2 z-10">
                   Featured
                 </Badge>
                 <div className="aspect-square rounded-md overflow-hidden  flex items-center justify-center">
@@ -78,8 +78,8 @@ export default function ProductCarousel() {
                 </div>
               </div>
               <CardContent className="p-4 text-center">
-                <h3 className="font-semibold p-1 border-b-2  text-foreground line-clamp-1 mb-1">{productCarousel.name}</h3>
-                <p className="text-green-600 font-semibold text-sm"> Starting From ₹{formatPrice(productCarousel.price)}</p>
+                <h3 className="font-semibold p-1 border-b-2 dark:border-b-gray-500  text-foreground line-clamp-1 mb-1">{productCarousel.name}</h3>
+                <p className="text-primary dark:text-primary/80 font-semibold text-sm"> Starting From ₹{formatPrice(productCarousel.price)}</p>
               </CardContent>
             </Card>
           </CarouselItem>

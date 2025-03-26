@@ -122,7 +122,7 @@ const ProductAddtocart = ({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    className="flex-1 bg-green-500 hover:bg-green-600  cursor-pointer"
+                    className="flex-1 bg-green-500 hover:bg-green-600  rounded-lg cursor-pointer"
                     onClick={() => handleAddToCart(id)}
                   >
                     Add to Cart
@@ -162,7 +162,7 @@ const ProductAddtocart = ({
                 variant="outline"
                 size="lg"
                 onClick={() => handleToggleWishlist(id)}
-                className={` hidden md:block lg:block${
+                className={` rounded-lg hidden md:block lg:block${
                   isWishlisted
                     ? "text-red-500 cursor-pointer"
                     : "cursor-pointer"

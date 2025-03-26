@@ -20,7 +20,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <div className="min-h-screen dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen dark:bg-muted py-8 px-4 sm:px-6 lg:px-8">
       <nav>
         <div className="flex items-center justify-start mb-8">
           <Link to="/" className="text-gray-600 hover:text-gray-900">
@@ -35,17 +35,17 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
       {children}
       <div className="max-w-4xl w-full mx-auto space-y-8">
         <footer className="mt-8">
-          <nav className="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
-            <Link to="/terms" className="hover:text-black">
+          <nav className="flex flex-wrap justify-center gap-4 text-sm text-gray-600 dark:text-white">
+            <Link to="/terms" className="hover:text-black dark:hover:text-slate-300">
               Terms & Conditions
             </Link>
-            <Link to="/privacy" className="hover:text-black">
+            <Link to="/privacy" className="hover:text-black  dark:hover:text-slate-300">
               Privacy Policy
             </Link>
-            <Link to="/whats-new" className="hover:text-black">
+            <Link to="/whats-new" className="hover:text-black dark:hover:text-slate-300">
               What's New
             </Link>
-            <Link to="/copyright" className="hover:text-black">
+            <Link to="/copyright" className="hover:text-black dark:hover:text-slate-300">
               Copyright
             </Link>
           </nav>

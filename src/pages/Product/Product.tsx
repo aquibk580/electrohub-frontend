@@ -19,6 +19,7 @@ import type { RootState } from "@/redux/store";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
+import { Separator } from "@radix-ui/react-select";
 
 export default function ProductPage() {
   const isAuthenticated = useSelector(
@@ -208,7 +209,10 @@ export default function ProductPage() {
           details={product.productInfo?.details || []}
           loading={loading}
         />
+        <Separator className="border"/>
         <RelatedProducts
+          wishlist={wishlist}
+          setWishlist={setWishlist}
           category={product.categoryName}
           currentProductId={product.id}
         />

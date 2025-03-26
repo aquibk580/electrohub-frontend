@@ -184,14 +184,14 @@ export function AppSidebar({ userRole, ...props }: AppSidebarProps) {
   const roleData = data[userRole];
 
   return (
-    <Sidebar className="min-h-screen  " collapsible="icon" {...props}>
-    <SidebarHeader >
+    <Sidebar className="min-h-screen " collapsible="icon" {...props}>
+    <SidebarHeader className="bg-white dark:bg-black" >
       <TeamSwitcher teams={roleData.teams} />
     </SidebarHeader>
-    <SidebarContent >
+    <SidebarContent className="bg-white dark:bg-black" >
       <NavMain items={roleData.navItems} />
     </SidebarContent>
-    <SidebarFooter >
+    <SidebarFooter className="bg-white dark:bg-black" >
       <NavUser user={roleData.user} userRole={userRole} />
     </SidebarFooter>
   </Sidebar>

@@ -113,13 +113,13 @@ export default function SellerRegister() {
   };
 
   return (
-    <div className="max-w-2xl w-full mx-auto sm:px-8 lg:p-4">
+    <div className="max-w-2xl w-full mx-auto sm:px-8 lg:p-4 space-y-4">
       <Card className="animate__animated animate__fadeIn shadow-lg rounded-xl">
         <CardHeader>
           <CardTitle className="text-3xl font-extrabold text-center">
             Create Seller Account
           </CardTitle>
-          <CardDescription className="text-center text-gray-600">
+          <CardDescription className="text-center text-gray-800 dark:text-gray-100">
             Register as a seller
           </CardDescription>
         </CardHeader>
@@ -294,15 +294,17 @@ export default function SellerRegister() {
               Sign in
             </Button>
           </p>
-          <Button
+         
+        </CardFooter>
+       
+      </Card>
+      <Button
             variant="outline"
             className="w-full shadow-md hover:shadow-lg transition-all font-semibold"
             onClick={() => navigate("/user/auth/signup")}
           >
             Sign Up for a User Account
           </Button>
-        </CardFooter>
-      </Card>
     </div>
   );
 }
