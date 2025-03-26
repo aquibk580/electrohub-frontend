@@ -38,9 +38,6 @@ import ProductManagement from "./pages/Admin/Product-Management";
 import ProductDetails from "./pages/Admin/ProductsManage";
 import Order from "./pages/Admin/Order";
 import OrderInfo from "./pages/Admin/OrdersManage";
-import Payments from "./pages/Admin/Payments";
-import PaymentDetail from "./pages/Admin/PayementDetails";
-import Reports from "./pages/Admin/Reports";
 import Messages from "./pages/Admin/Messages";
 import ChatLayout from "./components/Admin/ChatLayout";
 import ContentManagement from "./pages/Admin/ContentManagement";
@@ -423,30 +420,6 @@ const App = () => {
             element={
               <AdminLayout>
                 <OrderInfo />
-              </AdminLayout>
-            }
-          />
-          <Route
-            path="payments"
-            element={
-              <AdminLayout>
-                <Payments />
-              </AdminLayout>
-            }
-          />
-          <Route
-            path="payments/:id"
-            element={
-              <AdminLayout>
-                <PaymentDetail />
-              </AdminLayout>
-            }
-          />
-          <Route
-            path="reports"
-            element={
-              <AdminLayout>
-                <Reports />
               </AdminLayout>
             }
           />

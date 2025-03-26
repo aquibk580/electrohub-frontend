@@ -1,58 +1,59 @@
-"use client"
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Mail, MapPin, Phone, Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "react-toastify";
+import { Helmet } from "react-helmet-async";
+import axios from "@/lib/axios";
 
-import type React from "react"
-
-import { useState } from "react"
-import { Mail, MapPin, Phone, Send } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-// import { useToast } from "@/hooks/use-toast"
-import { toast } from "react-toastify"
-import { Helmet } from "react-helmet-async"
-
+const contactSchema = z.object({
+  name: z.string().min(3, "Name must be at least 3 characters"),
+  email: z.string().email("Invalid email address"),
+  subject: z.string().min(5, "Subject must be at least 5 characters"),
+  message: z.string().min(5, "Message must be at least 10 characters"),
+});
 
 export default function ContactUs() {
-  //   const { toast } = useToast()
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-
-    // toast({
-    //   title: "Message Sent",
-    //   description: "We'll get back to you as soon as possible.",
-    // })
-    toast.success("Product added successfully", {
-      position: "top-center",
-      theme: "dark",
-    })
-
-    setFormData({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
       name: "",
       email: "",
       subject: "",
       message: "",
-    })
-    setIsSubmitting(false)
-  }
+    },
+  });
+
+  const onSubmit = async (data: any) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/user/contact`,
+        data
+      );
+      if (response.status === 201) {
+        toast.success("Message sent successfully", {
+          position: "top-center",
+          theme: "dark",
+        });
+        reset();
+      }
+    } catch (error: any) {
+      toast.error(error.message, {
+        position: "top-center",
+        theme: "dark",
+      });
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -62,7 +63,9 @@ export default function ContactUs() {
       </Helmet>
       <div className="space-y-6">
         <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold tracking-tight text-primary">Contact Us</h1>
+          <h1 className="text-4xl font-bold tracking-tight text-primary">
+            Contact Us
+          </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Have questions or need assistance? We're here to help you.
           </p>
@@ -77,9 +80,13 @@ export default function ContactUs() {
                 </div>
                 <h3 className="text-xl font-semibold">Call Us</h3>
                 <p className="text-muted-foreground">
-                  Our customer support team is available Monday through Friday, 9am to 6pm.
+                  Our customer support team is available Monday through Friday,
+                  9am to 6pm.
                 </p>
-                <a href="tel:+1234567890" className="text-primary font-medium block hover:underline">
+                <a
+                  href="tel:+1234567890"
+                  className="text-primary font-medium block hover:underline"
+                >
                   +1 (234) 567-890
                 </a>
               </div>
@@ -94,9 +101,13 @@ export default function ContactUs() {
                 </div>
                 <h3 className="text-xl font-semibold">Email Us</h3>
                 <p className="text-muted-foreground">
-                  For general inquiries, support requests, or business opportunities.
+                  For general inquiries, support requests, or business
+                  opportunities.
                 </p>
-                <a href="mailto:support@electrohub.com" className="text-primary font-medium block hover:underline">
+                <a
+                  href="mailto:support@electrohub.com"
+                  className="text-primary font-medium block hover:underline"
+                >
                   support@electrohub.com
                 </a>
               </div>
@@ -110,7 +121,9 @@ export default function ContactUs() {
                   <MapPin className="text-primary h-6 w-6" />
                 </div>
                 <h3 className="text-xl font-semibold">Visit Us</h3>
-                <p className="text-muted-foreground">Our headquarters is located in the heart of the city.</p>
+                <p className="text-muted-foreground">
+                  Our headquarters is located in the heart of the city.
+                </p>
                 <address className="not-italic text-primary font-medium">
                   123 Tech Avenue
                   <br />
@@ -124,57 +137,72 @@ export default function ContactUs() {
         <div className="max-w-3xl mx-auto">
           <Card className="border-primary/20">
             <CardContent className="pt-6">
-              <h2 className="text-2xl font-bold text-primary text-center mb-6">Send Us a Message</h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <h2 className="text-2xl font-bold text-primary text-center mb-6">
+                Send Us a Message
+              </h2>
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Your Name</Label>
                     <Input
                       id="name"
-                      name="name"
+                      {...register("name")}
                       placeholder="John Doe"
-                      required
-                      value={formData.name}
-                      onChange={handleChange}
                     />
+                    {errors.name && (
+                      <p className="text-red-500 text-sm">
+                        {errors.name.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email Address</Label>
                     <Input
                       id="email"
-                      name="email"
                       type="email"
+                      {...register("email")}
                       placeholder="john@example.com"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
                     />
+                    {errors.email && (
+                      <p className="text-red-500 text-sm">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="subject">Subject</Label>
                   <Input
                     id="subject"
-                    name="subject"
+                    {...register("subject")}
                     placeholder="How can we help you?"
-                    required
-                    value={formData.subject}
-                    onChange={handleChange}
                   />
+                  {errors.subject && (
+                    <p className="text-red-500 text-sm">
+                      {errors.subject.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="message">Message</Label>
                   <Textarea
                     id="message"
-                    name="message"
+                    {...register("message")}
                     placeholder="Please describe your inquiry in detail..."
                     rows={6}
-                    required
-                    value={formData.message}
-                    onChange={handleChange}
                   />
+                  {errors.message && (
+                    <p className="text-red-500 text-sm">
+                      {errors.message.message}
+                    </p>
+                  )}
                 </div>
-                <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+                <Button
+                  type="submit"
+                  className="w-full"
+                  size="lg"
+                  disabled={isSubmitting}
+                >
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">
                       <svg
@@ -212,7 +240,9 @@ export default function ContactUs() {
         </div>
 
         <div className="py-8 mt-8">
-          <h2 className="text-2xl font-bold text-primary text-center mb-8">Frequently Asked Questions</h2>
+          <h2 className="text-2xl font-bold text-primary text-center mb-8">
+            Frequently Asked Questions
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {[
               {
@@ -232,7 +262,8 @@ export default function ContactUs() {
               },
               {
                 question: "Do you offer international shipping?",
-                answer: "Yes, we ship to most countries worldwide. Shipping costs and delivery times vary by location.",
+                answer:
+                  "Yes, we ship to most countries worldwide. Shipping costs and delivery times vary by location.",
               },
             ].map((faq, index) => (
               <div key={index} className="space-y-2">
@@ -249,7 +280,12 @@ export default function ContactUs() {
             <div className="text-center">
               {/* <MapPin className="h-12 w-12 text-primary/50 mx-auto mb-4" /> */}
               {/* <p className="text-muted-foreground">Interactive map would be displayed here</p> */}
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2114.7998618700612!2d72.97680132885189!3d19.18886824421335!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b90a6d3d1c2d%3A0x239d6bfd46240353!2sSahyog%20College%20of%20IT%20and%20Management!5e0!3m2!1sen!2sin!4v1742578033064!5m2!1sen!2sin" width="1250" height="400" style={{ border: 0 }} loading="lazy"
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2114.7998618700612!2d72.97680132885189!3d19.18886824421335!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b90a6d3d1c2d%3A0x239d6bfd46240353!2sSahyog%20College%20of%20IT%20and%20Management!5e0!3m2!1sen!2sin!4v1742578033064!5m2!1sen!2sin"
+                width="1250"
+                height="400"
+                style={{ border: 0 }}
+                loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
@@ -257,6 +293,5 @@ export default function ContactUs() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-

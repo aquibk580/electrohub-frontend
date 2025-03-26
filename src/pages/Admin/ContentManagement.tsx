@@ -3,8 +3,15 @@ import { useMediaQuery } from "react-responsive";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import {Table,TableBody,TableCell,TableHead,TableHeader,TableRow} from "@/components/ui/table";
-import { Image as ImageIcon } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Image as ImageIcon, Loader2 } from "lucide-react";
 import axios from "@/lib/axios";
 import DeleteCategoryButton from "@/components/Admin/CMS/DeleteCategoryButton";
 import AddCategoryDialog from "@/components/Admin/CMS/AddCategoryDialog";
@@ -46,6 +53,7 @@ interface TableWrapperProps {
 const ContentManagement = () => {
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [activeTab, setActiveTab] = useState("categories");
+  const [loading, setLoadung] = useState(true);
   const [productCarousels, setProductCarousels] = useState<
     Array<ProductCrousel>
   >([]);
@@ -65,6 +73,8 @@ const ContentManagement = () => {
         }
       } catch (error: any) {
         console.log(error);
+      } finally {
+        setLoadung(false);
       }
     };
 
@@ -264,44 +274,58 @@ const ContentManagement = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {categories.length > 0 ? (
-                categories.map((category, index) => (
-                  <TableRow key={category.name}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>
-                      <div className="w-32 h-24 bg-gray-100 rounded flex items-center justify-center">
-                        {category.imageUrl ? (
-                          <img
-                            src={category.imageUrl}
-                            className="w-full h-full object-contain"
-                            alt="Category Image"
+              {!loading ? (
+                categories.length > 0 ? (
+                  categories.map((category, index) => (
+                    <TableRow key={category.name}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>
+                        <div className="w-32 h-24 bg-gray-100 rounded flex items-center justify-center">
+                          {category.imageUrl ? (
+                            <img
+                              src={category.imageUrl}
+                              className="w-full h-full object-contain"
+                              alt="Category Image"
+                            />
+                          ) : (
+                            <ImageIcon className="w-6 h-6 text-gray-400" />
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell className="font-medium">
+                        {category.name}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex space-x-2">
+                          <EditCategoryDialog
+                            setCategories={setCategories}
+                            categoryName={category.name}
+                            imageUrl={category.imageUrl}
                           />
-                        ) : (
-                          <ImageIcon className="w-6 h-6 text-gray-400" />
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      {category.name}
-                    </TableCell>
-
-                    <TableCell>
-                      <div className="flex space-x-2">
-                        <EditCategoryDialog
-                          setCategories={setCategories}
-                          categoryName={category.name}
-                          imageUrl={category.imageUrl}
-                        />
-                        <DeleteCategoryButton
-                          categoryName={category.name}
-                          setCategories={setCategories}
-                        />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))
+                          <DeleteCategoryButton
+                            categoryName={category.name}
+                            setCategories={setCategories}
+                          />
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <h1 className="text-xl font-medium p-4">
+                    No Categories found
+                  </h1>
+                )
               ) : (
-                <h1 className="text-xl font-medium p-4">No Categories found</h1>
+                <tr>
+                  <td colSpan={4}>
+                    <div className="flex justify-center items-center h-64 w-full">
+                      <Loader2 className="h-12 w-12 animate-spin text-primary mr-2" />
+                      <p className="text-muted-foreground">
+                        Loading Categories...
+                      </p>
+                    </div>
+                  </td>
+                </tr>
               )}
             </TableBody>
           </Table>
