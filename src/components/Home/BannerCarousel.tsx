@@ -88,7 +88,7 @@ export default function BannerCarousel() {
   }
 
   return (
-    <div className="relative  w-full  overflow-hidden rounded-xl shadow-lg h-40 sm:h-60 md:h-80 lg:h-[84svh] ">
+    <div className="relative  w-full  overflow-hidden rounded-xl shadow-lg h-40 sm:h-60 md:h-80 mt-8 md:mt-3 lg:h-[84svh] ">
       <div
         className="relative w-full h-full cursor-pointer group"
         onClick={() => navigate(bannerCarousels[index].href)}
@@ -107,7 +107,7 @@ export default function BannerCarousel() {
         </AnimatePresence>
 
         {/* Overlay with gradient for better text visibility if needed */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="absolute inset-0 dark:bg-gradient-to-t  from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       </div>
 
       {/* Navigation buttons with improved styling */}
@@ -153,7 +153,7 @@ export default function BannerCarousel() {
       </div>
 
       {/* Slide indicators */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1.5">
+      <div className="absolute bottom-4  left-1/2 transform -translate-x-1/2 flex gap-1.5">
         {Banners.map((_, i) => (
           <button
             key={i}

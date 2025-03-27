@@ -98,13 +98,13 @@ const Navbar = () => {
         <div className="lg:hidden flex items-center w-full justify-between">
           <Menu
             size={32}
-            className="cursor-pointer"
+            className="cursor-pointer "
             onClick={() => setShowSidebar(true)}
           />
-          <h1 className="font-semibold text-3xl flex items-center cursor-pointer"  onClick={() => navigate("/")}>
-            
+          <div className="font-bold gap-1 text-3xl flex items-center cursor-pointer"  onClick={() => navigate("/")}>
+            <ShoppingCart className="text-green-500"/> {""}
             Electrohub
-          </h1>
+          </div>
           <div>
             {isAuthenticated && user ? (
               <UserProfileButton name={user.name} imageUrl={pfp!} />
@@ -113,7 +113,7 @@ const Navbar = () => {
                 onClick={() => navigate("/user/auth/signin")}
                 className="flex gap-1 items-center cursor-pointer hover:text-orange-600"
               >
-                <UserRound className="text-black dark:text-white border-4 border-white"/>
+                <UserRound className="text-black  dark:text-white lg:w-4 lg:h-4"/>
                 <p className="hidden lg:block">Account</p>
               </div>
             )}

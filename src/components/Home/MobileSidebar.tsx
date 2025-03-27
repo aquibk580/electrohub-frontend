@@ -68,11 +68,13 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
       initial={{ y: "-100%", opacity: 0 }}
       animate={showSidebar ? { y: 0, opacity: 1 } : { y: "-100%", opacity: 0 }}
       transition={{ duration: 0.4, ease: "easeInOut" }}
-      className="fixed top-0 left-0 w-full h-screen bg-white dark:bg-gray-900 shadow-lg border-b dark:border-gray-700 z-50"
+      className="fixed top-0 transition-all left-0 w-full h-screen bg-white dark:bg-black/75 backdrop-blur-3xl shadow-lg border-b dark:border-gray-700 z-50"
     >
-      <aside className="flex flex-col w-full h-screen px-4 py-4 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700">
+      <aside className="flex flex-col w-full h-screen px-4 py-4 overflow-y-auto  border-r rtl:border-r-0 rtl:border-l   ">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">ElectroHub</h1>
+          <div className="text-2xl flex items-center gap-1 font-bold">
+            <ShoppingCart className="text-green-500"/>
+            ElectroHub</div>
           <X
             size={30}
             onClick={() => setShowSidebar(false)}
@@ -94,21 +96,27 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
                 {initials}
               </AvatarFallback>
             </Avatar>
-            <h4 className="mx-2 mt-2 font-semibold text-gray-800 dark:text-gray-200">
+            <h4 className="mx-2 mt-2 font-bold text-lg text-gray-800 dark:text-gray-200">
               {user?.name}
             </h4>
-            <p className="mx-2 mt-1 text-sm font-medium text-gray-600 dark:text-gray-400">
+            <p className="mx-2 text-sm font-medium text-gray-600 dark:text-gray-400">
               {user?.email}
             </p>
           </div>
         ) : (
-          <div className="w-fit h-fit rounded-md mt-6 mx-4">
-            <img
-              src={assets.shoppingBoyGif}
-              className="object-contain w-44 h-44"
-              alt=""
-            />
-          </div>
+          <div className="flex w-full bg-gradient-to-br from-orange-500  to-amber-400 shadow-md  items-center  px-2 rounded-xl   mt-4 justify-center">
+            <div className="w-fit h-fit  rounded-md  mx-4">
+          <img
+            src={assets.shoppingBoyGif}
+            className="object-contain drop-shadow-xl  w-44 h-44"
+            alt=""
+          />
+        </div>
+        <div className="flex flex-col">
+        <span className="text-2xl text-white drop-shadow-xl border-l-2 px-2 font-extrabold">Start Shopping Now</span>
+        <span className="text-[10px] px-3 mt-1 text-slate-50">Your One-Stop Shop for Everything You Love!</span>
+        </div>
+        </div>
         )}
 
         <div className="flex flex-col justify-between flex-1 mt-6">
@@ -116,7 +124,7 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
             <Link
               to="/"
               onClick={() => setShowSidebar(false)}
-              className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200"
+              className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-primary/30  dark:text-gray-200"
             >
               <Home size={20} />
 
@@ -127,7 +135,7 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
                 <Link
                   to="/user/profile"
                   onClick={() => setShowSidebar(false)}
-                  className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200"
+                  className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-primary/30  dark:text-gray-200"
                 >
                   <User size={20} />
 
@@ -136,7 +144,7 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
                 <Link
                   to="/user/cart"
                   onClick={() => setShowSidebar(false)}
-                  className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200"
+                  className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-50  dark:hover:bg-primary/30  dark:text-gray-200"
                 >
                   <ShoppingCart size={20} />
 
@@ -145,7 +153,7 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
                 <Link
                   to="/user/wishlist"
                   onClick={() => setShowSidebar(false)}
-                  className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200"
+                  className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-primary/30  dark:text-gray-200"
                 >
                   <Heart size={20} />
 
@@ -154,7 +162,7 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
                 <Link
                   to="/user/orders"
                   onClick={() => setShowSidebar(false)}
-                  className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200"
+                  className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-primary/30 dark:text-gray-200"
                 >
                   <Package size={20} />
 
@@ -163,7 +171,7 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
                 <Link
                   to="/user/reviews"
                   onClick={() => setShowSidebar(false)}
-                  className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200"
+                  className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-primary/30  dark:text-gray-200"
                 >
                   <Star size={20} />
 
@@ -175,7 +183,7 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
             <Link
               to="/contact"
               onClick={() => setShowSidebar(false)}
-              className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200"
+              className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-primary/30  dark:text-gray-200"
             >
               <Contact size={20} />
 
@@ -184,7 +192,7 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
             <Link
               to="/user/settings"
               onClick={() => setShowSidebar(false)}
-              className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200"
+              className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-primary/30  dark:text-gray-200"
             >
               <Settings size={20} />
 
@@ -195,7 +203,7 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
             {isAuthenticated ? (
               <div
                 onClick={handleLogOut}
-                className="flex items-center font-medium text-md justify-start gap-0 bg-white w-full shadow-none px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200"
+                className="flex items-center font-medium text-md justify-start gap-0  w-full shadow-none px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-red-900/40  dark:text-gray-200"
               >
                 <LogOut size={20} className="text-red-600" />
 
@@ -205,7 +213,7 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
               <Link
                 to="/user/auth/login"
                 onClick={() => setShowSidebar(false)}
-                className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200"
+                className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-sky-700/40 dark:text-gray-200"
               >
                 <LogIn size={20} />
 
