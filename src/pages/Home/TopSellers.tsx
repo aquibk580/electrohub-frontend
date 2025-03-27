@@ -97,8 +97,8 @@ const TopSellerPage: React.FC = () => {
         {/* Hero Section */}
         <div className=" dark:bg-black ">
           <div className="container  mx-auto px-4 py-6">
-            <div className="flex gap-10 py-6 bg-slate-50/30 border dark:border-slate-700    dark:bg-gradient-to-tl from-slate-700 via-slate-900 to-black  shadow-md rounded-xl items-center px-16 ">
-              <div className="flex flex-col items-center  justify-center ">
+            <div className="flex flex-col lg:flex-row gap-10 py-6 bg-slate-50/30 border dark:border-slate-700    dark:bg-gradient-to-tl from-slate-700 via-slate-900 to-black  shadow-md rounded-xl items-center px-6 md:px-16 ">
+              <div className="flex flex-col  items-center   justify-center ">
                 <div className="relative ">
                   <img
                     src={seller?.pfp || "/placeholder.svg?height=160&width=160"}
@@ -112,12 +112,12 @@ const TopSellerPage: React.FC = () => {
 
 
               </div>
-              <div className="w-4/5">
-                <h1 className="text-3xl md:text-4xl  font-bold text-gray-900 dark:text-white">{seller?.name}</h1>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">Experience Premium Quality Products with Fast & Reliable Delivery!</p>
+              <div className="md:w-11/12 lg:w-4/5">
+                <h1 className="text-3xl md:text-4xl text-center lg:text-start  font-bold text-gray-900 dark:text-white">{seller?.name}</h1>
+                <p className="mt-2 text-gray-600 text-center md:text-start dark:text-gray-400">Experience Premium Quality Products with Fast & Reliable Delivery!</p>
 
                 <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="flex items-center gap-3 bg-gray-50 border dark:border-slate-700 shadow-md dark:bg-gray-800/50   p-4 rounded-xl">
+                  <div className="flex items-center gap-3 bg-gray-50 border dark:border-slate-700 shadow-md dark:bg-gray-800/50  p-3 md:p-4 rounded-xl">
                     <div className="p-2">
                       <Package className="w-8 h-8 text-gray-700  dark:text-gray-300" />
                     </div>
@@ -127,7 +127,7 @@ const TopSellerPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 bg-gray-50 border  dark:border-slate-700 shadow-md dark:bg-gray-800/50 p-4 rounded-xl">
+                  <div className="flex items-center gap-3 bg-gray-50 border  dark:border-slate-700 shadow-md dark:bg-gray-800/50 p-3 md:p-4 rounded-xl">
                     <div className="p-2 ">
                       <Star className="w-8 h-8 text-amber-500 fill-amber-500" />
                     </div>
@@ -137,7 +137,7 @@ const TopSellerPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 bg-gray-50 border dark:border-slate-700 shadow-md dark:bg-gray-800/50 p-4 rounded-xl">
+                  <div className="flex items-center gap-3 bg-gray-50 border dark:border-slate-700 shadow-md dark:bg-gray-800/50 p-3 md:p-4 rounded-xl">
                     <div className="p-2 ">
                       <ShoppingCart className="w-8 h-8 text-gray-700 dark:text-gray-300" />
                     </div>
@@ -148,20 +148,20 @@ const TopSellerPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="flex items-center gap-3">
-                    <MapPin className="w-8 h-8  text-gray-400" />
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-4">
+                  <div className="flex  gap-3">
+                    <MapPin className="w-5 h-5  text-gray-400" />
                     <span className="text-gray-600  dark:text-gray-300">{seller?.address || "Mumbai, India"}</span>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex  gap-3">
                     <Calendar className="w-5 h-5 text-gray-400" />
                     <span className="text-gray-600  dark:text-gray-300">
                     Member since in {new Date(seller?.createdAt).getFullYear()}
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex  gap-3">
                     <Clock className="w-5 h-5 text-gray-400" />
                     <span className="text-gray-600 dark:text-gray-300">Responds within 24 hrs</span>
                   </div>
@@ -173,18 +173,18 @@ const TopSellerPage: React.FC = () => {
 
         {/* Products Section */}
         <div className="container mx-auto px-4 py-1">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Products by {seller?.name}</h2>
-            <div className="flex items-center gap-2 border rounded-full bg-muted py-1.5 px-4 text-gray-600 dark:text-gray-400">
+          <div className="flex flex-row sm:items-center justify-between gap-4 mb-6">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">Products by {seller?.name}</h2>
+            <div className="flex  w-max items-center gap-2 border rounded-full bg-muted py-1.5 px-4 text-gray-600 dark:text-gray-400">
               <ShieldCheck className="w-5 h-5 text-green-600 dark:text-green-500" />
-              <span className="text-sm">100% Authentic Products</span>
+              <span className="text-[10px] md:text-sm ">100% Authentic Products</span>
             </div>
           </div>
 
           <Separator className="mb-8" />
 
           {seller?.products && seller.products.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
               {seller.products.map((product) => (
                 <ProductCard product={product} wishlist={wishlist} setWishlist={setWishlist} />
               ))}

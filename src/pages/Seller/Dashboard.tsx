@@ -120,12 +120,12 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="border border-primary/30 bg-primary/5 rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm">
+      <div className="border border-primary/30 bg-primary/5  dark:bg-gradient-to-br from-black via-primary/10 to-black rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm">
         <h2 className="text-2xl text-primary font-semibold">
           Orders
         </h2>
 
-        <Card className="w-full lg:w-[95%] flex flex-nowrap gap-4 text-secondary-foreground bg-primary/15 border-primary shadow-none rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x mx-auto">
+        <Card className="w-full lg:w-[95%] flex flex-nowrap gap-4 text-secondary-foreground bg-primary/10 border-primary shadow-none rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x mx-auto">
           <div className="flex items-center pl-6 space-x-2 text-primary">
             <CalendarCheck className="w-6 h-6" />
             <span className="font-semibold text-lg">Today</span>
@@ -175,7 +175,7 @@ export default function Dashboard() {
         </Tabs>
       </div>
 
-      <div className="space-y-3 border border-primary/30 bg-primary/5 p-3 rounded-xl shadow-sm  animate__animated animate__fadeIn">
+      <div className="space-y-3 border border-primary/30 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black  p-3 rounded-xl shadow-sm  animate__animated animate__fadeIn">
         <h2 className="text-xl pl-2 text-primary font-semibold">
           Orders Management
         </h2>
@@ -184,7 +184,7 @@ export default function Dashboard() {
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-secondary-foreground" />
             <Input
               placeholder="Search Order..."
-              className="pl-8 bg-background rounded-full focus:bg-secondary transition-colors"
+              className="pl-8 bg-transparent border-primary/30 rounded-full transition-colors"
             />
           </div>
 

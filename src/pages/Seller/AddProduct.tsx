@@ -205,7 +205,7 @@ export default function AddProductForm() {
 
   return (
     <div className=" mx-auto p-2 animate__animated animate__fadeIn">
-      <h1 className="text-xl bg-primary text-primary-foreground  pl-5 p-2 rounded-lg font-semibold mb-2">Add Product</h1>
+      <h1 className="text-xl text-primary bg-primary/30  pl-5 p-2 rounded-lg font-semibold mb-2">Add Product</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data" className="space-y-4 p-2">
         {/* Image Upload Section */}
@@ -247,7 +247,7 @@ export default function AddProductForm() {
                       viewBox="0 0 24 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-24 text-primary"
+                      className="h-24 "
                     >
                       <path
                         d="M7 10V9C7 6.23858 9.23858 4 12 4C14.7614 4 17 6.23858 17 9V10C19.2091 10 21 11.7909 21 14C21 15.4806 20.1956 16.8084 19 17.5M7 10C4.79086 10 3 11.7909 3 14C3 15.4806 3.8044 16.8084 5 17.5M7 10C7.43285 10 7.84965 10.0688 8.24006 10.1959M12 12V21M12 12L15 15M12 12L9 15"
@@ -257,7 +257,7 @@ export default function AddProductForm() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    <p className="text-center text-sm text-primary">Browse File to upload!</p>
+                    <p className="text-center text-sm">Browse File to upload!</p>
                   </div>
                 )}
               </div>
@@ -391,17 +391,17 @@ export default function AddProductForm() {
             />
             {errors.status && <p className="text-red-500 text-sm">{errors.status.message}</p>}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
+          <div className="grid grid-cols-1  gap-6">
+            <div className="space-y-1">
               <Label htmlFor="brand" className="text-sm font-medium">
                 Brand
               </Label>
               <Controller
                 name="brand"
                 control={control}
-                render={({ field }) => <Input {...field} id="brand" placeholder="e.g. MSI" />}
+                render={({ field }) => <Input {...field} id="brand" className="py-5" placeholder="e.g. MSI" />}
               />
-              {errors.brand && <p className="text-sm text-destructive">{errors.brand.message}</p>}
+              {errors.brand && <p className="text-sm  text-destructive">{errors.brand.message}</p>}
             </div>
           </div>
         </div>
@@ -409,15 +409,15 @@ export default function AddProductForm() {
         {/* Product Specifications */}
 
         <Separator />
-        <h2 className="text-xl font-semibold mb-4 bg-primary text-primary-foreground pl-4 p-2 rounded-lg">Additional Product Details</h2>
+        <h2 className="text-xl font-semibold mb-4 bg-primary/30 text-primary pl-4 p-2 rounded-lg">Additional Product Details</h2>
         <div className="space-y-4">
           <Label className="text-sm font-medium">Custom Attributes</Label>
           {fields.map((field, index) => (
             <div key={field.id} className="flex items-center space-x-2">
-              <Input {...register(`details.${index}.key`)} placeholder="Key" className="flex-1" />
-              <Input {...register(`details.${index}.value`)} placeholder="Value" className="flex-1" />
+              <Input {...register(`details.${index}.key`)} placeholder="Key" className="flex-1 py-5" />
+              <Input {...register(`details.${index}.value`)} placeholder="Value" className="flex-1 py-5" />
               <Button type="button" variant="destructive" size="icon" onClick={() => remove(index)}>
-                <X className="h-4 w-4" strokeWidth={4} />
+                <X className="h-5 w-5" strokeWidth={4} />
               </Button>
             </div>
           ))}

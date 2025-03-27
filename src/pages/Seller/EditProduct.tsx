@@ -319,12 +319,12 @@ export default function EditProduct() {
       <div className=" mx-auto p-2  rounded-xl   animate__animated animate__fadeIn">
         <Button
           variant="outline"
-          className="text-sm bg-transparent text-muted-foreground rounded-full hover:bg-accent shadow-none"
+          className="text-sm bg-transparent border-none text-muted-foreground rounded-full hover:bg-accent shadow-none"
           onClick={() => navigate(-1)}
         >
           <MoveLeft /> Back to Orders
         </Button>
-        <h1 className="text-xl mt-4 bg-primary text-primary-foreground  pl-5 p-2 rounded-lg font-semibold mb-2">
+        <h1 className="text-xl mt-4 bg-primary/30 text-primary  pl-5 p-2 rounded-lg font-semibold mb-2">
           Edit Product
         </h1>
 
@@ -346,7 +346,7 @@ export default function EditProduct() {
                   </li>
                 </p>
 
-                <div className="relative w-[21rem] h-64 md:h-48 md:w-48 lg:w-52  lg:h-52 sm:h-64 sm:w-64 p-2 rounded-lg  bg-zinc-50  ">
+                <div className="relative w-[21rem] h-64 md:h-48 md:w-48 lg:w-52  lg:h-52 sm:h-64 sm:w-64 p-2 rounded-lg    ">
                   <input
                     type="file"
                     accept="image/*"
@@ -368,7 +368,7 @@ export default function EditProduct() {
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-24 text-primary"
+                        className="h-24 "
                       >
                         <path
                           d="M7 10V9C7 6.23858 9.23858 4 12 4C14.7614 4 17 6.23858 17 9V10C19.2091 10 21 11.7909 21 14C21 15.4806 20.1956 16.8084 19 17.5M7 10C4.79086 10 3 11.7909 3 14C3 15.4806 3.8044 16.8084 5 17.5M7 10C7.43285 10 7.84965 10.0688 8.24006 10.1959M12 12V21M12 12L15 15M12 12L9 15"
@@ -378,14 +378,14 @@ export default function EditProduct() {
                           strokeLinejoin="round"
                         />
                       </svg>
-                      <p className="text-center text-sm text-primary">
+                      <p className="text-center text-sm ">
                         Browse File to upload!
                       </p>
                     </div>
                   )}
                 </div>
-                <div className="p-1 px-2 w-full flex shadow-sm items-center justify-between rounded-md  bg-zinc-50">
-                  <div className=" rounded-full  bg-zinc-100 p-1">
+                <div className="p-1 px-2 w-full flex shadow-sm items-center justify-between rounded-md  ">
+                  <div className=" rounded-full p-1">
                     {" "}
                     <CloudUpload />
                   </div>
@@ -582,7 +582,7 @@ export default function EditProduct() {
                 <p className="text-red-500 text-sm">{errors.status.message}</p>
               )}
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 gap-x-8">
+            <div className="grid grid-cols-1  gap-3 gap-x-8">
               <div className="space-y-1">
                 <Label htmlFor="brand" className="text-md font-medium">
                   Brand
@@ -609,7 +609,7 @@ export default function EditProduct() {
           {/* Product Specifications */}
 
           <Separator />
-          <h2 className="text-xl font-semibold mb-4 bg-primary text-primary-foreground border-border pl-4 p-2 rounded-lg">
+          <h2 className="text-xl font-semibold mb-4 bg-primary/30 text-primary border-border pl-4 p-2 rounded-lg">
             Additional Product Details
           </h2>
           <div className="space-y-4">
@@ -619,12 +619,12 @@ export default function EditProduct() {
                 <Input
                   {...register(`details.${index}.key`)}
                   placeholder="Key"
-                  className="flex-1"
+                  className="flex-1 py-5"
                 />
                 <Input
                   {...register(`details.${index}.value`)}
                   placeholder="Value"
-                  className="flex-1"
+                  className="flex-1 py-5"
                 />
                 <Button
                   type="button"

@@ -113,9 +113,9 @@ const ViewOrder = () => {
         </div>
 
         <div className="space-y-4 w-full">
-          <div className="flex flex-col lg:flex-row gap-2 lg:items-center bg-card borderItem p-3 md:p-1 rounded-lg shadow-sm">
+          <div className="flex flex-col lg:flex-row gap-2 lg:items-center border border-primary/50 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black   p-3 md:p-1 rounded-xl shadow-sm">
             <Link to={`product/${orderItem.id}`}>
-              <p className="text-muted-foreground ml-2 mt-1 text-sm">
+              <p className="text-primary ml-2 mt-1 text-sm">
                 Order ID: {orderItem.id}45363
               </p>
               <img
@@ -128,7 +128,7 @@ const ViewOrder = () => {
               <h3 className="text-xl font-semibold text-foreground">
                 {orderItem.product.name}
               </h3>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-foreground text-sm">
                 {orderItem.product.description}
               </p>
               <label
@@ -138,7 +138,7 @@ const ViewOrder = () => {
               >
                 {orderItem.status}
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 text-muted-foreground mt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 mt-2">
                 <p className="text-sm">
                   <strong>Date:</strong> {formatDate(orderItem.createdAt)}
                 </p>
@@ -153,29 +153,29 @@ const ViewOrder = () => {
               </div>
             </div>
             <div className="w-full lg:w-[400px] p-4 md:p-6">
-              <h3 className="text-md font-semibold text-foreground">
+              <h3 className="text-md font-semibold ">
                 Update Order Status
               </h3>
               <Select
                 onValueChange={(value) => handleOrderStatusUpdate(value)}
                 defaultValue={orderItem.status}
               >
-                <SelectTrigger className="w-full borderItem bg-background rounded-md px-4 py-2 mt-2">
+                <SelectTrigger className="w-full border-primary/40  bg-primary/20 rounded-xl px-4 py-2 mt-2">
                   <SelectValue placeholder="Select Status" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="OrderConfirmed">Confirmed</SelectItem>
-                  <SelectItem value="Shipped">Shipped</SelectItem>
-                  <SelectItem value="Delivered">Delivered</SelectItem>
-                  <SelectItem value="Cancelled">Cancelled</SelectItem>
-                  <SelectItem value="Returned">Returned</SelectItem>
+                <SelectContent className="rounded-xl dark:border-primary/30">
+                  <SelectItem className="rounded-lg" value="OrderConfirmed">Confirmed</SelectItem>
+                  <SelectItem className="rounded-lg" value="Shipped">Shipped</SelectItem>
+                  <SelectItem className="rounded-lg" value="Delivered">Delivered</SelectItem>
+                  <SelectItem className="rounded-lg" value="Cancelled">Cancelled</SelectItem>
+                  <SelectItem className="rounded-lg" value="Returned">Returned</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 md:p-6 rounded-lg bg-card borderItem shadow-sm">
+            <div className="p-4 md:p-6 rounded-xl border-primary/50 border bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black   shadow-sm">
               <h3 className="text-lg font-semibold text-foreground mb-3">
                 Customer Details
               </h3>
@@ -195,7 +195,7 @@ const ViewOrder = () => {
               </div>
             </div>
 
-            <div className="p-4 md:p-6 rounded-lg bg-card borderItem shadow-sm">
+            <div className="p-4 md:p-6 rounded-xl border border-primary/50 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black   shadow-sm">
               <h3 className="text-lg font-semibold text-foreground mb-3">
                 Product Details
               </h3>
