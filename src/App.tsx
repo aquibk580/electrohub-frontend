@@ -56,6 +56,7 @@ import AboutUs from "./pages/Home/About-us";
 import ContactUs from "./pages/Home/Contact-us";
 import InfoPage from "./pages/Home/Footer-links";
 import NotFound from "./components/ui/not-found";
+import Admins from "./pages/Admin/Admins";
 
 const App = () => {
   return (
@@ -108,14 +109,14 @@ const App = () => {
             }
           />
         </Route>
-          <Route
-            path="/info/:section"
-            element={
-              <HomeLayout>
-                <InfoPage />
-              </HomeLayout>
-            }
-          />
+        <Route
+          path="/info/:section"
+          element={
+            <HomeLayout>
+              <InfoPage />
+            </HomeLayout>
+          }
+        />
         <Route path="/user">
           <Route path="auth">
             <Route
@@ -210,14 +211,6 @@ const App = () => {
               </UserLayout>
             }
           />
-          {/* <Route
-            path="info/:section"
-            element={
-              <UserLayout>
-                <InfoPage />
-              </UserLayout>
-            }
-          /> */}
         </Route>
 
         <Route path="/seller">
@@ -420,6 +413,14 @@ const App = () => {
             element={
               <AdminLayout>
                 <OrderInfo />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="admins"
+            element={
+              <AdminLayout>
+                <Admins />
               </AdminLayout>
             }
           />

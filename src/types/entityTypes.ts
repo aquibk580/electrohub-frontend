@@ -23,6 +23,14 @@ export interface User {
   updatedAt: Date;
 }
 
+export interface Admin {
+  id: number;
+  name: string;
+  email: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface Category {
   name: string;
   imageUrl: string;
