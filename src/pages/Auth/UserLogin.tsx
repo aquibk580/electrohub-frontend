@@ -24,6 +24,7 @@ import axios from "../../lib/axios";
 import { toast } from "react-toastify";
 import { setUser } from "@/redux/slices/user";
 import { GoogleButton } from "@/components/Auth/GoogleButton";
+import { clearSeller } from "@/redux/slices/seller";
 
 export default function UserLogin() {
   const dispatch = useDispatch<AppDispatch>();
@@ -46,6 +47,7 @@ export default function UserLogin() {
       );
       if (response.status === 200) {
         dispatch(setUser(response.data.user));
+        dispatch(clearSeller())
         navigate("/");
         toast.success("Signed in successfully", {
           position: "top-center",
@@ -84,13 +86,14 @@ export default function UserLogin() {
       const redirectUrl = `${import.meta.env.VITE_FRONTEND_URL}/`;
       const userType = "user";
 
-      window.location.href = `${
-        import.meta.env.VITE_API_URL
-      }/api/auth/google?redirectUrl=${encodeURIComponent(
-        redirectUrl
-      )}&userType=${encodeURIComponent(userType)}`;
+      window.location.href = `${import.meta.env.VITE_API_URL
+        }/api/auth/google?redirectUrl=${encodeURIComponent(
+          redirectUrl
+        )}&userType=${encodeURIComponent(userType)}`;
     } catch (error: any) {
       console.log(error);
+    } finally {
+      dispatch(clearSeller())
     }
   };
 

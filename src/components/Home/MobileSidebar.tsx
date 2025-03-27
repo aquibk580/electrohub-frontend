@@ -11,6 +11,7 @@ import {
   Star,
   User,
   X,
+  UsersRound,
 } from "lucide-react";
 import { getRandomColor } from "./UserProfileButton";
 import { useDispatch, useSelector } from "react-redux";
@@ -47,7 +48,7 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
   const handleLogOut = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/auth/logout`
+        `${import.meta.env.VITE_API_URL}/api/auth/logout`
       );
       if (response.status === 200) {
         dispatch(clearUser());
@@ -189,6 +190,17 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
 
               <span className="mx-4 font-medium">Contact Us</span>
             </Link>
+
+            <Link
+              to="/about"
+              onClick={() => setShowSidebar(false)}
+              className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-primary/30  dark:text-gray-200"
+            >
+              <UsersRound size={20} />
+
+              <span className="mx-4 font-medium">About</span>
+            </Link>
+
             <Link
               to="/user/settings"
               onClick={() => setShowSidebar(false)}

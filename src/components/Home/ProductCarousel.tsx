@@ -78,8 +78,8 @@ export default function ProductCarousel() {
                 </div>
               </div>
               <CardContent className="p-4 text-center">
-                <h3 className="font-semibold p-1 border-b-2 dark:border-b-gray-500  text-foreground line-clamp-1 mb-1">{productCarousel.name}</h3>
-                <p className="text-primary dark:text-primary/80 font-semibold text-sm"> Starting From ₹{formatPrice(productCarousel.price)}</p>
+                <h3 className="font-semibold p-1 text-sm md:text-lg lg:text- border-b-2  dark:border-b-gray-500  text-foreground line-clamp-1 mb-1">{productCarousel.name}</h3>
+                <p className="text-primary dark:text-primary/80 font-semibold text-xs md:text-sm"> Starting From ₹{formatPrice(productCarousel.price)}</p>
               </CardContent>
             </Card>
           </CarouselItem>

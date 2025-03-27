@@ -25,6 +25,7 @@ import { setSeller } from "@/redux/slices/seller";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { GoogleButton } from "@/components/Auth/GoogleButton";
+import { clearUser } from "@/redux/slices/user";
 
 export default function SellerRegister() {
   const dispatch = useDispatch();
@@ -67,6 +68,7 @@ export default function SellerRegister() {
 
       if (response.status === 201) {
         dispatch(setSeller(response.data.seller));
+        dispatch(clearUser())
         navigate("/seller/dashboard");
         toast.success("Signed in successfully", {
           position: "top-center",
@@ -97,18 +99,18 @@ export default function SellerRegister() {
 
   const handleGoogleSignUp = async () => {
     try {
-      const redirectUrl = `${
-        import.meta.env.VITE_FRONTEND_URL
-      }/seller/auth/seller-details`;
+      const redirectUrl = `${import.meta.env.VITE_FRONTEND_URL
+        }/seller/auth/seller-details`;
       const userType = "seller";
 
-      window.location.href = `${
-        import.meta.env.VITE_API_URL
-      }/api/auth/google?redirectUrl=${encodeURIComponent(
-        redirectUrl
-      )}&userType=${encodeURIComponent(userType)}`;
+      window.location.href = `${import.meta.env.VITE_API_URL
+        }/api/auth/google?redirectUrl=${encodeURIComponent(
+          redirectUrl
+        )}&userType=${encodeURIComponent(userType)}`;
     } catch (error: any) {
       console.log(error);
+    } finally {
+      dispatch(clearUser())
     }
   };
 
@@ -294,17 +296,17 @@ export default function SellerRegister() {
               Sign in
             </Button>
           </p>
-         
+
         </CardFooter>
-       
+
       </Card>
       <Button
-            variant="outline"
-            className="w-full shadow-md hover:shadow-lg transition-all font-semibold"
-            onClick={() => navigate("/user/auth/signup")}
-          >
-            Sign Up for a User Account
-          </Button>
+        variant="outline"
+        className="w-full shadow-md hover:shadow-lg transition-all font-semibold"
+        onClick={() => navigate("/user/auth/signup")}
+      >
+        Sign Up for a User Account
+      </Button>
     </div>
   );
 }

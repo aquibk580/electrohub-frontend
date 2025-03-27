@@ -25,6 +25,7 @@ import { setUser } from "@/redux/slices/user";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { GoogleButton } from "@/components/Auth/GoogleButton";
+import { clearSeller } from "@/redux/slices/seller";
 
 export default function UserRegister() {
   const navigate = useNavigate();
@@ -50,6 +51,7 @@ export default function UserRegister() {
 
       if (response.status === 201) {
         dispatch(setUser(response.data.user));
+        dispatch(clearSeller())
         navigate("/");
         toast.success("Signed in successfully", {
           position: "top-center",
@@ -75,18 +77,18 @@ export default function UserRegister() {
 
   const handleGoogleSignUp = async () => {
     try {
-      const redirectUrl = `${
-        import.meta.env.VITE_FRONTEND_URL
-      }/user/auth/user-details`;
+      const redirectUrl = `${import.meta.env.VITE_FRONTEND_URL
+        }/user/auth/user-details`;
       const userType = "user";
 
-      window.location.href = `${
-        import.meta.env.VITE_API_URL
-      }/api/auth/google?redirectUrl=${encodeURIComponent(
-        redirectUrl
-      )}&userType=${encodeURIComponent(userType)}`;
+      window.location.href = `${import.meta.env.VITE_API_URL
+        }/api/auth/google?redirectUrl=${encodeURIComponent(
+          redirectUrl
+        )}&userType=${encodeURIComponent(userType)}`;
     } catch (error: any) {
       console.log(error);
+    } finally {
+      dispatch(clearSeller())
     }
   };
 
@@ -258,16 +260,16 @@ export default function UserRegister() {
               Sign in
             </Button>
           </p>
-         
+
         </CardFooter>
       </Card>
       <Button
-            variant="outline"
-            className="w-full shadow-md hover:shadow-lg transition-all font-semibold"
-            onClick={() => navigate("/seller/auth/signup")}
-          >
-            Create a New Seller Account
-          </Button>
+        variant="outline"
+        className="w-full shadow-md hover:shadow-lg transition-all font-semibold"
+        onClick={() => navigate("/seller/auth/signup")}
+      >
+        Create a New Seller Account
+      </Button>
     </div>
   );
 }

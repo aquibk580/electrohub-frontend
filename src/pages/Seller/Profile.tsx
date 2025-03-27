@@ -245,7 +245,7 @@ export default function Profile() {
         </div>
 
         <div className="grid md:grid-cols-2 mt-8 gap-8">
-          <div>
+          {/* <div>
             <h2 className="text-xl font-semibold mb-4">Social Links</h2>
             <div className="space-y-3">
               {socialLinks.map((link) => (
@@ -255,7 +255,7 @@ export default function Profile() {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           <div>
             <h2 className="text-xl font-semibold mb-4">Sales & Revenue</h2>
