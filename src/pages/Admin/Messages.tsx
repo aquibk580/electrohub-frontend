@@ -117,6 +117,27 @@ const Messages = () => {
     return result;
   }, [messages, searchTerm, sortBy, senderTypeFilter]);
 
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/admin/messages/${id}`
+      );
+      if (response.status === 200) {
+        setMessages((prev) => prev.filter((message) => message.id !== id));
+        toast.success("Message Deleted Successfully", {
+          position: "top-center",
+          theme: "dark",
+        });
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.message, {
+        position: "top-center",
+        theme: "dark",
+      });
+    }
+  };
+
   // Enhanced Message Card Component
   const MessageCard = ({ message }: { message: Message }) => (
     <div className="bg-white border rounded-xl shadow-sm hover:shadow-md transition-all duration-300 mb-4 overflow-hidden group">
@@ -135,6 +156,7 @@ const Messages = () => {
               variant="ghost"
               size="icon"
               className="text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={() => handleDelete(message.id)}
             >
               <Trash2 size={18} />
             </Button>

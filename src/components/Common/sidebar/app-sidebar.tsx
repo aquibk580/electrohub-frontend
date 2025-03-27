@@ -17,7 +17,8 @@ import {
   CircleUserRound,
   Home,
   FolderKanban,
-  Mail
+  Mail,
+  ShieldCheck
 } from "lucide-react";
 
 import { NavMain } from "./nav-main";
@@ -104,6 +105,11 @@ export function AppSidebar({ userRole, ...props }: AppSidebarProps) {
           title: "Orders Management",
           url: "/admin/ordersmanage",
           icon: ClipboardList,
+        },
+        {
+          title: "Admins",
+          url: "/admin/admins",
+          icon: ShieldCheck,
         },
         {
           title: "Messages",
