@@ -17,7 +17,7 @@ const LoadingFallback = () => (
 
 const Home = () => {
   return (
-    <div className="flex flex-col space-y-12 md:space-y-1 lg:space-y-8 mx-auo px-4 sm:px-6 lg:px-5  md:py-2">
+    <div className="flex flex-col space-y-12 md:space-y-8 lg:space-y-8 mx-auo px-4 sm:px-6 lg:px-5  md:py-2">
       {/* Hero Banner */}
       <section className="w-full animate__animated animate__fadeIn">
         <Suspense fallback={<LoadingFallback />}>

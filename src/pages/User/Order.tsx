@@ -118,10 +118,10 @@ export default function Orders() {
                         className="w-32 h-32 md:w-40 md:h-40 object-contain rounded-lg"
                       />
                       <div className="flex-1">
-                        <h3 className="text-lg font-semibold">
+                        <h3 className=" text-sm md:text-lg font-semibold">
                           {orderItem.product.name.substring(0, 50)}
                         </h3>
-                        <p className="text-black font-semibold text-base">
+                        <p className="text-black dark:text-slate-200 font-semibold text-base">
                           ₹
                           {formatPrice(
                             orderItem.product.price -
@@ -132,7 +132,7 @@ export default function Orders() {
                         <p className="text-gray-500">
                           Quantity: {orderItem.quantity}
                         </p>
-                        <p className="text-black font-semibold text-lg">
+                        <p className="text-black dark:text-slate-200 font-semibold text-lg">
                           Total: ₹
                           {formatPrice(
                             orderItem.quantity *

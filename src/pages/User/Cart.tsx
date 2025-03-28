@@ -12,7 +12,7 @@ import { formatPrice } from "@/utils/FormatPrice";
 import { Separator } from "@radix-ui/react-select";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 
 interface OrderInput {
@@ -21,6 +21,7 @@ interface OrderInput {
 }
 
 const Cart = () => {
+  const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user.user);
   const [orderData, setOrderData] = useState<OrderInput>({
     total: 0,
@@ -132,15 +133,16 @@ const Cart = () => {
                 >
                   <div className="flex flex-col sm:flex-row sm:gap-6 items-center">
                     <img
+                      onClick={() => navigate(`/product/${item.id}`)}
                       src={item.images[0].url}
                       alt={item.name}
-                      className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 object-cover rounded-lg"
+                      className="w-36 h-36 sm:w-32 sm:h-32 cursor-pointer md:w-44 md:h-44 object-cover rounded-lg"
                     />
-                    <div className="space-y-4">
-                      <h3 className="font-medium">{item.name}</h3>
-                      <h3 className="font-medium">{item.productInfo.brand}</h3>
+                    <div  onClick={() => navigate(`/product/${item.id}`)} className="space-y-1  cursor-pointer">
+                      <h3 className="font-medium cursor-pointer">{item.name}</h3>
+                      <h3 className="font-medium text-gray-700 dark:text-gray-300 text-sm">Seller: {item.productInfo.brand}</h3>
                       <div className="text-xl font-semibold mt-1">
-                        ₹
+                        ₹ 
                         {formatPrice(
                           item.price - (item.price / 100) * item.offerPercentage
                         )}
@@ -148,10 +150,11 @@ const Cart = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="flex items-center border rounded">
+                    <div className="flex items-center border px-[2px] rounded-xl">
                       <Button
                         variant="ghost"
                         size="sm"
+                        className="rounded-[10px] hover:bg-red-200/90 dark:hover:bg-red-700/55"
                         onClick={() => {
                           const newQuantity =
                             item.quantity > 1 ? item.quantity - 1 : 1; // Prevent going below 1
@@ -164,7 +167,7 @@ const Cart = () => {
                       <Input
                         type="number"
                         value={item.quantity}
-                        className="w-12 text-center border-0"
+                        className="w-12 text-center  font-semibold border-none shadow-none"
                         onChange={(e) => {
                           const newQuantity = parseInt(e.target.value, 10);
                           if (newQuantity > 0) {
@@ -176,6 +179,7 @@ const Cart = () => {
                       <Button
                         variant="ghost"
                         size="sm"
+                        className="rounded-[10px] hover:bg-green-200/90 dark:hover:bg-green-700/55"
                         onClick={() => {
                           const newQuantity = item.quantity + 1;
                           handleQuantityChange(item.cartItemId, newQuantity);
@@ -188,6 +192,7 @@ const Cart = () => {
                     <Button
                       variant="ghost"
                       size="sm"
+                      className="hover:bg-red-200/90 py-5 rounded-xl dark:hover:bg-red-900/30"
                       onClick={() => handleDelete(item.cartItemId)}
                     >
                       <Trash2 className="h-4 w-4 text-red-500" />

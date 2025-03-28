@@ -149,7 +149,7 @@ const RelatedProducts = ({
         </Button>
         {products.map((product) => (
 
-          <div key={product.id} className="flex-shrink-0 lg:w-1/4 md:w-2/4 w-3/4 snap-start">
+          <div key={product.id} className="flex-shrink-0 lg:w-1/4 md:w-2/4 w-5/6 snap-start">
             <ProductCard product={product} wishlist={wishlist} setWishlist={setWishlist} />
           </div>
         ))}

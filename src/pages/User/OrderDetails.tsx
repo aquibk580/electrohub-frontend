@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import OrderProgress from "@/components/User/ProgressBar";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { OrderItem } from "@/types/entityTypes";
 import { formatPrice } from "@/utils/FormatPrice";
 import { useSelector } from "react-redux";
@@ -19,6 +19,7 @@ import ReviewForm from "@/components/User/ReviewForm";
 import { Helmet } from "react-helmet-async";
 
 const OrderDetails = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const user = useSelector((state: RootState) => state.user.user);
   const location = useLocation();
@@ -161,9 +162,9 @@ const OrderDetails = () => {
 
       {/* Order Details */}
       <Card className="max-h-screen overflow-y-auto">
-        <CardContent className="pt-6 grid grid-cols-2">
+        <CardContent  onClick={() => navigate(`/product/${orderItem.product.id}`)} className="pt-6 grid  grid-cols-2">
           <div>
-            <h2 className="text-base md:text-lg font-semibold mb-4">
+            <h2 className="text-base md:text-lg cursor-pointer font-semibold mb-4">
               {orderItem.product.name.substring(0, 100) + "..."}
             </h2>
 
@@ -180,9 +181,10 @@ const OrderDetails = () => {
             </div>
           </div>
           <img
+
             src={orderItem.product.images[0].url}
             alt=""
-            className="object-contain w-52 xl:place-self-end"
+            className="object-contain w-52 cursor-pointer xl:place-self-end"
           />
         </CardContent>
         <CardFooter className="grid grid-rows-1 gap-4 border-t border-border pt-4">
@@ -203,7 +205,7 @@ const OrderDetails = () => {
             orderItem.status === "Shipped") && (
               <Button
                 variant="outline"
-                className="bg-background text-foreground hover:bg-destructive/10 hover:text-destructive border border-input transition-colors"
+                className="bg-background text-foreground rounded-lg hover:bg-destructive/10 dark:hover:bg-red-700 border border-input transition-colors"
                 onClick={() => handleOrderStatusUpdate("Cancelled")}
               >
                 Cancel Order
