@@ -1,22 +1,24 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import type React from "react" // Added import for React
+import { useEffect, useState, useRef } from "react"
+import type React from "react"
 import { useForm, useFieldArray, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CloudUpload, Plus, Trash2, X } from "lucide-react"
+import { CloudUpload, Plus, Trash2, X, Edit, Check, Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import axios from "../../lib/axios"
 import { AddProductSchema, type AddProductSchematype } from "@/components/Seller/FormSchema"
-// import { Separator } from "@radix-ui/react-dropdown-menu"
 import { Separator } from "@/components/ui/separator"
 import { useSelector } from "react-redux"
 import type { RootState } from "@/redux/store"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { removeBackground } from "@imgly/background-removal"
 
 interface Category {
   name: string
@@ -24,12 +26,19 @@ interface Category {
 
 export default function AddProductForm() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
   const navigate = useNavigate()
   const [categories, setCategories] = useState<Category[]>([])
   const seller = useSelector((state: RootState) => state.seller.seller)
   const [images, setImages] = useState<(File | null)[]>([null, null, null, null, null])
   const [previews, setPreviews] = useState<string[]>(["", "", "", "", ""])
-  const [fileNames, setFileNames] = useState<string[]>(Array(previews.length).fill("No Selected File"))
+  const [fileNames, setFileNames] = useState<string[]>(Array(5).fill("No Selected File"))
+  const [editingIndex, setEditingIndex] = useState<number | null>(null)
+  const [bgColor, setBgColor] = useState<string>("#ffffff")
+  const [removedBgImage, setRemovedBgImage] = useState<string | null>(null)
+  const [originalImage, setOriginalImage] = useState<string | null>(null)
+  const fileInputRefs = useRef<(HTMLInputElement | null)[]>(Array(5).fill(null))
+  const bgColors = ["#ffffff", "#f0f0f0", "#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff"]
 
   const {
     control,
@@ -55,76 +64,157 @@ export default function AddProductForm() {
     control,
     name: "details",
   })
-  
+
   const handleImageChange = async (
     e: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>,
-    index: number
+    index: number,
   ) => {
-    let file: File | null = null;
+    let file: File | null = null
 
     if ("dataTransfer" in e) {
-      e.preventDefault();
-      const items = e.dataTransfer.items;
+      e.preventDefault()
+      const items = e.dataTransfer.items
 
       for (const item of items) {
         if (item.kind === "file") {
-          file = item.getAsFile();
+          file = item.getAsFile()
         } else if (item.kind === "string") {
           // Handle image dragged from a website (URL)
           item.getAsString(async (url) => {
             if (url.startsWith("http")) {
               try {
-                const downloadedFile = await urlToFile(url);
-                updateImageState(downloadedFile, index);
+                const downloadedFile = await urlToFile(url)
+                updateImageState(downloadedFile, index)
               } catch (error) {
-                console.error("Failed to download image:", error);
+                console.error("Failed to download image:", error)
               }
             }
-          });
-          return; // Exit early as URL fetching is async
+          })
+          return // Exit early as URL fetching is async
         }
       }
     } else {
-      file = e.target.files?.[0] || null;
+      file = e.target.files?.[0] || null
     }
 
     if (file) {
-      updateImageState(file, index);
+      updateImageState(file, index)
     }
-  };
+  }
 
   const urlToFile = async (imageUrl: string) => {
-    const response = await fetch(imageUrl);
-    const blob = await response.blob();
-    return new File([blob], "dropped-image.jpg", { type: blob.type });
-  };
+    const response = await fetch(imageUrl)
+    const blob = await response.blob()
+    return new File([blob], "dropped-image.jpg", { type: blob.type })
+  }
 
   const updateImageState = (file: File | null, index: number) => {
-    if (!file) return;
+    if (!file) return
 
-    const reader = new FileReader();
+    const reader = new FileReader()
     reader.onloadend = () => {
       setPreviews((prevPreviews) => {
-        const newPreviews = [...prevPreviews];
-        newPreviews[index] = reader.result as string;
-        return newPreviews;
-      });
+        const newPreviews = [...prevPreviews]
+        newPreviews[index] = reader.result as string
+        return newPreviews
+      })
 
       setFileNames((prevFileNames) => {
-        const newFileNames = [...prevFileNames];
-        newFileNames[index] = file.name;
-        return newFileNames;
-      });
+        const newFileNames = [...prevFileNames]
+        newFileNames[index] = file.name
+        return newFileNames
+      })
 
       setImages((prevImages) => {
-        const newImages = [...prevImages];
-        newImages[index] = file;
-        return newImages;
-      });
-    };
-    reader.readAsDataURL(file);
-  };
+        const newImages = [...prevImages]
+        newImages[index] = file
+        return newImages
+      })
+    }
+    reader.readAsDataURL(file)
+  }
 
+  const handleRemoveBackground = async () => {
+    if (!originalImage) return
+
+    setIsProcessing(true)
+    try {
+      // Convert base64 to blob
+      const fetchResponse = await fetch(originalImage)
+      const blob = await fetchResponse.blob()
+
+      // Process with imgly
+      const result = await removeBackground(blob, {
+        progress: (progress) => {
+          console.log(`Progress: ${(progress as unknown as number) * 100}%`)
+        },
+      })
+
+      // Convert result to base64
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setRemovedBgImage(reader.result as string)
+      }
+      reader.readAsDataURL(result)
+    } catch (error) {
+      console.error("Error removing background:", error)
+      toast.error("Failed to remove background", {
+        position: "top-center",
+        theme: "dark",
+      })
+    } finally {
+      setIsProcessing(false)
+    }
+  }
+
+  const saveEditedImage = async () => {
+    if (editingIndex === null || !removedBgImage) return
+
+    try {
+      // Convert the edited image to a file
+      const response = await fetch(removedBgImage)
+      const blob = await response.blob()
+      const file = new File([blob], `edited-${fileNames[editingIndex]}`, { type: "image/png" })
+
+      // Update the image state
+      updateImageState(file, editingIndex)
+
+      // Reset editing state
+      setEditingIndex(null)
+      setRemovedBgImage(null)
+      setOriginalImage(null)
+
+      toast.success("Image updated successfully", {
+        position: "top-center",
+        theme: "dark",
+      })
+    } catch (error) {
+      console.error("Error saving edited image:", error)
+      toast.error("Failed to save edited image", {
+        position: "top-center",
+        theme: "dark",
+      })
+    }
+  }
+
+  const openImageEditor = (index: number) => {
+    if (previews[index]) {
+      setEditingIndex(index)
+      setOriginalImage(previews[index])
+      setRemovedBgImage(null)
+    }
+  }
+
+  const downloadEditedImage = async () => {
+    if (!removedBgImage) return
+
+    const link = document.createElement("a")
+    link.href = removedBgImage
+    link.download = `edited-${editingIndex !== null ? fileNames[editingIndex] : "image"}.png`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
 
   const onSubmit = async (data: AddProductSchematype) => {
     setIsSubmitting(true)
@@ -176,14 +266,16 @@ export default function AddProductForm() {
 
   // Function to remove the image at a specific index
   const removeImage = (index: number) => {
+    const newImages = [...images]
     const newFileNames = [...fileNames]
     const newPreviews = [...previews]
 
     // Reset the specific index to initial values
+    newImages[index] = null
     newFileNames[index] = "No Selected File"
     newPreviews[index] = "" // Clear the preview
-    setImages(images.filter((_, i) => i !== index))
 
+    setImages(newImages)
     setFileNames(newFileNames)
     setPreviews(newPreviews)
   }
@@ -204,14 +296,14 @@ export default function AddProductForm() {
   }, [])
 
   return (
-    <div className=" mx-auto p-2 animate__animated animate__fadeIn">
-      <h1 className="text-xl text-primary bg-primary/30  pl-5 p-2 rounded-lg font-semibold mb-2">Add Product</h1>
+    <div className="mx-auto p-2 animate__animated animate__fadeIn">
+      <h1 className="text-xl text-primary bg-primary/30 pl-5 p-2 rounded-lg font-semibold mb-2">Add Product</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data" className="space-y-4 p-2">
         {/* Image Upload Section */}
-        <div className="flex flex-wrap place-content-center gap-5 p-2 ">
+        <div className="flex flex-wrap place-content-center gap-5 p-2">
           {previews.map((preview, index) => (
-            <div key={index} className="space-y-2 flex flex-col w-fit h-fit items-center  ">
+            <div key={index} className="space-y-2 flex flex-col w-fit h-fit items-center">
               <p className="text-sm font-semibold text-center text-accent-foreground/80">
                 Upload Product Image
                 <li key={index} className="list-none">
@@ -234,21 +326,30 @@ export default function AddProductForm() {
                   className="absolute inset-0 opacity-0 cursor-pointer z-10"
                   required={index < 3 && !previews[index]} // Only require if there's no preview
                   title=""
+                  ref={(el) => (fileInputRefs.current[index] = el)}
                 />
                 {previews[index] ? (
-                  <img
-                    src={previews[index]}
-                    alt={`Preview ${index + 1}`}
-                    className="w-full h-full rounded-md object-cover"
-                  />
+                  <div className="relative w-full h-full">
+                    <img
+                      src={previews[index] || "/placeholder.svg"}
+                      alt={`Preview ${index + 1}`}
+                      className="w-full h-full rounded-md object-cover"
+                    />
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      className="absolute top-2 right-2 z-30 bg-background/80 backdrop-blur-sm hover:bg-background/90"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        openImageEditor(index)
+                      }}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                  </div>
                 ) : (
                   <div className="flex flex-col justify-center shadow-sm border-dashed border-2 rounded-md border-gray-400 items-center w-full h-full">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-24 "
-                    >
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-24">
                       <path
                         d="M7 10V9C7 6.23858 9.23858 4 12 4C14.7614 4 17 6.23858 17 9V10C19.2091 10 21 11.7909 21 14C21 15.4806 20.1956 16.8084 19 17.5M7 10C4.79086 10 3 11.7909 3 14C3 15.4806 3.8044 16.8084 5 17.5M7 10C7.43285 10 7.84965 10.0688 8.24006 10.1959M12 12V21M12 12L15 15M12 12L9 15"
                         className="stroke-current"
@@ -262,28 +363,113 @@ export default function AddProductForm() {
                 )}
               </div>
 
-              <div className="p-1 px-2 w-full flex shadow-sm items-center justify-between rounded-md  bg-card">
-                <div className=" rounded-full  bg-muted p-1">
-                  {" "}
-                  <CloudUpload />
+              <div className="p-1 px-2 w-full flex shadow-sm items-center justify-between rounded-md bg-card">
+                <div className="rounded-full bg-muted p-1">
+                  <CloudUpload className="h-4 w-4" />
                 </div>
-                <span className="text-sm ">
+                <span className="text-sm">
                   {fileNames[index] ? formatFileName(fileNames[index]) : "No Selected File"}
                 </span>
 
                 <div
-                  className=" rounded-lg cursor-pointer bg-destructive/10 text-destructive p-1"
+                  className="rounded-lg cursor-pointer bg-destructive/10 text-destructive p-1"
                   onClick={() => removeImage(index)}
                 >
-                  <Trash2 />
+                  <Trash2 className="h-4 w-4" />
                 </div>
               </div>
             </div>
           ))}
         </div>
 
+        {/* Image Editor Dialog */}
+        <Dialog open={editingIndex !== null} onOpenChange={(open) => !open && setEditingIndex(null)}>
+          <DialogContent className="max-w-4xl w-[90vw]">
+            <DialogHeader>
+              <DialogTitle>Edit Image</DialogTitle>
+            </DialogHeader>
+
+            <Tabs defaultValue="original" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="original">Original</TabsTrigger>
+                <TabsTrigger value="edited" disabled={!removedBgImage}>
+                  Edited
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="original" className="flex flex-col items-center">
+                {originalImage && (
+                  <div className="relative max-h-[60vh] overflow-auto p-2">
+                    <img
+                      src={originalImage || "/placeholder.svg"}
+                      alt="Original"
+                      className="w-96 h-auto object-contain rounded-md"
+                    />
+                  </div>
+                )}
+
+                <div className="flex justify-center gap-4 mt-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      if (editingIndex !== null) {
+                        fileInputRefs.current[editingIndex]?.click()
+                      }
+                    }}
+                  >
+                    Change Image
+                  </Button>
+                  <Button onClick={handleRemoveBackground} disabled={isProcessing} className="gap-2">
+                    {isProcessing ? "Processing..." : "Remove Background"}
+                  </Button>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="edited" className="flex flex-col items-center">
+                {removedBgImage && (
+                  <div className="relative max-h-[60vh] overflow-auto p-2" style={{ backgroundColor: bgColor }}>
+                    <img
+                      src={removedBgImage || "/placeholder.svg"}
+                      alt="Edited"
+                      className="max-w-full h-auto object-contain rounded-md"
+                    />
+                  </div>
+                )}
+
+                <div className="w-full mt-4">
+                  <Label htmlFor="bg-color" className="text-sm font-medium">
+                    Background Color
+                  </Label>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {bgColors.map((color) => (
+                      <button
+                        key={color}
+                        type="button"
+                        className={`w-8 h-8 rounded-full border-2 ${bgColor === color ? "border-primary" : "border-transparent"}`}
+                        style={{ backgroundColor: color }}
+                        onClick={() => setBgColor(color)}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex justify-center gap-4 mt-4">
+                  <Button variant="outline" onClick={downloadEditedImage} className="gap-2">
+                    <Download className="h-4 w-4" />
+                    Download
+                  </Button>
+                  <Button onClick={saveEditedImage} className="gap-2">
+                    <Check className="h-4 w-4" />
+                    Save Changes
+                  </Button>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </DialogContent>
+        </Dialog>
+
         {/* Basic Product Information */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 gap-x-8  ">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 gap-x-8">
           <div className="space-y-1">
             <Label htmlFor="name" className="text-md font-medium">
               Product Name
@@ -391,7 +577,7 @@ export default function AddProductForm() {
             />
             {errors.status && <p className="text-red-500 text-sm">{errors.status.message}</p>}
           </div>
-          <div className="grid grid-cols-1  gap-6">
+          <div className="grid grid-cols-1 gap-6">
             <div className="space-y-1">
               <Label htmlFor="brand" className="text-sm font-medium">
                 Brand
@@ -401,15 +587,16 @@ export default function AddProductForm() {
                 control={control}
                 render={({ field }) => <Input {...field} id="brand" className="py-5" placeholder="e.g. MSI" />}
               />
-              {errors.brand && <p className="text-sm  text-destructive">{errors.brand.message}</p>}
+              {errors.brand && <p className="text-sm text-destructive">{errors.brand.message}</p>}
             </div>
           </div>
         </div>
 
         {/* Product Specifications */}
-
         <Separator />
-        <h2 className="text-xl font-semibold mb-4 bg-primary/30 text-primary pl-4 p-2 rounded-lg">Additional Product Details</h2>
+        <h2 className="text-xl font-semibold mb-4 bg-primary/30 text-primary pl-4 p-2 rounded-lg">
+          Additional Product Details
+        </h2>
         <div className="space-y-4">
           <Label className="text-sm font-medium">Custom Attributes</Label>
           {fields.map((field, index) => (
@@ -436,7 +623,8 @@ export default function AddProductForm() {
         <div className="flex items-center justify-center">
           <Button
             type="submit"
-            className="  bg-primary font-semibold text-lg rounded-lg md:px-32 py-6 hover:bg-primary/90 shadow-lg "
+            className="bg-primary font-semibold text-lg rounded-lg md:px-32 py-6 hover:bg-primary/90 shadow-lg"
+            disabled={isSubmitting}
           >
             {!isSubmitting ? "Add Product" : "Adding..."}
           </Button>
