@@ -1,4 +1,4 @@
-import { Loader2, ShoppingCart, Trash2 } from "lucide-react";
+import { Loader2, ShoppingCart, Trash2, HeartOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { assets } from "@/assets/assets";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -10,8 +10,9 @@ import { useNavigate } from "react-router-dom";
 
 export function Wishlist() {
   const navigate = useNavigate();
-  const [wishlistItems, setWishlistItems] = useState<Array<Product>>();
+  const [wishlistItems, setWishlistItems] = useState<Array<Product>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
   useEffect(() => {
     const getAllWishlistItems = async () => {
       try {
@@ -92,23 +93,30 @@ export function Wishlist() {
         </div>
       </CardHeader>
       <CardContent className="flex-1 overflow-y-auto">
-        <div className="space-y-4">
-          {!isLoading ? (
-            wishlistItems?.map((item) => (
+        {isLoading ? (
+          <div className="flex justify-center items-center min-h-[200px]">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
+        ) : wishlistItems.length > 0 ? (
+          <div className="space-y-4">
+            {wishlistItems.map((item) => (
               <div
                 key={item.id}
-                className="flex flex-col sm:flex-row items-center gap-4 p-3 md:p-4 border  rounded-xl bg-slate-50/35 dark:bg-white/5  hover:bg-slate-100 dark:hover:bg-primary/5 hover:border-primary/35 shadow-sm"
+                className="flex flex-col sm:flex-row items-center gap-4 p-3 md:p-4 border rounded-xl bg-slate-50/35 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-primary/5 hover:border-primary/35 shadow-sm"
               >
                 {/* Product Image */}
                 <img
-                   onClick={() => navigate(`/product/${item.id}`)}
+                  onClick={() => navigate(`/product/${item.id}`)}
                   src={item.images[0].url || "/placeholder.svg"}
                   alt={item.name}
                   className="w-48 h-48 sm:w-32 sm:h-32 cursor-pointer object-contain rounded-lg"
                 />
 
                 {/* Product Details */}
-                <div  onClick={() => navigate(`/product/${item.id}`)} className="flex-1 text-center sm:text-left cursor-pointer">
+                <div
+                  onClick={() => navigate(`/product/${item.id}`)}
+                  className="flex-1 text-center sm:text-left cursor-pointer"
+                >
                   <h3 className="font-medium text-lg mb-1">{item.name}</h3>
                   <span className="text-lg font-bold">₹{item.price}</span>
                   <div
@@ -126,14 +134,15 @@ export function Wishlist() {
                 <div className="flex gap-2">
                   {item.status !== "OutOfStock" && (
                     <Button
-                      // size="icon"
                       variant="outline"
-                      className="p-2 px-4 hover:bg-green-100 dark:hover:bg-green-700/20  border-green-700/30 dark:border-green-900 rounded-xl"
+                      className="p-2 px-4 hover:bg-green-100 dark:hover:bg-green-700/20 border-green-700/30 dark:border-green-900 rounded-xl"
                       aria-label="Add to Cart"
                       onClick={() => handleAddToCart(item.id)}
                     >
                       <ShoppingCart className="h-5 w-5 text-green-600" />
-                      <span className="text-green-900 font-semibold dark:text-green-700">Add to Cart</span>
+                      <span className="text-green-900 font-semibold dark:text-green-700">
+                        Add to Cart
+                      </span>
                     </Button>
                   )}
                   <Button
@@ -147,13 +156,29 @@ export function Wishlist() {
                   </Button>
                 </div>
               </div>
-            ))
-          ) : (
-            <div className="flex justify-center items-center min-h-screen">
-              <Loader2 className="h-8 w-8 animate-spin" />
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full text-center px-4">
+  <HeartOff className="h-24 w-24 text-red-500 bg-red-100/75 dark:bg-red-700/30 shadow-sm p-4 rounded-full mb-4" />
+  
+  <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
+    Oops! Your Wishlist is Empty 
+  </h2>
+  
+  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+    Start adding your favorite products and save them for later!
+  </p>
+  
+  <Button
+    onClick={() => navigate("/")}
+    className="mt-5 px-6 py-3 bg-primary hover:bg-primary/90 transition-all text-white font-bold rounded-lg shadow-md"
+  >
+    Browse Products
+  </Button>
+</div>
+
+        )}
       </CardContent>
     </Card>
   );

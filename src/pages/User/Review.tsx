@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, Star, Trash2 } from "lucide-react";
+import { Loader2, MessageSquareText, Star, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import ReviewEditModel from "@/components/User/ReviewEditModel";
 import axios from "@/lib/axios";
@@ -139,7 +139,18 @@ const Reviews = () => {
               </div>
             ))
           ) : (
-            <h1 className="font-medium text-2xl p-2">No Reviews found</h1>
+            <div className="flex flex-col items-center justify-center text-center h-full">
+               <MessageSquareText className="h-16 w-16 text-gray-400 dark:text-gray-500 mb-2" /> 
+  <h1 className="font-semibold text-2xl text-gray-700 dark:text-gray-300">
+    No Reviews Yet 
+  </h1>
+  <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+    Be the first to share your thoughts!
+  </p>
+ 
+</div>
+
+          
           )
         ) : (
           <div className="flex justify-center items-center min-h-screen">

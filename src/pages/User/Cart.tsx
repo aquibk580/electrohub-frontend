@@ -201,16 +201,22 @@ const Cart = () => {
                 </div>
               ))
             ) : (
-              <div className="flex flex-col justify-center items-center h-full gap-2  ">
-                <img src={assets.CartEmpty} className="h-44" alt="Empty_Cart" />
-                <h1 className="font-semibold text-2xl">Your Cart is empty</h1>
-                <Link
-                  to="/"
-                  className="bg-green-700 p-1 px-3 rounded-lg text-white"
-                >
-                  Shop Now
-                </Link>
-              </div>
+              <div className="flex flex-col justify-center items-center h-full gap-1 text-center">
+              <img src={assets.CartEmpty} className="h-36 object-contain" alt="Empty Cart" />
+              <h1 className="font-semibold text-2xl text-gray-800 dark:text-white">
+                Oops! Your Cart is Empty 🛒
+              </h1>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">
+                Looks like you haven’t added anything yet.
+              </p>
+              <Link
+                to="/"
+                className="bg-green-700 hover:bg-green-800 transition-all p-2 px-5 rounded-lg text-white font-semibold shadow-md"
+              >
+                Start Shopping
+              </Link>
+            </div>
+            
             )}
           </div>
         </CardContent>
