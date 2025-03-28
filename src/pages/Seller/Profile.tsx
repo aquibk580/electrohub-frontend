@@ -3,22 +3,17 @@ import {
   Mail,
   Phone,
   Building2,
-  Globe,
-  Instagram,
   EllipsisVertical,
-  Facebook,
-  MailOpen,
-  Github,
   MoveUp,
   IndianRupee,
   RotateCw,
   PackageMinus,
   Loader2,
+  RefreshCcw,
 } from "lucide-react";
 import { assets } from "@/assets/assets";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -28,84 +23,66 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SellerEditDialog } from "@/components/Seller/SellerEditDialog";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import axios from "axios";
+import axios from "@/lib/axios";
 import { clearSeller, setSeller } from "@/redux/slices/seller";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
-const socialLinks = [
-  {
-    img: <Globe className="text-blue-500" />,
-    platform: "Website",
-    url: "amazonia.in",
-  },
-  {
-    img: <Instagram className="text-red-500" />,
-    platform: "Instagram",
-    url: "@amazonia",
-  },
-  {
-    img: <Facebook className="text-blue-700" />,
-    platform: "Facebook",
-    url: "fb.com/amazonia",
-  },
-  { img: <Github />, platform: "Reddit", url: "r/amazonia" },
-  {
-    img: <MailOpen className="text-gray-500" />,
-    platform: "Email",
-    url: "amazonia@techub.com",
-  },
-];
-
-const salesMetrics = [
-  {
-    img: (
-      <span className="bg-green-100 p-2 rounded-full">
-        <MoveUp className="text-green-700 w-5 h-5" />
-      </span>
-    ),
-    label: "items",
-    value: "12,000 items",
-  },
-  {
-    img: (
-      <span className="bg-orange-100 p-2 rounded-full">
-        <IndianRupee className="text-orange-500 w-5 h-5" />
-      </span>
-    ),
-    label: "Sale",
-    value: "5,28,593/-",
-  },
-  {
-    img: (
-      <span className="bg-pink-50 p-2 rounded-full">
-        <RotateCw className="text-red-500 w-5 h-5" />
-      </span>
-    ),
-    label: "items return",
-    value: "567 items return",
-  },
-  {
-    img: (
-      <span className="bg-red-100 p-2 rounded-full">
-        <PackageMinus className="text-red-700 w-5 h-5" />
-      </span>
-    ),
-    label: "Not delivered",
-    value: "3 Items Not delivered",
-  },
-];
+import { formatPrice } from "@/utils/FormatPrice";
 
 export default function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const seller = useSelector((state: RootState) => state.seller.seller);
-  const [profilePic, setProfilePic] = useState(seller!.pfp);
+  const [profilePic, setProfilePic] = useState(seller?.pfp ?? "");
+  const [loading, setLoading] = useState<boolean>(true);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [profileData, setProfileData] = useState<{
+    orderItems: number;
+    totalSales: number;
+    returnedItems: number;
+    notDeliveredItems: number;
+  } | null>(null);
+
+  const getProfileStatistics = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/seller/profilestatistics`
+      );
+      if (response.status === 200) {
+        const data = {
+          orderItems: response.data?.orderItems,
+          totalSales: response.data?.totalSales,
+          returnedItems: response.data?.returnedItems,
+          notDeliveredItems: response.data?.notDeliveredItems,
+        };
+        sessionStorage.setItem("profileData", JSON.stringify(data));
+        setProfileData(data);
+      }
+    } catch (error: any) {
+      toast.error(error.message, {
+        position: "top-center",
+        theme: "dark",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const cachedData = sessionStorage.getItem("profileData");
+    if (cachedData) {
+      setProfileData(JSON.parse(cachedData));
+      setLoading(false);
+      return;
+    }
+
+    getProfileStatistics();
+  }, []);
 
   const handleProfilePicChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -137,6 +114,8 @@ export default function Profile() {
           theme: "dark",
         });
         console.log(error);
+      } finally {
+        URL.revokeObjectURL(imageUrl);
       }
     }
   };
@@ -166,6 +145,48 @@ export default function Profile() {
     }
   };
 
+  const salesMetrics = useMemo(() => {
+    if (!profileData) return [];
+    return [
+      {
+        img: (
+          <span className="bg-green-100 p-2 rounded-full">
+            <MoveUp className="text-green-700 w-5 h-5" />
+          </span>
+        ),
+        label: "items",
+        value: `${profileData?.orderItems} items`,
+      },
+      {
+        img: (
+          <span className="bg-orange-100 p-2 rounded-full">
+            <IndianRupee className="text-orange-500 w-5 h-5" />
+          </span>
+        ),
+        label: "Sale",
+        value: `${formatPrice(profileData?.totalSales || 0)}/-`,
+      },
+      {
+        img: (
+          <span className="bg-pink-50 p-2 rounded-full">
+            <RotateCw className="text-red-500 w-5 h-5" />
+          </span>
+        ),
+        label: "items return",
+        value: `${profileData?.returnedItems} items return`,
+      },
+      {
+        img: (
+          <span className="bg-red-100 p-2 rounded-full">
+            <PackageMinus className="text-red-700 w-5 h-5" />
+          </span>
+        ),
+        label: "Not delivered",
+        value: `${profileData?.notDeliveredItems} Items Not delivered`,
+      },
+    ];
+  }, [profileData]);
+
   return (
     <div className="animate__animated animate__fadeIn">
       <header className="bg-teal-800 rounded-xl  h-44 relative">
@@ -192,8 +213,8 @@ export default function Profile() {
             <div className="w-32 h-32  rounded-full border-[3px] bg-white border-white relative">
               <img
                 className="w-full h-full object-cover  rounded-full"
-                src={profilePic}
-                alt=""
+                src={profilePic ?? assets.account_icon}
+                alt="Profile_Picture"
               />
               <label
                 htmlFor="profile-pic-input"
@@ -210,16 +231,17 @@ export default function Profile() {
               </label>
             </div>
           </div>
-          {/* {editProfile == true ? (<Button className="border shadow-none text-white mt-20 hover:bg-green-950 bg-green-900 rounded-full " onClick={() => seteditProfile(false)}>Save Changes</Button>) : (
-            <Button variant="outline" className="border shadow-none text-gray-600 mt-20 rounded-full " onClick={() => seteditProfile(true)}>Edit Profile</Button>
-          )} */}
           <SellerEditDialog />
         </div>
 
         <h1 className="text-3xl -mt-6 font-bold flex items-center gap-2">
           {seller!.name}
           <span className="text-blue-500">
-            <img className="w-8 -mt-3 mr-3" src={assets.verify} alt="" />
+            <img
+              className="w-8 -mt-3 mr-3"
+              src={assets.verify}
+              alt="Verify_Icon"
+            />
           </span>
         </h1>
 
@@ -244,30 +266,36 @@ export default function Profile() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 mt-8 gap-8">
-          {/* <div>
-            <h2 className="text-xl font-semibold mb-4">Social Links</h2>
-            <div className="space-y-3">
-              {socialLinks.map((link) => (
-                <div key={link.platform} className="flex items-center gap-2">
-                  <span className="">{link.img}</span>
-                  {link.url}
-                </div>
-              ))}
-            </div>
-          </div> */}
+        <div className="grid md:grid-cols-1 mt-8 gap-2">
+          {!loading ? (
+            <>
+              <div className="flex flex-row justify-between">
+                <h2 className="text-xl font-semibold">Sales & Revenue</h2>
+                <Button
+                  onClick={getProfileStatistics}
+                  className="transition-colors duration-300 px-4 py-2 rounded-md flex items-center gap-2  
+             bg-white text-black hover:bg-gray-200 
+             dark:bg-black dark:text-white dark:hover:bg-gray-800"
+                >
+                  <RefreshCcw /> Refresh
+                </Button>
+              </div>
 
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Sales & Revenue</h2>
-            <div className="space-y-3">
-              {salesMetrics.map((metric) => (
-                <div key={metric.label} className="flex items-center gap-2">
-                  {metric.img}
-                  {metric.value}
-                </div>
-              ))}
+              <div className="space-y-3">
+                {salesMetrics.map((metric) => (
+                  <div key={metric.label} className="flex items-center gap-2">
+                    {metric.img}
+                    {metric.value}
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-col justify-center items-center h-[200px]">
+              <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+              <p className="text-muted-foreground">Loading Sales Metrics...</p>
             </div>
-          </div>
+          )}
         </div>
 
         <div className="mt-12 mb-8">
@@ -299,8 +327,13 @@ export default function Profile() {
                 <Button
                   className="bg-red-600 text-white hover:bg-red-700 flex items-center gap-2"
                   onClick={handleAccountDelete}
+                  disabled={isDeleting}
                 >
-                  Delete Account
+                  {isDeleting ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    "Delete Account"
+                  )}
                 </Button>
               </AlertDialogFooter>
             </AlertDialogContent>

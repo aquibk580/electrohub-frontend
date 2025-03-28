@@ -16,55 +16,18 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { toast } from "react-toastify";
-import axios from "@/lib/axios";
 import { Category } from "@/types/entityTypes";
 
-export function ChartPie() {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [categories, setCategories] = useState<
-    Array<Category & { productCount: string }>
-  >([]);
-  const [highestProductCatgeory, setHighestProductCategory] = useState<{
+interface ChartPieProps {
+  loading: boolean;
+  highest: {
     name: string;
     productCount: string;
-  } | null>(null);
+  } | null;
+  categories: Array<Category & { productCount: string }>;
+}
 
-  useEffect(() => {
-    const getAllCategories = async () => {
-      try {
-        const response = await axios.get(
-          `${
-            import.meta.env.VITE_API_URL
-          }/api/admin/cms/categories/productCount`
-        );
-        if (response.status === 200) {
-          setCategories(response.data);
-          setHighestProductCategory(
-            response.data.reduce(
-              (
-                max: { productCount: string },
-                category: Category & { productCount: string }
-              ) =>
-                Number(category.productCount) > Number(max.productCount)
-                  ? category
-                  : max,
-              response.data[0]
-            )
-          );
-        }
-      } catch (error: any) {
-        toast.error(error.message, {
-          position: "top-center",
-          theme: "dark",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-    getAllCategories();
-  }, []);
-
+export function ChartPie({ loading, highest, categories }: ChartPieProps) {
   // Generate unique colors dynamically
   const generateColors = (count: number) => {
     const colors = [
@@ -85,8 +48,8 @@ export function ChartPie() {
   // Convert categories to chart-friendly format
   const chartData = categories.map((category, index) => ({
     name: category.name,
-    value: Number(category.productCount), // Convert to number
-    fill: generateColors(categories.length)[index], // Assign unique color
+    value: Number(category.productCount),
+    fill: generateColors(categories.length)[index],
   }));
 
   // Create Chart Config
@@ -170,7 +133,7 @@ export function ChartPie() {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          The most trending category is {highestProductCatgeory?.name}{" "}
+          The most trending category is {highest?.name}{" "}
           <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">

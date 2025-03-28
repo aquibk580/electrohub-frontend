@@ -19,7 +19,7 @@ import { DataTable } from "@/components/Admin/data-table";
 import { TableWrapper } from "@/components/Admin/table-wrapper";
 import DashboardStats from "@/components/Admin/dashboard-stats";
 import axios from "@/lib/axios";
-import { Product } from "@/types/entityTypes";
+import { Category, Product } from "@/types/entityTypes";
 import { formatPrice } from "@/utils/FormatPrice";
 import { Loader2 } from "lucide-react";
 import { toast } from "react-toastify";
@@ -47,44 +47,6 @@ const Dashboard = () => {
   const [topSellingProducts, setTopSellingProducts] = useState<Array<Product>>(
     []
   );
-  const salesData = {
-    "IN-AN": 12000,
-    "IN-AP": 800,
-    "IN-AR": 10000,
-    "IN-AS": 500,
-    "IN-BR": 300,
-    "IN-CH": 12000,
-    "IN-CT": 800,
-    "IN-DD": 10000,
-    "IN-DL": 500,
-    "IN-DN": 300,
-    "IN-GA": 12000,
-    "IN-GJ": 800,
-    "IN-HP": 10000,
-    "IN-HR": 500,
-    "IN-JH": 300,
-    "IN-JK": 12000,
-    "IN-KA": 800,
-    "IN-KL": 10000,
-    "IN-LD": 500,
-    "IN-MH": 300,
-    "IN-ML": 12000,
-    "IN-MN": 800,
-    "IN-MP": 10000,
-    "IN-MZ": 500,
-    "IN-NL": 300,
-    "IN-OR": 12000,
-    "IN-PB": 800,
-    "IN-PY": 10000,
-    "IN-RJ": 500,
-    "IN-SK": 300,
-    "IN-TG": 12000,
-    "IN-TN": 800,
-    "IN-TR": 10000,
-    "IN-UP": 500,
-    "IN-UT": 300,
-    "IN-WB": 12000,
-  };
 
   useEffect(() => {
     const getTopSellingProducts = async () => {
@@ -170,6 +132,50 @@ const Dashboard = () => {
     )}`,
   }));
 
+  const [chartDataloading, setChartDataLoading] = useState<boolean>(true);
+  const [categories, setCategories] = useState<
+    Array<Category & { productCount: string }>
+  >([]);
+  const [highestProductCatgeory, setHighestProductCategory] = useState<{
+    name: string;
+    productCount: string;
+  } | null>(null);
+
+  useEffect(() => {
+    const getAllCategories = async () => {
+      try {
+        const response = await axios.get(
+          `${
+            import.meta.env.VITE_API_URL
+          }/api/admin/cms/categories/productCount`
+        );
+        if (response.status === 200) {
+          setCategories(response.data);
+          setHighestProductCategory(
+            response.data.reduce(
+              (
+                max: { productCount: string },
+                category: Category & { productCount: string }
+              ) =>
+                Number(category.productCount) > Number(max.productCount)
+                  ? category
+                  : max,
+              response.data[0]
+            )
+          );
+        }
+      } catch (error: any) {
+        toast.error(error.message, {
+          position: "top-center",
+          theme: "dark",
+        });
+      } finally {
+        setChartDataLoading(false);
+      }
+    };
+    getAllCategories();
+  }, []);
+
   return (
     <div className="flex flex-col gap-4 p-4">
       {statisticsLoading ? (
@@ -223,7 +229,11 @@ const Dashboard = () => {
               </CardContent>
             </Card>
             <div className="max-w-lg">
-              <ChartPie />
+              <ChartPie
+                loading={chartDataloading}
+                categories={categories}
+                highest={highestProductCatgeory}
+              />
             </div>
           </div>
         </>

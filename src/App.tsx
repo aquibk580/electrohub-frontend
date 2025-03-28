@@ -57,6 +57,7 @@ import ContactUs from "./pages/Home/Contact-us";
 import InfoPage from "./pages/Home/Footer-links";
 import NotFound from "./components/ui/not-found";
 import Admins from "./pages/Admin/Admins";
+import SellerContact from "./pages/Seller/Contact";
 
 const App = () => {
   return (
@@ -265,6 +266,7 @@ const App = () => {
                 </SellerLayout>
               }
             />
+           
             <Route path="products">
               <Route
                 index
@@ -308,6 +310,14 @@ const App = () => {
               }
             />
           </Route>
+          <Route
+              path="contact"
+              element={
+                <SellerLayout>
+                  <SellerContact />
+                </SellerLayout>
+              }
+            />
           <Route
             path="settings"
             element={

@@ -37,7 +37,7 @@ export default function ContactUs() {
   const onSubmit = async (data: any) => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/user/contact`,
+        `${import.meta.env.VITE_API_URL}/api/contact`,
         data
       );
       if (response.status === 201) {
