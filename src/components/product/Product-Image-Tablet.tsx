@@ -42,7 +42,7 @@ export default function ProductImageTablet({ images, title }: ProductImageProps)
 
       {/* Main Image */}
       <div className="flex-1">
-        <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-900">
+        <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100 dark:bg-black">
           <Lens hovering={hovering} setHovering={setHovering}>
             <img
               src={images[currentIndex]}

@@ -104,7 +104,7 @@ const ProductSpecs = ({ reviews, details, loading }: ProductSpecsProps) => {
               ) : (
                <div className="h-[400px]  flex flex-col items-center justify-center p-5 ">
                 <MessageSquareMore className="h-12 w-12 text-muted-foreground" />
-                 <h3 className="text-md font-medium text-muted-foreground ">"There are currently no reviews for this product. 
+                 <h3 className="text-md text-center font-medium text-muted-foreground ">"There are currently no reviews for this product. 
                   Be the first to share your experience!"</h3>
                </div>
               )

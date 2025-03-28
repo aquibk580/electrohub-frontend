@@ -6,8 +6,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Product } from "@/types/entityTypes";
+import { useNavigate } from "react-router-dom";
 
 export function Wishlist() {
+  const navigate = useNavigate();
   const [wishlistItems, setWishlistItems] = useState<Array<Product>>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   useEffect(() => {
@@ -95,17 +97,18 @@ export function Wishlist() {
             wishlistItems?.map((item) => (
               <div
                 key={item.id}
-                className="flex flex-col sm:flex-row items-center gap-4 p-4 border rounded-lg bg-primary/5 hover:bg-primary/10 shadow-sm"
+                className="flex flex-col sm:flex-row items-center gap-4 p-3 md:p-4 border  rounded-xl bg-slate-50/35 dark:bg-white/5  hover:bg-slate-100 dark:hover:bg-primary/5 hover:border-primary/35 shadow-sm"
               >
                 {/* Product Image */}
                 <img
+                   onClick={() => navigate(`/product/${item.id}`)}
                   src={item.images[0].url || "/placeholder.svg"}
                   alt={item.name}
-                  className="w-24 h-24 sm:w-32 sm:h-32 object-contain rounded-lg"
+                  className="w-48 h-48 sm:w-32 sm:h-32 cursor-pointer object-contain rounded-lg"
                 />
 
                 {/* Product Details */}
-                <div className="flex-1 text-center sm:text-left">
+                <div  onClick={() => navigate(`/product/${item.id}`)} className="flex-1 text-center sm:text-left cursor-pointer">
                   <h3 className="font-medium text-lg mb-1">{item.name}</h3>
                   <span className="text-lg font-bold">₹{item.price}</span>
                   <div
@@ -123,19 +126,20 @@ export function Wishlist() {
                 <div className="flex gap-2">
                   {item.status !== "OutOfStock" && (
                     <Button
-                      size="icon"
+                      // size="icon"
                       variant="outline"
-                      className="p-2 hover:bg-green-100"
+                      className="p-2 px-4 hover:bg-green-100 dark:hover:bg-green-700/20  border-green-700/30 dark:border-green-900 rounded-xl"
                       aria-label="Add to Cart"
                       onClick={() => handleAddToCart(item.id)}
                     >
                       <ShoppingCart className="h-5 w-5 text-green-600" />
+                      <span className="text-green-900 font-semibold dark:text-green-700">Add to Cart</span>
                     </Button>
                   )}
                   <Button
                     size="icon"
                     variant="outline"
-                    className="p-2 hover:bg-red-100"
+                    className="p-2 hover:bg-red-100 dark:hover:bg-red-700/20 border-red-700/30 dark:border-red-900 rounded-xl"
                     aria-label="Remove from Wishlist"
                     onClick={() => handleDelete(item.id)}
                   >

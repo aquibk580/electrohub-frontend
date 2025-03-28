@@ -123,7 +123,7 @@ const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
             to={item.path}
             className={`flex items-center gap-3 px-6 py-3 rounded-lg h-fit text-foreground 
               hover:bg-accent
-              ${activeItem === item.text && "bg-primary/90 hover:bg-primary/40 "}`}
+              ${activeItem === item.text && "bg-primary text-white dark:text- dark:bg-primary/65 hover:bg-primary/40 "}`}
           >
             <item.icon className="h-5 w-5" />
             <span>{item.text}</span>
@@ -133,7 +133,13 @@ const Sidebar = forwardRef<HTMLDivElement>((props, ref) => {
 
       {/* Banner and Logout */}
       <div className="grid gap-4">
-        <img src={assets.BannerLogo || "/placeholder.svg"} className="rounded-xl shadow-md" alt="Banner" />
+        {/* <img src={assets.BannerLogo || "/placeholder.svg"} className="rounded-xl shadow-md" alt="Banner" /> */}
+        <div className="border dark:border-primary/85 shadow-lg bg-white dark:bg-transparent dark:bg-gradient-to-br from-primary/30 via-black to-primary/15 px-4 py-6 gap-1 rounded-xl flex flex-col items-center justify-center ">
+          <h1 className="text-4xl font-extrabold bg-gradient-to-br from-orange-500 via-red-600 to-yellow-300 text-transparent bg-clip-text ">Mega Offer</h1>
+          <p className="text-xs">Limited Time Deals</p>
+          <b className="font-extrabold  text-red-500">51% OFF</b>
+          <button className="bg-red-600 px-2 py-1 rounded-lg text-sm text-white font-medium">Grab Now</button>
+        </div>
         <Button
           
           className="flex items-center w-full p-5 border space-x-1 bg-white dark:bg-black hover:bg-red-600 dark:hover:bg-red-600 rounded-xl shadow-md"
