@@ -71,7 +71,6 @@ const ViewOrder = () => {
         `${import.meta.env.VITE_API_URL}/api/seller/orders/${orderItem.id}`,
         { status }
       );
-      console.log(status);
       if (response.status === 200) {
         setOrderItem((prev) => ({ ...prev, status }));
         toast.success("Order status updated", {
@@ -116,7 +115,7 @@ const ViewOrder = () => {
           <div className="flex flex-col lg:flex-row gap-2 lg:items-center border border-primary/50 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black   p-3 md:p-1 rounded-xl shadow-sm">
             <Link to={`product/${orderItem.id}`}>
               <p className="text-primary ml-2 mt-1 text-sm">
-                Order ID: {orderItem.id}45363
+                Order ID: {orderItem.id}
               </p>
               <img
                 src={orderItem.product.images[0].url}
@@ -146,8 +145,8 @@ const ViewOrder = () => {
                   <strong>Total:</strong>{" "}
                   {formatPrice(
                     orderItem.product.price -
-                      (orderItem.product.price / 100) *
-                        orderItem.product.offerPercentage
+                    (orderItem.product.price / 100) *
+                    orderItem.product.offerPercentage
                   )}
                 </p>
               </div>
@@ -179,20 +178,22 @@ const ViewOrder = () => {
               <h3 className="text-lg font-semibold text-foreground mb-3">
                 Customer Details
               </h3>
-              <div className="space-y-2 text-muted-foreground text-[15px]">
-                <p>
-                  <strong>Name:</strong> {user.name}
-                </p>
-                <p>
-                  <strong>Email:</strong> {user.email}
-                </p>
-                <p>
-                  <strong>Phone:</strong> {user.phone}
-                </p>
-                <p>
-                  <strong>Address:</strong> {user.address}
-                </p>
-              </div>
+              {user ? (
+                <div className="space-y-2 text-muted-foreground text-[15px]">
+                  <p>
+                    <strong>Name:</strong> {user.name}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {user.email}
+                  </p>
+                  <p>
+                    <strong>Phone:</strong> {user.phone}
+                  </p>
+                  <p>
+                    <strong>Address:</strong> {user.address}
+                  </p>
+                </div>
+              ) : (<h1 className="text-xl">User Details not available</h1>)}
             </div>
 
             <div className="p-4 md:p-6 rounded-xl border border-primary/50 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black   shadow-sm">

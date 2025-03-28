@@ -86,7 +86,7 @@ const Admins = () => {
                         </span>
                       </TableCell>
                       <TableCell className="hidden lg:table-cell">
-                        {formatDate(new Date())}
+                        {formatDate(user.createdAt)}
                       </TableCell>
                     </TableRow>
                   ))
