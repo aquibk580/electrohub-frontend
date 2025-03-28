@@ -18,7 +18,8 @@ import {
   Home,
   FolderKanban,
   Mail,
-  ShieldCheck
+  ShieldCheck,
+  Contact,
 } from "lucide-react";
 
 import { NavMain } from "./nav-main";
@@ -149,9 +150,9 @@ export function AppSidebar({ userRole, ...props }: AppSidebarProps) {
       ],
       navItems: [
         {
-          title: "Home",
+          title: "Dashboard",
           url: "/seller/dashboard",
-          icon: Home,
+          icon: LayoutGrid,
           isActive: true,
         },
         {
@@ -170,6 +171,11 @@ export function AppSidebar({ userRole, ...props }: AppSidebarProps) {
           icon: PackageSearch,
         },
         {
+          title: "Contact",
+          url: "/seller/contact",
+          icon: Contact,
+        },
+        {
           title: "Settings",
           url: "/seller/settings",
           icon: Settings2,
@@ -181,15 +187,15 @@ export function AppSidebar({ userRole, ...props }: AppSidebarProps) {
 
   return (
     <Sidebar className="min-h-screen " collapsible="icon" {...props}>
-    <SidebarHeader className="bg-white dark:bg-black" >
-      <TeamSwitcher teams={roleData.teams} />
-    </SidebarHeader>
-    <SidebarContent className="bg-white dark:bg-black" >
-      <NavMain items={roleData.navItems} />
-    </SidebarContent>
-    <SidebarFooter className="bg-white dark:bg-black" >
-      <NavUser user={roleData.user} userRole={userRole} />
-    </SidebarFooter>
-  </Sidebar>
+      <SidebarHeader className="bg-white dark:bg-black">
+        <TeamSwitcher teams={roleData.teams} />
+      </SidebarHeader>
+      <SidebarContent className="bg-white dark:bg-black">
+        <NavMain items={roleData.navItems} />
+      </SidebarContent>
+      <SidebarFooter className="bg-white dark:bg-black">
+        <NavUser user={roleData.user} userRole={userRole} />
+      </SidebarFooter>
+    </Sidebar>
   );
 }

@@ -3,8 +3,6 @@ import {
   CalendarCheck,
   ChevronRight,
   Filter,
-  LayoutGrid,
-  List,
   Loader2,
   Search,
 } from "lucide-react";
@@ -36,37 +34,13 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import axios from "@/lib/axios";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { assets } from "@/assets/assets";
 import { Card } from "@/components/ui/card";
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  offerPercentage: number | null;
-  stock: number;
-  categoryName: string;
-  status: string;
-  images: { id: number; url: string }[];
-  productInfo: { brand: string; details: { key: string; value: string }[] };
-  reviews: [];
-}
-
-// const products = [
-//   {
-//     id: 1,
-//     name: "iPhone 13 Plus (128 GB Storage, 12 GB Ram)",
-//     image: assets.laptop,
-//     price: "68,956",
-//     stock: 10,
-//     status: "Inactive",
-//   },
-// ];
+import { Product } from "@/types/entityTypes";
+import AnimatedCounter from "@/components/Common/AnimatedCounter";
 
 export default function ProductList() {
   const seller = useSelector((state: RootState) => state.seller.seller);
@@ -141,9 +115,7 @@ export default function ProductList() {
   return (
     <div className=" space-y-5 ">
       <div className="border border-primary/30 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black  rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm ">
-        <h2 className="text-2xl text-primary font-semibold">
-          Products
-        </h2>
+        <h2 className="text-2xl text-primary font-semibold">Products</h2>
 
         <Card className="w-full lg:w-[100%] flex flex-nowrap  border-primary/50  bg-primary/10 rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x">
           <div className="flex items-center space-x-2 p-4 text-primary">
@@ -155,12 +127,8 @@ export default function ProductList() {
               key={stat.label}
               className="p-3 px-4 border-l-2 border-primary/50 min-w-[190px]  flex flex-col"
             >
-              <div className="text-sm truncate">
-                {stat.label}
-              </div>
-              <div className="text-xl font-semibold truncate text-primary">
-                {stat.value}
-              </div>
+              <div className="text-sm truncate">{stat.label}</div>
+              <AnimatedCounter end={String(stat.value)} duration={500} />
             </div>
           ))}
         </Card>
@@ -206,8 +174,6 @@ export default function ProductList() {
           </div>
 
           <div className="flex gap-2">
-           
-
             <Button className="bg-primary text-primary-foreground shadow-md border rounded-lg px-5 py-3 hover:bg-primary/80 flex items-center gap-2">
               <Filter size={24} />
               <span className="hidden sm:block font-medium">Filter</span>
@@ -217,9 +183,7 @@ export default function ProductList() {
 
         {/* Orders Table */}
         {paginatedProducts.length === 0 ? (
-          <h2 className=" font-bold text-center text-xl p-16">
-            No Products!
-          </h2>
+          <h2 className=" font-bold text-center text-xl p-16">No Products!</h2>
         ) : (
           <Card className="p-2 md:p-4 border rounded-xl bg-background  border-primary/30 overflow-hidden">
             <div className="overflow-x-auto ">
