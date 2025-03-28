@@ -387,20 +387,19 @@ export default function Dashboard() {
                         </TableCell>
                         <TableCell className="space-x-2 whitespace-nowrap">
                           <span className="p-1.5 border bg-primary/10 text-primary font-semibold rounded-full">
-                            {orders
-                              .find((order) => order.id === orderItem.orderId)
-                              ?.user.name.split(" ")
-                              .map((letter: string) => letter[0])
-                              .join("")
-                              .toUpperCase()}
+                            {orders.find((order) => order.id === orderItem.orderId)?.user?.name
+                              ? orders
+                                .find((order) => order.id === orderItem.orderId)!
+                                .user.name.split(" ")
+                                .map((letter: string) => letter[0])
+                                .join("")
+                                .toUpperCase()
+                              : "UN"}
                           </span>
                           <span>
-                            {
-                              orders.find(
-                                (order) => order.id === orderItem.orderId
-                              )?.user.name
-                            }
+                            {orders.find((order) => order.id === orderItem.orderId)?.user?.name || "Unknown"}
                           </span>
+
                         </TableCell>
                         <TableCell className="whitespace-nowrap">
                           {formatDate(orderItem.createdAt)}
@@ -410,25 +409,24 @@ export default function Dashboard() {
                           {formatPrice(
                             (orderItem.product.price -
                               (orderItem.product.price / 100) *
-                                orderItem.product.offerPercentage) *
-                              orderItem.quantity
+                              orderItem.product.offerPercentage) *
+                            orderItem.quantity
                           )}
                         </TableCell>
                         <TableCell>
                           <span
-                            className={`px-2 py-1 text-[10px] font-medium rounded-md ${
-                              orderItem.status === "Confirmed"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : orderItem.status === "Shipped"
+                            className={`px-2 py-1 text-[10px] font-medium rounded-md ${orderItem.status === "Confirmed"
+                              ? "bg-yellow-100 text-yellow-800"
+                              : orderItem.status === "Shipped"
                                 ? "bg-blue-100 text-blue-800"
                                 : orderItem.status === "Delivered"
-                                ? "bg-green-100 text-green-800"
-                                : orderItem.status === "Cancelled"
-                                ? "bg-red-100 text-red-800"
-                                : orderItem.status === "Returned"
-                                ? "bg-gray-100 text-gray-800"
-                                : "bg-gray-200 text-gray-800"
-                            }`}
+                                  ? "bg-green-100 text-green-800"
+                                  : orderItem.status === "Cancelled"
+                                    ? "bg-red-100 text-red-800"
+                                    : orderItem.status === "Returned"
+                                      ? "bg-gray-100 text-gray-800"
+                                      : "bg-gray-200 text-gray-800"
+                              }`}
                           >
                             {orderItem.status}
                           </span>
