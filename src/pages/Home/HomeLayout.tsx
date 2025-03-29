@@ -71,7 +71,6 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
         welcomeMessage="👋 Hi there! How can I help you today?"
       />
       <Footer />
-      {/* <CustomCursor /> */}
     </div>
   );
 };

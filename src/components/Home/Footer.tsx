@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ShoppingCart,
   Gift,
@@ -12,22 +12,47 @@ import {
   Twitter,
   Instagram,
   Linkedin,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-
+  Loader2,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import axios from "@/lib/axios";
+import { Category } from "@/types/entityTypes";
 
 interface FooterProps {
   activeTab?: string;
   setActiveTab?: (tab: string) => void;
 }
 
-
 export default function Footer({ activeTab, setActiveTab }: FooterProps) {
-  const [openSections, setOpenSections] = useState<Record<string, boolean>>({})
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
+  const [categories, setCategories] = useState<Array<Category>>([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/categories/6`
+        );
+
+        if (response.status === 200) setCategories(response.data);
+      } catch (error: any) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleClick = (tab: string) => {
     setActiveTab?.(tab);
@@ -38,47 +63,41 @@ export default function Footer({ activeTab, setActiveTab }: FooterProps) {
     setOpenSections((prev) => ({
       ...prev,
       [section]: !prev[section],
-    }))
-  }
+    }));
+  };
 
-  const footerLinks = {
-    department: [
-      "Smartphones",
-      "Televisions",
-      "Laptops",
-      "Tablets",
-      "Keyboards",
-      "Mice",
-      "Device Covers",
-      "Gaming Laptops",
-      "Electronics & Gadgets",
-      "Smartwatches",
-      "Earbuds",
-      "Accessories",
-    ],
-    aboutUs: [
-      { name: "About ElectroHub", path: "/about" },
-      { name: "Careers", path: "/info/careers" },
-      { name: "News & Blog", path: "/info/news-blog" },
-      { name: "Help", path: "/info/help-center" },
-      { name: "Press Center", path: "/info/press-center" },
-      { name: "Shop By Location", path: "/info/locations" },
-      { name: "ElectroHub Brands", path: "/info/brands" },
-      { name: "Affiliate & Partners", path: "/info/affiliate" },
-      { name: "Ideas & Guides", path: "/info/ideas" },
-    ],
-    customerService: [
-      { name: "Contact Us", path: "/contact" },
-      { name: "FAQs", path: "/info/faqs" },
-      { name: "Shipping & Delivery", path: "/user/orders" },
-      { name: "Returns & Exchanges", path: "/user/orders" },
-      { name: "Order Tracking", path: "/user/orders" },
-      { name: "Warranty Information", path: "/info/warranty-information" },
-      { name: "Privacy Policy", path: "/info/privacy-policy" },
-      { name: "Terms of Service", path: "/info/terms-of-service" },
-      { name: "Financing Options", path: "/info/financing-options" },
-    ],
-  }
+  const footerLinks = useMemo(() => {
+    return {
+      categories: categories.map((category) => {
+        return {
+          name: category.name,
+          href: `/categories/${category.name}`,
+        };
+      }),
+      aboutUs: [
+        { name: "About ElectroHub", path: "/about" },
+        { name: "Careers", path: "/info/careers" },
+        { name: "News & Blog", path: "/info/news-blog" },
+        { name: "Help", path: "/info/help-center" },
+        { name: "Press Center", path: "/info/press-center" },
+        { name: "Shop By Location", path: "/info/locations" },
+        { name: "ElectroHub Brands", path: "/info/brands" },
+        { name: "Affiliate & Partners", path: "/info/affiliate" },
+        { name: "Ideas & Guides", path: "/info/ideas" },
+      ],
+      customerService: [
+        { name: "Contact Us", path: "/contact" },
+        { name: "FAQs", path: "/info/faqs" },
+        { name: "Shipping & Delivery", path: "/user/orders" },
+        { name: "Returns & Exchanges", path: "/user/orders" },
+        { name: "Order Tracking", path: "/user/orders" },
+        { name: "Warranty Information", path: "/info/warranty-information" },
+        { name: "Privacy Policy", path: "/info/privacy-policy" },
+        { name: "Terms of Service", path: "/info/terms-of-service" },
+        { name: "Financing Options", path: "/info/financing-options" },
+      ],
+    };
+  }, [categories]);
 
   const paymentMethods = [
     "visa",
@@ -92,7 +111,7 @@ export default function Footer({ activeTab, setActiveTab }: FooterProps) {
     "mir",
     "unionpay",
     "upi",
-  ]
+  ];
 
   return (
     <footer className="w-full border-t border-border bg-background pt-10 pb-6">
@@ -100,14 +119,17 @@ export default function Footer({ activeTab, setActiveTab }: FooterProps) {
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 mb-10">
           {/* Logo and Description Section */}
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-6">
             <div className="flex items-center gap-2 mb-3">
               <ShoppingCart className="h-5 w-5 text-primary" />
-              <span className="text-2xl font-bold text-foreground">ElectroHub</span>
+              <span className="text-2xl font-bold text-foreground">
+                ElectroHub
+              </span>
             </div>
             <p className="text-muted-foreground text-base mb-4 max-w-md">
-              Your one-stop shop for all electronics and tech gadgets. We offer the latest products with competitive
-              prices and excellent customer service.
+              Your one-stop shop for all electronics and tech gadgets. We offer
+              the latest products with competitive prices and excellent customer
+              service.
             </p>
 
             {/* Social Media */}
@@ -148,12 +170,18 @@ export default function Footer({ activeTab, setActiveTab }: FooterProps) {
 
             {/* Newsletter - Desktop */}
             <div className="hidden md:block">
-              <h3 className="text-lg font-semibold mb-3 text-foreground">Newsletter</h3>
+              <h3 className="text-lg font-semibold mb-3 text-foreground">
+                Newsletter
+              </h3>
               <p className="text-base text-muted-foreground mb-3">
                 Subscribe for the latest products, deals, and tech news.
               </p>
               <form className="flex space-x-2">
-                <Input type="email" placeholder="Your email" className="h-10 text-sm" />
+                <Input
+                  type="email"
+                  placeholder="Your email"
+                  className="h-10 text-sm"
+                />
                 <Button className="h-10">Subscribe</Button>
               </form>
             </div>
@@ -161,31 +189,47 @@ export default function Footer({ activeTab, setActiveTab }: FooterProps) {
 
           {/* Mobile Collapsible Sections */}
           <div className="lg:hidden col-span-1 space-y-2">
-            {/* Department Links - Mobile */}
+            {/* Category Links - Mobile */}
             <Collapsible
-              open={openSections["department"]}
-              onOpenChange={() => toggleSection("department")}
+              open={openSections["Categories"]}
+              onOpenChange={() => toggleSection("Categories")}
               className="border-b border-border pb-2"
             >
               <CollapsibleTrigger asChild>
-                <Button variant="ghost" className="w-full justify-between p-2 h-auto">
-                  <span className="font-medium text-base">Department</span>
-                  {openSections["department"] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                <Button
+                  variant="ghost"
+                  className="w-full justify-between p-2 h-auto"
+                >
+                  <span className="font-medium text-base">Categories</span>
+                  {openSections["Categories"] ? (
+                    <ChevronUp size={18} />
+                  ) : (
+                    <ChevronDown size={18} />
+                  )}
                 </Button>
               </CollapsibleTrigger>
               <CollapsibleContent className="pl-2">
-                <ul className="grid grid-cols-2 gap-x-4 gap-y-2 pt-2 pb-3">
-                  {footerLinks.department.map((item) => (
-                    <li key={item} className="text-sm">
-                      <Link
-                        to={`/category/${item.toLowerCase().replace(/ /g, "-")}`}
-                        className="text-muted-foreground hover:text-primary transition-colors duration-200"
-                      >
-                        {item}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                {loading ? (
+                  <div className="flex flex-col justify-center items-center h-[200px]">
+                    <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+                    <p className="text-muted-foreground">
+                      Loading Categories...
+                    </p>
+                  </div>
+                ) : (
+                  <ul className="grid grid-cols-2 gap-x-4 gap-y-2 pt-2 pb-3">
+                    {footerLinks.categories.map((item) => (
+                      <li key={item.name} className="text-sm">
+                        <Link
+                          to={item.href}
+                          className="text-muted-foreground hover:text-primary transition-colors duration-200"
+                        >
+                          {item.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </CollapsibleContent>
             </Collapsible>
 
@@ -196,9 +240,16 @@ export default function Footer({ activeTab, setActiveTab }: FooterProps) {
               className="border-b border-border pb-2"
             >
               <CollapsibleTrigger asChild>
-                <Button variant="ghost" className="w-full justify-between p-2 h-auto">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-between p-2 h-auto"
+                >
                   <span className="font-medium text-base">About Us</span>
-                  {openSections["aboutUs"] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                  {openSections["aboutUs"] ? (
+                    <ChevronUp size={18} />
+                  ) : (
+                    <ChevronDown size={18} />
+                  )}
                 </Button>
               </CollapsibleTrigger>
               <CollapsibleContent className="pl-2">
@@ -224,9 +275,18 @@ export default function Footer({ activeTab, setActiveTab }: FooterProps) {
               className="border-b border-border pb-2"
             >
               <CollapsibleTrigger asChild>
-                <Button variant="ghost" className="w-full justify-between p-2 h-auto">
-                  <span className="font-medium text-base">Customer Service</span>
-                  {openSections["customerService"] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                <Button
+                  variant="ghost"
+                  className="w-full justify-between p-2 h-auto"
+                >
+                  <span className="font-medium text-base">
+                    Customer Service
+                  </span>
+                  {openSections["customerService"] ? (
+                    <ChevronUp size={18} />
+                  ) : (
+                    <ChevronDown size={18} />
+                  )}
                 </Button>
               </CollapsibleTrigger>
 
@@ -248,52 +308,53 @@ export default function Footer({ activeTab, setActiveTab }: FooterProps) {
 
             {/* Newsletter - Mobile */}
             <div className="pt-4 pb-2">
-              <h3 className="text-base font-semibold mb-3 text-foreground">Newsletter</h3>
+              <h3 className="text-base font-semibold mb-3 text-foreground">
+                Newsletter
+              </h3>
               <p className="text-sm text-muted-foreground mb-3">
                 Subscribe for the latest products, deals, and tech news.
               </p>
               <form className="flex space-x-2">
-                <Input type="email" placeholder="Your email" className="h-10 text-sm" />
+                <Input
+                  type="email"
+                  placeholder="Your email"
+                  className="h-10 text-sm"
+                />
                 <Button className="h-10">Subscribe</Button>
               </form>
             </div>
           </div>
 
-          {/* Desktop Footer Links */}
+          {/* Desktop Section */}
           <div className="hidden lg:block lg:col-span-2">
-            <h2 className="text-lg font-semibold mb-4 text-foreground">Department</h2>
-            <ul className="space-y-2">
-              {footerLinks.department.slice(0, 6).map((item) => (
-                <li key={item} className="text-base">
-                  <Link
-                    to={`/category/${item.toLowerCase().replace(/ /g, "-")}`}
-                    className="text-muted-foreground hover:text-primary transition-colors duration-200"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <h2 className="text-lg font-semibold mb-4 text-foreground">
+              Categories
+            </h2>
+            {loading ? (
+              <div className="flex flex-col justify-center items-center h-[200px]">
+                <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+                <p className="text-muted-foreground">Loading Categories...</p>
+              </div>
+            ) : (
+              <ul className="space-y-2">
+                {footerLinks.categories.map((item) => (
+                  <li key={item.name} className="text-base">
+                    <Link
+                      to={item.href}
+                      className="text-muted-foreground hover:text-primary transition-colors duration-200"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <div className="hidden lg:block lg:col-span-2">
-            <h2 className="text-lg font-semibold mb-4 text-foreground">More Categories</h2>
-            <ul className="space-y-2">
-              {footerLinks.department.slice(6).map((item) => (
-                <li key={item} className="text-base">
-                  <Link
-                    to={`/category/${item.toLowerCase().replace(/ /g, "-")}`}
-                    className="text-muted-foreground hover:text-primary transition-colors duration-200"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="hidden lg:block lg:col-span-2">
-            <h2 className="text-lg font-semibold mb-4 text-foreground">About Us</h2>
+            <h2 className="text-lg font-semibold mb-4 text-foreground">
+              About Us
+            </h2>
             <ul className="space-y-2">
               {footerLinks.aboutUs.map((item) => (
                 <li key={item.name} className="text-base">
@@ -309,13 +370,18 @@ export default function Footer({ activeTab, setActiveTab }: FooterProps) {
           </div>
 
           <div className="hidden lg:block lg:col-span-2">
-            <h2 className="text-lg font-semibold mb-4 text-foreground">Customer Service</h2>
+            <h2 className="text-lg font-semibold mb-4 text-foreground">
+              Customer Service
+            </h2>
             <ul className="space-y-2">
               {footerLinks.customerService.map((item) => (
                 <li key={item.name} className="text-base">
                   <Link
                     to={item.path}
-                    onClick={() => item.name === "Order Tracking" && handleClick("order-tracking")}
+                    onClick={() =>
+                      item.name === "Order Tracking" &&
+                      handleClick("order-tracking")
+                    }
                     className="text-muted-foreground hover:text-primary transition-colors duration-200"
                   >
                     {item.name}
@@ -328,7 +394,9 @@ export default function Footer({ activeTab, setActiveTab }: FooterProps) {
 
         {/* Payment Methods */}
         <div className="mb-6">
-          <h3 className="text-base font-semibold mb-3 text-foreground">Accepted Payments</h3>
+          <h3 className="text-base font-semibold mb-3 text-foreground">
+            Accepted Payments
+          </h3>
           <div className="grid grid-cols-5 sm:grid-cols-7 md:grid-cols-11 gap-2">
             {paymentMethods.map((payment) => (
               <div
@@ -352,7 +420,7 @@ export default function Footer({ activeTab, setActiveTab }: FooterProps) {
           {/* Quick Links */}
           <div className="flex flex-wrap gap-4 text-sm">
             <Link
-              to="/become-seller"
+              to="/seller/auth/signup"
               className="flex items-center text-muted-foreground hover:text-primary transition-colors duration-200"
             >
               <ShoppingCart className="h-4 w-4 mr-1.5" />
@@ -376,10 +444,16 @@ export default function Footer({ activeTab, setActiveTab }: FooterProps) {
 
           {/* Terms and Privacy */}
           <div className="flex space-x-4 text-sm">
-            <Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors duration-200">
+            <Link
+              to="/terms"
+              className="text-muted-foreground hover:text-primary transition-colors duration-200"
+            >
               Terms of Service
             </Link>
-            <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors duration-200">
+            <Link
+              to="/privacy"
+              className="text-muted-foreground hover:text-primary transition-colors duration-200"
+            >
               Privacy & Policy
             </Link>
           </div>
@@ -391,5 +465,5 @@ export default function Footer({ activeTab, setActiveTab }: FooterProps) {
         </div>
       </div>
     </footer>
-  )
+  );
 }
