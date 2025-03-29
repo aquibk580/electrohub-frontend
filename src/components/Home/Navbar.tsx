@@ -143,7 +143,7 @@ const Navbar = () => {
               <NavigationMenuContent>
                 <ul className="grid gap-4 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-1">
                   {dealProduct ? (
-                    <li className="row-span-3 relative overflow-hidden rounded-lg shadow-xl transition-all hover:scale-[1.02] group">
+                    <li className="row-span-3 relative overflow-hidden rounded-lg shadow-md transition-all hover:scale-[1.02] group">
                       <NavigationMenuLink asChild>
                         <a
                           className="flex h-full w-full select-none flex-col justify-end rounded-lg bg-gradient-to-b from-muted/10 to-muted/80 p-0 no-underline outline-none focus:shadow-md"
