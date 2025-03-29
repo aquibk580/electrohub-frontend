@@ -133,7 +133,7 @@ export default function EditBannerCarouselDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-50 text-blue-700 flex items-center space-x-2 p-1.5 px-2.5 shadow-none rounded-lg focus-visible:right-0 hover:bg-blue-100">
+        <Button className="bg-blue-50  dark:border-none dark:bg-blue-300 text-blue-700 border border-blue-400 flex items-center space-x-2 p-1.5 px-2.5 shadow-none rounded-lg focus-visible:right-0 hover:bg-blue-100">
           <Edit className="w-5" />
           <span className="text-sm font-medium"> Edit</span>
         </Button>
