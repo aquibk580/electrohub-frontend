@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, Suspense } from "react"
 import type React from "react"
 import { useForm, useFieldArray, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -19,12 +19,23 @@ import { useNavigate } from "react-router-dom"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { removeBackground } from "@imgly/background-removal"
+import { AddProductSkeleton } from "@/components/Seller/Skeletons"
 
 interface Category {
   name: string
 }
 
-export default function AddProductForm() {
+export default function AddProductForm(){
+  return (
+    <Suspense fallback={<AddProductSkeleton />}>
+      <AAddProductForm />
+    </Suspense>
+  )
+}
+
+
+
+function AAddProductForm() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
   const navigate = useNavigate()

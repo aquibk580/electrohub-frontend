@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type React from "react"; // Added import for React
+import type React from "react";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CloudUpload, MoveLeft, Plus, Trash2, X } from "lucide-react";
@@ -7,20 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-import { assets } from "@/assets/assets";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { EditProductSkeleton } from "@/components/Seller/Skeletons";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import {
-  EditProductSchema,
-  EditProductSchemaType,
-} from "@/components/Seller/FormSchema";
+import { EditProductSchema, EditProductSchemaType } from "@/components/Seller/FormSchema";
 import axios from "../../lib/axios";
 import { toast } from "react-toastify";
 import { Separator } from "@radix-ui/react-dropdown-menu";
@@ -49,6 +39,7 @@ export default function EditProduct() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [isLoading, setIsLoading] = useState<boolean>(true); // Added loading state
   const [isEditting, setIsEditting] = useState<boolean>(false);
   const [product, setProduct] = useState<Product | null>(
     location.state?.product || null
@@ -122,10 +113,6 @@ export default function EditProduct() {
       }
     };
 
-    getProduct();
-  }, []);
-
-  useEffect(() => {
     const getAllCategories = async () => {
       try {
         const response = await axios.get(
@@ -139,8 +126,14 @@ export default function EditProduct() {
       }
     };
 
-    getAllCategories();
-  }, []);
+    const loadData = async () => {
+      setIsLoading(true);
+      await Promise.all([getProduct(), getAllCategories()]);
+      setIsLoading(false);
+    };
+
+    loadData();
+  }, [id]);
 
   useEffect(() => {
     if (product?.images) {
@@ -313,6 +306,11 @@ export default function EditProduct() {
       });
     }
   };
+
+  // If loading, show skeleton
+  if (isLoading) {
+    return <EditProductSkeleton />;
+  }
 
   return (
     <div className="space-y-2">
@@ -539,7 +537,7 @@ export default function EditProduct() {
                     </SelectTrigger>
                     <SelectContent>
                       {categories.map((category) => (
-                        <SelectItem value={category.name}>
+                        <SelectItem key={category.name} value={category.name}>
                           {category.name}
                         </SelectItem>
                       ))}
@@ -652,6 +650,7 @@ export default function EditProduct() {
             <Button
               type="submit"
               className="  bg-accent hover:bg-primary/5 font-semibold text-lg rounded-lg md:px-32 py-6 shadow-lg text-accent-foreground"
+              disabled={isEditting}
             >
               {!isEditting ? "Edit Product" : "Editting..."}
             </Button>

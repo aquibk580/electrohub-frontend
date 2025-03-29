@@ -1,28 +1,10 @@
-import {
-  Pencil,
-  Mail,
-  Phone,
-  Building2,
-  EllipsisVertical,
-  MoveUp,
-  IndianRupee,
-  RotateCw,
-  PackageMinus,
-  Loader2,
-  RefreshCcw,
-} from "lucide-react";
+import { Pencil, Mail, Phone, Building2, EllipsisVertical, MoveUp, IndianRupee, RotateCw, PackageMinus, Loader2, RefreshCcw } from "lucide-react";
 import { assets } from "@/assets/assets";
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useMemo, useState } from "react";
 import { SellerEditDialog } from "@/components/Seller/SellerEditDialog";
 import { useDispatch, useSelector } from "react-redux";
@@ -47,6 +29,7 @@ export default function Profile() {
     notDeliveredItems: number;
   } | null>(null);
 
+  // Your existing functions
   const getProfileStatistics = async () => {
     try {
       setLoading(true);
@@ -189,36 +172,51 @@ export default function Profile() {
 
   return (
     <div className="animate__animated animate__fadeIn">
-      <header className="bg-teal-800 rounded-xl  h-44 relative">
-        <img
-          className="w-full h-full object-fit"
-          src={assets.banner}
-          alt="Banner"
-        />
+      {/* Banner section */}
+      <header className="bg-teal-800 rounded-xl h-44 relative">
+        {loading ? (
+          <Skeleton className="w-full h-full rounded-xl" />
+        ) : (
+          <img
+            className="w-full h-full object-fit rounded-xl"
+            src={assets.banner}
+            alt="Banner"
+          />
+        )}
 
-        <div className="absolute  rounded-full  right-4 top-4">
+        <div className="absolute rounded-full right-4 top-4">
           <Button
             variant="ghost"
             size="icon"
-            className="text-white border rounded-full "
+            className="text-white border rounded-full"
           >
             <EllipsisVertical />
           </Button>
         </div>
       </header>
 
+      {/* Profile section */}
       <div className="px-6 -mt-16">
-        <div className="flex justify-between  items-start mb-8">
-          <div className="flex items-end gap-4   ">
-            <div className="w-32 h-32  rounded-full border-[3px] bg-white border-white relative">
-              <img
-                className="w-full h-full object-cover  rounded-full"
-                src={profilePic ?? assets.account_icon}
-                alt="Profile_Picture"
-              />
+        <div className="flex justify-between items-start mb-8">
+          <div className="flex items-end gap-4">
+            <div className="w-32 h-32 rounded-full border-[3px] bg-white border-white relative">
+              {loading ? (
+                <Skeleton className="w-full h-full rounded-full" />
+              ) : (
+                <Avatar className="w-full h-full">
+                  <AvatarImage 
+                    src={profilePic ?? assets.account_icon} 
+                    alt="Profile_Picture" 
+                    className="object-cover"
+                  />
+                  <AvatarFallback>
+                    {seller?.name?.charAt(0) ?? "U"}
+                  </AvatarFallback>
+                </Avatar>
+              )}
               <label
                 htmlFor="profile-pic-input"
-                className="absolute  top-1  cursor-pointer right-2 p-1 bg-white rounded-full shadow-sm"
+                className="absolute top-1 cursor-pointer right-2 p-1 bg-white rounded-full shadow-sm"
               >
                 <Pencil className="h-5 w-5 text-black" />
                 <input
@@ -234,81 +232,115 @@ export default function Profile() {
           <SellerEditDialog />
         </div>
 
-        <h1 className="text-3xl -mt-6 font-bold flex items-center gap-2">
-          {seller!.name}
-          <span className="text-blue-500">
-            <img
-              className="w-8 -mt-3 mr-3"
-              src={assets.verify}
-              alt="Verify_Icon"
-            />
-          </span>
-        </h1>
+        {loading ? (
+          <Skeleton className="h-8 w-64 -mt-6 mb-4" />
+        ) : (
+          <h1 className="text-3xl -mt-6 font-bold flex items-center gap-2">
+            {seller!.name}
+            <span className="text-blue-500">
+              <img
+                className="w-8 -mt-3 mr-3"
+                src={assets.verify}
+                alt="Verify_Icon"
+              />
+            </span>
+          </h1>
+        )}
 
         <div className="space-y-3 mt-5">
-          <div className="flex items-center gap-2">
-            <span className="text-muted-foreground">
-              <Mail />
-            </span>
-            {seller!.email}
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-muted-foreground">
-              <Phone />
-            </span>
-            +91 {seller!.phone}
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-muted-foreground">
-              <Building2 />
-            </span>
-            {seller!.address}
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-1 mt-8 gap-2">
-          {!loading ? (
+          {loading ? (
             <>
-              <div className="flex flex-row justify-between">
-                <h2 className="text-xl font-semibold">Sales & Revenue</h2>
-                <Button
-                  onClick={getProfileStatistics}
-                  className="transition-colors duration-300 px-4 py-2 rounded-md flex items-center gap-2  
-             bg-white text-black hover:bg-gray-200 
-             dark:bg-black dark:text-white dark:hover:bg-gray-800"
-                >
-                  <RefreshCcw /> Refresh
-                </Button>
-              </div>
-
-              <div className="space-y-3">
-                {salesMetrics.map((metric) => (
-                  <div key={metric.label} className="flex items-center gap-2">
-                    {metric.img}
-                    {metric.value}
-                  </div>
-                ))}
-              </div>
+              <Skeleton className="h-6 w-full max-w-md mb-2" />
+              <Skeleton className="h-6 w-full max-w-md mb-2" />
+              <Skeleton className="h-6 w-full max-w-md" />
             </>
           ) : (
-            <div className="flex flex-col justify-center items-center h-[200px]">
-              <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-              <p className="text-muted-foreground">Loading Sales Metrics...</p>
-            </div>
+            <>
+              <div className="flex items-center gap-2">
+                <span className="text-muted-foreground">
+                  <Mail />
+                </span>
+                {seller!.email}
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-muted-foreground">
+                  <Phone />
+                </span>
+                +91 {seller!.phone}
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-muted-foreground">
+                  <Building2 />
+                </span>
+                {seller!.address}
+              </div>
+            </>
           )}
         </div>
 
+        {/* Sales metrics section */}
+        <Card className="mt-8">
+          <CardHeader className="pb-2">
+            <div className="flex justify-between items-center">
+              <CardTitle>Sales & Revenue</CardTitle>
+              <Button
+                variant="outline"
+                onClick={getProfileStatistics}
+                className="flex items-center gap-2"
+                disabled={loading}
+              >
+                {loading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <RefreshCcw className="h-4 w-4" />
+                )}
+                Refresh
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <div className="space-y-3">
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full" />
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {salesMetrics.map((metric, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    {metric.img}
+                    <span>{metric.value}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Delete account section */}
         <div className="mt-12 mb-8">
           <div className="text-xs text-muted-foreground mb-4">
             *Note: Deleting your account is permanent and cannot be undone. All
             your data will be lost.
           </div>
 
-          {/* Button that shows loading when clicked */}
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button className="md:px-24 py-5 bg-red-600 hover:bg-red-700 text-white shadow-md flex items-center gap-2">
-                {!isDeleting ? " Delete Account Permanent" : "Deleting..."}
+              <Button 
+                variant="destructive" 
+                className="md:px-24 py-5"
+                disabled={isDeleting}
+              >
+                {isDeleting ? (
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Deleting...
+                  </div>
+                ) : (
+                  "Delete Account Permanent"
+                )}
               </Button>
             </AlertDialogTrigger>
 
@@ -325,15 +357,15 @@ export default function Profile() {
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
 
                 <Button
-                  className="bg-red-600 text-white hover:bg-red-700 flex items-center gap-2"
+                  variant="destructive"
                   onClick={handleAccountDelete}
                   disabled={isDeleting}
+                  className="flex items-center gap-2"
                 >
                   {isDeleting ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : (
-                    "Delete Account"
-                  )}
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : null}
+                  Delete Account
                 </Button>
               </AlertDialogFooter>
             </AlertDialogContent>

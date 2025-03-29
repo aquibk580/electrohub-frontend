@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import MainNav from "../../components/Seller/MainNav";
-import { assets } from "@/assets/assets";
 import axios from "../../lib/axios";
 import { setSeller } from "@/redux/slices/seller";
 import { useDispatch, useSelector } from "react-redux";

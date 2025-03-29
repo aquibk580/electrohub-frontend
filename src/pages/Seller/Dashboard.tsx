@@ -1,60 +1,21 @@
-import { useEffect, useMemo, useState } from "react";
-import {
-  Search,
-  Filter,
-  CalendarCheck,
-  ChevronRight,
-  Loader2,
-} from "lucide-react";
+import { useEffect, useMemo, useState, Suspense, lazy } from "react";
+import { Search, Filter, CalendarCheck, ChevronRight, Loader2 } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Category, Order, OrderItem } from "@/types/entityTypes";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Category, Order, OrderItem } from "@/types/entityTypes";
-import axios from "@/lib/axios";
 import { formatDate } from "@/lib/utils";
 import { formatPrice } from "@/utils/FormatPrice";
 import { useNavigate } from "react-router-dom";
-import AnimatedCounter from "@/components/Common/AnimatedCounter";
-import {
-  ResponsiveContainer,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Line,
-  LineChart,
-} from "recharts";
+import { ResponsiveContainer, CartesianGrid, XAxis, YAxis, Tooltip, Line, LineChart } from "recharts";
 import { ChartPie } from "@/components/Admin/Chart-Pie";
+import AnimatedCounter from "@/components/Common/AnimatedCounter";
+import axios from "@/lib/axios";
+import { DashboardSkeleton } from "@/components/Seller/Skeletons";
 
 interface Stat {
   label: string;
@@ -63,6 +24,7 @@ interface Stat {
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const [orders, setOrders] = useState<Array<Order>>([]);
   const [stats, setStats] = useState<Stat[]>([]);
   const [categories, setCategories] = useState<
@@ -76,28 +38,30 @@ export default function Dashboard() {
   const [salesGraph, setSalesGraph] = useState<
     Array<{ date: string; amount: number }>
   >([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const ordersPerPage = 5;
 
+  // Combined data loading
   useEffect(() => {
-    const getAllOrders = async () => {
+    const loadAllData = async () => {
       try {
-        const response = await axios.get(
+        // Load orders
+        const ordersResponse = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/seller/orders`
         );
-        if (response.status === 200) {
+        
+        if (ordersResponse.status === 200) {
           setStats([
-            { label: "Total Orders", value: response.data?.orders?.length },
+            { label: "Total Orders", value: ordersResponse.data?.orders?.length },
             {
               label: "Order Items overtime",
-              value: response.data?.orders?.reduce(
+              value: ordersResponse.data?.orders?.reduce(
                 (acc: number, order: Order) => acc + order.orderItems.length,
                 0
               ),
             },
             {
               label: "Returns",
-              value: response.data?.orders?.reduce(
+              value: ordersResponse.data?.orders?.reduce(
                 (acc: number, order: Order) =>
                   acc +
                   order.orderItems.filter(
@@ -108,7 +72,7 @@ export default function Dashboard() {
             },
             {
               label: "Fulfilled orders? overtime",
-              value: response.data?.orders?.reduce(
+              value: ordersResponse.data?.orders?.reduce(
                 (acc: number, order: Order) =>
                   acc +
                   order.orderItems.filter(
@@ -118,26 +82,17 @@ export default function Dashboard() {
               ),
             },
           ]);
-          setOrders(response.data?.orders);
+          setOrders(ordersResponse.data?.orders);
         }
-      } catch (error) {
-        console.error("Failed to fetch orders:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getAllOrders();
-  }, []);
 
-  useEffect(() => {
-    const getSalesStatistics = async () => {
-      try {
-        const response = await axios.get(
+        // Load sales statistics
+        const salesResponse = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/seller/salesstatistics`
         );
-        if (response.status === 200) {
+        
+        if (salesResponse.status === 200) {
           setSalesGraph(
-            response.data?.weeklySales.map(
+            salesResponse.data?.weeklySales.map(
               (item: { date: Date; sales: number }) => {
                 return {
                   date: formatDate(item.date).substring(0, 6),
@@ -146,15 +101,18 @@ export default function Dashboard() {
               }
             )
           );
-          setCategories(response.data?.categories);
+          setCategories(salesResponse.data?.categories);
         }
       } catch (error) {
-        console.error("Failed to fetch orders:", error);
+        console.error("Failed to fetch data:", error);
       } finally {
+        // Set all loading states to false when done
+        setIsLoading(false);
         setSalesStatisticsLoading(false);
       }
     };
-    getSalesStatistics();
+
+    loadAllData();
   }, []);
 
   const highestProductCategory = useMemo(() => {
@@ -197,90 +155,82 @@ export default function Dashboard() {
     currentPage * ordersPerPage
   );
 
+  // Render skeleton while loading
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
+
+  // Render actual dashboard when data is loaded
   return (
     <div className="space-y-5">
       <div className="border border-primary/30 bg-primary/5  dark:bg-gradient-to-br from-black via-primary/10 to-black rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm">
         <h2 className="text-2xl text-primary font-semibold">Orders</h2>
-        {loading ? (
-          <div className="flex flex-col justify-center items-center h-[200px]">
-            <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-            <p className="text-muted-foreground">Loading Order Statistics...</p>
+        <Card className="w-full lg:w-[95%] flex flex-nowrap gap-4 text-secondary-foreground bg-primary/10 border-primary shadow-none rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x mx-auto">
+          <div className="flex items-center pl-6 space-x-2 text-primary">
+            <CalendarCheck className="w-6 h-6" />
+            <span className="font-semibold text-lg">Today</span>
           </div>
-        ) : (
-          <Card className="w-full lg:w-[95%] flex flex-nowrap gap-4 text-secondary-foreground bg-primary/10 border-primary shadow-none rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x mx-auto">
-            <div className="flex items-center pl-6 space-x-2 text-primary">
-              <CalendarCheck className="w-6 h-6" />
-              <span className="font-semibold text-lg">Today</span>
+          {stats?.map((stat) => (
+            <div
+              key={stat.label}
+              className="p-3 px-4 pr-10 border-l-2 border-primary/50 min-w-[200px] flex flex-col"
+            >
+              <div className="text-sm">{stat.label}</div>
+              <AnimatedCounter end={String(stat.value)} duration={500} />
             </div>
-            {stats?.map((stat) => (
-              <div
-                key={stat.label}
-                className="p-3 px-4 pr-10 border-l-2 border-primary/50 min-w-[200px] flex flex-col"
-              >
-                <div className="text-sm  ">{stat.label}</div>
-                <AnimatedCounter end={String(stat.value)} duration={500} />
-              </div>
-            ))}
-          </Card>
-        )}
+          ))}
+        </Card>
       </div>
 
       {/* Charts Section */}
-      {!salesStatisticsLoading ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Sales Statistics */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Weekly Sales</CardTitle>
-              <CardDescription>Order values over time</CardDescription>
-            </CardHeader>
-            <CardContent className="h-[300px] mt-10">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={salesGraph}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    className="stroke-muted"
-                  />
-                  <XAxis dataKey="date" className="text-xs" />
-                  <YAxis
-                    className="text-xs"
-                    tickFormatter={(value) => `₹${value}`}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--background))",
-                      border: "1px solid hsl(var(--border))",
-                    }}
-                    formatter={(value) => [
-                      `₹${formatPrice(Number(value))}`,
-                      "Amount",
-                    ]}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="amount"
-                    stroke="hsl(var(--primary))"
-                    strokeWidth={2}
-                    dot={{ fill: "hsl(var(--primary))" }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-          <div className="max-w-lg">
-            <ChartPie
-              loading={loading}
-              categories={categories}
-              highest={highestProductCategory}
-            />
-          </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Sales Statistics */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Weekly Sales</CardTitle>
+            <CardDescription>Order values over time</CardDescription>
+          </CardHeader>
+          <CardContent className="h-[300px] mt-10">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={salesGraph}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  className="stroke-muted"
+                />
+                <XAxis dataKey="date" className="text-xs" />
+                <YAxis
+                  className="text-xs"
+                  tickFormatter={(value) => `₹${value}`}
+                />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--background))",
+                    border: "1px solid hsl(var(--border))",
+                  }}
+                  formatter={(value) => [
+                    `₹${formatPrice(Number(value))}`,
+                    "Amount",
+                  ]}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="amount"
+                  stroke="hsl(var(--primary))"
+                  strokeWidth={2}
+                  dot={{ fill: "hsl(var(--primary))" }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        <div className="max-w-lg">
+          <ChartPie
+            loading={false}
+            categories={categories}
+            highest={highestProductCategory}
+          />
         </div>
-      ) : (
-        <div className="flex flex-col justify-center items-center h-screen">
-          <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-          <p className="text-muted-foreground">Loading Sales Statistics...</p>
-        </div>
-      )}
+      </div>
 
       <div className="space-y-3 border border-primary/30 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black  p-3 rounded-xl shadow-sm  animate__animated animate__fadeIn">
         <h2 className="text-xl pl-2 text-primary font-semibold">
@@ -333,137 +283,130 @@ export default function Dashboard() {
           </div>
         </Tabs>
 
-        {!loading ? (
-          paginatedOrders?.length === 0 ? (
-            <h2 className=" font-bold text-center text-xl p-16">No Orders!</h2>
-          ) : (
-            <Card className="p-2 md:p-4 border border-primary/30 rounded-xl  overflow-hidden">
-              <div className="overflow-x-auto">
-                <Table className="w-full">
-                  <TableHeader className="bg-primary  overflow-hidden">
-                    <TableRow className="rounded-3xl border-none hover:bg-transparent">
-                      <TableHead className="text-primary-foreground  font-semibold rounded-tl-lg rounded-bl-lg">
-                        Order
-                      </TableHead>
-                      <TableHead className="text-primary-foreground  font-semibold">
-                        Customer
-                      </TableHead>
-                      <TableHead className="text-primary-foreground  font-semibold">
-                        Date
-                      </TableHead>
-                      <TableHead className="text-primary-foreground  font-semibold">
-                        Total
-                      </TableHead>
-                      <TableHead className="text-primary-foreground  font-semibold">
-                        Status
-                      </TableHead>
-                      <TableHead className="text-right text-primary-foreground  font-semibold rounded-br-lg rounded-tr-lg">
-                        Action
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {paginatedOrders?.map((orderItem: OrderItem) => (
-                      <TableRow
-                        key={orderItem.id}
-                        className="border-b h-[60px] hover:bg-primary/5"
-                      >
-                        <TableCell>
-                          <div className="flex items-center gap-5">
-                            <img
-                              src={
-                                orderItem.product.images[0].url ||
-                                "/placeholder.svg"
-                              }
-                              alt="Product"
-                              width={48}
-                              height={48}
-                              className="w-16"
-                            />
-                            <div className="text-sm w-56">
-                              {orderItem.product.name}
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="space-x-2 whitespace-nowrap">
-                          <span className="p-1.5 border bg-primary/10 text-primary font-semibold rounded-full">
-                            {orders.find((order) => order.id === orderItem.orderId)?.user?.name
-                              ? orders
-                                .find((order) => order.id === orderItem.orderId)!
-                                .user.name.split(" ")
-                                .map((letter: string) => letter[0])
-                                .join("")
-                                .toUpperCase()
-                              : "UN"}
-                          </span>
-                          <span>
-                            {orders.find((order) => order.id === orderItem.orderId)?.user?.name || "Unknown"}
-                          </span>
-
-                        </TableCell>
-                        <TableCell className="whitespace-nowrap">
-                          {formatDate(orderItem.createdAt)}
-                        </TableCell>
-                        <TableCell>
-                          ₹
-                          {formatPrice(
-                            (orderItem.product.price -
-                              (orderItem.product.price / 100) *
-                              orderItem.product.offerPercentage) *
-                            orderItem.quantity
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <span
-                            className={`px-2 py-1 text-[10px] font-medium rounded-md ${orderItem.status === "Confirmed"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : orderItem.status === "Shipped"
-                                ? "bg-blue-100 text-blue-800"
-                                : orderItem.status === "Delivered"
-                                  ? "bg-green-100 text-green-800"
-                                  : orderItem.status === "Cancelled"
-                                    ? "bg-red-100 text-red-800"
-                                    : orderItem.status === "Returned"
-                                      ? "bg-gray-100 text-gray-800"
-                                      : "bg-gray-200 text-gray-800"
-                              }`}
-                          >
-                            {orderItem.status}
-                          </span>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <Button
-                            variant="ghost"
-                            className="hover:bg-accent"
-                            onClick={() =>
-                              navigate(
-                                `/seller/dashboard/orders/${orderItem.id}`,
-                                {
-                                  state: {
-                                    user: orders.find(
-                                      (order) => order.id === orderItem.orderId
-                                    )?.user,
-                                    orderItem,
-                                  },
-                                }
-                              )
-                            }
-                          >
-                            <ChevronRight />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </Card>
-          )
+        {paginatedOrders?.length === 0 ? (
+          <h2 className=" font-bold text-center text-xl p-16">No Orders!</h2>
         ) : (
-          <div className="flex flex-col justify-center items-center h-screen">
-            <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-            <p className="text-muted-foreground">Loading Orders...</p>
-          </div>
+          <Card className="p-2 md:p-4 border border-primary/30 rounded-xl  overflow-hidden">
+            <div className="overflow-x-auto">
+              <Table className="w-full">
+                <TableHeader className="bg-primary  overflow-hidden">
+                  <TableRow className="rounded-3xl border-none hover:bg-transparent">
+                    <TableHead className="text-primary-foreground  font-semibold rounded-tl-lg rounded-bl-lg">
+                      Order
+                    </TableHead>
+                    <TableHead className="text-primary-foreground  font-semibold">
+                      Customer
+                    </TableHead>
+                    <TableHead className="text-primary-foreground  font-semibold">
+                      Date
+                    </TableHead>
+                    <TableHead className="text-primary-foreground  font-semibold">
+                      Total
+                    </TableHead>
+                    <TableHead className="text-primary-foreground  font-semibold">
+                      Status
+                    </TableHead>
+                    <TableHead className="text-right text-primary-foreground  font-semibold rounded-br-lg rounded-tr-lg">
+                      Action
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {paginatedOrders?.map((orderItem: OrderItem) => (
+                    <TableRow
+                      key={orderItem.id}
+                      className="border-b h-[60px] hover:bg-primary/5"
+                    >
+                      <TableCell>
+                        <div className="flex items-center gap-5">
+                          <img
+                            src={
+                              orderItem.product.images[0].url ||
+                              "/placeholder.svg"
+                            }
+                            alt="Product"
+                            width={48}
+                            height={48}
+                            className="w-16"
+                          />
+                          <div className="text-sm w-56">
+                            {orderItem.product.name}
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="space-x-2 whitespace-nowrap">
+                        <span className="p-1.5 border bg-primary/10 text-primary font-semibold rounded-full">
+                          {orders.find((order) => order.id === orderItem.orderId)?.user?.name
+                            ? orders
+                              .find((order) => order.id === orderItem.orderId)!
+                              .user.name.split(" ")
+                              .map((letter: string) => letter[0])
+                              .join("")
+                              .toUpperCase()
+                            : "UN"}
+                        </span>
+                        <span>
+                          {orders.find((order) => order.id === orderItem.orderId)?.user?.name || "Unknown"}
+                        </span>
+
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap">
+                        {formatDate(orderItem.createdAt)}
+                      </TableCell>
+                      <TableCell>
+                        ₹
+                        {formatPrice(
+                          (orderItem.product.price -
+                            (orderItem.product.price / 100) *
+                            orderItem.product.offerPercentage) *
+                          orderItem.quantity
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <span
+                          className={`px-2 py-1 text-[10px] font-medium rounded-md ${orderItem.status === "Confirmed"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : orderItem.status === "Shipped"
+                              ? "bg-blue-100 text-blue-800"
+                              : orderItem.status === "Delivered"
+                                ? "bg-green-100 text-green-800"
+                                : orderItem.status === "Cancelled"
+                                  ? "bg-red-100 text-red-800"
+                                  : orderItem.status === "Returned"
+                                    ? "bg-gray-100 text-gray-800"
+                                    : "bg-gray-200 text-gray-800"
+                            }`}
+                        >
+                          {orderItem.status}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          className="hover:bg-accent"
+                          onClick={() =>
+                            navigate(
+                              `/seller/dashboard/orders/${orderItem.id}`,
+                              {
+                                state: {
+                                  user: orders.find(
+                                    (order) => order.id === orderItem.orderId
+                                  )?.user,
+                                  orderItem,
+                                },
+                              }
+                            )
+                          }
+                        >
+                          <ChevronRight />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </Card>
         )}
       </div>
 

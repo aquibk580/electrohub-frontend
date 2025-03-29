@@ -10,6 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
 import axios from "@/lib/axios";
+import { ContactSkeleton } from "@/components/Seller/Skeletons";
+import { Suspense, useEffect, useState } from "react";
 
 const contactSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),
@@ -17,8 +19,33 @@ const contactSchema = z.object({
   subject: z.string().min(5, "Subject must be at least 5 characters"),
   message: z.string().min(10, "Message must be at least 10 characters"),
 });
+export default function SellerContact(){
+  const [isLoading, setIsLoading] = useState(true)
 
-export default function SellerContact() {
+  useEffect(() => {
+    // Simulate data loading
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [])
+  return (
+    <div>
+      {isLoading ? (
+        <ContactSkeleton />
+      ) : (
+        <Suspense fallback={<ContactSkeleton />}>
+          <MainSellerContact />
+        </Suspense>
+      )}
+    </div>
+  )
+
+
+}
+
+ function MainSellerContact() {
   const {
     register,
     handleSubmit,

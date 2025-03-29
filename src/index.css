@@ -87,7 +87,14 @@ input::-webkit-inner-spin-button {
   scrollbar-width: none; /* Firefox */
 }
 
-
+.description {
+  display: -webkit-box;
+  -webkit-line-clamp: 9;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 @layer base {
   :root {

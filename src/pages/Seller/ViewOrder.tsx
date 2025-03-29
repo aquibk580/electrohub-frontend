@@ -1,218 +1,285 @@
-import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { MoveLeft } from "lucide-react";
-import { OrderItem, User } from "@/types/entityTypes";
-import { formatDate } from "@/lib/utils";
-import { formatPrice } from "@/utils/FormatPrice";
-import { toast } from "react-toastify";
-import axios from "@/lib/axios";
+"use client"
+
+import { useParams, useNavigate, Link, useLocation } from "react-router-dom"
+import { Suspense, useEffect, useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { MoveLeft, Package, UserIcon, Info } from "lucide-react"
+import type { OrderItem, User } from "@/types/entityTypes"
+import { formatDate } from "@/lib/utils"
+import { formatPrice } from "@/utils/FormatPrice"
+import { toast } from "react-toastify"
+import axios from "@/lib/axios"
+import { ViewOrderSkeleton } from "@/components/Seller/Skeletons"
 
 const getStatusColor = (status: any) => {
   switch (status) {
     case "OrderConfirmed":
-      return "bg-blue-100 text-blue-600";
+      return "bg-blue-100 text-blue-600"
     case "Shipped":
-      return "bg-yellow-100 text-yellow-600";
+      return "bg-yellow-100 text-yellow-600"
     case "Delivered":
-      return "bg-green-100 text-green-600";
+      return "bg-green-100 text-green-600"
     case "Cancelled":
-      return "bg-red-100 text-red-600";
+      return "bg-red-100 text-red-600"
     case "Returned":
-      return "bg-gray-100 text-gray-600";
+      return "bg-gray-100 text-gray-600"
     default:
-      return "bg-gray-100 text-gray-600";
+      return "bg-gray-100 text-gray-600"
   }
-};
+}
 
 const ViewOrder = () => {
-  const location = useLocation();
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const user: User = location.state?.user;
-  const [orderItem, setOrderItem] = useState<OrderItem>(
-    location.state?.orderItem
-  );
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    // Simulate data loading
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  return (
+    <div className="container mx-auto px-4 py-6">
+      {isLoading ? (
+        <ViewOrderSkeleton />
+      ) : (
+        <Suspense fallback={<ViewOrderSkeleton />}>
+          <MainViewOrder />
+        </Suspense>
+      )}
+    </div>
+  )
+}
+
+export default ViewOrder
+
+const MainViewOrder = () => {
+  const location = useLocation()
+  const { id } = useParams()
+  const navigate = useNavigate()
+  const user: User = location.state?.user
+  const [orderItem, setOrderItem] = useState<OrderItem>(location.state?.orderItem)
+  const [showDesc, setshowDesc] = useState(false)
 
   useEffect(() => {
     const getOrderItem = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/seller/orders/${id}`
-        );
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/seller/orders/${id}`)
 
         if (response.status === 200) {
-          const updatedOrder = response.data;
-          setOrderItem((prev) => ({ ...prev, status: updatedOrder.status }));
+          const updatedOrder = response.data
+          setOrderItem((prev) => ({ ...prev, status: updatedOrder.status }))
         }
       } catch (error: any) {
-        console.log(error);
+        console.log(error)
         toast.error(error.message, {
           position: "top-center",
           theme: "dark",
-        });
+        })
       }
-    };
-    if (!orderItem) {
-      getOrderItem();
     }
-  }, [id]);
+    if (!orderItem) {
+      getOrderItem()
+    }
+  }, [id, orderItem])
 
   const handleOrderStatusUpdate = async (status: string) => {
     try {
-      const response = await axios.patch(
-        `${import.meta.env.VITE_API_URL}/api/seller/orders/${orderItem.id}`,
-        { status }
-      );
+      const response = await axios.patch(`${import.meta.env.VITE_API_URL}/api/seller/orders/${orderItem.id}`, {
+        status,
+      })
       if (response.status === 200) {
-        setOrderItem((prev) => ({ ...prev, status }));
+        setOrderItem((prev) => ({ ...prev, status }))
         toast.success("Order status updated", {
           position: "top-center",
           theme: "dark",
-        });
+        })
       }
     } catch (error: any) {
-      console.log(error);
+      console.log(error)
       toast.error(error.message, {
         position: "top-center",
         theme: "dark",
-      });
+      })
     }
-  };
+  }
 
   if (!orderItem) {
     return (
       <div className="flex justify-center items-center h-screen text-xl font-semibold text-foreground">
         Order not found! 😢
       </div>
-    );
+    )
+  }
+
+  const handleShowDescription = () => {
+    if(showDesc) {
+    setshowDesc(false)
+  }
+    else {
+      setshowDesc(true)
+    }
   }
 
   return (
-    <div className="space-y-2">
-      <Button
-        className="text-sm bg-transparent text-muted-foreground rounded-full hover:bg-accent shadow-none"
-        onClick={() => navigate(-1)}
-      >
-        <MoveLeft /> Back to Orders
-      </Button>
+    <div className="space-y-6">
+      {/* Header with back button and title */}
+      <div className="flex items-center justify-between">
+        <Button
+          className="text-sm bg-transparent text-muted-foreground rounded-full hover:bg-accent shadow-none"
+          onClick={() => navigate(-1)}
+        >
+          <MoveLeft className="mr-2 h-4 w-4" /> Back to Orders
+        </Button>
+        <div className="text-2xl font-semibold text-foreground">Order Details</div>
+      </div>
 
-      <div className="space-y-3">
-        <div>
-          <div className="text-2xl font-semibold text-foreground">
-            Order Details
+      {/* Order ID and Status Banner */}
+      <div className="flex items-center justify-between bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black p-4 rounded-lg border border-primary/50">
+        <div className="flex items-center space-x-2">
+          <span className="text-primary font-medium">Order ID:</span>
+          <span className="font-mono">{orderItem.id}</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <span className="text-muted-foreground">Status:</span>
+          <span className={`${getStatusColor(orderItem.status)} px-3 py-1 rounded-full text-xs font-medium`}>
+            {orderItem.status}
+          </span>
+        </div>
+      </div>
+
+      {/* Main content grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Product details card - takes 2 columns on large screens */}
+        <div className="lg:col-span-2 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black rounded-xl border border-primary/50 overflow-hidden">
+          <div className="p-6">
+            <div className="flex flex-col w gap-6">
+              {/* Product image */}
+              <Link to={`product/${orderItem.id}`} className=" md:w-1/3 flex flex-row">
+                <img
+                  src={orderItem.product.images[0].url || "/placeholder.svg"}
+                  alt={orderItem.product.name}
+                  className="w-full h-auto object-cover rounded-lg"
+                />
+                <img
+                  src={orderItem.product.images[1].url || "/placeholder.svg"}
+                  alt={orderItem.product.name}
+                  className="w-full h-auto object-cover rounded-lg"
+                />
+              </Link>
+
+              {/* Product info */}
+              <div className="w-full space-y-4">
+                <h3 className="text-xl font-semibold text-foreground">{orderItem.product.name}</h3>
+                <p onClick={handleShowDescription} className={`text-muted-foreground ${showDesc? "": "description" }`}>{orderItem.product.description}</p>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center">
+                    <span className="text-muted-foreground mr-2">Date:</span>
+                    <span className="font-medium">{formatDate(orderItem.createdAt)}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-muted-foreground mr-2">Price:</span>
+                    <span className="font-medium">
+                      {formatPrice(
+                        orderItem.product.price - (orderItem.product.price / 100) * orderItem.product.offerPercentage,
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+
+
+
         </div>
 
-        <div className="space-y-4 w-full">
-          <div className="flex flex-col lg:flex-row gap-2 lg:items-center border border-primary/50 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black   p-3 md:p-1 rounded-xl shadow-sm">
-            <Link to={`product/${orderItem.id}`}>
-              <p className="text-primary ml-2 mt-1 text-sm">
-                Order ID: {orderItem.id}
-              </p>
-              <img
-                src={orderItem.product.images[0].url}
-                alt="Product"
-                className="w-full lg:w-48 object-cover"
-              />
-            </Link>
-            <div className="flex-1 p-3 space-y-2">
-              <h3 className="text-xl font-semibold text-foreground">
-                {orderItem.product.name}
-              </h3>
-              <p className="text-foreground text-sm">
-                {orderItem.product.description}
-              </p>
-              <label
-                className={`${getStatusColor(
-                  orderItem.status
-                )} text-xs p-1 px-3 rounded-md`}
-              >
-                {orderItem.status}
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 mt-2">
-                <p className="text-sm">
-                  <strong>Date:</strong> {formatDate(orderItem.createdAt)}
-                </p>
-                <p className="text-sm">
-                  <strong>Total:</strong>{" "}
-                  {formatPrice(
-                    orderItem.product.price -
-                    (orderItem.product.price / 100) *
-                    orderItem.product.offerPercentage
-                  )}
-                </p>
-              </div>
+        {/* Right sidebar with status update and customer info */}
+        <div className="space-y-6">
+          {/* Status update card */}
+          <div className="bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black rounded-xl border border-primary/50 p-6">
+            <div className="flex items-center mb-4">
+              <Package className="h-5 w-5 mr-2 text-primary" />
+              <h3 className="text-lg font-semibold">Update Order Status</h3>
             </div>
-            <div className="w-full lg:w-[400px] p-4 md:p-6">
-              <h3 className="text-md font-semibold ">
-                Update Order Status
-              </h3>
-              <Select
-                onValueChange={(value) => handleOrderStatusUpdate(value)}
-                defaultValue={orderItem.status}
-              >
-                <SelectTrigger className="w-full border-primary/40  bg-primary/20 rounded-xl px-4 py-2 mt-2">
-                  <SelectValue placeholder="Select Status" />
-                </SelectTrigger>
-                <SelectContent className="rounded-xl dark:border-primary/30">
-                  <SelectItem className="rounded-lg" value="OrderConfirmed">Confirmed</SelectItem>
-                  <SelectItem className="rounded-lg" value="Shipped">Shipped</SelectItem>
-                  <SelectItem className="rounded-lg" value="Delivered">Delivered</SelectItem>
-                  <SelectItem className="rounded-lg" value="Cancelled">Cancelled</SelectItem>
-                  <SelectItem className="rounded-lg" value="Returned">Returned</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <Select onValueChange={(value) => handleOrderStatusUpdate(value)} defaultValue={orderItem.status}>
+              <SelectTrigger className="w-full border-primary/40 bg-primary/20 rounded-xl px-4 py-2 mt-2">
+                <SelectValue placeholder="Select Status" />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl dark:border-primary/30">
+                <SelectItem className="rounded-lg" value="OrderConfirmed">
+                  Confirmed
+                </SelectItem>
+                <SelectItem className="rounded-lg" value="Shipped">
+                  Shipped
+                </SelectItem>
+                <SelectItem className="rounded-lg" value="Delivered">
+                  Delivered
+                </SelectItem>
+                <SelectItem className="rounded-lg" value="Cancelled">
+                  Cancelled
+                </SelectItem>
+                <SelectItem className="rounded-lg" value="Returned">
+                  Returned
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 md:p-6 rounded-xl border-primary/50 border bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black   shadow-sm">
-              <h3 className="text-lg font-semibold text-foreground mb-3">
-                Customer Details
-              </h3>
-              {user ? (
-                <div className="space-y-2 text-muted-foreground text-[15px]">
-                  <p>
-                    <strong>Name:</strong> {user.name}
-                  </p>
-                  <p>
-                    <strong>Email:</strong> {user.email}
-                  </p>
-                  <p>
-                    <strong>Phone:</strong> {user.phone}
-                  </p>
-                  <p>
-                    <strong>Address:</strong> {user.address}
-                  </p>
-                </div>
-              ) : (<h1 className="text-xl">User Details not available</h1>)}
+          {/* Customer details card */}
+          <div className="bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black rounded-xl border border-primary/50 p-6">
+            <div className="flex items-center mb-4">
+              <UserIcon className="h-5 w-5 mr-2 text-primary" />
+              <h3 className="text-lg font-semibold">Customer Details</h3>
             </div>
+            {user ? (
+              <div className="space-y-3">
+                <div className="flex">
+                  <span className="font-medium min-w-[80px]">Name:</span>
+                  <span className="text-muted-foreground">{user.name}</span>
+                </div>
+                <div className="flex">
+                  <span className="font-medium min-w-[80px]">Email:</span>
+                  <span className="text-muted-foreground">{user.email}</span>
+                </div>
+                <div className="flex">
+                  <span className="font-medium min-w-[80px]">Phone:</span>
+                  <span className="text-muted-foreground">{user.phone}</span>
+                </div>
+                <div className="flex">
+                  <span className="font-medium min-w-[80px]">Address:</span>
+                  <span className="text-muted-foreground">{user.address}</span>
+                </div>
+              </div>
+            ) : (
+              <div className="text-muted-foreground italic">User details not available</div>
+            )}
+          </div>
 
-            <div className="p-4 md:p-6 rounded-xl border border-primary/50 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black   shadow-sm">
-              <h3 className="text-lg font-semibold text-foreground mb-3">
-                Product Details
-              </h3>
-              <div className="space-y-2 text-muted-foreground text-[15px]">
+          {/* Product specifications */}
+          <div className="bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black rounded-xl border border-primary/50 p-6">
+            {/* <div className="border-t border-primary/20 p-6"> */}
+              <div className="flex items-center mb-4">
+                <Info className="h-5 w-5 mr-2 text-primary" />
+                <h3 className="text-lg font-semibold">Product Specifications</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {orderItem.product.productInfo.details.map((item) => (
-                  <p key={item.key}>
-                    <strong>{item.key}</strong> : {item.value}
-                  </p>
+                  <div key={item.key} className="flex">
+                    <span className="font-medium min-w-[120px]">{item.key}:</span>
+                    <span className="text-muted-foreground">{item.value}</span>
+                  </div>
                 ))}
               </div>
-            </div>
+            {/* </div> */}
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ViewOrder;

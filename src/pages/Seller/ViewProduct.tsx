@@ -19,6 +19,7 @@ import axios from "@/lib/axios";
 import DeleteButtonDialog from "@/components/Seller/DeleteButtonDialog";
 import { toast } from "react-toastify";
 import { cn, formatDate } from "@/lib/utils";
+import { ViewOrderSkeleton } from "@/components/Seller/Skeletons";
 
 interface Image {
   url: string;
@@ -147,10 +148,11 @@ export default function ViewProduct() {
 
   if (loading) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-        <p className="text-muted-foreground">Loading Product Details...</p>
-      </div>
+      // <div className="flex flex-col justify-center items-center h-screen">
+      //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+      //   <p className="text-muted-foreground">Loading Product Details...</p>
+      // </div>
+      <ViewOrderSkeleton/>
     );
   }
 

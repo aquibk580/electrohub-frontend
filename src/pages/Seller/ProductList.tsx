@@ -1,37 +1,10 @@
 import { Button } from "@/components/ui/button";
-import {
-  CalendarCheck,
-  ChevronRight,
-  Filter,
-  Loader2,
-  Search,
-} from "lucide-react";
+import { CalendarCheck, ChevronRight, Filter, Search } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useEffect, useState } from "react";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import axios from "@/lib/axios";
@@ -41,6 +14,8 @@ import { assets } from "@/assets/assets";
 import { Card } from "@/components/ui/card";
 import { Product } from "@/types/entityTypes";
 import AnimatedCounter from "@/components/Common/AnimatedCounter";
+import { ProductListSkeleton } from "@/components/Seller/Skeletons";
+
 
 export default function ProductList() {
   const seller = useSelector((state: RootState) => state.seller.seller);
@@ -105,10 +80,11 @@ export default function ProductList() {
 
   if (loading) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-        <p className="text-muted-foreground">Loading Product List...</p>
-      </div>
+      // <div className="flex flex-col justify-center items-center h-screen">
+      //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+      //   <p className="text-muted-foreground">Loading Product List...</p>
+      // </div>
+      <ProductListSkeleton/>
     );
   }
 
