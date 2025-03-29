@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { RootState } from "@/redux/store";
 import { assets } from "../../assets/assets";
 
@@ -15,76 +15,58 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import UserProfileButton from "./UserProfileButton";
-import { Menu, Phone, ShoppingBag, ShoppingCart, UserRound } from "lucide-react";
+import { Menu, Phone, ShoppingCart, UserRound } from "lucide-react";
 import MobileSideBar from "./MobileSidebar";
-import { Input } from "../ui/input";
-import Logo from "../Logo";
 import SearchBar from "./Searchbar";
+import axios from "@/lib/axios";
+import { Category } from "@/types/entityTypes";
 
 const Navbar = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user.user);
   const pfp = useSelector((state: RootState) => state.user.pfp);
+  const [categories, setCategories] = useState<Array<Category>>([]);
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/categories/6`
+        );
+
+        if (response.status === 200) setCategories(response.data);
+      } catch (error: any) {
+        console.error(error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const components: {
     title: string;
     img: string;
     href: string;
-    description: string;
-  }[] = [
-    {
-      title: "Alert Dialog",
-      img: assets.laptop,
-      href: "/docs/primitives/alert-dialog",
-      description:
-        "A modal dialog that interrupts the user with important content and expects a response.",
-    },
-    {
-      title: "Hover Card",
-      img: assets.mobile,
-      href: "/docs/primitives/hover-card",
-      description:
-        "For sighted users to preview content available behind a link.",
-    },
-    {
-      title: "Progress",
-      img: assets.monitor,
-      href: "/docs/primitives/progress",
-      description:
-        "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
-    },
-    {
-      title: "Scroll-area",
-      img: assets.earbuds,
-      href: "/docs/primitives/scroll-area",
-      description: "Visually or semantically separates content.",
-    },
-    {
-      title: "Tabs",
-      img: assets.tablet,
-      href: "/docs/primitives/tabs",
-      description:
-        "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
-    },
-    {
-      title: "Tooltip",
-      img: assets.watch,
-      href: "/docs/primitives/tooltip",
-      description:
-        "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
-    },
-  ];
+  }[] = useMemo(() => {
+    return categories.map((category) => {
+      return {
+        title: category.name,
+        img: category.imageUrl,
+        href: `/categories/${category.name}`,
+      };
+    });
+  }, [categories]);
 
   return (
     <header className="fixed z-50 w-full border-b shadow-sm bg-white dark:bg-black">
       {/* Top Banner */}
       <div className="bg-primary dark:bg-primary/25  text-sm py-1 px-6 lg:flex items-center justify-between hidden">
         <div className="flex items-center gap-2 w-full">
-          <Phone className="w-4"/>
+          <Phone className="w-4" />
           <p>+91-987654321</p>
         </div>
         <p className="text-end w-full">
@@ -101,8 +83,11 @@ const Navbar = () => {
             className="cursor-pointer "
             onClick={() => setShowSidebar(true)}
           />
-          <div className="font-bold gap-1 text-3xl flex items-center cursor-pointer"  onClick={() => navigate("/")}>
-            <ShoppingCart className="text-green-500"/> {""}
+          <div
+            className="font-bold gap-1 text-3xl flex items-center cursor-pointer"
+            onClick={() => navigate("/")}
+          >
+            <ShoppingCart className="text-green-500" /> {""}
             Electrohub
           </div>
           <div>
@@ -113,7 +98,7 @@ const Navbar = () => {
                 onClick={() => navigate("/user/auth/signin")}
                 className="flex gap-1 items-center cursor-pointer hover:text-orange-600"
               >
-                <UserRound className="text-black  dark:text-white lg:w-4 lg:h-4"/>
+                <UserRound className="text-black  dark:text-white lg:w-4 lg:h-4" />
                 <p className="hidden lg:block">Account</p>
               </div>
             )}
@@ -121,8 +106,11 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Logo */}
-        <div className="font-bold text-2xl hidden lg:flex   items-center cursor-pointer" onClick={() => navigate("/")}>
-        <ShoppingCart className="text-green-500 p-[1.5px]" />
+        <div
+          className="font-bold text-2xl hidden lg:flex   items-center cursor-pointer"
+          onClick={() => navigate("/")}
+        >
+          <ShoppingCart className="text-green-500 p-[1.5px]" />
           Electrohub
         </div>
 
@@ -166,25 +154,24 @@ const Navbar = () => {
                 <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                   {components.map((component) => (
                     <ListItem
-                      className="flex flex-row items-center p-2 py-1 border  rounded-md " // Reduced vertical padding (py-1)
+                      className="flex flex-row items-center p-2 py-1 border rounded-md "
                       key={component.title}
                     >
-                      <div className="flex flex-row items-center gap-3">
-                        <img
-                          src={component.img}
-                          alt={component.title}
-                          className="w-20 h-20 rounded-md object-cover"
-                        />
+                      <Link to={component.href}>
+                        <div className="flex flex-row items-center gap-3">
+                          <img
+                            src={component.img}
+                            alt={component.title}
+                            className="w-20 h-20 rounded-md object-cover"
+                          />
 
-                        <div className="flex flex-col items-start">
-                          <div className="font-medium text-black text-md">
-                            {component.title}
-                          </div>
-                          <div className="text-xs">
-                            {component.description.slice(0, 45)}...
+                          <div className="flex flex-col items-start">
+                            <div className="font-medium text-md">
+                              {component.title}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     </ListItem>
                   ))}
                 </ul>
@@ -220,7 +207,7 @@ const Navbar = () => {
               onClick={() => navigate("/user/auth/signin")}
               className="flex gap-1 items-center cursor-pointer hover:text-orange-600"
             >
-               <UserRound className="text-black dark:text-white"/>
+              <UserRound className="text-black dark:text-white" />
               <p className="hidden lg:block">Account</p>
             </div>
           )}

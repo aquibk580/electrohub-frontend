@@ -1,146 +1,171 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react"
-import { Loader2, Filter } from "lucide-react"
-import type { Category, Product } from "../../types/entityTypes"
-import axios from "@/lib/axios"
-import ProductCard from "./ProductCard"
-import { useSelector } from "react-redux"
-import type { RootState } from "@/redux/store"
-import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-const PRODUCTS_PER_PAGE = 12
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { Loader2, Filter } from "lucide-react";
+import type { Category, Product } from "../../types/entityTypes";
+import axios from "@/lib/axios";
+import ProductCard from "./ProductCard";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/store";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+const PRODUCTS_PER_PAGE = 12;
 
 const AllProducts = () => {
-  const [categories, setCategories] = useState<Category[]>([])
-  const [products, setProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(true)
-  const [loadingMore, setLoadingMore] = useState(false)
-  const [category, setCategory] = useState<string>("All")
-  const [wishlist, setWishlist] = useState<Set<number>>(new Set())
-  const [page, setPage] = useState(1)
-  const [hasMore, setHasMore] = useState(true)
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [category, setCategory] = useState<string>("All");
+  const [wishlist, setWishlist] = useState<Set<number>>(new Set());
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
-  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated)
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.user.isAuthenticated
+  );
 
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
         const [categoriesRes, productsRes] = await Promise.all([
-          axios.get(`${import.meta.env.VITE_API_URL}/api/categories`),
-          axios.get(`${import.meta.env.VITE_API_URL}/api/user/products?page=1&limit=${PRODUCTS_PER_PAGE}`),
-        ])
+          axios.get(`${import.meta.env.VITE_API_URL}/api/categories/all`),
+          axios.get(
+            `${
+              import.meta.env.VITE_API_URL
+            }/api/user/products?page=1&limit=${PRODUCTS_PER_PAGE}`
+          ),
+        ]);
 
-        if (categoriesRes.status === 200) setCategories(categoriesRes.data)
+        if (categoriesRes.status === 200) setCategories(categoriesRes.data);
         if (productsRes.status === 200) {
-          processProducts(productsRes.data.products)
-          setHasMore(productsRes.data.products.length === PRODUCTS_PER_PAGE)
+          processProducts(productsRes.data.products);
+          setHasMore(productsRes.data.products.length === PRODUCTS_PER_PAGE);
         }
       } catch (error: any) {
-        console.error(error)
+        console.error(error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchInitialData()
-  }, [])
+    fetchInitialData();
+  }, []);
 
   useEffect(() => {
-    if (!isAuthenticated) return
+    if (!isAuthenticated) return;
 
     const fetchWishlist = async () => {
       try {
-        const wishlistRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/wishlist/wishlistproducts`)
+        const wishlistRes = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/user/wishlist/wishlistproducts`
+        );
 
         if (wishlistRes.status === 200 && wishlistRes.data?.wishlist) {
-          setWishlist(new Set(wishlistRes.data.wishlist))
+          setWishlist(new Set(wishlistRes.data.wishlist));
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
+    };
 
-    fetchWishlist()
-  }, [isAuthenticated])
+    fetchWishlist();
+  }, [isAuthenticated]);
 
   const processProducts = (newProducts: Product[]) => {
     const updatedProducts = newProducts.map((product) => {
-      const totalRating = product?.reviews?.reduce((acc, review) => acc + review.rating, 0)
-      const averageRating = product.reviews.length > 0 ? totalRating / product.reviews.length : 0
-      return { ...product, averageRating }
-    })
+      const totalRating = product?.reviews?.reduce(
+        (acc, review) => acc + review.rating,
+        0
+      );
+      const averageRating =
+        product.reviews.length > 0 ? totalRating / product.reviews.length : 0;
+      return { ...product, averageRating };
+    });
 
-    setProducts((prevProducts) => [...prevProducts, ...updatedProducts])
-  }
+    setProducts((prevProducts) => [...prevProducts, ...updatedProducts]);
+  };
 
   const loadMoreProducts = async () => {
-    if (!hasMore) return
-    setLoadingMore(true)
+    if (!hasMore) return;
+    setLoadingMore(true);
 
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/user/products?page=${page + 1}&limit=${PRODUCTS_PER_PAGE}`,
-      )
+        `${import.meta.env.VITE_API_URL}/api/user/products?page=${
+          page + 1
+        }&limit=${PRODUCTS_PER_PAGE}`
+      );
 
       if (response.status === 200) {
-        processProducts(response.data.products)
-        setPage((prevPage) => prevPage + 1)
-        setHasMore(response.data.products.length === PRODUCTS_PER_PAGE)
+        processProducts(response.data.products);
+        setPage((prevPage) => prevPage + 1);
+        setHasMore(response.data.products.length === PRODUCTS_PER_PAGE);
       }
     } catch (error) {
-      console.error("Error loading more products:", error)
+      console.error("Error loading more products:", error);
     } finally {
-      setLoadingMore(false)
+      setLoadingMore(false);
     }
-  }
+  };
 
   const filteredProducts = useMemo(() => {
-    if (category === "All") return products
-    return products.filter((p) => p.categoryName.toLowerCase() === category.toLowerCase())
-  }, [category, products])
+    if (category === "All") return products;
+    return products.filter(
+      (p) => p.categoryName.toLowerCase() === category.toLowerCase()
+    );
+  }, [category, products]);
 
-  const [categoryProductsCache, setCategoryProductsCache] = useState<Record<string, Product[]>>({})
+  const [categoryProductsCache, setCategoryProductsCache] = useState<
+    Record<string, Product[]>
+  >({});
 
   const handleCategoryChange = useCallback(
     async (selectedCategory: string) => {
-      setCategory(selectedCategory)
-      setProducts([])
-      setPage(1)
-      setHasMore(true)
-      setLoading(true)
+      setCategory(selectedCategory);
+      setProducts([]);
+      setPage(1);
+      setHasMore(true);
+      setLoading(true);
 
       // If category data is already cached, use it
       if (categoryProductsCache[selectedCategory]) {
-        setProducts(categoryProductsCache[selectedCategory])
-        setLoading(false)
-        return
+        setProducts(categoryProductsCache[selectedCategory]);
+        setLoading(false);
+        return;
       }
 
       try {
         const response = await axios.get(
           `${
             import.meta.env.VITE_API_URL
-          }/api/user/products?page=1&limit=${PRODUCTS_PER_PAGE}&category=${selectedCategory}`,
-        )
+          }/api/user/products?page=1&limit=${PRODUCTS_PER_PAGE}&category=${selectedCategory}`
+        );
 
         if (response.status === 200) {
-          processProducts(response.data.products)
+          processProducts(response.data.products);
           setCategoryProductsCache((prevCache) => ({
             ...prevCache,
             [selectedCategory]: response.data.products,
-          }))
-          setHasMore(response.data.products.length === PRODUCTS_PER_PAGE)
+          }));
+          setHasMore(response.data.products.length === PRODUCTS_PER_PAGE);
         }
       } catch (error) {
-        console.error("Error fetching products for category:", error)
+        console.error("Error fetching products for category:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     },
-    [categoryProductsCache],
-  )
+    [categoryProductsCache]
+  );
 
   if (loading) {
     return (
@@ -165,7 +190,7 @@ const AllProducts = () => {
           ))}
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -186,7 +211,9 @@ const AllProducts = () => {
               <SheetContent side="right">
                 <SheetHeader>
                   <SheetTitle>Categories</SheetTitle>
-                  <SheetDescription>Filter products by category</SheetDescription>
+                  <SheetDescription>
+                    Filter products by category
+                  </SheetDescription>
                 </SheetHeader>
                 <div className="mt-6 flex flex-col gap-2">
                   <Button
@@ -239,12 +266,21 @@ const AllProducts = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} wishlist={wishlist} setWishlist={setWishlist} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                wishlist={wishlist}
+                setWishlist={setWishlist}
+              />
             ))
           ) : (
             <div className="col-span-full py-12 text-center">
-              <h1 className="text-2xl font-semibold text-foreground">No products found for this category</h1>
-              <p className="mt-2 text-muted-foreground">Try selecting a different category</p>
+              <h1 className="text-2xl font-semibold text-foreground">
+                No products found for this category
+              </h1>
+              <p className="mt-2 text-muted-foreground">
+                Try selecting a different category
+              </p>
             </div>
           )}
         </div>
@@ -272,8 +308,7 @@ const AllProducts = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AllProducts
-
+export default AllProducts;
