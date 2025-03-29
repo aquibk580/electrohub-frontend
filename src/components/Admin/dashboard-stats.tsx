@@ -38,7 +38,7 @@ const StatCard = ({
 }: StatItem) => {
   if (variant === "payment") {
     return (
-      <div className="bg-background border-border rounded-lg p-4 shadow-sm flex-1 min-w-fit my-5">
+      <div className="bg-primary/5  dark:bg-gradient-to-br from-primary/15 via-slate-900/30 to-primary/5  border-primary/75 border rounded-lg p-4 shadow-sm flex-1 min-w-fit my-5">
         <div className="flex flex-col gap-1">
           <p className="text-sm text-foreground truncate">{label}</p>
           <div className="flex items-baseline gap-2 flex-col">
@@ -71,14 +71,14 @@ const StatCard = ({
   }
 
   return (
-    <div className=" bg-secondary text-secondary-foreground flex items-center gap-4  rounded-lg p-4 min-w-[180px] sm:min-w-[200px]">
+    <div className=" border border-primary/75 dark:bg-gradient-to-br from-primary/35 via-slate-700/50 to-primary/10 bg-primary/15  text-secondary-foreground flex items-center gap-4  rounded-lg p-4 min-w-[180px] sm:min-w-[200px]">
       {icon && (
         <div className="p-2 bg-primary/10 rounded-full text-primary">
           {icon}
         </div>
       )}
       <div>
-        <p className="text-sm text-muted-foreground-foreground truncate">
+        <p className="text-sm truncate">
           {label}
         </p>
         {typeof value !== "number" ? (
@@ -102,11 +102,11 @@ export const DashboardStats = ({
   variant = "default",
 }: DashboardStatsProps) => {
   return (
-    <div className="space-y-6">
-      <SelectorWrapper>
+    <div className="space-y-6 ">
+      <SelectorWrapper >
         <div
           className={cn(
-            "flex gap-4",
+            "flex gap-4  ",
             variant === "payment" ? "flex" : "flex-row overflow-x-auto"
           )}
         >

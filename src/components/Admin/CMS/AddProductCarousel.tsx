@@ -133,9 +133,9 @@ export default function AddProductCarousel({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button className="border-primary border bg-primary/40 text-accent-foreground hover:text-white">
           <Plus className="w-4 h-4 mr-2" />
-          Add Product
+          Add Product Carousel
         </Button>
       </DialogTrigger>
       <DialogContent>

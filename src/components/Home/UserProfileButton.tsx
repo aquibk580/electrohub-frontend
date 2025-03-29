@@ -66,10 +66,10 @@ export default function UserProfileButton({
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
-      <DropdownMenuTrigger  asChild>
+      <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="flex items-center gap-2  px-0 hover:bg-transparent p-5 py-6"
+          className="flex items-center  px-0 hover:bg-transparent  md:p-5 py-6"
           onMouseEnter={() => {
             clearTimeout(closeTimeout); // Prevents immediate closing
             setOpen(true);
@@ -77,7 +77,7 @@ export default function UserProfileButton({
         >
           <Avatar>
             <AvatarImage src={imageUrl} alt="User" className="w-full h-full object-cover rounded-full" />
-            <AvatarFallback className={`${bgColor} text-white font-extrabold`}>
+            <AvatarFallback className={`${bgColor}  to-black text-white font-extrabold`}>
               {initials}
             </AvatarFallback>
           </Avatar>

@@ -47,7 +47,8 @@ const Admins = () => {
   }, []);
 
   return (
-    <Card>
+  <div className="p-4">
+      <Card className="rounded-xl bg-primary/5 border-primary/75 dark:bg-gradient-to-br from-primary/10 via-slate-900/20 to-primary/5">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <ShieldCheck className="h-5 w-5" />
@@ -58,10 +59,10 @@ const Admins = () => {
       <CardContent>
         <div className="space-y-6">
           {/* Users Table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
+          <div className="rounded-xl border overflow-hidden bg-white dark:bg-black border-primary/75">
+            <Table >
+              <TableHeader >
+                <TableRow className="border-b-primary hover:bg-primary/30  bg-primary/30">
                   <TableHead>Sr.No</TableHead>
                   <TableHead>ID</TableHead>
                   <TableHead className="hidden md:table-cell">Name</TableHead>
@@ -74,7 +75,7 @@ const Admins = () => {
               <TableBody>
                 {!loading ? (
                   admins.map((user, index) => (
-                    <TableRow key={user.id}>
+                    <TableRow key={user.id} className="border-primary/25">
                       <TableCell className="font-medium">{index + 1}</TableCell>
                       <TableCell>{user.id}</TableCell>
                       <TableCell className="hidden md:table-cell">
@@ -108,6 +109,7 @@ const Admins = () => {
         </div>
       </CardContent>
     </Card>
+  </div>
   );
 };
 

@@ -171,26 +171,26 @@ const Seller = () => {
       <Tabs
         defaultValue="top"
         onValueChange={setActiveTab}
-        className="space-y-4"
+        className="space-y-4 "
       >
         <div className="w-full">
-          <TabsList className="w-full sm:w-auto">
+          <TabsList className="w-full rounded-xl sm:w-auto">
             <TabsTrigger
               value="top"
-              className="flex-1 sm:flex-none text-sm sm:text-base"
+              className="flex-1 sm:flex-none rounded-xl text-sm sm:text-base"
             >
               Top Sellers
             </TabsTrigger>
             <TabsTrigger
               value="all"
-              className="flex-1 sm:flex-none text-sm sm:text-base"
+              className="flex-1 sm:flex-none rounded-xl text-sm sm:text-base"
             >
               All Sellers
             </TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="top" className="mt-2">
-          <Card className="shadow-md rounded-lg py-4">
+          <Card className="shadow-md rounded-xl border-primary/50 bg-primary/5 dark:bg-gradient-to-br from-primary/15 via-slate-900/40 to-primary/10 py-4">
             <CardHeader className="px-4 py-2 sm:p-5">
               <CardTitle className="text-xl sm:text-2xl">Top Sellers</CardTitle>
             </CardHeader>
@@ -235,7 +235,7 @@ const Seller = () => {
           </Card>
         </TabsContent>
         <TabsContent value="all" className="mt-2">
-          <Card className="shadow-md rounded-lg py-4">
+          <Card className="shadow-md rounded-xl bg-primary/5  dark:bg-gradient-to-br from-primary/15 via-slate-900/20 to-primary/10 border-primary/50 py-4">
             <CardHeader className="px-4 py-2 sm:p-5">
               <CardTitle className="text-xl sm:text-2xl">All Sellers</CardTitle>
             </CardHeader>

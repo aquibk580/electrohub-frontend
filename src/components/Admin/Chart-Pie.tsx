@@ -76,7 +76,7 @@ export function ChartPie({ loading, highest, categories }: ChartPieProps) {
   }
 
   return (
-    <Card className="flex flex-col max-w-lg mx-auto px-8">
+    <Card className="flex flex-col max-w-lg mx-auto px-8 border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-slate-900/20 to-primary/5">
       <CardHeader className="items-center pb-0">
         <CardTitle>Product Distribution</CardTitle>
         <CardDescription>Categories and their product counts</CardDescription>

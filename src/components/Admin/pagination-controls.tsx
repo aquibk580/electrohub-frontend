@@ -52,9 +52,9 @@ export function PaginationControls({
   };
 
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between w-full">
-      <div className="flex items-center">
-        <span className="text-sm text-muted-foreground whitespace-nowrap mr-2">Items per page</span>
+    <div className="flex  gap-4  items-center    w-full">
+      <div className="flex items-center ">
+        <span className="text-sm text-muted-foreground dark:text-white whitespace-nowrap mr-2">Items per page</span>
         <Select value={itemsPerPage.toString()} onValueChange={(value) => onItemsPerPageChange(Number(value))}>
           <SelectTrigger className="w-[70px]">
             <SelectValue>{itemsPerPage}</SelectValue>
@@ -67,7 +67,7 @@ export function PaginationControls({
           </SelectContent>
         </Select>
       </div>
-      <Pagination className="ml-auto">
+      <Pagination className="mr-0  w-max">
         <PaginationContent className="flex items-center gap-1">
           <PaginationItem>
             <Button
