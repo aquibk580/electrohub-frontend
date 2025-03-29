@@ -58,6 +58,7 @@ import InfoPage from "./pages/Home/Footer-links";
 import NotFound from "./components/ui/not-found";
 import Admins from "./pages/Admin/Admins";
 import SellerContact from "./pages/Seller/Contact";
+import Category from "./pages/Home/Category";
 
 const App = () => {
   return (
@@ -71,6 +72,14 @@ const App = () => {
           element={
             <HomeLayout>
               <Home />
+            </HomeLayout>
+          }
+        />
+        <Route
+          path="/categories/:categoryName"
+          element={
+            <HomeLayout>
+              <Category />
             </HomeLayout>
           }
         />
@@ -266,7 +275,7 @@ const App = () => {
                 </SellerLayout>
               }
             />
-           
+
             <Route path="products">
               <Route
                 index
@@ -311,13 +320,13 @@ const App = () => {
             />
           </Route>
           <Route
-              path="contact"
-              element={
-                <SellerLayout>
-                  <SellerContact />
-                </SellerLayout>
-              }
-            />
+            path="contact"
+            element={
+              <SellerLayout>
+                <SellerContact />
+              </SellerLayout>
+            }
+          />
           <Route
             path="settings"
             element={
