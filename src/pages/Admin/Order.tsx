@@ -216,7 +216,7 @@ const Order = () => {
         activeFilter={statusFilter}
       />
 
-      <Card className="shadow-md rounded-lg py-4">
+      <Card className="shadow-md rounded-xl bg-primary/5 border-primary/75 dark:bg-gradient-to-br from-primary/10 via-slate-900/20  to-primary/5 py-4">
         <CardHeader className="px-4 py-2 sm:p-5">
           <CardTitle className="text-xl sm:text-2xl">
             Orders Management

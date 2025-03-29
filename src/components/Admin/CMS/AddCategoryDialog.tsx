@@ -108,7 +108,7 @@ export default function AddCategoryDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button className="rounded-xl shadow-md text-accent-foreground bg-primary/40 font-medium hover:text-white border border-primary">
           <Plus className="w-4 h-4 mr-2" />
           Add Category
         </Button>

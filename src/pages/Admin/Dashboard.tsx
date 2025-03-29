@@ -190,7 +190,7 @@ const Dashboard = () => {
           {/* Charts Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Sales Statistics */}
-            <Card>
+            <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-slate-900/20 to-primary/5">
               <CardHeader>
                 <CardTitle>Weekly Sales</CardTitle>
                 <CardDescription>Order values over time</CardDescription>
@@ -241,7 +241,7 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 gap-4">
         {/* Top Products Table */}
-        <Card>
+        <Card className=" border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-slate-900/20 to-primary/5" >
           <CardHeader>
             <CardTitle>Top Selling Products</CardTitle>
           </CardHeader>

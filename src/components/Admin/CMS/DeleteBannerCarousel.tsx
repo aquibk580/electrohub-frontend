@@ -59,7 +59,7 @@ export default function DeleteBannerCarouselButton({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button className="bg-red-50 text-red-700 flex items-center space-x-2 p-1.5 px-2.5 shadow-none rounded-lg hover:bg-red-100">
+        <Button className="bg-red-50 dark:border-none dark:bg-red-200 text-red-700 border border-red-400 flex items-center space-x-2 p-1.5 px-2.5 shadow-none rounded-lg hover:bg-red-100">
           <div className=" w-4 h-4  flex items-center  justify-center rounded-lg">
             <img src={assets.del} className="w-6" />
           </div>

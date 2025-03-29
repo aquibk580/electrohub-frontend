@@ -140,22 +140,23 @@ const Messages = () => {
 
   // Enhanced Message Card Component
   const MessageCard = ({ message }: { message: Message }) => (
-    <div className="bg-white border rounded-xl shadow-sm hover:shadow-md transition-all duration-300 mb-4 overflow-hidden group">
+    <div className=" border bg-white/95 dark:border-primary/15 hover:border-primary/75 dark:bg-black rounded-xl shadow-sm hover:shadow-md transition-all duration-300 mb-4 overflow-hidden group">
       <div className="p-4 flex items-start justify-between">
         <div className="flex-1 space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <h3 className="font-semibold text-lg text-gray-800">
+              <span className="p-1 bg-gradient-to-br from-primary to-blue-900 text-white font-bold px-2.5 rounded-full ">{message.name[0]}</span>
+              <h3 className="font-semibold text-lg text-accent-foreground">
                 {message.name}
               </h3>
-              <Badge variant="secondary" className="text-xs">
+              <Badge  className="text-[8px] dark:bg-primary/35 text-white">
                 {message.email}
               </Badge>
             </div>
             <Button
               variant="ghost"
               size="icon"
-              className="text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+              className="text-red-500 hover:bg-red-600 hover:text-white dark:hover:bg-red-700 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
               onClick={() => handleDelete(message.id)}
             >
               <Trash2 size={18} />
@@ -163,8 +164,8 @@ const Messages = () => {
           </div>
 
           <div className="space-y-1">
-            <p className="font-medium text-gray-700">{message.subject}</p>
-            <p className="text-sm text-gray-500 line-clamp-2">
+            <p className="font-medium text-gray-700 dark:text-slate-300">{message.subject}</p>
+            <p className="text-sm text-gray-500  dark:text-gray-300 line-clamp-2">
               {message.message}
             </p>
           </div>
@@ -183,11 +184,11 @@ const Messages = () => {
       {statsData.map((stat, index) => (
         <div
           key={index}
-          className={`${stat.bgColor} rounded-xl p-5 flex items-center space-x-4 shadow-sm`}
+          className={`dark:bg-gradient-to-br from-primary/15  to-black rounded-xl p-5 border border-primary/85 bg-primary/10 flex items-center space-x-4 shadow-sm`}
         >
-          <div className="rounded-full bg-white p-3 shadow-md">{stat.icon}</div>
+          <div className="rounded-full bg-primary/10  p-3 ">{stat.icon}</div>
           <div>
-            <p className="text-sm text-gray-600 font-medium">{stat.label}</p>
+            <p className="text-sm text-gray-600 dark:text-white font-medium">{stat.label}</p>
             <AnimatedCounter end={String(stat.value)} duration={500} />
           </div>
         </div>
@@ -196,18 +197,18 @@ const Messages = () => {
   );
 
   return (
-    <div className="bg-gray-50 min-h-screen p-6">
+    <div className="min-h-screen p-6">
       <div className="max-w-7xl mx-auto space-y-6">
-        <Card className="border-none shadow-lg rounded-2xl">
+        <Card className=" shadow-md rounded-xl  bg-primary/5 border-primary/75 dark:bg-gradient-to-br from-primary/15 via-slate-900/15 to-primary/10">
           <CardContent className="p-6">
             <StatsCard />
           </CardContent>
         </Card>
 
-        <Card className="border-none shadow-lg rounded-2xl">
+        <Card className="border-primary/75 dark:bg-gradient-to-br from-primary/10 via-slate-900/40 to-primary/10  shadow-md bg-primary/5 rounded-xl ">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="text-2xl font-bold text-gray-800">
+              <CardTitle className="text-2xl font-bold text-accent-foreground">
                 Message Center
               </CardTitle>
             </div>
@@ -216,10 +217,10 @@ const Messages = () => {
           <CardContent className="space-y-4">
             <div className="grid md:grid-cols-3 gap-4">
               <div className="relative md:col-span-2">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Search className="absolute left-3 top-1/2  w-5 h-5 dark:text-white -translate-y-1/2 text-gray-400" />
                 <Input
                   placeholder="Search messages..."
-                  className="pl-10 py-2 rounded-xl border-gray-300"
+                  className="pl-10 py-2 rounded-full bg-white/95 dark:bg-black border-primary/65"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -230,7 +231,7 @@ const Messages = () => {
                   value={senderTypeFilter}
                   onValueChange={setSenderTypeFilter}
                 >
-                  <SelectTrigger className="rounded-xl">
+                  <SelectTrigger className="rounded-full bg-white/95 dark:bg-black border-primary/60">
                     <SelectValue placeholder="Sort">
                       <div className="flex items-center space-x-2">
                         <SortAsc size={16} />
@@ -244,14 +245,14 @@ const Messages = () => {
                       </div>
                     </SelectValue>
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All</SelectItem>
-                    <SelectItem value="User">User</SelectItem>
-                    <SelectItem value="Seller">Seller</SelectItem>
+                  <SelectContent className="rounded-xl  ">
+                    <SelectItem className="rounded-lg"  value="all">All</SelectItem>
+                    <SelectItem className="rounded-lg"  value="User">User</SelectItem>
+                    <SelectItem className="rounded-lg"  value="Seller">Seller</SelectItem>
                   </SelectContent>
                 </Select>
                 <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="rounded-xl">
+                  <SelectTrigger className="rounded-full bg-white/95 dark:bg-black border-primary/60">
                     <SelectValue placeholder="Sort">
                       <div className="flex items-center space-x-2">
                         <SortAsc size={16} />
@@ -265,10 +266,10 @@ const Messages = () => {
                       </div>
                     </SelectValue>
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="default">Default</SelectItem>
-                    <SelectItem value="newest">Newest First</SelectItem>
-                    <SelectItem value="oldest">Oldest First</SelectItem>
+                  <SelectContent className="rounded-xl">
+                    <SelectItem  className="rounded-lg"  value="default">Default</SelectItem>
+                    <SelectItem className="rounded-lg"  value="newest">Newest First</SelectItem>
+                    <SelectItem  className="rounded-lg" value="oldest">Oldest First</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

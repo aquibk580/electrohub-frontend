@@ -133,23 +133,23 @@ const ContentManagement = () => {
       <TableWrapper>
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Sr no</TableHead>
-              <TableHead>Title</TableHead>
-              <TableHead>Image</TableHead>
-              <TableHead>Link</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Actions</TableHead>
+            <TableRow className="hover:bg-transparent border-b-black dark:border-b-white">
+              <TableHead className="text-center text-accent-foreground">Sr no</TableHead>
+              <TableHead className="text-center text-accent-foreground">Title</TableHead>
+              <TableHead className="text-center text-accent-foreground">Image</TableHead>
+              <TableHead className="text-center text-accent-foreground">Link</TableHead>
+              <TableHead className="text-center text-accent-foreground">Status</TableHead>
+              <TableHead className="text-center text-accent-foreground">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {bannerCarousels.length > 0 ? (
               bannerCarousels.map((bannerCarousel, index) => (
                 <TableRow key={bannerCarousel.id}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{bannerCarousel.title}</TableCell>
-                  <TableCell>
-                    <div className="w-32 h-24 bg-gray-100 rounded flex items-center justify-center">
+                  <TableCell className="text-center">{index + 1}</TableCell>
+                  <TableCell className="text-center">{bannerCarousel.title}</TableCell>
+                  <TableCell className="flex place-content-center">
+                    <div className="w-32 h-24 rounded flex items-center justify-center">
                       {bannerCarousel.imageUrl ? (
                         <img
                           src={bannerCarousel.imageUrl}
@@ -162,12 +162,12 @@ const ContentManagement = () => {
                     </div>
                   </TableCell>
 
-                  <TableCell>{bannerCarousel.href}</TableCell>
-                  <TableCell>
+                  <TableCell className="text-center">{bannerCarousel.href}</TableCell>
+                  <TableCell className="text-center">
                     {bannerCarousel.isActive === true ? "Active" : "Inactive"}
                   </TableCell>
-                  <TableCell>
-                    <div className="flex space-x-2">
+                  <TableCell className="place-content-center">
+                    <div className="flex space-x-2 justify-center">
                       <EditBannerCarouselDialog
                         bannerCarousel={bannerCarousel}
                         setBannerCarousels={setBannerCarousels}
@@ -198,24 +198,24 @@ const ContentManagement = () => {
       <TableWrapper>
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Sr no</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Image</TableHead>
-              <TableHead>Price</TableHead>
-              <TableHead>Link</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Actions</TableHead>
+            <TableRow className="hover:bg-transparent border-b-black dark:border-b-white">
+              <TableHead className="text-accent-foreground text-center">Sr no</TableHead>
+              <TableHead className="text-accent-foreground text-center">Name</TableHead>
+              <TableHead className="text-accent-foreground text-center">Image</TableHead>
+              <TableHead className="text-accent-foreground text-center">Price</TableHead>
+              <TableHead className="text-accent-foreground text-center">Link</TableHead>
+              <TableHead className="text-accent-foreground text-center">Status</TableHead>
+              <TableHead className="text-accent-foreground text-center">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {productCarousels.length > 0 ? (
               productCarousels.map((productCarousel, index) => (
                 <TableRow key={productCarousel.id}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{productCarousel.name}</TableCell>
-                  <TableCell>
-                    <div className="w-32 h-24 bg-gray-100 rounded flex items-center justify-center">
+                  <TableCell className="text-center">{index + 1}</TableCell>
+                  <TableCell className="text-center">{productCarousel.name}</TableCell>
+                  <TableCell className=" flex place-content-center">
+                    <div className="w-32 h-24  rounded flex items-center justify-center">
                       {productCarousel.imageUrl ? (
                         <img
                           src={productCarousel.imageUrl}
@@ -227,13 +227,13 @@ const ContentManagement = () => {
                       )}
                     </div>
                   </TableCell>
-                  <TableCell>₹{formatPrice(productCarousel.price)}</TableCell>
-                  <TableCell>{productCarousel.href}</TableCell>
-                  <TableCell>
+                  <TableCell className="text-center">₹{formatPrice(productCarousel.price)}</TableCell>
+                  <TableCell className="text-center">{productCarousel.href}</TableCell>
+                  <TableCell className="text-center">
                     {productCarousel.isActive === true ? "Active" : "Inactive"}
                   </TableCell>
-                  <TableCell>
-                    <div className="flex space-x-2">
+                  <TableCell className="place-content-center">
+                    <div className="flex space-x-2 justify-center">
                       <EditProductCarouselButton
                         key={productCarousel.id}
                         productCarousel={productCarousel}
@@ -266,21 +266,21 @@ const ContentManagement = () => {
         <TableWrapper>
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Sr no</TableHead>
-                <TableHead>Image</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Actions</TableHead>
+              <TableRow className="hover:bg-transparent border-b-black dark:border-b-white">
+                <TableHead className="text-accent-foreground text-center">Sr no</TableHead>
+                <TableHead className="text-accent-foreground text-center">Image</TableHead>
+                <TableHead className="text-accent-foreground text-center">Name</TableHead>
+                <TableHead className="text-accent-foreground text-center">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {!loading ? (
                 categories.length > 0 ? (
                   categories.map((category, index) => (
-                    <TableRow key={category.name}>
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>
-                        <div className="w-32 h-24 bg-gray-100 rounded flex items-center justify-center">
+                    <TableRow className=" " key={category.name}>
+                      <TableCell className="text-center">{index + 1}</TableCell>
+                      <TableCell className="flex place-content-center" >
+                        <div className="w-32 h-24   rounded-lg flex items-center justify-center">
                           {category.imageUrl ? (
                             <img
                               src={category.imageUrl}
@@ -292,11 +292,11 @@ const ContentManagement = () => {
                           )}
                         </div>
                       </TableCell>
-                      <TableCell className="font-medium">
+                      <TableCell className="font-medium text-center">
                         {category.name}
                       </TableCell>
-                      <TableCell>
-                        <div className="flex space-x-2">
+                      <TableCell >
+                        <div className="flex items-center justify-center space-x-2">
                           <EditCategoryDialog
                             setCategories={setCategories}
                             categoryName={category.name}
@@ -336,7 +336,7 @@ const ContentManagement = () => {
 
   return (
     <div className="w-full px-2 py-2 sm:px-4 sm:py-4 space-y-4 ">
-      <Card className="shadow-md rounded-lg">
+      <Card className="shadow-md rounded-xl border-primary/75 dark:bg-gradient-to-br from-primary/15 via-slate-900/30 to-primary/5 bg-primary/5 ">
         <CardHeader className="px-4 py-2 sm:p-5">
           <CardTitle className="text-xl sm:text-2xl">
             Content Management
@@ -348,10 +348,10 @@ const ContentManagement = () => {
             className="w-full"
             onValueChange={setActiveTab}
           >
-            <TabsList className="w-fit justify-start mb-4 bg-accent ">
-              <TabsTrigger value="categories">Categories</TabsTrigger>
-              <TabsTrigger value="bannerCarousel">Banners</TabsTrigger>
-              <TabsTrigger value="productCarousel">Product Slider</TabsTrigger>
+            <TabsList className="w-fit justify-start mb-4 gap-1 text-accent-foreground bg-accent rounded-xl ">
+              <TabsTrigger className="hover:bg-primary/10"  value="categories">Categories</TabsTrigger>
+              <TabsTrigger className="hover:bg-primary/10" value="bannerCarousel">Banners</TabsTrigger>
+              <TabsTrigger className="hover:bg-primary/10" value="productCarousel">Product Slider</TabsTrigger>
             </TabsList>
             <TabsContent value="categories">
               <CategorySection />

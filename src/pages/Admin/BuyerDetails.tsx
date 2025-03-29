@@ -112,13 +112,13 @@ const BuyerDetails = () => {
               <span className="font-medium">Back to Buyers</span>
             </button>
       {/* Header Card */}
-      <Card>
+      <Card className="border-white/60 bg-primary/5 dark:bg-gradient-to-br from-slate-900 via-slate-700/35 to-black">
         <CardHeader className="flex flex-row items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Avatar className="h-20 w-20">
-              <AvatarImage src={user?.pfp} />
+          <div className="flex items-center  space-x-4">
+            <Avatar className="h-20 w-20 ">
+              <AvatarImage  src={user?.pfp} />
               <AvatarFallback
-                className={`${bgColor} flex items-center justify-center`}
+                className={`${bgColor}  flex items-center justify-center`}
               >
                 {initials}
               </AvatarFallback>
@@ -145,7 +145,7 @@ const BuyerDetails = () => {
 
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <Card>
+            <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   Total Spend
@@ -158,7 +158,7 @@ const BuyerDetails = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   Items Purchased
@@ -169,7 +169,7 @@ const BuyerDetails = () => {
                 <div className="text-2xl font-bold">{user!.itemsPurchased}</div>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Returns</CardTitle>
                 <RefreshCcw className="h-4 w-4 text-muted-foreground" />
@@ -178,7 +178,7 @@ const BuyerDetails = () => {
                 <div className="text-2xl font-bold">{user!.returns}</div>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   Avg Order Value
@@ -193,7 +193,7 @@ const BuyerDetails = () => {
             </Card>
           </div>
 
-          <Card>
+          <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
             <CardHeader>
               <CardTitle>Contact Information</CardTitle>
             </CardHeader>
@@ -221,32 +221,32 @@ const BuyerDetails = () => {
         </TabsContent>
 
         <TabsContent value="orders">
-          <Card>
+          <Card className="border-primary/35 bg-primary/5 dark:bg-gradient-to-br from-primary/5 via-black to-black">
             <CardHeader>
               <CardTitle>Purchase History</CardTitle>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
-                  <TableRow>
-                    <TableHead>Order ID</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Items</TableHead>
-                    <TableHead>Total</TableHead>
-                    <TableHead>Status</TableHead>
+                  <TableRow className="border-b-accent-foreground">
+                    <TableHead className="text-center text-accent-foreground">Order ID</TableHead>
+                    <TableHead className="text-center text-accent-foreground">Date</TableHead>
+                    <TableHead className="text-center text-accent-foreground">Items</TableHead>
+                    <TableHead className="text-center text-accent-foreground">Total</TableHead>
+                    <TableHead className="text-center text-accent-foreground">Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {orderItems?.map((orderItem) => (
-                    <TableRow key={orderItem.id}>
-                      <TableCell>{orderItem.id}</TableCell>
-                      <TableCell>{formatDate(orderItem.createdAt)}</TableCell>
-                      <TableCell>
+                    <TableRow className="border-b-gray-400" key={orderItem.id}>
+                      <TableCell className="text-center text-accent-foreground">{orderItem.id}</TableCell>
+                      <TableCell className="text-center text-accent-foreground">{formatDate(orderItem.createdAt)}</TableCell>
+                      <TableCell className="text-center text-accent-foreground">
                         {orderItem.quantity}x{" "}
                         {orderItem?.product?.name.substring(0, 60) ||
                           "Unknown Product"}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="text-center text-accent-foreground">
                         ₹
                         {formatPrice(
                           orderItem.product.price -
@@ -254,8 +254,20 @@ const BuyerDetails = () => {
                               orderItem.product.price
                         )}
                       </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{orderItem.status}</Badge>{" "}
+                      <TableCell className="text-center text-accent-foreground">
+                      <Badge
+  variant="outline"
+  className={`mt-1 
+    ${orderItem.status === "Delivered" ? "bg-green-100 text-green-700 border-green-500" : ""} 
+    ${orderItem.status === "OrderConfirmed" ? "bg-blue-100 text-blue-700 border-blue-500" : ""} 
+    ${orderItem.status === "Shipped" ? "bg-yellow-100 text-yellow-700 border-yellow-500" : ""} 
+    ${orderItem.status === "Cancelled" ? "bg-red-100 text-red-700 border-red-500" : ""} 
+    ${orderItem.status === "Returned" ? "bg-purple-100 text-purple-700 border-purple-500" : ""} 
+  `}
+>
+  {orderItem.status}
+</Badge>
+
                       </TableCell>
                     </TableRow>
                   ))}

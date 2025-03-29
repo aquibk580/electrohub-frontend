@@ -121,7 +121,7 @@ export default function AddBannerCarousel({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button className="text-accent-foreground border border-primary bg-primary/40 hover:text-white">
           <Plus className="w-4 h-4 mr-2" />
           Add Banner
         </Button>

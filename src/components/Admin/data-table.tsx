@@ -18,22 +18,22 @@ export function DataTable({ headers, data, type, onRowClick }: TableProps) {
   };
 
   return (
-    <Card>
+    <Card className="rounded-xl border-primary/50 ">
       <CardContent className="p-0">
         <div className="w-full">
-          <Table className="min-w-[800px] border-border">
-            <TableHeader>
-              <TableRow className="border-border hover:bg-secondary/50">
+          <Table className="min-w-[800px]  rounded-xl overflow-hidden ">
+            <TableHeader className=" bg-primary/75     ">
+              <TableRow className="   hover:bg-transparent">
                 {headers.map((header) => (
                   <TableHead
-                    className="pl-3 sticky top-0 bg-background text-muted-foreground border-border text-base min-w-32 whitespace-nowrap"
-                    key={header.key}
+                    className="pl-3 sticky top-0  border-b-2 border-primary/50 text-white/95 text-base min-w-32 whitespace-nowrap"
+                    key={header.key} 
                   >
                     {header.label}
                   </TableHead>
                 ))}
                 {onRowClick && (
-                  <TableHead className="w-[50px] sticky top-0 bg-background" />
+                  <TableHead className="w-[50px] sticky top-0  border-b-2  border-primary/50" />
                 )}
               </TableRow>
             </TableHeader>
@@ -57,7 +57,7 @@ export function DataTable({ headers, data, type, onRowClick }: TableProps) {
                     </TableCell>
                   ))}
                   {onRowClick && (
-                    <TableCell>
+                    <TableCell >
                       <ChevronRight className="h-5 w-5" />
                     </TableCell>
                   )}

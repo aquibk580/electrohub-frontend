@@ -225,8 +225,8 @@ const ProductManagement = () => {
 
   return (
     <div className="w-full px-2 py-2 sm:px-4 sm:py-4 space-y-4">
-      <Card className="shadow-md rounded-lg py-4">
-        <CardContent className="p-4">
+      <Card className="shadow-md rounded-xl border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/20 via-slate-900/20 to-primary/10 py-4">
+        <CardContent className="p-4 ">
           <DashboardStats
             stats={productStats}
             filterOptions={categoryOptions}
@@ -237,7 +237,7 @@ const ProductManagement = () => {
         </CardContent>
       </Card>
 
-      <Card className="shadow-md rounded-lg py-4">
+      <Card className="shadow-md bg-primary/5 rounded-xl border-primary/75 dark:bg-gradient-to-br from-primary/10 via-slate-900/15 to-primary/10 py-4">
         <CardHeader className="px-4 py-2 sm:p-5">
           <CardTitle className="text-xl sm:text-2xl">
             Products Management

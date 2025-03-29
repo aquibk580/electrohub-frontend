@@ -68,7 +68,7 @@ const SellerDetails = () => {
     //<SidbarLayout breadcrumbs={breadcrumbs}>
     <div className="w-full px-4 py-6 space-y-6">
       {/* Seller Overview */}
-      <Card>
+      <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
         <CardHeader>
           <CardTitle>Seller Overview</CardTitle>
         </CardHeader>
@@ -79,7 +79,7 @@ const SellerDetails = () => {
                 <AvatarImage
                   src={seller?.pfp}
                   alt="User"
-                  className="w-32 h-32 object-contain rounded-full"
+                  className="w-32 h-32 object-cover border-2 border-white p-1 rounded-full"
                 />
                 <AvatarFallback
                   className={`${bgColor} text-white font-extrabold`}
@@ -101,7 +101,7 @@ const SellerDetails = () => {
           </div>
           <div className="space-y-2">
             <p>
-              <strong>Member Since : </strong> {formatDate(seller!?.createdAt)}
+              <strong>Member Since :  </strong> {formatDate(seller!?.createdAt)}
             </p>
             <p>
               <strong>Email : </strong> {seller?.email}
@@ -121,13 +121,13 @@ const SellerDetails = () => {
       </Card>
 
       {/* Performance Metrics */}
-      <Card>
+      <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
         <CardHeader>
           <CardTitle>Seller insights</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card>
+            <Card className="border-primary/75 bg-primary/10 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-2">
                   <Package className="w-4 h-4" />
@@ -138,7 +138,7 @@ const SellerDetails = () => {
                 </p>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="border-primary/75 bg-primary/10 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-2">
                   <Package className="w-4 h-4" />
@@ -147,7 +147,7 @@ const SellerDetails = () => {
                 <p className="text-2xl font-semibold mt-2">{totalSales}</p>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="border-primary/75 bg-primary/10 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-2">
                   <Star className="w-4 h-4" />
@@ -156,7 +156,7 @@ const SellerDetails = () => {
                 <p className="text-2xl font-semibold mt-2">{averageRating}</p>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="border-primary/75 bg-primary/10 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-2">
                   <Users className="w-4 h-4" />
@@ -170,23 +170,23 @@ const SellerDetails = () => {
       </Card>
 
       {/* Contact Information */}
-      <Card>
+      <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
         <CardHeader>
           <CardTitle>Contact Information</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className="space-y-2 ">
           <div className="flex justify-between">
-            <span>Email</span>
+            <span >Email :</span>
             <span>{seller?.email}</span>
           </div>
           <Separator />
           <div className="flex justify-between">
-            <span>Phone</span>
+            <span>Phone :</span>
             <span>{seller?.phone}</span>
           </div>
           <Separator />
           <div className="flex justify-between">
-            <span>Address</span>
+            <span>Address :</span>
             <span>{seller?.address}</span>
           </div>
         </CardContent>
@@ -199,16 +199,16 @@ const SellerDetails = () => {
         </TabsList>
         <TabsContent value="Products">
           {/* Seller Products */}
-          <Card>
+          <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
             <CardHeader>
               <CardTitle>Seller Products</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
+            <CardContent className="">
+              <div className="space-y-4 ">
                 {sellerProducts.map((product: Product) => (
                   <div
                     key={product.id}
-                    className="flex items-center justify-between p-4 border rounded-lg"
+                    className="flex items-center justify-between border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15 p-4 border rounded-lg"
                   >
                     <div className="flex items-center space-x-4">
                       <img
@@ -231,9 +231,17 @@ const SellerDetails = () => {
                             (product.offerPercentage / 100) * product.price
                         )}
                       </p>
-                      <Badge variant="outline" className="mt-1">
-                        {product.status}
-                      </Badge>
+                      <Badge
+  variant="outline"
+  className={`mt-1 
+    ${product.status === "Active" ? "bg-green-100 text-green-700 border-green-500" : ""} 
+    ${product.status === "Inactive" ? "bg-gray-100 text-gray-700 border-gray-500" : ""} 
+    ${product.status === "Out of Stock" ? "bg-red-100 text-red-700 border-red-500" : ""} 
+  `}
+>
+  {product.status}
+</Badge>
+
                     </div>
                   </div>
                 ))}
@@ -244,7 +252,7 @@ const SellerDetails = () => {
 
         <TabsContent value="Orders">
           {/* Recent Orders */}
-          <Card>
+          <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
             <CardHeader>
               <CardTitle>Recent Orders</CardTitle>
             </CardHeader>
@@ -253,7 +261,7 @@ const SellerDetails = () => {
                 {orders.map((order: OrderItem) => (
                   <div
                     key={order.id}
-                    className="flex items-center justify-between p-4 border rounded-lg"
+                    className="flex items-center border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15 justify-between p-4 border rounded-lg"
                   >
                     <div className="flex items-center space-x-4">
                       <img
@@ -281,9 +289,19 @@ const SellerDetails = () => {
                               order.product.price
                         )}
                       </p>
-                      <Badge variant="outline" className="mt-1">
-                        {order.status}
-                      </Badge>
+                      <Badge
+  variant="outline"
+  className={`mt-1 
+    ${order.status === "Delivered" ? "bg-green-100 text-green-700 border-green-500" : ""} 
+    ${order.status === "OrderConfirmed" ? "bg-blue-100 text-blue-700 border-blue-500" : ""} 
+    ${order.status === "Shipped" ? "bg-yellow-100 text-yellow-700 border-yellow-500" : ""} 
+    ${order.status === "Cancelled" ? "bg-red-100 text-red-700 border-red-500" : ""} 
+    ${order.status === "Returned" ? "bg-purple-100 text-purple-700 border-purple-500" : ""} 
+  `}
+>
+  {order.status}
+</Badge>
+
                     </div>
                   </div>
                 ))}

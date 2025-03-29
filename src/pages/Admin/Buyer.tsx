@@ -150,7 +150,7 @@ const Buyer = () => {
 
   return (
     <div className="w-full px-2 py-2 sm:px-4 sm:py-4">
-      <Card className="shadow-md rounded-lg py-4">
+      <Card className="shadow-md rounded-xl bg-primary/5 border-primary/75 dark:bg-gradient-to-br from-primary/20 via-slate-900/20 to-primary/10 py-4">
         <CardHeader className="px-4 py-2 sm:p-5">
           <CardTitle className="text-xl sm:text-2xl">Buyers</CardTitle>
         </CardHeader>
