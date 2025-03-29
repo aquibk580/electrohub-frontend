@@ -14,11 +14,12 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import UserProfileButton from "./UserProfileButton";
-import { Menu, Phone, ShoppingCart, UserRound } from "lucide-react";
+import { Loader2, Menu, Phone, ShoppingCart, UserRound } from "lucide-react";
 import MobileSideBar from "./MobileSidebar";
 import SearchBar from "./Searchbar";
 import axios from "@/lib/axios";
-import { Category } from "@/types/entityTypes";
+import { Category, Product } from "@/types/entityTypes";
+import { formatPrice } from "@/utils/FormatPrice";
 
 const Navbar = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -26,6 +27,7 @@ const Navbar = () => {
   const user = useSelector((state: RootState) => state.user.user);
   const pfp = useSelector((state: RootState) => state.user.pfp);
   const [categories, setCategories] = useState<Array<Category>>([]);
+  const [dealProduct, setDealProduct] = useState<Product | null>(null);
   const [open, setOpen] = useState(false);
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
@@ -45,6 +47,22 @@ const Navbar = () => {
     };
 
     fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const fetchDealProduct = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/user/products/deal`
+        );
+
+        if (response.status === 200) setDealProduct(response.data);
+      } catch (error: any) {
+        console.error(error);
+      }
+    };
+
+    fetchDealProduct();
   }, []);
 
   const components: {
@@ -121,31 +139,79 @@ const Navbar = () => {
         >
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger className="rounded-full">
-                Deals
-              </NavigationMenuTrigger>
+              <NavigationMenuTrigger>Deals</NavigationMenuTrigger>
               <NavigationMenuContent>
-                <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                  <li className="row-span-3">
-                    <NavigationMenuLink asChild>
-                      <a
-                        className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                        href="/"
-                      ></a>
-                    </NavigationMenuLink>
-                  </li>
-                  <ListItem href="/docs" title="Introduction">
-                    Re-usable components built using Radix UI and Tailwind CSS.
-                  </ListItem>
-                  <ListItem href="/docs/installation" title="Installation">
-                    How to install dependencies and structure your app.
-                  </ListItem>
-                  <ListItem
-                    href="/docs/primitives/typography"
-                    title="Typography"
-                  >
-                    Styles for headings, paragraphs, lists...etc
-                  </ListItem>
+                <ul className="grid gap-4 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-1">
+                  {dealProduct ? (
+                    <li className="row-span-3 relative overflow-hidden rounded-lg shadow-xl transition-all hover:scale-[1.02] group">
+                      <NavigationMenuLink asChild>
+                        <a
+                          className="flex h-full w-full select-none flex-col justify-end rounded-lg bg-gradient-to-b from-muted/10 to-muted/80 p-0 no-underline outline-none focus:shadow-md"
+                          href={`/product/${dealProduct?.id}`}
+                        >
+                          {/* Offer Badge */}
+                          <div className="absolute top-3 right-3 z-10">
+                            <span className="bg-red-500 text-white font-bold px-3 py-1 rounded-full shadow-md transform -rotate-6 flex items-center justify-center">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4 mr-1"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                              </svg>
+                              {dealProduct?.offerPercentage || 0}% OFF
+                            </span>
+                          </div>
+
+                          {/* Product Image */}
+                          <div className="relative h-48 overflow-hidden rounded-t-lg">
+                            <img
+                              src={dealProduct?.images[0].url}
+                              alt="Deal Product"
+                              className="object-contain h-full w-full transition-transform group-hover:scale-110 duration-300"
+                            />
+                          </div>
+
+                          {/* Product Info Overlay */}
+                          <div className="p-4">
+                            <h3 className="font-bold text-lg mb-1">
+                              {dealProduct?.name || "Premium Product"}
+                            </h3>
+
+                            {/* Price Section */}
+                            <div className="flex items-center space-x-2">
+                              <span className="text-gray-500 line-through text-sm">
+                                ₹{formatPrice(dealProduct!.price) || 0}
+                              </span>
+                              <span className="text-xl font-bold text-emerald-600">
+                                ₹
+                                {dealProduct?.offerPercentage
+                                  ? formatPrice(
+                                      dealProduct!.price *
+                                        (1 - dealProduct!.offerPercentage / 100)
+                                    )
+                                  : dealProduct?.price}
+                              </span>
+                            </div>
+
+                            {/* Rating */}
+                          </div>
+                        </a>
+                      </NavigationMenuLink>
+                    </li>
+                  ) : (
+                    <div className="flex flex-col justify-center items-center h-screen">
+                      <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+                      <p className="text-muted-foreground">Loading Deals...</p>
+                    </div>
+                  )}
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>

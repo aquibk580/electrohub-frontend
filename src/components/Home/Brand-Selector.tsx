@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useTheme } from "@/components/theme-provider";
 import axios from "@/lib/axios";
 import { Seller } from "../../types/entityTypes";
 import { useNavigate } from "react-router-dom";
 import { BadgeCheck, Loader2 } from "lucide-react";
+import { getRandomColor } from "./UserProfileButton";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 interface SellerProps {
   name: string;
@@ -18,6 +20,13 @@ const SellerCard = ({
   deliveryTime = "Delivery within 24 hours",
   onClick,
 }: SellerProps) => {
+  const initials = name
+    .split(" ")
+    .map((name) => name[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+  const bgColor = useMemo(() => getRandomColor(), []);
   return (
     <div
       onClick={onClick}
@@ -30,32 +39,39 @@ const SellerCard = ({
          dark:bg-gradient-to-r from-gray-800 to-black
         shadow-sm  border  dark:border-gray-700
         hover:shadow-lg hover:scale-105
-        
-        
       `}
     >
-      <div className="w-16  h-16  sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-24 lg:h-24  p-1 border-2 border-gray-400 dark:border-white 
-                  rounded-full overflow-hidden flex-shrink-0
-                  flex items-center justify-center 
-                   dark:bg-gray-900
-                 ">
-        <img
-          src={logo || "/placeholder.svg"}
-          alt={`${name} logo`}
-          className="w-full h-full object-cover rounded-full"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = "/placeholder.svg";
-          }}
-        />
+      <div
+        className="w-16  h-16  sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-24 lg:h-24  p-1 border-2 border-gray-400 dark:border-white 
+        rounded-full overflow-hidden flex-shrink-0
+        flex items-center justify-center 
+      dark:bg-gray-900"
+      >
+        <Avatar className="w-20 h-20 rounded-full overflow-hidden">
+          <AvatarImage
+            src={logo}
+            alt="Brand_Logo"
+            className="w-full h-full object-fill rounded-full" 
+          />
+          <AvatarFallback
+            className={`${bgColor} flex items-center justify-center text-3xl font-extrabold rounded-full w-20 h-20`}
+          >
+            {initials}
+          </AvatarFallback>
+        </Avatar>
       </div>
       <div className="flex flex-col min-w-0">
-        <h3 className="font-semibold text-sm sm:text-base md:text-lg lg:text-xl truncate 
-                      text-gray-900 dark:text-white">
-          {name}  
+        <h3
+          className="font-semibold text-sm sm:text-base md:text-lg lg:text-xl truncate 
+        text-gray-900 dark:text-white"
+        >
+          {name}
         </h3>
-       
-        <p className="text-xs sm:text-sm  truncate 
-                    text-gray-500 dark:text-gray-300">
+
+        <p
+          className="text-xs sm:text-sm  truncate 
+                    text-gray-500 dark:text-gray-300"
+        >
           {deliveryTime}
         </p>
       </div>
@@ -101,9 +117,7 @@ export default function TopSellers() {
   }
 
   return (
-    <section
-      className={`w-full  sm:py-6  px-2 sm:px-3 md:px-4 lg:px-1`}
-    >
+    <section className={`w-full  sm:py-6  px-2 sm:px-3 md:px-4 lg:px-1`}>
       <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-6">
         Top Sellers & Brands
       </h2>

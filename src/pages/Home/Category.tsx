@@ -11,8 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { SlidersHorizontal, Star } from "lucide-react";
-import { Product, Review } from "@/types/entityTypes";
+import { SlidersHorizontal } from "lucide-react";
+import { Product } from "@/types/entityTypes";
 import axios from "@/lib/axios";
 import ProductCard from "@/components/Home/ProductCard";
 import { useSelector } from "react-redux";
@@ -76,13 +76,6 @@ export default function CategoryPage() {
 
     fetchWishlist();
   }, [isAuthenticated]);
-
-  //   const getAverageProductRating = useCallback((reviews: Review[]): number => {
-  //     if (!reviews || reviews.length === 0) return 0;
-
-  //     const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
-  //     return totalRating / reviews.length;
-  //   }, []);
 
   // Sort products based on selected option
   const sortedProducts = [...products].sort((a, b) => {

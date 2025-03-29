@@ -11,10 +11,10 @@ import { formatPrice } from "@/utils/FormatPrice";
 
 export default function SearchBar() {
   const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const searchRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
