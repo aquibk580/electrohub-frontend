@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import React, { useEffect, useMemo, useState } from "react";
 import { RootState } from "@/redux/store";
-import { assets } from "../../assets/assets";
 
 import {
   NavigationMenu,
@@ -27,6 +26,7 @@ const Navbar = () => {
   const user = useSelector((state: RootState) => state.user.user);
   const pfp = useSelector((state: RootState) => state.user.pfp);
   const [categories, setCategories] = useState<Array<Category>>([]);
+  const [open, setOpen] = useState(false);
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
@@ -115,7 +115,10 @@ const Navbar = () => {
         </div>
 
         {/* Navigation Menu */}
-        <NavigationMenu className="hidden lg:flex">
+        <NavigationMenu
+          className="hidden lg:flex"
+          onValueChange={(value) => setOpen(value === "open")}
+        >
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuTrigger className="rounded-full">
@@ -147,17 +150,21 @@ const Navbar = () => {
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuTrigger className="rounded-full">
+              <NavigationMenuTrigger
+                className="rounded-full"
+                onClick={() => setOpen(!open)}
+              >
                 Category
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                   {components.map((component) => (
-                    <ListItem
-                      className="flex flex-row items-center p-2 py-1 border rounded-md "
+                    <Link
+                      to={component.href}
                       key={component.title}
+                      onClick={() => setOpen(false)}
                     >
-                      <Link to={component.href}>
+                      <ListItem className="flex flex-row items-center p-2 py-1 border rounded-md ">
                         <div className="flex flex-row items-center gap-3">
                           <img
                             src={component.img}
@@ -171,8 +178,8 @@ const Navbar = () => {
                             </div>
                           </div>
                         </div>
-                      </Link>
-                    </ListItem>
+                      </ListItem>
+                    </Link>
                   ))}
                 </ul>
               </NavigationMenuContent>
