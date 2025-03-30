@@ -69,7 +69,7 @@ const OrderDetails = () => {
       Shipped: "bg-blue-500",
       Delivered: "bg-green-500",
       Cancelled: "bg-red-500",
-      Returned: "bg-purple-500",
+      Returned: "bg-gray-500",
     };
     return colors[status as keyof typeof colors] || "bg-gray-500";
   };
@@ -152,7 +152,7 @@ const OrderDetails = () => {
       </button>
 
       {/* Order Summary */}
-      <Card>
+      <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-black to-primary/5">
         <CardHeader>
           <CardTitle>Order Details #{orderItem?.id}</CardTitle>
         </CardHeader>
@@ -162,7 +162,7 @@ const OrderDetails = () => {
               <img
                 src={orderItem?.product?.images[0]?.url || "/placeholder.svg"}
                 alt={orderItem?.product?.name}
-                className="w-24 h-24 rounded-lg object-cover"
+                className="w-32 h-32 rounded-lg object-cover"
               />
               <div>
                 <h3 className="font-medium">{orderItem?.product?.name}</h3>
@@ -203,7 +203,7 @@ const OrderDetails = () => {
 
       <div className="flex flex-col w-full h-full gap-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
-          <Card className="lg:col-span-1 w-full h-full">
+          <Card className="lg:col-span-1 border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-black to-primary/5 w-full h-full">
             <CardHeader>
               <CardTitle>Order Timeline</CardTitle>
             </CardHeader>
@@ -270,7 +270,7 @@ const OrderDetails = () => {
           </Card>
 
           <div className="lg:col-span-2 w-full">
-            <Card className="h-full">
+            <Card className="h-full border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-black to-primary/5">
               <CardHeader>
                 <CardTitle>Shipping Details</CardTitle>
               </CardHeader>

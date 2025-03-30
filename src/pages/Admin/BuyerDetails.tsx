@@ -112,11 +112,11 @@ const BuyerDetails = () => {
               <span className="font-medium">Back to Buyers</span>
             </button>
       {/* Header Card */}
-      <Card className="border-white/60 bg-primary/5 dark:bg-gradient-to-br from-slate-900 via-slate-700/35 to-black">
+      <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/30 via-slate-700/35 to-primary/25">
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center  space-x-4">
-            <Avatar className="h-20 w-20 ">
-              <AvatarImage  src={user?.pfp} />
+            <Avatar className="h-20  border-[3px]  border-primary p-1 w-20 ">
+              <AvatarImage className="rounded-full"  src={user?.pfp} />
               <AvatarFallback
                 className={`${bgColor}  flex items-center justify-center`}
               >
@@ -221,7 +221,7 @@ const BuyerDetails = () => {
         </TabsContent>
 
         <TabsContent value="orders">
-          <Card className="border-primary/35 bg-primary/5 dark:bg-gradient-to-br from-primary/5 via-black to-black">
+          <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-black to-primary/5">
             <CardHeader>
               <CardTitle>Purchase History</CardTitle>
             </CardHeader>
@@ -278,14 +278,14 @@ const BuyerDetails = () => {
         </TabsContent>
 
         <TabsContent value="reviews">
-          <Card>
+          <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/15 via-black to-primary/5">
             <CardHeader>
               <CardTitle>Product Reviews</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {user?.reviews?.map((review) => (
-                  <Card key={review.productId}>
+                  <Card className="hover:border-primary/85 bg-white/95 dark:bg-gradient-to-br from-primary/20 via-black to-primary/15" key={review.productId}>
                     <CardContent className="pt-6">
                       <div className="flex justify-between items-start">
                         <div>
@@ -322,28 +322,29 @@ const BuyerDetails = () => {
 
         <TabsContent value="payment">
           {/* Transaction History */}
-          <Card className="mt-4">
+          <Card  className="mt-4 border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-black to-primary/5">
             <CardHeader>
               <CardTitle>Recent Transactions</CardTitle>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
-                  <TableRow>
-                    <TableHead>Transaction ID</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead>Status</TableHead>
+                  <TableRow className="border-b-accent-foreground">
+                    <TableHead className="text-center text-accent-foreground ">Transaction ID</TableHead>
+                    <TableHead className="text-center text-accent-foreground ">Date</TableHead>
+                    <TableHead className="text-center text-accent-foreground ">Amount</TableHead>
+                    <TableHead className="text-center text-accent-foreground ">Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {user?.orders?.map((order) => (
                     <TableRow key={order.id}>
-                      <TableCell>{order.id}</TableCell>
-                      <TableCell>{formatDate(order.createdAt)}</TableCell>
-                      <TableCell>₹{formatPrice(order.total)}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Completed</Badge>
+                      <TableCell className="text-center">{order.id}</TableCell>
+                      <TableCell className="text-center">{formatDate(order.createdAt)}</TableCell>
+                      <TableCell className="text-center">₹{formatPrice(order.total)}</TableCell>
+                      <TableCell className="text-center">
+                      <Badge className="bg-primary/70">Completed</Badge>
+
                       </TableCell>
                     </TableRow>
                   ))}

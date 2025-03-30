@@ -31,7 +31,7 @@ const SidebarLayout = ({ children }: SidebarLayoutProps) => {
       <AppSidebar userRole="admin" className="w-64 border-r" />
       <SidebarInset className="flex-1 overflow-auto">
         <BreadcrumbHeader items={breadcrumbs} />
-        <div className="bg-slate-50/20 dark:bg-black ">{children}</div>
+        <div className="bg-slate-50/30 dark:bg-transparent dark:bg-gradient-to-br from-primary/5 to-slate-900/10  ">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

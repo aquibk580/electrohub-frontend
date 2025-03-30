@@ -262,7 +262,7 @@ const LogsAndSecurity = () => {
       {[...Array(10)].map((_, i) => (
         <div
           key={i}
-          className="absolute w-10 h-10 bg-white bg-opacity-20 rounded-full blur-md animate-bounce"
+          className="absolute w-10 h-10 bg-white bg-opacity-20 rounded-full  animate-bounce"
           style={{
             top: `${Math.random() * 100}%`,
             left: `${Math.random() * 100}%`,
@@ -273,7 +273,7 @@ const LogsAndSecurity = () => {
 
       {/* Content */}
       <div className="text-center">
-        <h1 className="text-5xl font-extrabold tracking-wide animate-pulse">
+        <h1 className="text-5xl p-2 bg-gradient-to-br  from-primary to-primary/55 text-transparent bg-clip-text  font-extrabold tracking-wide animate-pulse">
           Coming Soon
         </h1>
         <p className="text-lg mt-3 opacity-80">Stay tuned for something amazing!</p>
