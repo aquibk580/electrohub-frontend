@@ -39,14 +39,14 @@ export default function AddProductForm(){
         <meta property="og:type" content="website" />
         <meta property="og:image" content="/logo.png" />
       </Helmet>
-      <AAddProductForm />
+      <MainAddProductForm />
     </Suspense>
   )
 }
 
 
 
-function AAddProductForm() {
+function MainAddProductForm() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
   const navigate = useNavigate()

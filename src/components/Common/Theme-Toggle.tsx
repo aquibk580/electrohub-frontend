@@ -144,7 +144,7 @@ export default function ThemeToggle() {
               ))}
             </div>
             
-            <div className="mt-8 space-y-4">
+            {/* <div className="mt-8 space-y-4">
               <h4 className="text-sm font-medium">Preview</h4>
               <div className="grid gap-4">
                 <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
@@ -157,7 +157,7 @@ export default function ThemeToggle() {
                   Text and background using the primary color
                 </div>
               </div>
-            </div>
+            </div> */}
             
           </CardContent>
         </Card>
