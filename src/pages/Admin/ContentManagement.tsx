@@ -145,7 +145,7 @@ const ContentManagement = () => {
           <TableBody>
             {bannerCarousels.length > 0 ? (
               bannerCarousels.map((bannerCarousel, index) => (
-                <TableRow key={bannerCarousel.id}>
+                <TableRow className="border-b-accent-foreground/60 hover:bg-primary/10 " key={bannerCarousel.id}>
                   <TableCell className="text-center">{index + 1}</TableCell>
                   <TableCell className="text-center">{bannerCarousel.title}</TableCell>
                   <TableCell className="flex place-content-center">
@@ -211,7 +211,7 @@ const ContentManagement = () => {
           <TableBody>
             {productCarousels.length > 0 ? (
               productCarousels.map((productCarousel, index) => (
-                <TableRow key={productCarousel.id}>
+                <TableRow  className="border-b-accent-foreground/60 hover:bg-primary/10 " key={productCarousel.id}>
                   <TableCell className="text-center">{index + 1}</TableCell>
                   <TableCell className="text-center">{productCarousel.name}</TableCell>
                   <TableCell className=" flex place-content-center">
@@ -277,7 +277,7 @@ const ContentManagement = () => {
               {!loading ? (
                 categories.length > 0 ? (
                   categories.map((category, index) => (
-                    <TableRow className=" " key={category.name}>
+                    <TableRow className=" border-b-accent-foreground/60 hover:bg-primary/10 " key={category.name}>
                       <TableCell className="text-center">{index + 1}</TableCell>
                       <TableCell className="flex place-content-center" >
                         <div className="w-32 h-24   rounded-lg flex items-center justify-center">
@@ -336,7 +336,7 @@ const ContentManagement = () => {
 
   return (
     <div className="w-full px-2 py-2 sm:px-4 sm:py-4 space-y-4 ">
-      <Card className="shadow-md rounded-xl border-primary/75 dark:bg-gradient-to-br from-primary/15 via-slate-900/30 to-primary/5 bg-primary/5 ">
+      <Card className="shadow-md rounded-xl border-primary/55   bg-primary/5 ">
         <CardHeader className="px-4 py-2 sm:p-5">
           <CardTitle className="text-xl sm:text-2xl">
             Content Management

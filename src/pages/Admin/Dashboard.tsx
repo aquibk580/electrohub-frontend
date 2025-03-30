@@ -228,7 +228,7 @@ const Dashboard = () => {
                 </ResponsiveContainer>
               </CardContent>
             </Card>
-            <div className="max-w-lg">
+            <div className="w-full">
               <ChartPie
                 loading={chartDataloading}
                 categories={categories}

@@ -18,7 +18,7 @@ export function DataTable({ headers, data, type, onRowClick }: TableProps) {
   };
 
   return (
-    <Card className="rounded-xl border-primary/50 ">
+    <Card className="rounded-xl ">
       <CardContent className="p-0">
         <div className="w-full">
           <Table className="min-w-[800px]  rounded-xl overflow-hidden ">

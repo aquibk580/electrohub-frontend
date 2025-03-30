@@ -64,6 +64,7 @@ const ProductDetails = () => {
           `${import.meta.env.VITE_API_URL}/api/admin/products/${id}`
         );
         if (response.status === 200) {
+          
           setProduct(response.data);
         }
       } catch (error) {
@@ -136,15 +137,15 @@ const ProductDetails = () => {
         <span className="font-medium">Back to Products</span>
       </button>
       {/* Product Summary */}
-      <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-black to-primary/5">
+      <Card className="border-primary/75 bg-primary/5 ">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Product Details #{product?.id}</CardTitle>
+          <CardTitle className="text-xl">Product Details #{product?.id}</CardTitle>
           <div>
             <Select
               onValueChange={handleProductStatusChange}
               value={product?.status || ""}
             >
-              <SelectTrigger className="py-5 rounded-xl border-primary bg-primary/10">
+              <SelectTrigger className="py-5 rounded-xl border-primary bg-primary/15">
                 <SelectValue placeholder="Select status">
                   {product?.status || "Select status"}
                 </SelectValue>
@@ -210,9 +211,9 @@ const ProductDetails = () => {
       </Card>
 
       {/* Product Specifications */}
-      <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-black to-primary/5">
+      <Card className="border-primary/75 bg-primary/5 ">
         <CardHeader>
-          <CardTitle>Product Specifications</CardTitle>
+          <CardTitle className="text-xl">Product Specifications</CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {product!.productInfo.details.map(({ key, value }) => (
@@ -225,20 +226,22 @@ const ProductDetails = () => {
       </Card>
 
       {/* Reviews */}
-      <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-black to-primary/5">
+      <Card className="border-primary/45 bg-primary/5 ">
         <CardHeader>
-          <CardTitle>Customer Reviews</CardTitle>
+          <CardTitle className="text-xl">Customer Reviews</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {product!.reviews?.length > 0 ? (
               product?.reviews.map((review, index: number) => (
-                <div key={index} className="border border-primary/75 bg-white/95 dark:bg-transparent dark:bg-gradient-to-br from-primary/25 via-black to-primary/15 px-6 py-4 rounded-xl  pb-4">
+                <div key={index}
+                // onClick={() => navigate(`/admin/buyer/${review.user.userId}`)} 
+                 className="bg-primary/10  border  hover:border-primary px-6 py-4 rounded-xl  pb-4">
                   <div className="flex items-center justify-between space-x-2">
                     {/* <User className="w-6 h-6" /> */}
                    <div className="space-x-3">
-                   <span className=" text-accent-foreground font-semibold bg-gradient-to-br from-primary to-blue-500 px-3 py-1.5  rounded-full ">{review.user.name[0]}</span>
-                   <span className="font-medium">{review.user.name}</span>
+                   <span className=" text-white  font-semibold bg-gradient-to-br from-primary to-blue-600 px-2.5 py-1.5  rounded-full ">{review.user.name[0]}</span>
+                   <span className="font-semibold  hover:text-primary">{review.user.name}</span>
                    </div>
                     <div className="flex items-center space-x-1">
   {[...Array(5)].map((_, i) => {
@@ -248,22 +251,20 @@ const ProductDetails = () => {
         key={i}
         className={`w-4 h-4 ${
           review.rating >= starValue
-            ? "text-yellow-400 fill-current" // Full star
-            : review.rating >= starValue - 0.5
-            ? "text-yellow-400 fill-current opacity-50" // Half star effect
-            : " dark:fill-current text-gray-300 fill-current " // Empty star
+            ? "text-primary fill-current" // Full star
+            : " dark:fill-current text-white fill-current " // Empty star
         }`}
       />
     );
   })}
-  <span className="ml-2 text-accent-foreground font-medium">{review.rating.toFixed(1)} / 5</span>
+  <span className="ml-2 text-accent-foreground text-xs">{review.rating.toFixed(1)}/5</span>
 </div>
 
                   </div>
                  
-                  <p className="mt-2">{review.content}</p>
+                  <p className="mt-2 text-sm">{review.content}</p>
 
-                  <div className="flex items-center space-x-2 text-xs text-muted-foreground mt-1">
+                  <div className="flex items-center space-x-2 text-xs text-accent-foreground/85 mt-1">
                     <Calendar className="w-4 h-4" />
                     <span>{formatDate(review.createdAt)}</span>
                   </div>

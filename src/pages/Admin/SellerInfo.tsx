@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Star, Package, Users, Loader2 } from "lucide-react";
+import { Star, Package, Users, Loader2, VerifiedIcon } from "lucide-react";
 import axios from "@/lib/axios";
 import { formatDate } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
@@ -13,6 +13,7 @@ import { formatPrice } from "@/utils/FormatPrice";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const SellerDetails = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [seller, setSeller] = useState<Seller | null>(null);
@@ -68,26 +69,29 @@ const SellerDetails = () => {
     //<SidbarLayout breadcrumbs={breadcrumbs}>
     <div className="w-full px-4 py-6 space-y-6">
       {/* Seller Overview */}
-      <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
+      <Card className="border-primary/65 bg-primary/5 dark:bg-gradient-to-br from-primary/5 via-slate-900/30 to-primary/5">
         <CardHeader>
-          <CardTitle>Seller Overview</CardTitle>
+          <CardTitle className="text-xl">Seller Overview</CardTitle>
         </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <div className="flex flex-col items-center gap-2 w-fit">
+        <CardContent className="grid grid-col-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4 flex items-center justify-center  md: ">
+            <div className="flex flex-col items-center  gap-2 w-fit">
               <Avatar>
                 <AvatarImage
                   src={seller?.pfp}
                   alt="User"
-                  className="w-32 h-32 object-cover border-2 border-white p-1 rounded-full"
+                  className="w-32 h-32 object-cover border-[3px] border-primary  p-1.5 rounded-full"
                 />
                 <AvatarFallback
-                  className={`${bgColor} text-white font-extrabold`}
+                  className={`${bgColor}  text-white font-extrabold`}
                 >
                   {initials}
                 </AvatarFallback>
               </Avatar>
-              <h3 className="text-2xl font-semibold">{seller?.name}</h3>
+              <div className="flex space-x-1 items-center">
+              <h3 className="text-xl  font-bold">{seller?.name}</h3>
+              <VerifiedIcon className="w-5 h-5 text-blue-600"/>
+              </div>
               {/* <div className="flex items-center space-x-2 mt-2">
                 <Badge variant="secondary">{seller.email}</Badge>
                 <Badge
@@ -121,16 +125,16 @@ const SellerDetails = () => {
       </Card>
 
       {/* Performance Metrics */}
-      <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
+      <Card className="border-primary/70 bg-primary/5 dark:bg-gradient-to-br from-primary/5 via-slate-900/30 to-primary/5">
         <CardHeader>
-          <CardTitle>Seller insights</CardTitle>
+          <CardTitle className="text-xl">Seller insights</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card className="border-primary/75 bg-primary/10 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
+            <Card className="dark:border-primary/75 shadow-none border-none bg-primary/10 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-2">
-                  <Package className="w-4 h-4" />
+                  <Package className="h-8 w-8 text-primary" />
                   <span>Total Products</span>
                 </div>
                 <p className="text-2xl font-semibold mt-2">
@@ -138,28 +142,28 @@ const SellerDetails = () => {
                 </p>
               </CardContent>
             </Card>
-            <Card className="border-primary/75 bg-primary/10 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
+            <Card className="dark:border-primary/75 shadow-none border-none bg-primary/10 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-2">
-                  <Package className="w-4 h-4" />
+                  <Package className="h-8 w-8 text-primary" />
                   <span>Order Completion</span>
                 </div>
                 <p className="text-2xl font-semibold mt-2">{totalSales}</p>
               </CardContent>
             </Card>
-            <Card className="border-primary/75 bg-primary/10 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
+            <Card className="dark:border-primary/75 shadow-none border-none bg-primary/10 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-2">
-                  <Star className="w-4 h-4" />
+                  <Star className="h-8 w-8 text-primary " />
                   <span>Satisfaction</span>
                 </div>
                 <p className="text-2xl font-semibold mt-2">{averageRating}</p>
               </CardContent>
             </Card>
-            <Card className="border-primary/75 bg-primary/10 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
+            <Card className="dark:border-primary/75 shadow-none border-none bg-primary/10 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-2">
-                  <Users className="w-4 h-4" />
+                  <Users className="h-8 w-8 text-primary" />
                   <span>Total Returns</span>
                 </div>
                 <p className="text-2xl font-semibold mt-2">{totalReturns}</p>
@@ -170,7 +174,7 @@ const SellerDetails = () => {
       </Card>
 
       {/* Contact Information */}
-      <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
+      <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/5 via-slate-900/30 to-primary/5">
         <CardHeader>
           <CardTitle>Contact Information</CardTitle>
         </CardHeader>
@@ -199,26 +203,27 @@ const SellerDetails = () => {
         </TabsList>
         <TabsContent value="Products">
           {/* Seller Products */}
-          <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
+          <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/5 via-slate-900/30 to-primary/5">
             <CardHeader>
-              <CardTitle>Seller Products</CardTitle>
+              <CardTitle className="text-xl">Seller Products</CardTitle>
             </CardHeader>
             <CardContent className="">
-              <div className="space-y-4 ">
+              <div className="space-y-2 ">
                 {sellerProducts.map((product: Product) => (
                   <div
+                  onClick={() => navigate(`/admin/productsmanage/${product.id}`)}
                     key={product.id}
-                    className="flex items-center justify-between border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15 p-4 border rounded-lg"
+                    className="flex flex-col md:flex-row md:items-center justify-between cursor-pointer  border-transparent shadow-none hover:border-primary/70 bg-primary/10   p-4 border rounded-xl"
                   >
                     <div className="flex items-center space-x-4">
                       <img
                         src={product.images[0].url}
                         alt={product.name}
-                        className="w-12 h-12 rounded object-cover"
+                        className=" w-24 h-24 md:w-20 md:h-20 rounded object-cover"
                       />
                       <div>
-                        <p className="font-medium">{product.name}</p>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="font-medium text-sm md:text-md">{product.name}</p>
+                        <p className="text-sm text-accent-foreground">
                           {formatDate(product.createAt)}
                         </p>
                       </div>
@@ -252,30 +257,32 @@ const SellerDetails = () => {
 
         <TabsContent value="Orders">
           {/* Recent Orders */}
-          <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
+          <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/5 via-slate-900/30 to-primary/5">
             <CardHeader>
-              <CardTitle>Recent Orders</CardTitle>
+              <CardTitle className="text-xl">Recent Orders</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-2">
                 {orders.map((order: OrderItem) => (
                   <div
+                  onClick={() => navigate(`/admin/ordersmanage/${order.id}`)}
                     key={order.id}
-                    className="flex items-center border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15 justify-between p-4 border rounded-lg"
+                    className="flex flex-col md:flex-row md:items-center border-transparent cursor-pointer bg-primary/10 hover:border-primary/70  justify-between p-4 border rounded-xl"
+                  
                   >
-                    <div className="flex items-center space-x-4">
+                    <div className="flex  items-center space-x-4">
                       <img
                         src={order.product.images[0].url}
                         alt={order.product.name}
-                        className="w-12 h-12 rounded object-cover"
+                        className="w-24 h-24 md:w-20 md:h-20 rounded object-cover"
                       />
                       <div>
-                        <p className="font-medium">
+                        <p className="font-semibold">
                           <strong>Order ID : </strong>
                           {order.id}
                         </p>
                         <p className="font-medium">{order.product.name}</p>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-accent-foreground/80">
                           {formatDate(order.createdAt)}
                         </p>
                       </div>

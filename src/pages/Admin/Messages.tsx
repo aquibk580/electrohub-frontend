@@ -140,7 +140,7 @@ const Messages = () => {
 
   // Enhanced Message Card Component
   const MessageCard = ({ message }: { message: Message }) => (
-    <div className=" border bg-white/95 dark:border-primary/15 hover:border-primary/75 dark:bg-black rounded-xl shadow-sm hover:shadow-md transition-all duration-300 mb-4 overflow-hidden group">
+    <div className="bg-primary/10 border border-primary/55 rounded-xl mb-4 overflow-hidden group">
       <div className="p-4 flex items-start justify-between">
         <div className="flex-1 space-y-2">
           <div className="flex items-center justify-between">
@@ -205,7 +205,7 @@ const Messages = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-primary/75 dark:bg-gradient-to-br from-primary/10 via-slate-900/40 to-primary/10  shadow-md bg-primary/5 rounded-xl ">
+        <Card className="border-primary/75   shadow-md bg-primary/5 rounded-xl ">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="text-2xl font-bold text-accent-foreground">
