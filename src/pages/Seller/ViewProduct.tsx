@@ -20,6 +20,7 @@ import DeleteButtonDialog from "@/components/Seller/DeleteButtonDialog";
 import { toast } from "react-toastify";
 import { cn, formatDate } from "@/lib/utils";
 import { ViewOrderSkeleton } from "@/components/Seller/Skeletons";
+import { Helmet } from "react-helmet-async";
 
 interface Image {
   url: string;
@@ -84,8 +85,7 @@ export default function ViewProduct() {
     setIsDeleting(true);
     try {
       const response = await axios.delete(
-        `${
-          import.meta.env.VITE_API_URL
+        `${import.meta.env.VITE_API_URL
         }/api/seller/products/del-permanent/${id}`
       );
       if (response.status === 200) {
@@ -110,8 +110,7 @@ export default function ViewProduct() {
     const getProduct = async () => {
       try {
         const response = await axios.get(
-          `${
-            import.meta.env.VITE_API_URL
+          `${import.meta.env.VITE_API_URL
           }/api/seller/products/single-product/${id}`
         );
         if (response.status === 200) {
@@ -132,9 +131,9 @@ export default function ViewProduct() {
       setAverageRating(
         product!.reviews.length > 0
           ? product!.reviews.reduce(
-              (acc: number, review: Review) => acc + review.rating,
-              0
-            ) / product!.reviews.length
+            (acc: number, review: Review) => acc + review.rating,
+            0
+          ) / product!.reviews.length
           : 0.0
       );
 
@@ -148,16 +147,45 @@ export default function ViewProduct() {
 
   if (loading) {
     return (
+      <>
+        <Helmet
+          title="View Product | Seller"
+          meta={[
+            {
+              name: "og:url",
+              property: "og:url",
+              content: `${import.meta.env.VITE_APP_URL}/seller/dashboard/products/view-product`,
+            }
+          ]}></Helmet>
+        <ViewOrderSkeleton />
+      </>
       // <div className="flex flex-col justify-center items-center h-screen">
       //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
       //   <p className="text-muted-foreground">Loading Product Details...</p>
       // </div>
-      <ViewOrderSkeleton/>
     );
   }
 
   return (
     <div className=" p-1.5 space-y-6">
+      <Helmet
+        title={`Product - ${product!.name}`}
+        meta={[
+          {
+            name: "description",
+            content: `Product details for ${product!.name}`,
+          },
+          {
+            property: "og:title",
+            content: `Product - ${product!.name}`,
+          },
+          {
+            property: "og:description",
+            content: `Product details for ${product!.name}`,
+          },
+        ]}
+      ></Helmet>
+
       <div className="flex justify-between items-center">
         <Button
           className="text-sm bg-transparent text-muted-foreground rounded-full hover:bg-accent shadow-none"
@@ -416,11 +444,10 @@ export default function ViewProduct() {
                                 {[...Array(5)].map((_, i) => (
                                   <Star
                                     key={i}
-                                    className={`h-4 w-4 ${
-                                      i < review.rating
+                                    className={`h-4 w-4 ${i < review.rating
                                         ? "fill-yellow-400 text-yellow-400"
                                         : "text-gray-300"
-                                    }`}
+                                      }`}
                                   />
                                 ))}
                               </div>

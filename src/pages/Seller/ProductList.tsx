@@ -15,6 +15,7 @@ import { Card } from "@/components/ui/card";
 import { Product } from "@/types/entityTypes";
 import AnimatedCounter from "@/components/Common/AnimatedCounter";
 import { ProductListSkeleton } from "@/components/Seller/Skeletons";
+import { Helmet } from "react-helmet-async";
 
 
 export default function ProductList() {
@@ -80,16 +81,62 @@ export default function ProductList() {
 
   if (loading) {
     return (
+      <>
+      <Helmet
+        title="Product List"
+        meta={[
+          {
+            name: "description",
+            content: "Electrohub Seller Product List Page",
+          },
+          {
+            property: "og:title",
+            content: "Product List",
+          },
+          {
+            property: "og:description",
+            content: "Electrohub Seller Product List Page",
+          },
+          {
+            property: "og:type",
+            content: "website",
+          },
+        ]}
+      ></Helmet>
+            <ProductListSkeleton/>
+
+      </>
       // <div className="flex flex-col justify-center items-center h-screen">
       //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
       //   <p className="text-muted-foreground">Loading Product List...</p>
       // </div>
-      <ProductListSkeleton/>
     );
   }
 
   return (
     <div className=" space-y-5 ">
+      <Helmet
+        title="Product List"
+        meta={[
+          {
+            name: "description",
+            content: "Electrohub Seller Product List Page",
+          },
+          {
+            property: "og:title",
+            content: "Product List",
+          },
+          {
+            property: "og:description",
+            content: "Electrohub Seller Product List Page",
+          },
+          {
+            property: "og:type",
+            content: "website",
+          },
+        ]}
+      ></Helmet>
+
       <div className="border border-primary/30 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black  rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm ">
         <h2 className="text-2xl text-primary font-semibold">Products</h2>
 

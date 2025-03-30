@@ -20,6 +20,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { removeBackground } from "@imgly/background-removal"
 import { AddProductSkeleton } from "@/components/Seller/Skeletons"
+import { Helmet } from "react-helmet-async"
 
 interface Category {
   name: string
@@ -28,6 +29,16 @@ interface Category {
 export default function AddProductForm(){
   return (
     <Suspense fallback={<AddProductSkeleton />}>
+      <Helmet>
+        <title>Add Product</title>
+        <meta name="description" content="Add a new product to your store" />
+        <link rel="canonical" href={`${import.meta.env.VITE_APP_URL}/seller/add-product`} />
+        <meta property="og:title" content="Add Product" />
+        <meta property="og:description" content="Add a new product to your store" />
+        <meta name="og:url" property="og:url" content={`${import.meta.env.VITE_APP_URL}/seller/add-product`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="/logo.png" />
+      </Helmet>
       <AAddProductForm />
     </Suspense>
   )
@@ -308,6 +319,17 @@ function AAddProductForm() {
 
   return (
     <div className="mx-auto p-2 animate__animated animate__fadeIn">
+      <Helmet>
+        <title>Add Product</title>
+        <meta name="description" content="Add a new product to your store" />
+        <link rel="canonical" href={`${import.meta.env.VITE_APP_URL}/seller/add-product`} />
+        <meta property="og:title" content="Add Product" />
+        <meta property="og:description" content="Add a new product to your store" />
+        <meta name="og:url" property="og:url" content={`${import.meta.env.VITE_APP_URL}/seller/add-product`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="/logo.png" />
+      </Helmet>
+
       <h1 className="text-xl text-primary bg-primary/30 pl-5 p-2 rounded-lg font-semibold mb-2">Add Product</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data" className="space-y-4 p-2">
