@@ -5,6 +5,7 @@ import { setSeller } from "@/redux/slices/seller";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 export default function SellerLayout({
   children,
@@ -56,6 +57,18 @@ export default function SellerLayout({
 
   return (
     <MainNav>
+      <Helmet
+        title=" Seller"
+        meta={[
+          {
+            name: "og:url",
+            property: "og:url",
+            content: `${import.meta.env.VITE_APP_URL}/seller/dashboard`,
+          }
+        ]}></Helmet>
+
+
+
       <div className=" p-1.5 md:p-6 bg-white dark:bg-black">{children}</div>
     </MainNav>
   );

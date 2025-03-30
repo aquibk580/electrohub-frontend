@@ -14,6 +14,7 @@ import { EditProductSchema, EditProductSchemaType } from "@/components/Seller/Fo
 import axios from "../../lib/axios";
 import { toast } from "react-toastify";
 import { Separator } from "@radix-ui/react-dropdown-menu";
+import { Helmet } from "react-helmet-async";
 
 interface Category {
   name: string;
@@ -309,11 +310,49 @@ export default function EditProduct() {
 
   // If loading, show skeleton
   if (isLoading) {
-    return <EditProductSkeleton />;
+    return (
+    <>
+     <Helmet>
+        <title>Edit Product - ElectroHub</title>
+        <meta
+          name="description"
+          content="Edit product details and images for your ElectroHub seller account."
+        />
+        <meta
+          property="og:title"
+          content="Edit Product - ElectroHub Seller Dashboard"
+        />
+        <meta
+          property="og:description"
+          content="Edit product details and images for your ElectroHub seller account."
+        />
+        <meta property="og:url" content={`${import.meta.env.VITE_APP_URL}/seller/edit-product/${id}`} />
+        <meta property="og:type" content="website" />
+      </Helmet>
+    <EditProductSkeleton />
+    </>
+  )
   }
 
   return (
     <div className="space-y-2">
+      <Helmet>
+        <title>Edit Product - ElectroHub</title>
+        <meta
+          name="description"
+          content="Edit product details and images for your ElectroHub seller account."
+        />
+        <meta
+          property="og:title"
+          content="Edit Product - ElectroHub Seller Dashboard"
+        />
+        <meta
+          property="og:description"
+          content="Edit product details and images for your ElectroHub seller account."
+        />
+        <meta property="og:url" content={`${import.meta.env.VITE_APP_URL}/seller/edit-product/${id}`} />
+        <meta property="og:type" content="website" />
+      </Helmet>
       <div className=" mx-auto p-2  rounded-xl   animate__animated animate__fadeIn">
         <Button
           variant="outline"

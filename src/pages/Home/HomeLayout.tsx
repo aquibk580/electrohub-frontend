@@ -1,7 +1,7 @@
 import Footer from "@/components/Home/Footer";
 import Navbar from "@/components/Home/Navbar";
 import { AppDispatch, RootState } from "@/redux/store";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setPfp, setUser } from "@/redux/slices/user";
@@ -10,6 +10,8 @@ import { ChatBot } from "@/components/Home/ChatBot";
 // import { ChatBot } from "@/components/Home/NewChatbot";
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const [isVisible, setIsVisible] = useState(false);
+
   const navigate = useNavigate();
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
@@ -62,14 +64,31 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
       fetchUserData();
     }
   }, [isAuthenticated, dispatch]);
+
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
     <div className="selection:bg-primary selection:text-primary-foreground">
       <Navbar />
       <div className="pt-[4rem] lg:pt-[6.7rem] ">{children}</div>
+      <div className={` transition-opacity duration-500 ${isVisible ? "opacity-100" : "opacity-0"}`}>
+
       <ChatBot
         botName="Electro Bot"
         welcomeMessage="👋 Hi there! How can I help you today?"
       />
+      </div>
       <Footer />
     </div>
   );

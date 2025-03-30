@@ -26,14 +26,23 @@ export default function SellerContact(){
     // Simulate data loading
     const timer = setTimeout(() => {
       setIsLoading(false)
-    }, 2000)
+    }, 1000)
 
     return () => clearTimeout(timer)
   }, [])
   return (
     <div>
       {isLoading ? (
+        <>
+        <Helmet>
+        <title>Contact Support - Seller</title>
+        <meta
+          name="description"
+          content="Electrohub Seller Support Contact Page"
+        />
+      </Helmet>
         <ContactSkeleton />
+        </>
       ) : (
         <Suspense fallback={<ContactSkeleton />}>
           <MainSellerContact />

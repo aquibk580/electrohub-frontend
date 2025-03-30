@@ -14,6 +14,7 @@ import { clearSeller, setSeller } from "@/redux/slices/seller";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { formatPrice } from "@/utils/FormatPrice";
+import { Helmet } from "react-helmet-async";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -172,6 +173,12 @@ export default function Profile() {
 
   return (
     <div className="animate__animated animate__fadeIn">
+      <Helmet>
+        <title>Profile - Seller</title>
+        <meta name="description" content="Electrohub Seller Profile Page" />
+        <meta name="og:url" property="og:url" content={`${import.meta.env.VITE_APP_URL}/seller/profile`} />
+      </Helmet>
+
       {/* Banner section */}
       <header className="bg-teal-800 rounded-xl h-44 relative">
         {loading ? (

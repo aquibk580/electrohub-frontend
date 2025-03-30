@@ -11,6 +11,7 @@ import { formatPrice } from "@/utils/FormatPrice"
 import { toast } from "react-toastify"
 import axios from "@/lib/axios"
 import { ViewOrderSkeleton } from "@/components/Seller/Skeletons"
+import { Helmet } from "react-helmet-async"
 
 const getStatusColor = (status: any) => {
   switch (status) {
@@ -43,6 +44,7 @@ const ViewOrder = () => {
 
   return (
     <div className="container mx-auto px-4 py-6">
+      
       {isLoading ? (
         <ViewOrderSkeleton />
       ) : (
@@ -126,6 +128,22 @@ const MainViewOrder = () => {
 
   return (
     <div className="space-y-6">
+      <Helmet
+        title={`Order Details - ${orderItem.product.name}`}
+        meta={[
+          {
+            name: "description",
+            content: `Order details for ${orderItem.product.name}`,
+          },
+          {
+            property: "og:title",
+            content: `Order Details - ${orderItem.product.name}`,
+          },
+          {
+            property: "og:description",
+            content: `Order details for ${orderItem.product.name}`,
+          },
+        ]} ></Helmet>
       {/* Header with back button and title */}
       <div className="flex items-center justify-between">
         <Button

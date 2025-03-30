@@ -16,6 +16,7 @@ import { ChartPie } from "@/components/Admin/Chart-Pie";
 import AnimatedCounter from "@/components/Common/AnimatedCounter";
 import axios from "@/lib/axios";
 import { DashboardSkeleton } from "@/components/Seller/Skeletons";
+import { Helmet } from "react-helmet-async";
 
 interface Stat {
   label: string;
@@ -48,7 +49,7 @@ export default function Dashboard() {
         const ordersResponse = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/seller/orders`
         );
-        
+
         if (ordersResponse.status === 200) {
           setStats([
             { label: "Total Orders", value: ordersResponse.data?.orders?.length },
@@ -89,7 +90,7 @@ export default function Dashboard() {
         const salesResponse = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/seller/salesstatistics`
         );
-        
+
         if (salesResponse.status === 200) {
           setSalesGraph(
             salesResponse.data?.weeklySales.map(
@@ -157,12 +158,34 @@ export default function Dashboard() {
 
   // Render skeleton while loading
   if (isLoading) {
-    return <DashboardSkeleton />;
+    return (
+      <>
+        <Helmet
+          title="Dashboard | Seller"
+          meta={[
+            {
+              name: "og:url",
+              property: "og:url",
+              content: `${import.meta.env.VITE_APP_URL}/seller/dashboard`,
+            }
+          ]}></Helmet>
+        <DashboardSkeleton />;
+      </>
+    )
   }
 
   // Render actual dashboard when data is loaded
   return (
     <div className="space-y-5">
+      <Helmet
+        title="Dashboard | Seller"
+        meta={[
+          {
+            name: "og:url",
+            property: "og:url",
+            content: `${import.meta.env.VITE_APP_URL}/seller/dashboard`,
+          }
+        ]}></Helmet>
       <div className="border border-primary/30 bg-primary/5  dark:bg-gradient-to-br from-black via-primary/10 to-black rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm">
         <h2 className="text-2xl text-primary font-semibold">Orders</h2>
         <Card className="w-full lg:w-[95%] flex flex-nowrap gap-4 text-secondary-foreground bg-primary/10 border-primary shadow-none rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x mx-auto">
