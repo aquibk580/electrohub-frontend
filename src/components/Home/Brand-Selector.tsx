@@ -31,7 +31,7 @@ const SellerCard = ({
     <div
       onClick={onClick}
       className={`
-        h-[120px]
+         lg:h-[120px]
         rounded-xl p-2 sm:p-3 md:p-4 
         flex items-center gap-2 sm:gap-3 md:gap-4 
         cursor-pointer transition-all duration-300
@@ -47,11 +47,11 @@ const SellerCard = ({
         flex items-center justify-center 
       dark:bg-gray-900"
       >
-        <Avatar className="w-20 h-20 rounded-full overflow-hidden">
+        <Avatar className="w-20 h-20  rounded-full overflow-hidden">
           <AvatarImage
             src={logo}
             alt="Brand_Logo"
-            className="w-full h-full object-fill rounded-full" 
+            className="w-full h-full object-fill  rounded-full " 
           />
           <AvatarFallback
             className={`${bgColor} flex items-center justify-center text-3xl font-extrabold rounded-full w-20 h-20`}

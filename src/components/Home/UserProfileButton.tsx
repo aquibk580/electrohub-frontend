@@ -22,13 +22,14 @@ interface UserProfileButtonProps {
 
 export function getRandomColor() {
   const colors = [
-    "bg-red-500",
-    "bg-blue-500",
-    "bg-green-500",
-    "bg-yellow-500",
-    "bg-purple-500",
-    "bg-pink-500",
+    "bg-gradient-to-br from-red-500 via-orange-400 to-yellow-500",
+    "bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500",
+    "bg-gradient-to-br from-green-500 via-teal-400 to-cyan-500",
+    "bg-gradient-to-br from-blue-500 via-sky-400 to-green-400",
+    "bg-gradient-to-br from-fuchsia-500 via-violet-500 to-indigo-500",
+    "bg-gradient-to-br from-rose-500 via-pink-500 to-amber-500",
   ];
+  
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
@@ -69,7 +70,7 @@ export default function UserProfileButton({
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="flex items-center  px-0 hover:bg-transparent  md:p-5 py-6"
+          className="flex items-center  px-0 hover:bg-transparent md:pl-6 lg:p-5 py-6"
           onMouseEnter={() => {
             clearTimeout(closeTimeout); // Prevents immediate closing
             setOpen(true);

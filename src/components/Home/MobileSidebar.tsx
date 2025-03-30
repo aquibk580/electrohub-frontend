@@ -71,11 +71,11 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
       transition={{ duration: 0.4, ease: "easeInOut" }}
       className="fixed top-0 transition-all left-0 w-full h-screen bg-white dark:bg-black/75 backdrop-blur-3xl shadow-lg border-b dark:border-gray-700 z-50"
     >
-      <aside className="flex flex-col w-full h-screen px-4 py-4 overflow-y-auto  border-r rtl:border-r-0 rtl:border-l   ">
+      <aside className="flex flex-col  w-full h-screen px-4 py-4 overflow-y-auto  border-r rtl:border-r-0 rtl:border-l   ">
         <div className="flex justify-between items-center">
           <div className="text-2xl flex items-center gap-1 font-bold">
             <ShoppingCart className="text-green-500"/>
-            ElectroHub</div>
+            Electrohub</div>
           <X
             size={30}
             onClick={() => setShowSidebar(false)}
@@ -84,7 +84,7 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
         </div>
 
         {isAuthenticated ? (
-          <div className="flex flex-col items-center mt-6 mx-2">
+          <div className="flex  flex-col items-center mt-6 mx-2">
             <Avatar>
               <AvatarImage
                 src={pfp!}
@@ -92,7 +92,7 @@ const MobileSideBar = ({ setShowSidebar, showSidebar }: MobileSidebarProps) => {
                 className="w-full h-full object-cover rounded-full"
               />
               <AvatarFallback
-                className={`${bgColor} text-white font-semibold w-fit h-fit mx-2 rounded-full p-6 text-3xl text-center block`}
+                className={`${bgColor} text-white font-bold w-fit h-fit mx-2 rounded-full p-6 text-3xl text-center block`}
               >
                 {initials}
               </AvatarFallback>

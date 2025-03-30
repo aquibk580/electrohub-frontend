@@ -172,7 +172,7 @@ const AllProducts = () => {
       <div>
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl md:text-3xl font-bold">Our Products</h1>
-          <Button variant="outline" size="sm" disabled>
+          <Button variant="outline"  size="sm" disabled>
             <Filter className="h-4 w-4 mr-2" />
             Filter
           </Button>
@@ -203,22 +203,22 @@ const AllProducts = () => {
           <div className="block md:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" className="border-primary  rounded-xl" size="sm">
                   <Filter className="h-4 w-4 mr-2" />
                   Filter
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right">
+              <SheetContent side="right"  className="dark:bg-black/30 backdrop-blur-3xl ">
                 <SheetHeader>
                   <SheetTitle>Categories</SheetTitle>
-                  <SheetDescription>
+                  <SheetDescription className="text-accent-foreground/85">
                     Filter products by category
                   </SheetDescription>
                 </SheetHeader>
                 <div className="mt-6 flex flex-col gap-2">
                   <Button
                     variant={category === "All" ? "default" : "outline"}
-                    className="justify-start"
+                    className="justify-start rounded-xl"
                     onClick={() => handleCategoryChange("All")}
                   >
                     All
@@ -227,7 +227,7 @@ const AllProducts = () => {
                     <Button
                       key={item.name}
                       variant={category === item.name ? "default" : "outline"}
-                      className="justify-start"
+                      className="justify-start rounded-xl"
                       onClick={() => handleCategoryChange(item.name)}
                     >
                       {item.name}

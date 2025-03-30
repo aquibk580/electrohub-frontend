@@ -17,7 +17,7 @@ const LoadingFallback = () => (
 
 const Home = () => {
   return (
-    <div className="flex flex-col space-y-12 md:space-y-8 lg:space-y-8 mx-auo px-4 sm:px-6 lg:px-5  md:py-2">
+    <div className="flex flex-col space-y-7 md:space-y-8 lg:space-y-8 mx-auo px-4 sm:px-6 lg:px-5  md:py-2">
       {/* Hero Banner */}
       <section className="w-full animate__animated animate__fadeIn">
         <Suspense fallback={<LoadingFallback />}>
@@ -27,7 +27,7 @@ const Home = () => {
 
       {/* Featured Products */}
       <section className="w-full animate__animated animate__fadeIn animate__delay-1s">
-        <div className="mb-6">
+        <div className="mb-3 md:mb-6">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Featured Products</h2>
           <p className="dark:text-gray-300  mt-2">Explore our curated collection of top-quality, must-have products just for you</p>
         </div>

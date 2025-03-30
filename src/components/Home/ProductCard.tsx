@@ -176,7 +176,7 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
         </TooltipProvider>
       </div>
 
-      <div className="px-8 py-3">
+      <div className="px-2.5 md:-px-6 py-3">
         {/* Product details */}
         <div>
           <h2 className="text-base font-medium mb-1 line-clamp-1 group-hover:text-primary transition-colors duration-300">
@@ -221,7 +221,7 @@ const ProductCard = ({ product, wishlist, setWishlist }: ProductCardProps) => {
             </TooltipProvider>
           ) : (
             product?.status === "OutOfStock" && (
-              <Badge variant="outline" className="text-red-500 border-red-200 bg-red-50 rounded-lg">
+              <Badge variant="outline" className="text-red-500 border-red-200 bg-red-50 text-[4px] text-center md:text-sm  rounded-lg">
                 Out of Stock
               </Badge>
             )

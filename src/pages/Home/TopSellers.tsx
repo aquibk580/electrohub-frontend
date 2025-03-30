@@ -96,7 +96,7 @@ const TopSellerPage: React.FC = () => {
 
         {/* Hero Section */}
         <div className=" dark:bg-black ">
-          <div className="container  mx-auto px-4 py-6">
+          <div className="container  mx-auto px-4 pt-20 md:py-6">
             <div className="flex flex-col lg:flex-row gap-10 py-6 bg-slate-50/30 border dark:border-slate-700    dark:bg-gradient-to-tl from-slate-700 via-slate-900 to-black  shadow-md rounded-xl items-center px-6 md:px-16 ">
               <div className="flex flex-col  items-center   justify-center ">
                 <div className="relative ">
@@ -172,9 +172,9 @@ const TopSellerPage: React.FC = () => {
         </div>
 
         {/* Products Section */}
-        <div className="container mx-auto px-4 py-1">
+        <div className="container mx-auto px-4 py-3 lg:py-1">
           <div className="flex flex-row sm:items-center justify-between gap-4 mb-6">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">Products by {seller?.name}</h2>
+            <h2 className="text-lg md:text-2xl font-bold text-gray-900 dark:text-white">Products by {seller?.name}</h2>
             <div className="flex  w-max items-center gap-2 border rounded-full bg-muted py-1.5 px-4 text-gray-600 dark:text-gray-400">
               <ShieldCheck className="w-5 h-5 text-green-600 dark:text-green-500" />
               <span className="text-[10px] md:text-sm ">100% Authentic Products</span>

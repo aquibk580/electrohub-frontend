@@ -147,7 +147,7 @@ export default function ProductPage() {
         <title>{product.name}</title>
         <meta name="description" content={product.description} />
       </Helmet>
-      <main className="px-4 py-8">
+      <main className="px-4 py-20 md:py-8">
         <div className="grid lg:grid-cols-2 gap-8">
           <div className="space-y-4">
             {/* Product Image - Different for Tablets */}

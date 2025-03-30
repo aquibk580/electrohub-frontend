@@ -76,7 +76,7 @@ export default function SearchBar() {
   };
 
   return (
-    <div ref={searchRef} className="relative w-full max-w-md hidden lg:flex">
+    <div ref={searchRef} className="relative w-full  lg:max-w-md  md:flex ">
       <div className="relative flex items-center">
         <div className="absolute left-3 text-muted-foreground">
           <Search size={18} className="text:black dark:text-white" />
@@ -85,7 +85,7 @@ export default function SearchBar() {
         <Input
           type="text"
           placeholder="Search products..."
-          className="pl-10 pr-10 h-11 w-[450px] rounded-full  focus-visible:ring-primary"
+          className="pl-10 pr-10 h-11 md:w-[450px] rounded-full border-gray-500 focus:border-transparent  focus-visible:ring-primary"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onFocus={() => setIsFocused(true)}

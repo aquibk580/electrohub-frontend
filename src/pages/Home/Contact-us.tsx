@@ -56,7 +56,7 @@ export default function ContactUs() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4 pt-20 md:py-12">
       <Helmet>
         <title>Contact us</title>
         <meta name="description" content="Electrohub Contact Us Page" />

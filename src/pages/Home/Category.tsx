@@ -105,39 +105,39 @@ export default function CategoryPage() {
   }
 
   return (
-    <div className="container px-4 py-8 mx-auto">
+    <div className="container px-4 pt-20 md:py-8 mx-auto">
       {/* Category Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
+        <div className="border-l-[6px] border-primary pl-6">
           <h1 className="text-3xl font-bold tracking-tight">{categoryName}</h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-accent-foreground/85 mt-1">
             Discover our collection of {categoryName?.toLowerCase()}
           </p>
         </div>
 
-        <Select value={sortOption} onValueChange={setSortOption}>
-          <SelectTrigger className="w-[180px]">
+        <Select  value={sortOption} onValueChange={setSortOption}>
+          <SelectTrigger className="w-[180px] rounded-xl border-gray-400">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Filters">
-              <span className="flex flex-row items-center justify-center">
+          <SelectContent className="rounded-lg">
+            <SelectItem className="rounded-lg" value="Filters">
+              <span className="flex flex-row  items-center justify-center">
                 <SlidersHorizontal className="mr-2 h-4 w-4" />
                 Filters
               </span>
             </SelectItem>
-            <SelectItem value="newest">Newest</SelectItem>
-            <SelectItem value="price-low">Price: Low to High</SelectItem>
-            <SelectItem value="price-high">Price: High to Low</SelectItem>
-            <SelectItem value="rating">Top Rated</SelectItem>
+            <SelectItem className="rounded-lg" value="newest">Newest</SelectItem>
+            <SelectItem className="rounded-lg" value="price-low">Price: Low to High</SelectItem>
+            <SelectItem className="rounded-lg" value="price-high">Price: High to Low</SelectItem>
+            <SelectItem className="rounded-lg" value="rating">Top Rated</SelectItem>
           </SelectContent>
         </Select>
       </div>
-
       {/* Products Grid */}
       {loading ? (
         <ProductsLoadingSkeleton />
       ) : sortedProducts.length === 0 ? (
+        
         <div className="text-center py-12">
           <h3 className="text-lg font-medium">No products found</h3>
           <p className="text-muted-foreground mt-2">
@@ -145,7 +145,7 @@ export default function CategoryPage() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-8">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 mt-8">
           {sortedProducts.map((product) => (
             <ProductCard
               key={product.id}
