@@ -64,23 +64,28 @@ export const assets = {
     demoimg,
     paymentOptions,
 };
+
+import { Home, BadgeIndianRupee, Package  } from "lucide-react"
 //services to help you
 export const serviceContain = [
     {
         id: 0,
         img: service1,
+        icon:Home,
         title: "Frequently Asked Questions",
         desc: "Updates on safe Shopping in our Stores",
     },
     {
         id: 1,
         img: service2,
+        icon:BadgeIndianRupee,
         title: "Online Payment Process",
         desc: "Updates on safe Shopping in our Stores",
     },
     {
         id: 2,
         img: service3,
+        icon:Package,
         title: "Home Delivery Options",
         desc: "Updates on safe Shopping in our Stores",
     },

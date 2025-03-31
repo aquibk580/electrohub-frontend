@@ -111,7 +111,7 @@ export default function AboutUs() {
   ]
 
   return (
-    <div className="container mx-auto px-4 pt-20 md:py-12">
+    <div className="container mx-auto px-4 pt-16 md:py-12">
       <Helmet>
         <title>About us</title>
         <meta name="description" content="Electrohub About us Page" />

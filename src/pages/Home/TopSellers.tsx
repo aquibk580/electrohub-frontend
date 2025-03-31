@@ -96,7 +96,7 @@ const TopSellerPage: React.FC = () => {
 
         {/* Hero Section */}
         <div className=" dark:bg-black ">
-          <div className="container  mx-auto px-4 pt-20 md:py-6">
+          <div className="container  mx-auto px-4 pt-16 md:py-6">
             <div className="flex flex-col lg:flex-row gap-10 py-6 bg-slate-50/30 border dark:border-slate-700    dark:bg-gradient-to-tl from-slate-700 via-slate-900 to-black  shadow-md rounded-xl items-center px-6 md:px-16 ">
               <div className="flex flex-col  items-center   justify-center ">
                 <div className="relative ">
