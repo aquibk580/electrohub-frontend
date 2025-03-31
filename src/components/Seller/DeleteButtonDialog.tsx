@@ -30,7 +30,7 @@ export default function DeleteButtonDialog({
     <AlertDialog>
       <AlertDialogTrigger asChild>
         {/* <Button variant="outline">Show Dialog</Button> */}
-        <Button className="bg-red-50 text-red-700 flex items-center space-x-2 p-1.5 px-2.5 shadow-none rounded-lg hover:bg-red-100">
+        <Button className="bg-red-50 border border-red-600 hover:bg-red-100 dark:bg-red-900/25 font-semibold text-red-700 flex items-center space-x-2 p-1.5 px-2.5 shadow-none rounded-xl ">
           <div className=" w-4 h-4  flex items-center  justify-center rounded-lg">
             <img src={assets.del} className="w-6" />
           </div>

@@ -137,10 +137,10 @@ export default function ProductList() {
         ]}
       ></Helmet>
 
-      <div className="border border-primary/30 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black  rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm ">
+      <div className="border border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-slate-900/30 to-primary/10  rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm ">
         <h2 className="text-2xl text-primary font-semibold">Products</h2>
 
-        <Card className="w-full lg:w-[100%] flex flex-nowrap  border-primary/50  bg-primary/10 rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x">
+        <Card className="w-full lg:w-[100%] flex flex-nowrap  border-primary/70  bg-primary/10 rounded-xl overflow-x-auto whitespace-nowrap scrollbar-x">
           <div className="flex items-center space-x-2 p-4 text-primary">
             <CalendarCheck className="w-6 h-6" />
             <span className="font-semibold text-lg">Current Updates</span>
@@ -148,7 +148,7 @@ export default function ProductList() {
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="p-3 px-4 border-l-2 border-primary/50 min-w-[190px]  flex flex-col"
+              className="p-3 px-4 border-l-2 border-primary/70 min-w-[190px]  flex flex-col"
             >
               <div className="text-sm truncate">{stat.label}</div>
               <AnimatedCounter end={String(stat.value)} duration={500} />
@@ -183,7 +183,7 @@ export default function ProductList() {
           </div>
         </Tabs>
       </div>
-      <div className="space-y-3 border p-3 rounded-xl shadow-sm border-primary/30 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black  animate__animated animate__fadeIn">
+      <div className="space-y-3 border p-3 rounded-xl shadow-sm border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/5 via-slate-900/30 to-primary/5  animate__animated animate__fadeIn">
         <h2 className="text-xl pl-1 text-primary font-semibold">
           All Product Lists
         </h2>
@@ -192,27 +192,27 @@ export default function ProductList() {
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-secondary-foreground" />
             <Input
               placeholder="Search Order..."
-              className="pl-8 bg-transparent border-primary/50 rounded-full  transition-colors"
+              className="pl-8 bg-white dark:bg-black border-primary/70 rounded-full  transition-colors"
             />
           </div>
 
-          <div className="flex gap-2">
+          {/* <div className="flex gap-2">
             <Button className="bg-primary text-primary-foreground shadow-md border rounded-lg px-5 py-3 hover:bg-primary/80 flex items-center gap-2">
               <Filter size={24} />
               <span className="hidden sm:block font-medium">Filter</span>
             </Button>
-          </div>
+          </div> */}
         </div>
 
         {/* Orders Table */}
         {paginatedProducts.length === 0 ? (
           <h2 className=" font-bold text-center text-xl p-16">No Products!</h2>
         ) : (
-          <Card className="p-2 md:p-4 border rounded-xl bg-background  border-primary/30 overflow-hidden">
+          <Card className="p-2 md:p-4rounded-xl bg-background  border-primary/70 overflow-hidden">
             <div className="overflow-x-auto ">
               <Table className="w-full ">
                 <TableHeader className="bg-primary  rounded-lg  overflow-hidden">
-                  <TableRow className="border-none hover:bg-transparent ">
+                  <TableRow className=" hover:bg-transparent ">
                     <TableHead className="text-primary-foreground  font-semibold text-center rounded-l-lg">
                       Sr.No.
                     </TableHead>
@@ -239,8 +239,18 @@ export default function ProductList() {
                 <TableBody>
                   {paginatedProducts.map((product, index) => (
                     <TableRow
+                    onClick={() =>
+                      navigate(
+                        `/seller/dashboard/products/view-product/${product.id}`,
+                        {
+                          state: {
+                            product,
+                          },
+                        }
+                      )
+                    }
                       key={product.id}
-                      className="border-b h-[60px] hover:bg-accent"
+                      className="border-b-primary/25 cursor-pointer h-[60px] hover:bg-primary/5"
                     >
                       <TableCell className="text-center rounded-tl-lg rounded-bl-lg">
                         {index + 1}
