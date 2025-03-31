@@ -418,17 +418,17 @@ export default function ViewProduct() {
                 {[...Array(5)].map((_, i) => (
                                   <Star
                                     key={i}
-                                    className={`h-5 w-5 ${i < averageRating
+                                    className={`h-3 w-3 md:h-5 md:w-5 ${i < averageRating
                                       ? "fill-yellow-400 text-yellow-400"
                                       : "text-gray-300 fill-current"
                                       }`}
                                   />
                                 ))}
                 </div>
-                  <span className="text-xl font-semibold">
+                  <span className="text-sm md:text-xl font-semibold">
                     {averageRating}.0/5
                   </span>
-                  <span className="text-accent-foreground/85">
+                  <span className=" text-xs md:text-sm text-accent-foreground/85">
                     ({product!.reviews.length} reviews)
                   </span>
                 </div>
@@ -438,10 +438,10 @@ export default function ViewProduct() {
               <div className="space-y-4">
                 {product!.reviews.length > 0 ? (
                   product!.reviews.map((review: Review) => (
-                    <Card className="border-none shadow-none dark:border-primary/55  rounded-xl bg-primary/10" key={review.id}>
+                    <Card className=" border-none shadow-none dark:border-primary/55  rounded-xl bg-primary/10" key={review.id}>
                       <CardContent className="pt-4">
                         <div className="flex  ">
-                          <div className=" w-full flex justify-between ">
+                          <div className=" w-full flex flex-col md:flex-row md:justify-between ">
                             <div className="flex items-center  gap-2">
                               
                               <span className="bg-gradient-to-br from-primary/60 to-blue-800 p-1.5 text-center text-white  px-2 font-semibold rounded-full">
@@ -451,16 +451,16 @@ export default function ViewProduct() {
                                   .join("")
                                   .toUpperCase()}
                               </span>
-                              <div className="font-semibold">
+                              <div className="font-semibold whitespace-nowrap">
                                 {review.user.name}
                               </div>
                               </div>
-                              <div className="space-x-1 flex items-center">
-                              <div className="flex space-x-1">
+                              <div className="space-x-1 ml-11 -mt-1.5 md:-mt-0 md:ml-0 flex items-center">
+                              <div className="flex gap-[3px] md:space-x-1">
                                 {[...Array(5)].map((_, i) => (
                                   <Star
                                     key={i}
-                                    className={`h-4 w-4 ${i < review.rating
+                                    className={`h-3 w-3 md:h-4 md:w-4 ${i < review.rating
                                       ? "fill-yellow-400 text-yellow-400"
                                       : "text-gray-300 fill-current"
                                       }`}

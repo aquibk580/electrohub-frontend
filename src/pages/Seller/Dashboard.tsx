@@ -32,6 +32,7 @@ export default function Dashboard() {
     Array<Category & { productCount: string }>
   >([]);
 
+  const [productsPerPage, setProductsPerPage] = useState(5);
   const [selectedTab, setSelectedTab] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,7 +40,7 @@ export default function Dashboard() {
   const [salesGraph, setSalesGraph] = useState<
     Array<{ date: string; amount: number }>
   >([]);
-  const ordersPerPage = 5;
+  
 
   // Combined data loading
   useEffect(() => {
@@ -150,11 +151,12 @@ export default function Dashboard() {
     return result;
   }, [allOrderItems, searchTerm, selectedTab]);
 
-  const totalPages = Math.ceil(filteredOrders?.length / ordersPerPage);
-  const paginatedOrders = (filteredOrders || []).slice(
-    (currentPage - 1) * ordersPerPage,
-    currentPage * ordersPerPage
-  );
+  const totalPages = Math.ceil(filteredOrders?.length / productsPerPage);
+const paginatedOrders = (filteredOrders || []).slice(
+  (currentPage - 1) * productsPerPage,
+  currentPage * productsPerPage
+);
+
 
   // Render skeleton while loading
   if (isLoading) {
@@ -449,9 +451,9 @@ export default function Dashboard() {
       <div className="flex p-2 items-center justify-between">
         <div className="flex whitespace-nowrap space-x-2 items-center">
           <label className="text-sm">Items per page</label>
-          <Select>
+          <Select onValueChange={(value) => setProductsPerPage(Number(value))} >
             <SelectTrigger className="w-[70px]">
-              <SelectValue placeholder="5" />
+              <SelectValue  placeholder={String(productsPerPage)} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="5">5</SelectItem>

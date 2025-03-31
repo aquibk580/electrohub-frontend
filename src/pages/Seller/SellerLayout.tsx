@@ -69,7 +69,7 @@ export default function SellerLayout({
 
 
 
-      <div className=" p-1.5 md:p-6 bg-white dark:bg-black">{children}</div>
+      <div className=" h-full p-1.5 md:p-6 bg-white dark:bg-black">{children}</div>
     </MainNav>
   );
 }

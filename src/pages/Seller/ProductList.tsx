@@ -25,7 +25,8 @@ export default function ProductList() {
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 5;
+  const [productsPerPage, setProductsPerPage] = useState(5);
+
 
   const stats = [
     { label: "Total Products", value: products.length },
@@ -72,12 +73,12 @@ export default function ProductList() {
       ? products
       : products.filter((product) => product.status === selectedTab);
 
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-  const startIndex = (currentPage - 1) * productsPerPage;
-  const paginatedProducts = filteredProducts.slice(
-    startIndex,
-    startIndex + productsPerPage
-  );
+
+   const totalPages = Math.ceil(filteredProducts?.length / productsPerPage);
+const paginatedProducts = (filteredProducts || []).slice(
+  (currentPage - 1) * productsPerPage,
+  currentPage * productsPerPage
+);
 
   if (loading) {
     return (
@@ -322,14 +323,14 @@ export default function ProductList() {
       <div className="flex p-2 items-center">
         <div className="flex whitespace-nowrap space-x-2   items-center">
           <label className="text-sm">Items per pages</label>
-          <Select>
+          <Select onValueChange={(value) => setProductsPerPage(Number(value))}>
             <SelectTrigger className="">
-              <SelectValue placeholder="5" />
+              <SelectValue placeholder={String(productsPerPage)} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="active">5</SelectItem>
-              <SelectItem value="inactive">10</SelectItem>
-              <SelectItem value="draft">15</SelectItem>
+              <SelectItem value="5">5</SelectItem>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="15">15</SelectItem>
             </SelectContent>
           </Select>
         </div>

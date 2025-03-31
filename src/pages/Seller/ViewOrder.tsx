@@ -176,7 +176,7 @@ const MainViewOrder = () => {
         <div className="lg:flex grid-cols-1 space-y-4 lg:space-y-0  md:grid-cols-2 md:gap-4 ">
           <div className=" lg:col-span-2 md:col-span-1   flex items-center bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-black to-primary/10 rounded-xl border border-primary/75 overflow-hidden">
             <div className="p-6">
-              <div className="flex flex-col border md:flex-row items-center lg:items-start gap-6">
+              <div className="flex flex-col md:flex-row items-center lg:items-start gap-6">
                 {/* Product image */}
                 <Link to={`product/${orderItem.id}`} className="w-4/5 md:w-3/5 flex items-center  flex-row">
                   <img
@@ -192,17 +192,17 @@ const MainViewOrder = () => {
                 </Link>
 
                 {/* Product info */}
-                <div className="w-full border  space-y-2 md:space-y-4">
+                <div className="w-full  space-y-2 md:space-y-4">
                   <h3 className="text-2xl font-semibold text-foreground">{orderItem.product.name}</h3>
-                  <p onClick={handleShowDescription} className={`text-muted-foreground border ${showDesc ? "" : "description"}`}>{orderItem.product.description}</p>
+                  <p onClick={handleShowDescription} className={`text-muted-foreground ${showDesc ? "" : "description"}`}>{orderItem.product.description}</p>
 
                   <div className="flex justify-between px-1 ">
                     <div className="flex items-center">
-                      <span className="text-accent-foreground/80 mr-2">Date:</span>
+                      <span className="text-accent-foreground/80 mr-1">Date:</span>
                       <span className="font-medium whitespace-nowrap">{formatDate(orderItem.createdAt)}</span>
                     </div>
                     <div className="flex items-center">
-                      <span className="text-accent-foreground/80 mr-2">Price:</span>
+                      <span className="text-accent-foreground/80 mr-1">Price:</span>
                       <span className="font-medium">
                         {formatPrice(
                           orderItem.product.price - (orderItem.product.price / 100) * orderItem.product.offerPercentage,
@@ -290,7 +290,7 @@ const MainViewOrder = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3">
             {orderItem.product.productInfo.details.map((item) => (
-              <div key={item.key} className="flex">
+              <div key={item.key} className="flex flex-col md:flex-row">
                 <span className="font-medium min-w-[120px]">{item.key}:</span>
                 <span className="text-accent-foreground/80">{item.value}</span>
               </div>
