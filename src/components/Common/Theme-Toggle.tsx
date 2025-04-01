@@ -1,12 +1,23 @@
-import { useTheme, THEMES, type Theme, type Color } from "@/components/theme-provider"
-import { Moon, Sun, Check, Palette } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  useTheme,
+  THEMES,
+  type Theme,
+  type Color,
+} from "@/components/theme-provider";
+import { Moon, Sun, Check, Palette } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 interface ColorOption {
-  value: Color
-  label: string
-  hsl: string
+  value: Color;
+  label: string;
+  hsl: string;
 }
 
 const colorOptions: ColorOption[] = [
@@ -51,35 +62,20 @@ const colorOptions: ColorOption[] = [
     hsl: "hsl(180 76% 40%)",
   },
   {
-    value: "pink",
-    label: "Pink",
-    hsl: "hsl(330 100% 70%)",
-  },
-  {
     value: "cyan",
     label: "Cyan",
     hsl: "hsl(190 80% 45%)",
   },
-  {
-    value: "brown",
-    label: "Brown",
-    hsl: "hsl(30 50% 30%)",
-  },
-  {
-    value: "gray",
-    label: "Gray",
-    hsl: "hsl(0 0% 50%)",
-  },
-] as const
+] as const;
 
 export default function ThemeToggle() {
-  const { theme, setTheme, color, setColor } = useTheme()
+  const { theme, setTheme, color, setColor } = useTheme();
 
   const handleThemeChange = (value: string) => {
     if (THEMES.includes(value as Theme)) {
-      setTheme(value as Theme)
+      setTheme(value as Theme);
     }
-  }
+  };
 
   return (
     <div className="">
@@ -131,9 +127,12 @@ export default function ThemeToggle() {
                   key={option.value}
                   onClick={() => setColor(option.value)}
                   className="w-10 h-10 rounded-lg relative transition-all hover:scale-105 ring-offset-background"
-                  style={{ 
+                  style={{
                     backgroundColor: option.hsl,
-                    boxShadow: color === option.value ? '0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--primary))' : 'none'
+                    boxShadow:
+                      color === option.value
+                        ? "0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--primary))"
+                        : "none",
                   }}
                 >
                   {color === option.value && (
@@ -143,26 +142,9 @@ export default function ThemeToggle() {
                 </button>
               ))}
             </div>
-            
-            {/* <div className="mt-8 space-y-4">
-              <h4 className="text-sm font-medium">Preview</h4>
-              <div className="grid gap-4">
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-                  Primary Button
-                </Button>
-                <Button variant="outline">
-                  Outline Button
-                </Button>
-                <div className="p-4 rounded-lg border bg-primary/10 text-primary">
-                  Text and background using the primary color
-                </div>
-              </div>
-            </div> */}
-            
           </CardContent>
         </Card>
-
       </div>
     </div>
-  )
+  );
 }
