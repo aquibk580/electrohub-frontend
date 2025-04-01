@@ -91,7 +91,7 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
       <div className="pt-[4rem] lg:pt-[6.7rem] ">{children}</div>
       <div
         className={` transition-opacity duration-500 ${
-          isVisible ? "opacity-100" : "opacity-0"
+          isVisible ? "opacity-100" : "opacity-0 hidden"
         }`}
       >
         <ChatBot
