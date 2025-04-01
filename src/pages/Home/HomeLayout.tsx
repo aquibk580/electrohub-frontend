@@ -8,7 +8,6 @@ import { setPfp, setUser } from "@/redux/slices/user";
 import axios from "../../lib/axios";
 import API from "axios";
 import { ChatBot } from "@/components/Home/ChatBot";
-// import { ChatBot } from "@/components/Home/NewChatbot";
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [isVisible, setIsVisible] = useState(false);
@@ -23,8 +22,11 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (isSellerAuthenticated) {
       navigate("/seller/dashboard");
+      return;
     }
   }, [isSellerAuthenticated, navigate]);
+
+  if (isSellerAuthenticated) return null;
 
   useEffect(() => {
     const fetchUserData = async () => {
