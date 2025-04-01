@@ -24,7 +24,7 @@ export default function SellerLayout({
     const getSellerData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/auth/seller-data"
+          `${import.meta.env.VITE_API_URL}/api/auth/seller-data`
         );
         if (response.status === 200 && response.data.authorized) {
           dispatch(
@@ -64,12 +64,13 @@ export default function SellerLayout({
             name: "og:url",
             property: "og:url",
             content: `${import.meta.env.VITE_APP_URL}/seller/dashboard`,
-          }
-        ]}></Helmet>
+          },
+        ]}
+      ></Helmet>
 
-
-
-      <div className=" h-full p-1.5 md:p-6 bg-white dark:bg-black">{children}</div>
+      <div className=" h-full p-1.5 md:p-6 bg-white dark:bg-black">
+        {children}
+      </div>
     </MainNav>
   );
 }
