@@ -7,9 +7,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { CloudUpload, Plus, Trash2, X, Edit, Check, Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import axios from "../../lib/axios"
+import { Label } from "@/components/ui/label"
 import { AddProductSchema, type AddProductSchematype } from "@/components/Seller/FormSchema"
 import { Separator } from "@/components/ui/separator"
 import { useSelector } from "react-redux"
@@ -17,9 +17,9 @@ import type { RootState } from "@/redux/store"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { removeBackground } from "@imgly/background-removal"
 import { AddProductSkeleton } from "@/components/Seller/Skeletons"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Helmet } from "react-helmet-async"
 
 interface Category {
@@ -156,31 +156,52 @@ function MainAddProductForm() {
     reader.readAsDataURL(file)
   }
 
+  // Server-side background removal function
   const handleRemoveBackground = async () => {
-    if (!originalImage) return
-
+    if (!originalImage || editingIndex === null) return
+  
     setIsProcessing(true)
     try {
-      // Convert base64 to blob
-      const fetchResponse = await fetch(originalImage)
-      const blob = await fetchResponse.blob()
-
-      // Process with imgly
-      const result = await removeBackground(blob, {
-        progress: (progress) => {
-          console.log(`Progress: ${(progress as unknown as number) * 100}%`)
-        },
-      })
-
-      // Convert result to base64
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setRemovedBgImage(reader.result as string)
+      // Get the current image file
+      const file = images[editingIndex]
+      if (!file) {
+        toast.error("No image to process", {
+          position: "top-center",
+          theme: "dark",
+        })
+        setIsProcessing(false)
+        return
       }
-      reader.readAsDataURL(result)
-    } catch (error) {
+  
+      // Create form data for API request
+      const formData = new FormData()
+      formData.append("image", file)
+  
+      // Send to server API
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/remove-bg`, 
+        formData, 
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          }
+        }
+      )
+  
+      // Check if response has processedImage (matches your server response)
+      if (response.data && response.data.processedImage) {
+        // Set the processed image with base64 data
+        setRemovedBgImage(`data:image/png;base64,${response.data.processedImage}`)
+        toast.success("Background removed successfully", {
+          position: "top-center",
+          theme: "dark",
+        })
+      } else {
+        throw new Error(response.data.error || "Failed to process image")
+      }
+    } catch (error: any) {
       console.error("Error removing background:", error)
-      toast.error("Failed to remove background", {
+      toast.error(error.message || "Failed to remove background", {
         position: "top-center",
         theme: "dark",
       })
