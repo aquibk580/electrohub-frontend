@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import { serviceContain, BackContent } from "@/assets/assets"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { HelpCircle } from "lucide-react"
+import { HelpCircle  } from "lucide-react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
 // Card component for desktop
@@ -98,10 +98,15 @@ const MobileServiceSection = () => {
   return (
     <div className="md:hidden">
       <Tabs defaultValue={serviceContain[0].id.toString()} className="w-full">
-        <TabsList className="grid grid-cols-3 mb-4">
+        <TabsList className="grid grid-cols-3 rounded-xl gap-1 mb-4">
           {serviceContain.map((item) => (
-            <TabsTrigger key={item.id} value={item.id.toString()}>
-              {item.title}
+            <TabsTrigger key={item.id} value={item.id.toString()} className="flex items-center hover:bg-primary/30  rounded-xl gap-">
+              {/* Icon visible on mobile only */}
+              <item.icon className="h-5 w-5 "/> {/* Render icon */}
+             
+
+              {/* Text visible on larger screens */}
+              <span className="hidden sm:inline">{item.title}</span>
             </TabsTrigger>
           ))}
         </TabsList>

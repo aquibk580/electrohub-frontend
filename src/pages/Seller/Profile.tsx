@@ -174,18 +174,18 @@ export default function Profile() {
   return (
     <div className="animate__animated animate__fadeIn">
       <Helmet>
-        <title>Profile - Seller</title>
+        <title>Profile - Seller</title> 
         <meta name="description" content="Electrohub Seller Profile Page" />
         <meta name="og:url" property="og:url" content={`${import.meta.env.VITE_APP_URL}/seller/profile`} />
       </Helmet>
 
       {/* Banner section */}
-      <header className="bg-teal-800 rounded-xl h-44 relative">
+      <header className="bg-teal-700 rounded-2xl h-44 relative">
         {loading ? (
           <Skeleton className="w-full h-full rounded-xl" />
         ) : (
           <img
-            className="w-full h-full object-fit rounded-xl"
+            className="w-full h-full object-fit  rounded-xl"
             src={assets.banner}
             alt="Banner"
           />
@@ -195,7 +195,7 @@ export default function Profile() {
           <Button
             variant="ghost"
             size="icon"
-            className="text-white border rounded-full"
+            className="text-white hover:text-white border  rounded-full"
           >
             <EllipsisVertical />
           </Button>
@@ -203,18 +203,18 @@ export default function Profile() {
       </header>
 
       {/* Profile section */}
-      <div className="px-6 -mt-16">
+      <div className="px-1 md:px-4 lg:px-6 -mt-16">
         <div className="flex justify-between items-start mb-8">
           <div className="flex items-end gap-4">
-            <div className="w-32 h-32 rounded-full border-[3px] bg-white border-white relative">
+            <div className="w-32 h-32 rounded-full border-[5px] bg-white border-white dark:border-black relative">
               {loading ? (
-                <Skeleton className="w-full h-full rounded-full" />
+                <Skeleton className="w-full h-full rounded-full " />
               ) : (
-                <Avatar className="w-full h-full">
-                  <AvatarImage 
+                <Avatar className="w-full h-full ">
+                  <AvatarImage  
                     src={profilePic ?? assets.account_icon} 
                     alt="Profile_Picture" 
-                    className="object-cover"
+                    className="object-cover "
                   />
                   <AvatarFallback>
                     {seller?.name?.charAt(0) ?? "U"}
@@ -223,9 +223,9 @@ export default function Profile() {
               )}
               <label
                 htmlFor="profile-pic-input"
-                className="absolute top-1 cursor-pointer right-2 p-1 bg-white rounded-full shadow-sm"
+                className="absolute top-1 border cursor-pointer right-2 p-1 bg-white rounded-full shadow-sm"
               >
-                <Pencil className="h-5 w-5 text-black" />
+                <Pencil className="h-5 w-5 b text-black" />
                 <input
                   id="profile-pic-input"
                   type="file"
@@ -286,20 +286,20 @@ export default function Profile() {
         </div>
 
         {/* Sales metrics section */}
-        <Card className="mt-8">
+        <Card className="mt-8 border-primary/75 bg-primary/5 rounded-2xl">
           <CardHeader className="pb-2">
             <div className="flex justify-between items-center">
-              <CardTitle>Sales & Revenue</CardTitle>
+              <CardTitle className="text-xl">Sales & Revenue</CardTitle>
               <Button
                 variant="outline"
                 onClick={getProfileStatistics}
-                className="flex items-center gap-2"
+                className="flex items-center border-primary rounded-xl gap-2"
                 disabled={loading}
               >
                 {loading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <RefreshCcw className="h-4 w-4" />
+                  <RefreshCcw className="h-4 w-4 text-primary" />
                 )}
                 Refresh
               </Button>
@@ -334,10 +334,11 @@ export default function Profile() {
           </div>
 
           <AlertDialog>
-            <AlertDialogTrigger asChild>
+            <div className="flex  justify-center md:justify-start">
+            <AlertDialogTrigger  asChild>
               <Button 
                 variant="destructive" 
-                className="md:px-24 py-5"
+                className="w-[100%] md:w-80 place-content-center rounded-xl md:px-24 py-5"
                 disabled={isDeleting}
               >
                 {isDeleting ? (
@@ -350,7 +351,7 @@ export default function Profile() {
                 )}
               </Button>
             </AlertDialogTrigger>
-
+            </div>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>

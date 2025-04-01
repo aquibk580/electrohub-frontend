@@ -45,7 +45,7 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex flex-col min-h-screen selection:bg-primary selection:text-primary-foreground">
       <Navbar />
-      <div className="flex flex-1 bg-muted dark:bg-gray-600/10 pt-[8rem] md:pt-[4.45rem] lg:pt-[6.7rem]">
+      <div className="flex flex-1 bg-muted dark:bg-gray-600/10 pt-[8rem] md:pt-[4.45rem] lg:pt-[6rem]">
         <div ref={sidebarRef} className="h-fit">
           <Sidebar />
         </div>

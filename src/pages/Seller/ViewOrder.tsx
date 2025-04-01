@@ -44,7 +44,7 @@ const ViewOrder = () => {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      
+
       {isLoading ? (
         <ViewOrderSkeleton />
       ) : (
@@ -118,16 +118,16 @@ const MainViewOrder = () => {
   }
 
   const handleShowDescription = () => {
-    if(showDesc) {
-    setshowDesc(false)
-  }
+    if (showDesc) {
+      setshowDesc(false)
+    }
     else {
       setshowDesc(true)
     }
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 ">
       <Helmet
         title={`Order Details - ${orderItem.product.name}`}
         meta={[
@@ -156,146 +156,149 @@ const MainViewOrder = () => {
       </div>
 
       {/* Order ID and Status Banner */}
-      <div className="flex items-center justify-between bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black p-4 rounded-lg border border-primary/50">
+      <div className="flex items-center justify-between bg-primary/5  p-4 rounded-xl border border-primary/75">
         <div className="flex items-center space-x-2">
           <span className="text-primary font-medium">Order ID:</span>
           <span className="font-mono">{orderItem.id}</span>
         </div>
         <div className="flex items-center space-x-2">
-          <span className="text-muted-foreground">Status:</span>
+          <span className="text-accent-foreground/80">Status:</span>
           <span className={`${getStatusColor(orderItem.status)} px-3 py-1 rounded-full text-xs font-medium`}>
             {orderItem.status}
           </span>
         </div>
       </div>
 
+
       {/* Main content grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1  gap-4">
         {/* Product details card - takes 2 columns on large screens */}
-        <div className="lg:col-span-2 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black rounded-xl border border-primary/50 overflow-hidden">
-          <div className="p-6">
-            <div className="flex flex-col w gap-6">
-              {/* Product image */}
-              <Link to={`product/${orderItem.id}`} className=" md:w-1/3 flex flex-row">
-                <img
-                  src={orderItem.product.images[0].url || "/placeholder.svg"}
-                  alt={orderItem.product.name}
-                  className="w-full h-auto object-cover rounded-lg"
-                />
-                <img
-                  src={orderItem.product.images[1].url || "/placeholder.svg"}
-                  alt={orderItem.product.name}
-                  className="w-full h-auto object-cover rounded-lg"
-                />
-              </Link>
+        <div className="lg:flex grid-cols-1 space-y-4 lg:space-y-0  md:grid-cols-2 md:gap-4 ">
+          <div className=" lg:col-span-2 md:col-span-1   flex items-center bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-black to-primary/10 rounded-xl border border-primary/75 overflow-hidden">
+            <div className="p-6">
+              <div className="flex flex-col md:flex-row items-center lg:items-start gap-6">
+                {/* Product image */}
+                <Link to={`product/${orderItem.id}`} className="w-4/5 md:w-3/5 flex items-center  flex-row">
+                  <img
+                    src={orderItem.product.images[0].url || "/placeholder.svg"}
+                    alt={orderItem.product.name}
+                    className="w-full h-auto object-cover rounded-lg"
+                  />
+                  {/* <img
+                    src={orderItem.product.images[1].url || "/placeholder.svg"}
+                    alt={orderItem.product.name}
+                    className="w-full h-auto object-cover rounded-lg"
+                  /> */}
+                </Link>
 
-              {/* Product info */}
-              <div className="w-full space-y-4">
-                <h3 className="text-xl font-semibold text-foreground">{orderItem.product.name}</h3>
-                <p onClick={handleShowDescription} className={`text-muted-foreground ${showDesc? "": "description" }`}>{orderItem.product.description}</p>
+                {/* Product info */}
+                <div className="w-full  space-y-2 md:space-y-4">
+                  <h3 className="text-2xl font-semibold text-foreground">{orderItem.product.name}</h3>
+                  <p onClick={handleShowDescription} className={`text-muted-foreground ${showDesc ? "" : "description"}`}>{orderItem.product.description}</p>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center">
-                    <span className="text-muted-foreground mr-2">Date:</span>
-                    <span className="font-medium">{formatDate(orderItem.createdAt)}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="text-muted-foreground mr-2">Price:</span>
-                    <span className="font-medium">
-                      {formatPrice(
-                        orderItem.product.price - (orderItem.product.price / 100) * orderItem.product.offerPercentage,
-                      )}
-                    </span>
+                  <div className="flex justify-between px-1 ">
+                    <div className="flex items-center">
+                      <span className="text-accent-foreground/80 mr-1">Date:</span>
+                      <span className="font-medium whitespace-nowrap">{formatDate(orderItem.createdAt)}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-accent-foreground/80 mr-1">Price:</span>
+                      <span className="font-medium">
+                        {formatPrice(
+                          orderItem.product.price - (orderItem.product.price / 100) * orderItem.product.offerPercentage,
+                        )}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+
+
+
           </div>
 
-
-
-        </div>
-
-        {/* Right sidebar with status update and customer info */}
-        <div className="space-y-6">
-          {/* Status update card */}
-          <div className="bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black rounded-xl border border-primary/50 p-6">
-            <div className="flex items-center mb-4">
-              <Package className="h-5 w-5 mr-2 text-primary" />
-              <h3 className="text-lg font-semibold">Update Order Status</h3>
-            </div>
-            <Select onValueChange={(value) => handleOrderStatusUpdate(value)} defaultValue={orderItem.status}>
-              <SelectTrigger className="w-full border-primary/40 bg-primary/20 rounded-xl px-4 py-2 mt-2">
-                <SelectValue placeholder="Select Status" />
-              </SelectTrigger>
-              <SelectContent className="rounded-xl dark:border-primary/30">
-                <SelectItem className="rounded-lg" value="OrderConfirmed">
-                  Confirmed
-                </SelectItem>
-                <SelectItem className="rounded-lg" value="Shipped">
-                  Shipped
-                </SelectItem>
-                <SelectItem className="rounded-lg" value="Delivered">
-                  Delivered
-                </SelectItem>
-                <SelectItem className="rounded-lg" value="Cancelled">
-                  Cancelled
-                </SelectItem>
-                <SelectItem className="rounded-lg" value="Returned">
-                  Returned
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Customer details card */}
-          <div className="bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black rounded-xl border border-primary/50 p-6">
-            <div className="flex items-center mb-4">
-              <UserIcon className="h-5 w-5 mr-2 text-primary" />
-              <h3 className="text-lg font-semibold">Customer Details</h3>
-            </div>
-            {user ? (
-              <div className="space-y-3">
-                <div className="flex">
-                  <span className="font-medium min-w-[80px]">Name:</span>
-                  <span className="text-muted-foreground">{user.name}</span>
-                </div>
-                <div className="flex">
-                  <span className="font-medium min-w-[80px]">Email:</span>
-                  <span className="text-muted-foreground">{user.email}</span>
-                </div>
-                <div className="flex">
-                  <span className="font-medium min-w-[80px]">Phone:</span>
-                  <span className="text-muted-foreground">{user.phone}</span>
-                </div>
-                <div className="flex">
-                  <span className="font-medium min-w-[80px]">Address:</span>
-                  <span className="text-muted-foreground">{user.address}</span>
-                </div>
-              </div>
-            ) : (
-              <div className="text-muted-foreground italic">User details not available</div>
-            )}
-          </div>
-
-          {/* Product specifications */}
-          <div className="bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black rounded-xl border border-primary/50 p-6">
-            {/* <div className="border-t border-primary/20 p-6"> */}
+          {/* Right sidebar with status update and customer info */}
+          <div className="space-y-4 ">
+            {/* Status update card */}
+            <div className="bg-primary/5  dark:bg-gradient-to-br from-primary/10 via-black to-primary/10 rounded-xl border border-primary/75 p-6">
               <div className="flex items-center mb-4">
-                <Info className="h-5 w-5 mr-2 text-primary" />
-                <h3 className="text-lg font-semibold">Product Specifications</h3>
+                <Package className="h-6 w-6 mr-2 text-primary" />
+                <h3 className="text-xl font-semibold">Update Order Status</h3>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {orderItem.product.productInfo.details.map((item) => (
-                  <div key={item.key} className="flex">
-                    <span className="font-medium min-w-[120px]">{item.key}:</span>
-                    <span className="text-muted-foreground">{item.value}</span>
+              <Select onValueChange={(value) => handleOrderStatusUpdate(value)} defaultValue={orderItem.status}>
+                <SelectTrigger className="w-full border-primary/40 bg-primary/20 rounded-xl px-4 py-2 mt-2">
+                  <SelectValue placeholder="Select Status" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl dark:border-primary/30">
+                  <SelectItem className="rounded-lg" value="OrderConfirmed">
+                    Confirmed
+                  </SelectItem>
+                  <SelectItem className="rounded-lg" value="Shipped">
+                    Shipped
+                  </SelectItem>
+                  <SelectItem className="rounded-lg" value="Delivered">
+                    Delivered
+                  </SelectItem>
+                  <SelectItem className="rounded-lg" value="Cancelled">
+                    Cancelled
+                  </SelectItem>
+                  <SelectItem className="rounded-lg" value="Returned">
+                    Returned
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Customer details card */}
+            <div className="bg-primary/5  dark:bg-gradient-to-br from-primary/10 via-black to-primary/10 rounded-xl border border-primary/75 p-6">
+              <div className="flex items-center mb-4">
+                <UserIcon className="h-6 w-6 mr-2 text-primary" />
+                <h3 className="text-xl font-semibold">Customer Details</h3>
+              </div>
+              {user ? (
+                <div className="space-y-3">
+                  <div className="flex">
+                    <span className="font-medium min-w-[80px]">Name:</span>
+                    <span className="text-accent-foreground/85">{user.name}</span>
                   </div>
-                ))}
-              </div>
-            {/* </div> */}
+                  <div className="flex">
+                    <span className="font-medium min-w-[80px]">Email:</span>
+                    <span className="text-accent-foreground/85">{user.email}</span>
+                  </div>
+                  <div className="flex">
+                    <span className="font-medium min-w-[80px]">Phone:</span>
+                    <span className="text-accent-foreground/85">{user.phone}</span>
+                  </div>
+                  <div className="flex">
+                    <span className="font-medium min-w-[80px]">Address:</span>
+                    <span className="text-accent-foreground/85">{user.address}</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-muted-foreground italic">User details not available</div>
+              )}
+            </div>
           </div>
         </div>
+        {/* Product specifications */}
+        <div className="bg-primary/5  dark:bg-gradient-to-br from-primary/10 via-black to-primary/10 rounded-xl border border-primary/75 p-6">
+          {/* <div className="border-t border-primary/20 p-6"> */}
+          <div className="flex items-center mb-4">
+            <Info className="h-6 w-6 mr-2 text-primary" />
+            <h3 className="text-xl font-semibold">Product Specifications</h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3">
+            {orderItem.product.productInfo.details.map((item) => (
+              <div key={item.key} className="flex flex-col md:flex-row">
+                <span className="font-medium min-w-[120px]">{item.key}:</span>
+                <span className="text-accent-foreground/80">{item.value}</span>
+              </div>
+            ))}
+          </div>
+          {/* </div> */}
+        </div>
+
       </div>
     </div>
   )

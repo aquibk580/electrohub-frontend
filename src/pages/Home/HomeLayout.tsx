@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setPfp, setUser } from "@/redux/slices/user";
 import axios from "../../lib/axios";
+import API from "axios";
 import { ChatBot } from "@/components/Home/ChatBot";
 // import { ChatBot } from "@/components/Home/NewChatbot";
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
@@ -49,14 +50,21 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
           dispatch(setPfp(user.pfp));
         }
       } catch (error: any) {
-        if (axios.isAxiosError(error)) {
-          if (error.response?.status === 401) {
-            console.warn("User is unauthorized.");
-          } else if (error.response?.status === 404) {
-            console.warn("User not found.");
-          } else {
-            console.error("Error fetching user data:", error);
+        if (API.isAxiosError(error)) {
+          const status = error.response?.status;
+
+          switch (status) {
+            case 401:
+              console.warn("User is unauthorized. Logging out...");
+              break;
+            case 404:
+              console.warn("User not found.");
+              break;
+            default:
+              console.error("Error fetching user data:", error.message);
           }
+        } else {
+          console.error("Non-Axios error:", error);
         }
       }
     };
@@ -64,7 +72,6 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
       fetchUserData();
     }
   }, [isAuthenticated, dispatch]);
-
 
   useEffect(() => {
     const handleScroll = () => {
@@ -82,12 +89,15 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="selection:bg-primary selection:text-primary-foreground">
       <Navbar />
       <div className="pt-[4rem] lg:pt-[6.7rem] ">{children}</div>
-      <div className={` transition-opacity duration-500 ${isVisible ? "opacity-100" : "opacity-0"}`}>
-
-      <ChatBot
-        botName="Electro Bot"
-        welcomeMessage="👋 Hi there! How can I help you today?"
-      />
+      <div
+        className={` transition-opacity duration-500 ${
+          isVisible ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <ChatBot
+          botName="Electro Bot"
+          welcomeMessage="👋 Hi there! How can I help you today?"
+        />
       </div>
       <Footer />
     </div>

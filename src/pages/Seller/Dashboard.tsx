@@ -32,6 +32,7 @@ export default function Dashboard() {
     Array<Category & { productCount: string }>
   >([]);
 
+  const [productsPerPage, setProductsPerPage] = useState(5);
   const [selectedTab, setSelectedTab] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,7 +40,7 @@ export default function Dashboard() {
   const [salesGraph, setSalesGraph] = useState<
     Array<{ date: string; amount: number }>
   >([]);
-  const ordersPerPage = 5;
+  
 
   // Combined data loading
   useEffect(() => {
@@ -54,7 +55,7 @@ export default function Dashboard() {
           setStats([
             { label: "Total Orders", value: ordersResponse.data?.orders?.length },
             {
-              label: "Order Items overtime",
+              label: "Order Items Overtime",
               value: ordersResponse.data?.orders?.reduce(
                 (acc: number, order: Order) => acc + order.orderItems.length,
                 0
@@ -72,7 +73,7 @@ export default function Dashboard() {
               ),
             },
             {
-              label: "Fulfilled orders? overtime",
+              label: "Fulfilled Orders Overtime",
               value: ordersResponse.data?.orders?.reduce(
                 (acc: number, order: Order) =>
                   acc +
@@ -150,11 +151,12 @@ export default function Dashboard() {
     return result;
   }, [allOrderItems, searchTerm, selectedTab]);
 
-  const totalPages = Math.ceil(filteredOrders?.length / ordersPerPage);
-  const paginatedOrders = (filteredOrders || []).slice(
-    (currentPage - 1) * ordersPerPage,
-    currentPage * ordersPerPage
-  );
+  const totalPages = Math.ceil(filteredOrders?.length / productsPerPage);
+const paginatedOrders = (filteredOrders || []).slice(
+  (currentPage - 1) * productsPerPage,
+  currentPage * productsPerPage
+);
+
 
   // Render skeleton while loading
   if (isLoading) {
@@ -186,9 +188,9 @@ export default function Dashboard() {
             content: `${import.meta.env.VITE_APP_URL}/seller/dashboard`,
           }
         ]}></Helmet>
-      <div className="border border-primary/30 bg-primary/5  dark:bg-gradient-to-br from-black via-primary/10 to-black rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm">
+      <div className="border border-primary/75 bg-primary/5  dark:bg-gradient-to-br from-primary/5 via-slate-900/25 to-primary/5 rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm">
         <h2 className="text-2xl text-primary font-semibold">Orders</h2>
-        <Card className="w-full lg:w-[95%] flex flex-nowrap gap-4 text-secondary-foreground bg-primary/10 border-primary shadow-none rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x mx-auto">
+        <Card className="w-full lg:w-[95%] flex flex-nowrap gap-4 text-secondary-foreground bg-primary/10 border-primary/70 shadow-none rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x mx-auto">
           <div className="flex items-center pl-6 space-x-2 text-primary">
             <CalendarCheck className="w-6 h-6" />
             <span className="font-semibold text-lg">Today</span>
@@ -196,7 +198,7 @@ export default function Dashboard() {
           {stats?.map((stat) => (
             <div
               key={stat.label}
-              className="p-3 px-4 pr-10 border-l-2 border-primary/50 min-w-[200px] flex flex-col"
+              className="p-3 px-4 pr-10 border-l-2 border-primary/45  min-w-[200px] flex flex-col"
             >
               <div className="text-sm">{stat.label}</div>
               <AnimatedCounter end={String(stat.value)} duration={500} />
@@ -208,7 +210,7 @@ export default function Dashboard() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Sales Statistics */}
-        <Card>
+        <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-slate-900/20 to-primary/5">
           <CardHeader>
             <CardTitle>Weekly Sales</CardTitle>
             <CardDescription>Order values over time</CardDescription>
@@ -246,7 +248,7 @@ export default function Dashboard() {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-        <div className="max-w-lg">
+        <div >
           <ChartPie
             loading={false}
             categories={categories}
@@ -255,7 +257,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="space-y-3 border border-primary/30 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black  p-3 rounded-xl shadow-sm  animate__animated animate__fadeIn">
+      <div className="space-y-3 border border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/5 via-slate-900/30 to-primary/5  p-3 rounded-xl shadow-sm  animate__animated animate__fadeIn">
         <h2 className="text-xl pl-2 text-primary font-semibold">
           Orders Management
         </h2>
@@ -264,18 +266,18 @@ export default function Dashboard() {
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-secondary-foreground" />
             <Input
               placeholder="Search Order..."
-              className="pl-8 bg-transparent border-primary/30 rounded-full transition-colors"
+              className="pl-8 bg-white dark:bg-black border-primary/30 rounded-full transition-colors"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
-          <div className="flex gap-2">
+          {/* <div className="flex gap-2">
             <Button className="bg-primary text-primary-foreground shadow-md border rounded-lg px-5 py-3 hover:bg-primary/50 flex items-center gap-2">
               <Filter size={24} />
               <span className="hidden sm:block font-medium">Filter</span>
             </Button>
-          </div>
+          </div> */}
         </div>
         <Tabs
           defaultValue="All"
@@ -338,7 +340,20 @@ export default function Dashboard() {
                   {paginatedOrders?.map((orderItem: OrderItem) => (
                     <TableRow
                       key={orderItem.id}
-                      className="border-b h-[60px] hover:bg-primary/5"
+                      onClick={() =>
+                        navigate(
+                          `/seller/dashboard/orders/${orderItem.id}`,
+                          {
+                            state: {
+                              user: orders.find(
+                                (order) => order.id === orderItem.orderId
+                              )?.user,
+                              orderItem,
+                            },
+                          }
+                        )
+                      }
+                      className="border-b-primary/30 cursor-pointer h-[60px] hover:bg-primary/5"
                     >
                       <TableCell>
                         <div className="flex items-center gap-5">
@@ -436,9 +451,9 @@ export default function Dashboard() {
       <div className="flex p-2 items-center justify-between">
         <div className="flex whitespace-nowrap space-x-2 items-center">
           <label className="text-sm">Items per page</label>
-          <Select>
+          <Select onValueChange={(value) => setProductsPerPage(Number(value))} >
             <SelectTrigger className="w-[70px]">
-              <SelectValue placeholder="5" />
+              <SelectValue  placeholder={String(productsPerPage)} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="5">5</SelectItem>

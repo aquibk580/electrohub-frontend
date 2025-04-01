@@ -83,7 +83,7 @@ export function SellerEditDialog() {
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="border shadow-none text-gray-600 mt-20 rounded-full"
+          className="border-primary shadow-none text-accent-foreground/80 mt-20 rounded-full"
         >
           Edit Profile
         </Button>

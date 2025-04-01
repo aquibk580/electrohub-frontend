@@ -112,7 +112,7 @@ export default function SellerContact(){
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 py-12">
-          <Card className="border-primary/20">
+          <Card className="border-primary/75 bg-primary/5">
             <CardContent className="pt-6">
               <div className="text-center space-y-4">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
@@ -134,7 +134,7 @@ export default function SellerContact(){
             </CardContent>
           </Card>
 
-          <Card className="border-primary/20">
+          <Card className="border-primary/75">
             <CardContent className="pt-6">
               <div className="text-center space-y-4">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
@@ -155,7 +155,7 @@ export default function SellerContact(){
             </CardContent>
           </Card>
 
-          <Card className="border-primary/20">
+          <Card className="border-primary/75 bg-primary/5">
             <CardContent className="pt-6">
               <div className="text-center space-y-4">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
@@ -176,7 +176,7 @@ export default function SellerContact(){
         </div>
 
         <div className="max-w-3xl mx-auto">
-          <Card className="border-primary/20">
+          <Card className="border-primary/75  ">
             <CardContent className="pt-6">
               <h2 className="text-2xl font-bold text-primary text-center mb-6">
                 Submit a Support Request

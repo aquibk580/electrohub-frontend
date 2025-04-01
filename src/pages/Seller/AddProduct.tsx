@@ -326,7 +326,7 @@ function MainAddProductForm() {
   useEffect(() => {
     const getAllCategories = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/categories`)
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/categories/all`)
         if (response.status === 200) {
           setCategories(response.data)
         }

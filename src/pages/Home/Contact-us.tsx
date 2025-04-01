@@ -56,7 +56,7 @@ export default function ContactUs() {
   };
 
   return (
-    <div className="container mx-auto px-4 pt-20 md:py-12">
+    <div className="container mx-auto px-4 pt-16 md:py-12">
       <Helmet>
         <title>Contact us</title>
         <meta name="description" content="Electrohub Contact Us Page" />
@@ -71,7 +71,7 @@ export default function ContactUs() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 py-12">
+        <div className="grid grid-cols-1  lg:grid-cols-3 gap-8 py-12">
           <Card className="border-primary/20">
             <CardContent className="pt-6">
               <div className="text-center space-y-4">
