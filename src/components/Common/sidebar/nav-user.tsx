@@ -38,23 +38,6 @@ export function NavUser({ user, userRole }: NavUserProps) {
   const dispatch = useDispatch<AppDispatch>();
   const { isMobile } = useSidebar();
 
-  // const menuItems = {
-  //   admin: [
-  //     { icon: Sparkles, label: "Upgrade to Pro" },
-  //     { icon: BadgeCheck, label: "Account" },
-  //     { icon: CreditCard, label: "Billing" },
-  //     { icon: Bell, label: "Notifications" },
-  //   ],
-  //   seller: [
-  //     { icon: Store, label: "Shop Settings" },
-  //     { icon: User, label: "Profile" },
-  //     { icon: Bell, label: "Notifications" },
-  //     { icon: CreditCard, label: "Payment Info" },
-  //   ]
-  // }
-
-  // const currentMenuItems = menuItems[userRole]
-
   const handleSellerLogout = async () => {
     try {
       const response = await axios.get(

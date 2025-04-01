@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import {
   GalleryVerticalEnd,
@@ -10,12 +8,10 @@ import {
   User,
   ShoppingBag,
   ClipboardList,
-  Bell,
   Shield,
   PackageSearch,
   BadgePlus,
   CircleUserRound,
-  Home,
   FolderKanban,
   Mail,
   ShieldCheck,

@@ -33,9 +33,13 @@ export const sellerSlice = createSlice({
       state.isAuthenticated = false;
       state.seller = null;
     },
+    setSellerIsAuthenticated: (state, action: PayloadAction<boolean>) => {
+      state.isAuthenticated = action.payload;
+    },
   },
 });
 
-export const { setSeller, clearSeller } = sellerSlice.actions;
+export const { setSeller, clearSeller, setSellerIsAuthenticated } =
+  sellerSlice.actions;
 
 export default sellerSlice.reducer;

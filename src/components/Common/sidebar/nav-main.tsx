@@ -1,9 +1,11 @@
-"use client";
-
 import { ChevronRight, type LucideIcon } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarMenu,
@@ -16,7 +18,6 @@ import {
 
 export function NavMain({
   items,
-
 }: {
   items: {
     title: string;
@@ -24,13 +25,12 @@ export function NavMain({
     icon?: LucideIcon;
     items?: { title: string; url: string; icon?: LucideIcon }[];
   }[];
-
 }) {
   const location = useLocation(); // Get current path
   const navigate = useNavigate(); // React Router navigation
 
   return (
-    <SidebarGroup >
+    <SidebarGroup>
       <SidebarMenu className="pt-7">
         {items.map((item) =>
           item.items && item.items.length > 0 ? (
@@ -41,7 +41,7 @@ export function NavMain({
               className="group/collapsible font-medium"
             >
               <SidebarMenuItem>
-              <CollapsibleTrigger asChild>
+                <CollapsibleTrigger asChild>
                   <SidebarMenuButton tooltip={item.title} className="">
                     {item.icon && <item.icon />}
                     <span className="pl-1.5  py-5">{item.title}</span>
@@ -55,10 +55,12 @@ export function NavMain({
                       <SidebarMenuSubItem key={subItem.title}>
                         <SidebarMenuSubButton asChild>
                           <Link
-                          to={subItem.url}
+                            to={subItem.url}
                             // ref={subItem.url}
                             className={`my-1 pl-9 ${
-                              location.pathname === subItem.url ? "bg-accent text-black" : ""
+                              location.pathname === subItem.url
+                                ? "bg-accent text-black"
+                                : ""
                             }`}
                           >
                             {subItem.icon && <subItem.icon />}
@@ -73,16 +75,17 @@ export function NavMain({
             </Collapsible>
           ) : (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild  >
+              <SidebarMenuButton asChild>
                 <button
                   onClick={() => navigate(item.url)}
                   className={`flex w-full py-5  rounded-lg transition-all duration-200 
     ${location.pathname === item.url ? "bg-accent text-" : "hover:bg-accent"}`}
                 >
-                  {item.icon && <item.icon className=" min-h-[1.1rem] min-w-[1.1rem] " />}
+                  {item.icon && (
+                    <item.icon className=" min-h-[1.1rem] min-w-[1.1rem] " />
+                  )}
                   <span className="ml-1 font-medium">{item.title}</span>
                 </button>
-
               </SidebarMenuButton>
             </SidebarMenuItem>
           )

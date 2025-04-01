@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,7 +21,7 @@ import {
 import "animate.css";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
-import { setSeller } from "@/redux/slices/seller";
+import { setSeller, setSellerIsAuthenticated } from "@/redux/slices/seller";
 import { toast } from "react-toastify";
 import { GoogleButton } from "@/components/Auth/GoogleButton";
 import { clearUser } from "@/redux/slices/user";
@@ -49,7 +47,7 @@ export default function SellerLogin() {
       );
       if (response.status === 200) {
         dispatch(setSeller(response.data.seller));
-        dispatch(clearUser())
+        dispatch(clearUser());
         navigate("/seller/dashboard");
         toast.success("Signed in successfully", {
           position: "top-center",
@@ -81,18 +79,20 @@ export default function SellerLogin() {
 
   const handleGoogleSignIn = async () => {
     try {
-      const redirectUrl = `${import.meta.env.VITE_FRONTEND_URL
-        }/seller/dashboard`;
+      const redirectUrl = `${
+        import.meta.env.VITE_FRONTEND_URL
+      }/seller/dashboard`;
       const userType = "seller";
-
-      window.location.href = `${import.meta.env.VITE_API_URL
-        }/api/auth/google?redirectUrl=${encodeURIComponent(
-          redirectUrl
-        )}&userType=${encodeURIComponent(userType)}`;
+      dispatch(setSellerIsAuthenticated(true));
+      window.location.href = `${
+        import.meta.env.VITE_API_URL
+      }/api/auth/google?redirectUrl=${encodeURIComponent(
+        redirectUrl
+      )}&userType=${encodeURIComponent(userType)}`;
     } catch (error: any) {
       console.log(error);
     } finally {
-      dispatch(clearUser())
+      dispatch(clearUser());
     }
   };
 
@@ -122,7 +122,6 @@ export default function SellerLogin() {
                   },
                 })}
                 placeholder="Email ID"
-
               />
               {errors.email && (
                 <p className="text-red-500 text-sm">
