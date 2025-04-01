@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Loader2, ShieldCheck } from "lucide-react";
+import { Loader2, ShieldCheck, Users } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -7,14 +7,8 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
+import { DataTable } from "@/components/Admin/data-table";
 import { formatDate } from "@/lib/utils";
 import { Admin } from "@/types/entityTypes";
 import { toast } from "react-toastify";
@@ -22,7 +16,7 @@ import axios from "@/lib/axios";
 
 const Admins = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [admins, setAdmin] = useState<Admin[]>([]);
+  const [admins, setAdmins] = useState<Admin[]>([]);
 
   useEffect(() => {
     const getAllAdmins = async () => {
@@ -31,7 +25,7 @@ const Admins = () => {
           `${import.meta.env.VITE_API_URL}/api/admin/admins`
         );
         if (response.status === 200) {
-          setAdmin(response.data);
+          setAdmins(response.data);
         }
       } catch (error: any) {
         toast.error(error.message, {
@@ -46,70 +40,95 @@ const Admins = () => {
     getAllAdmins();
   }, []);
 
+  const tableHeaders = [
+    { key: "srNo", label: "Sr.No" },
+    { key: "id", label: "ID" },
+    { key: "name", label: "Name" },
+    { key: "email", label: "Email" },
+    { key: "createdAt", label: "Admin Since" },
+  ];
+
+  const tableData = admins.map((admin, index) => ({
+    srNo: index + 1,
+    id: admin.id,
+    name: admin.name,
+    email: (
+      <span className="inline-flex items-center rounded-md bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
+        {admin.email}
+      </span>
+    ),
+    createdAt: formatDate(admin.createdAt),
+  }));
+
+  // const handleRowClick = (row: any) => {
+  //   // Handle row click if needed
+  //   console.log("Admin clicked:", row);
+  // };
+
   return (
-  <div className="p-4">
+    <div className="p-4">
       <Card className="rounded-xl bg-primary/5 border-primary/75 dark:bg-gradient-to-br from-primary/10 via-slate-900/20 to-primary/5">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <ShieldCheck className="h-5 w-5" />
-          Admin List
-        </CardTitle>
-        <CardDescription>Admins on Electrohub</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-6">
-          {/* Users Table */}
-          <div className="rounded-xl border overflow-hidden bg-white dark:bg-black border-primary/75">
-            <Table >
-              <TableHeader >
-                <TableRow className="border-b-primary hover:bg-primary/30  bg-primary/30">
-                  <TableHead>Sr.No</TableHead>
-                  <TableHead>ID</TableHead>
-                  <TableHead className="hidden md:table-cell">Name</TableHead>
-                  <TableHead className="hidden sm:table-cell">Email</TableHead>
-                  <TableHead className="hidden lg:table-cell">
-                    Admin Since
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {!loading ? (
-                  admins.map((user, index) => (
-                    <TableRow key={user.id} className="border-primary/25">
-                      <TableCell className="font-medium">{index + 1}</TableCell>
-                      <TableCell>{user.id}</TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {user.name}
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <span className="inline-flex items-center rounded-md bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
-                          {user.email}
-                        </span>
-                      </TableCell>
-                      <TableCell className="hidden lg:table-cell">
-                        {formatDate(user.createdAt)}
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={5} className="py-10">
-                      <div className="flex flex-col justify-center items-center">
-                        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-                        <p className="text-muted-foreground">
-                          Loading Admin Details...
-                        </p>
-                      </div>
-                    </td>
-                  </tr>
-                )}
-              </TableBody>
-            </Table>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <ShieldCheck className="h-5 w-5" />
+            Admin List
+          </CardTitle>
+          <CardDescription>Manage Admins on Electrohub</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-6">
+            {loading ? (
+              <AdminTableSkeleton />
+            ) : (
+              <DataTable
+                headers={tableHeaders}
+                data={tableData}
+                // type="admins"
+                // onRowClick={handleRowClick}
+              />
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+const AdminTableSkeleton = () => {
+  return (
+    <Card className="rounded-xl overflow-hidden">
+      <CardContent className="p-0">
+        <div className="w-full">
+          <div className="min-w-[800px] rounded-xl overflow-hidden">
+            {/* Skeleton Header */}
+            <div className="bg-primary/75 flex p-3">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="flex-1 min-w-32">
+                  <Skeleton className="h-6 w-24 bg-primary/40" />
+                </div>
+              ))}
+              <div className="w-[50px]"></div>
+            </div>
+            
+            {/* Skeleton Rows */}
+            <div className="bg-white dark:bg-black">
+              {[1, 2, 3, 4].map((row) => (
+                <div key={row} className="flex items-center p-3 border-b border-primary/25">
+                  {[1, 2, 3, 4, 5].map((cell) => (
+                    <div key={cell} className="flex-1 min-w-32">
+                      <Skeleton className="h-5 w-full max-w-32 bg-primary/10" />
+                    </div>
+                  ))}
+                  <div className="w-[50px] flex justify-center">
+                    <Skeleton className="h-5 w-5 bg-primary/10" />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </CardContent>
     </Card>
-  </div>
   );
 };
 

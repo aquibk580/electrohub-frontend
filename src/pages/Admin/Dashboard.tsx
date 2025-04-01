@@ -27,6 +27,7 @@ import { formatDate } from "@/lib/utils";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { ChartPie } from "@/components/Admin/Chart-Pie";
+import DashboardSkeleton from "@/components/Admin/Skeletons";
 const IndiaSalesMap = React.lazy(
   () => import("@/components/Admin/india-sales-map")
 );
@@ -179,10 +180,11 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col gap-4 p-4">
       {statisticsLoading ? (
-        <div className="flex flex-col justify-center items-center h-screen">
-          <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-          <p className="text-muted-foreground">Loading Sales Statistcis...</p>
-        </div>
+        // <div className="flex flex-col justify-center items-center h-screen">
+        //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+        //   <p className="text-muted-foreground">Loading Sales Statistcis...</p>
+        // </div>
+        <DashboardSkeleton/>
       ) : (
         <>
           <DashboardStats stats={stats} variant="payment" />

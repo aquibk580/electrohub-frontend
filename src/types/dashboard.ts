@@ -10,7 +10,7 @@ export type TableHeader = {
   export type TableProps = {
     headers: TableHeader[]
     data: TableData[]
-    type: "seller" | "topSeller" | "allSeller" | "allBuyer" | "orders" | "products" | "allPayments" | "withdrawlRequest" | "customerRefunds"| "allTransactions"
+    type?: "seller" | "topSeller" | "allSeller" | "allBuyer" | "orders" | "products" | "allPayments" | "withdrawlRequest" | "customerRefunds"| "allTransactions"
     onRowClick?: (row: TableData) => void
   }
   
