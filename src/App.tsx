@@ -44,7 +44,6 @@ import ContentManagement from "./pages/Admin/ContentManagement";
 import AdminSettings from "./pages/Admin/Settings";
 import LogsAndSecurity from "./pages/Admin/Logs";
 import Demo from "./pages/Admin/demo";
-import SellerProduct from "./pages/Admin/Seller-Product";
 import ViewProduct from "./pages/Seller/ViewProduct";
 import EditProduct from "./pages/Seller/EditProduct";
 import ViewOrder from "./pages/Seller/ViewOrder";
@@ -488,14 +487,6 @@ const App = () => {
             element={
               <AdminLayout>
                 <Demo />
-              </AdminLayout>
-            }
-          />
-          <Route
-            path="sellerproduct"
-            element={
-              <AdminLayout>
-                <SellerProduct />
               </AdminLayout>
             }
           />
