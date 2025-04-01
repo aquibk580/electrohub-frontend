@@ -52,25 +52,29 @@ export default function SellerLayout({
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/");
+      return;
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate]);``
+  if (isAuthenticated) {
+    return (
+      <MainNav>
+        <Helmet
+          title=" Seller"
+          meta={[
+            {
+              name: "og:url",
+              property: "og:url",
+              content: `${import.meta.env.VITE_APP_URL}/seller/dashboard`,
+            },
+          ]}
+        ></Helmet>
 
-  return (
-    <MainNav>
-      <Helmet
-        title=" Seller"
-        meta={[
-          {
-            name: "og:url",
-            property: "og:url",
-            content: `${import.meta.env.VITE_APP_URL}/seller/dashboard`,
-          },
-        ]}
-      ></Helmet>
-
-      <div className=" h-full p-1.5 md:p-6 bg-white dark:bg-black">
-        {children}
-      </div>
-    </MainNav>
-  );
+        <div className=" h-full p-1.5 md:p-6 bg-white dark:bg-black">
+          {children}
+        </div>
+      </MainNav>
+    );
+  } else {
+    return null;
+  }
 }

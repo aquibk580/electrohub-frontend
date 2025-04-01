@@ -2,6 +2,7 @@ import axios from "axios";
 import { store } from "@/redux/store";
 import { clearUser } from "@/redux/slices/user";
 import { clearSeller } from "@/redux/slices/seller";
+import { clearAdmin } from "@/redux/slices/admin";
 
 // Enable credentials (cookies) for every request
 axios.defaults.withCredentials = true;
@@ -15,11 +16,19 @@ const API = axios.create({
 API.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (axios.isAxiosError(error) && error.response?.status === 401) {
+    if (
+      axios.isAxiosError(error) &&
+      error.response?.data?.flag === "NoTokenProvided"
+    ) {
       store.dispatch(clearUser());
       store.dispatch(clearSeller());
     }
-    return Promise.reject(error);
+    if (
+      axios.isAxiosError(error) &&
+      error.response?.data?.flag === "NoAdminTokenProvided"
+    ) {
+      store.dispatch(clearAdmin());
+    }
   }
 );
 
