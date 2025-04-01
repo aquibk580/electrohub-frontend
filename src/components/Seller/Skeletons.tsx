@@ -106,154 +106,192 @@ export function ViewOrderSkeleton() {
 }
 
 // Dashboard Skeleton
-export function DashboardSkeleton() {
+type SkeletonProps = {
+  rows?: number;
+  showHeader?: boolean;
+  className?: string;
+};
+
+// Component to display different skeleton types based on props
+export const DynamicSkeleton = ({ 
+  type, 
+  ...props 
+}: { 
+  type: 'stats' | 'chart' | 'pie' | 'table' | 'tabs' | 'pagination'
+} & SkeletonProps) => {
+  switch (type) {
+    case 'stats':
+      return <StatsCardSkeleton count={props.rows || 4} />;
+    case 'chart':
+      return <ChartSkeleton title={props.showHeader ? "Weekly Sales" : undefined} />;
+    case 'pie':
+      return <PieChartSkeleton title={props.showHeader ? "Product Categories" : undefined} />;
+    case 'table':
+      return <TableSkeleton rows={props.rows || 5} />;
+    case 'tabs':
+      return <TabsSkeleton />;
+    case 'pagination':
+      return <PaginationSkeleton />;
+    default:
+      return <Skeleton className={props.className || "h-10 w-full"} />;
+  }
+};
+
+// Stats Card Skeleton
+export const StatsCardSkeleton = ({ count = 4 }: { count?: number }) => {
   return (
-    <div className="space-y-5">
-      {/* Orders Stats Card Skeleton */}
-      <div className="border border-primary/30 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm">
-        <h2 className="text-2xl text-primary font-semibold">Orders</h2>
-        <Card className="w-full lg:w-[95%] flex flex-nowrap gap-4 text-secondary-foreground bg-primary/10 border-primary shadow-none rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x mx-auto">
-          <div className="flex items-center pl-6 space-x-2 text-primary">
-            <Skeleton className="w-6 h-6 rounded-full" />
-            <Skeleton className="h-6 w-20" />
-          </div>
-          {Array(4).fill(0).map((_, index) => (
-            <div key={index} className="p-3 px-4 pr-10 border-l-2 border-primary/50 min-w-[200px] flex flex-col">
-              <Skeleton className="h-4 w-24 mb-2" />
-              <Skeleton className="h-8 w-16" />
-            </div>
+    <Card className="w-full lg:w-[95%] flex flex-nowrap gap-4 text-secondary-foreground bg-primary/10 border-primary/70 shadow-none rounded-lg overflow-x-auto whitespace-nowrap scrollbar-x mx-auto">
+      <div className="flex items-center pl-6 space-x-2 text-primary">
+        <CalendarCheck className="w-6 h-6 opacity-50" />
+        <Skeleton className="h-6 w-20" />
+      </div>
+      {Array(count).fill(0).map((_, index) => (
+        <div key={index} className="p-3 px-4 pr-10 border-l-2 border-primary/45 min-w-[200px] flex flex-col">
+          <Skeleton className="h-4 w-24 mb-2" />
+          <Skeleton className="h-8 w-16" />
+        </div>
+      ))}
+    </Card>
+  );
+};
+
+// Chart Skeleton
+export const ChartSkeleton = ({ title }: { title?: string }) => {
+  return (
+    <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-slate-900/20 to-primary/5">
+      <CardHeader>
+        {title ? (
+          <CardTitle>{title}</CardTitle>
+        ) : (
+          <Skeleton className="h-6 w-32" />
+        )}
+        <Skeleton className="h-4 w-48" />
+      </CardHeader>
+      <CardContent className="h-[300px] mt-10">
+        <Skeleton className="h-full w-full rounded-lg" />
+      </CardContent>
+    </Card>
+  );
+};
+
+// Pie Chart Skeleton
+export const PieChartSkeleton = ({ title }: { title?: string }) => {
+  return (
+    <Card className="border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-slate-900/20 to-primary/5">
+      <CardHeader>
+        {title ? (
+          <CardTitle>{title}</CardTitle>
+        ) : (
+          <Skeleton className="h-6 w-40" />
+        )}
+        <Skeleton className="h-4 w-56" />
+      </CardHeader>
+      <CardContent className="h-[300px] pt-4 flex justify-center">
+        <Skeleton className="h-64 w-64 rounded-full" />
+      </CardContent>
+    </Card>
+  );
+};
+
+// Table Skeleton
+export const TableSkeleton = ({ rows = 5 }: { rows?: number }) => {
+  return (
+    <div className="overflow-x-auto">
+      <Table className="w-full">
+        <TableHeader className="bg-primary overflow-hidden">
+          <TableRow className="rounded-3xl border-none hover:bg-transparent">
+            <TableHead className="text-primary-foreground font-semibold rounded-tl-lg rounded-bl-lg">
+              Order
+            </TableHead>
+            <TableHead className="text-primary-foreground font-semibold">
+              Customer
+            </TableHead>
+            <TableHead className="text-primary-foreground font-semibold">
+              Date
+            </TableHead>
+            <TableHead className="text-primary-foreground font-semibold">
+              Total
+            </TableHead>
+            <TableHead className="text-primary-foreground font-semibold">
+              Status
+            </TableHead>
+            <TableHead className="text-right text-primary-foreground font-semibold rounded-br-lg rounded-tr-lg">
+              Action
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {Array(rows).fill(0).map((_, index) => (
+            <TableRow key={index} className="border-b h-[60px] hover:bg-primary/5">
+              <TableCell>
+                <div className="flex items-center gap-5">
+                  <Skeleton className="h-16 w-16 rounded-md" />
+                  <Skeleton className="h-4 w-56" />
+                </div>
+              </TableCell>
+              <TableCell className="space-x-2 whitespace-nowrap">
+                <Skeleton className="h-8 w-8 rounded-full inline-block" />
+                <Skeleton className="h-4 w-24 inline-block" />
+              </TableCell>
+              <TableCell className="whitespace-nowrap">
+                <Skeleton className="h-4 w-24" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-4 w-16" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-6 w-20 rounded-md" />
+              </TableCell>
+              <TableCell className="text-right">
+                <Skeleton className="h-8 w-8 rounded-md ml-auto" />
+              </TableCell>
+            </TableRow>
           ))}
-        </Card>
+        </TableBody>
+      </Table>
+    </div>
+  );
+};
+
+// Tabs Skeleton
+export const TabsSkeleton = () => {
+  return (
+    <Tabs
+     className="w-full overflow-x-auto scrollbar-x">
+      <TabsList className="flex min-w-max items-center justify-start bg-transparent rounded-none overflow-y-hidden whitespace-nowrap">
+        {["All", "Confirmed", "Shipped", "Delivered", "Cancelled", "Returned"].map((item) => (
+          <TabsTrigger
+            key={item}
+            className="px-4 py-2 border-b-8 text-sm w-[140px] rounded-none shadow-none border-transparent"
+            value={item}
+            disabled
+          >
+            <Skeleton className="h-4 w-20" />
+          </TabsTrigger>
+        ))}
+      </TabsList>
+    </Tabs>
+  );
+};
+
+// Pagination Skeleton
+export const PaginationSkeleton = () => {
+  return (
+    <div className="flex p-2 items-center justify-between">
+      <div className="flex whitespace-nowrap space-x-2 items-center">
+        <Skeleton className="h-4 w-24" />
+        <Skeleton className="h-8 w-16 rounded-md" />
       </div>
-
-      {/* Charts Section Skeleton */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Sales Statistics Skeleton */}
-        <Card>
-          <CardHeader>
-            <CardTitle><Skeleton className="h-6 w-32" /></CardTitle>
-            <Skeleton className="h-4 w-48" />
-          </CardHeader>
-          <CardContent className="h-[300px] mt-10">
-            <Skeleton className="h-full w-full rounded-lg" />
-          </CardContent>
-        </Card>
-        {/* Pie Chart Skeleton */}
-        <Card>
-          <CardHeader>
-            <CardTitle><Skeleton className="h-6 w-40" /></CardTitle>
-            <Skeleton className="h-4 w-56" />
-          </CardHeader>
-          <CardContent className="h-[300px] pt-4 flex justify-center">
-            <Skeleton className="h-64 w-64 rounded-full" />
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Orders Management Skeleton */}
-      <div className="space-y-3 border border-primary/30 bg-primary/5 dark:bg-gradient-to-br from-black via-primary/10 to-black p-3 rounded-xl shadow-sm animate__animated animate__fadeIn">
-        <h2 className="text-xl pl-2 text-primary font-semibold">
-          Orders Management
-        </h2>
-        <div className="flex flex-nowrap gap-2 items-center justify-between">
-          <Skeleton className="h-10 w-72 rounded-full" />
-          <Skeleton className="h-10 w-32 rounded-lg" />
-        </div>
-
-        {/* Tabs Skeleton */}
-        <Tabs defaultValue="All" className="w-full lg:w-[85%]">
-          <div className="w-full overflow-x-auto scrollbar-x">
-            <TabsList className="flex min-w-max items-center justify-start bg-transparent rounded-none overflow-y-hidden whitespace-nowrap">
-              {["All", "Confirmed", "Shipped", "Delivered", "Cancelled", "Returned"].map((item) => (
-                <TabsTrigger
-                  key={item}
-                  className="px-4 py-2 border-b-8 text-sm w-[140px] rounded-none shadow-none border-transparent"
-                  value={item}
-                  disabled
-                >
-                  <Skeleton className="h-4 w-20" />
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </div>
-        </Tabs>
-
-        {/* Table Skeleton */}
-        <Card className="p-2 md:p-4 border border-primary/30 rounded-xl overflow-hidden">
-          <div className="overflow-x-auto">
-            <Table className="w-full">
-              <TableHeader className="bg-primary overflow-hidden">
-                <TableRow className="rounded-3xl border-none hover:bg-transparent">
-                  <TableHead className="text-primary-foreground font-semibold rounded-tl-lg rounded-bl-lg">
-                    Order
-                  </TableHead>
-                  <TableHead className="text-primary-foreground font-semibold">
-                    Customer
-                  </TableHead>
-                  <TableHead className="text-primary-foreground font-semibold">
-                    Date
-                  </TableHead>
-                  <TableHead className="text-primary-foreground font-semibold">
-                    Total
-                  </TableHead>
-                  <TableHead className="text-primary-foreground font-semibold">
-                    Status
-                  </TableHead>
-                  <TableHead className="text-right text-primary-foreground font-semibold rounded-br-lg rounded-tr-lg">
-                    Action
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {Array(5).fill(0).map((_, index) => (
-                  <TableRow key={index} className="border-b h-[60px] hover:bg-primary/5">
-                    <TableCell>
-                      <div className="flex items-center gap-5">
-                        <Skeleton className="h-16 w-16 rounded-md" />
-                        <Skeleton className="h-4 w-56" />
-                      </div>
-                    </TableCell>
-                    <TableCell className="space-x-2 whitespace-nowrap">
-                      <Skeleton className="h-8 w-8 rounded-full inline-block" />
-                      <Skeleton className="h-4 w-24 inline-block" />
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap">
-                      <Skeleton className="h-4 w-24" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton className="h-4 w-16" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton className="h-6 w-20 rounded-md" />
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Skeleton className="h-8 w-8 rounded-md ml-auto" />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </Card>
-      </div>
-
-      {/* Pagination Skeleton */}
-      <div className="flex p-2 items-center justify-between">
-        <div className="flex whitespace-nowrap space-x-2 items-center">
-          <Skeleton className="h-4 w-24" />
-          <Skeleton className="h-8 w-16 rounded-md" />
-        </div>
-        <div className="flex items-center gap-1">
-          <Skeleton className="h-8 w-8 rounded-md" />
-          {Array(3).fill(0).map((_, index) => (
-            <Skeleton key={index} className="h-8 w-8 rounded-md" />
-          ))}
-          <Skeleton className="h-8 w-8 rounded-md" />
-        </div>
+      <div className="flex items-center gap-1">
+        <Skeleton className="h-8 w-8 rounded-md" />
+        {Array(3).fill(0).map((_, index) => (
+          <Skeleton key={index} className="h-8 w-8 rounded-md" />
+        ))}
+        <Skeleton className="h-8 w-8 rounded-md" />
       </div>
     </div>
   );
-}
+};
 
 // ProductList Skeleton
 export function ProductListSkeleton() {
