@@ -122,10 +122,10 @@ export default function Orders() {
         <div className="flex items-center w-full">
           <Input
             placeholder="Search your orders here"
-            className="w-full sm:w-auto flex-1 rounded-l-xl focus-visible:ring-0"
+            className="w-full sm:w-auto flex-1 rounded-l-xl border-accent-foreground/45 focus-visible:ring-0"
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <Button className="flex items-center gap-2 w-fit bg-green-900 text-white rounded-r-xl rounded-l-none ">
+          <Button className="flex items-center gap-2 w-fit bg-primary/70 text-white rounded-r-xl rounded-l-none ">
             <Search size={16} />{" "}
           </Button>
         </div>

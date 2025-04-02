@@ -151,7 +151,7 @@ const OrderDetails = () => {
   };
 
   return (
-    <div className="grid md:grid-cols-2 gap-6 ">
+    <div className="grid md:grid-cols-2 md:gap-4 lg:gap-6 ">
       <Helmet>
         <title>Order- {orderItem.product.name.substring(0, 100) + "..."}</title>
         <meta
@@ -215,7 +215,7 @@ const OrderDetails = () => {
       </Card>
 
       {/* Right Column */}
-      <div className="space-y-6">
+      <div className="md:space-y-3 lg:space-y-6">
         {/* Shipping Details */}
         <Card>
           <CardHeader>

@@ -1,5 +1,5 @@
 import { RootState } from "@/redux/store";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft,  ShoppingCart } from "lucide-react";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -20,15 +20,15 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <div className="min-h-screen dark:bg-muted py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen w-full dark:bg-muted/45 py-8 px-4 sm:px-6 lg:px-8">
       <nav>
         <div className="flex items-center justify-start mb-8">
           <Link to="/" className="text-gray-600 hover:text-gray-900">
             <ArrowLeft className="h-8 w-8 text-black dark:text-white" />
           </Link>
-          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-inherit flex-grow text-center">
-            Electrohub
-          </h2>
+          <div className="text-3xl flex items-center justify-center gap-2 font-extrabold text-gray-900 dark:text-inherit flex-grow text-center">
+           <ShoppingCart className="text-green-500"/> Electrohub
+          </div>
           <div className="w-6"></div>
         </div>
       </nav>

@@ -211,7 +211,7 @@ const Cart = () => {
               </p>
               <Link
                 to="/"
-                className="bg-green-700 hover:bg-green-800 transition-all p-2 px-5 rounded-lg text-white font-semibold shadow-md"
+                className="bg-primary/80 hover:bg-primary/90 transition-all p-2 px-5 rounded-lg text-white font-semibold shadow-md"
               >
                 Start Shopping
               </Link>

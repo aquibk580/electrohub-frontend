@@ -86,7 +86,7 @@ const ReviewEditModel = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-100 hover:bg-gray-100 text-blue-700">
+        <Button className="bg-blue-100 dark:bg-blue-800/30 border border-blue-500 rounded-xl hover:bg-gray-100 text-blue-700">
           <Edit className="w-5 h-5" />
         </Button>
       </DialogTrigger>

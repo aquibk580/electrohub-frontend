@@ -98,7 +98,7 @@ export default function UserLogin() {
   };
 
   return (
-    <div className="max-w-md w-full mx-auto space-y-8 sm:px-8 sm:p-4">
+    <div className=" md:max-w-md w-full     mx-auto space-y-8 sm:px-8 sm:p-4">
       <Card className="animate__animated animate__fadeIn shadow-lg rounded-xl">
         <CardHeader>
           <CardTitle className="text-3xl font-extrabold text-center">

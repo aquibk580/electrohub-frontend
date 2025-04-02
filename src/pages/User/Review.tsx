@@ -101,7 +101,7 @@ const Reviews = () => {
                     <h3 className="text-base sm:text-lg font-medium mb-2">
                       {review.product.name}
                     </h3>
-                    <div className="flex justify-center sm:justify-start items-center gap-2 mb-2">
+                    <div className="flex justify-center sm:justify-start items-center gap-1 mb-2">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
@@ -111,11 +111,12 @@ const Reviews = () => {
                             }`}
                         />
                       ))}
+                      <span className="ml-1 font-semibold">{review.rating}.0/5</span>
                     </div>
-                    <p className="text-gray-600 text-sm sm:text-base mb-3">
+                    <p className="text-accent-foreground/90 text-sm sm:text-base mb-3">
                       {review.content}
                     </p>
-                    <div className="flex justify-center sm:justify-start items-center gap-2 text-xs sm:text-sm text-gray-500 mb-3">
+                    <div className="flex justify-center sm:justify-start items-center gap-2 text-xs sm:text-sm text-accent-foreground/80 mb-3">
                       <span>{formatDate(review.createdAt)}</span>
                     </div>
                   </div>
@@ -131,7 +132,7 @@ const Reviews = () => {
                   />
                   <Button
                     onClick={() => handleDelete(review.id)}
-                    className="bg-red-100 hover:bg-gray-100 text-red-700 flex items-center md:w-auto shadow-none"
+                    className="bg-red-100 dark:bg-red-700/40 dark:border-red-500 border rounded-xl  hover:bg-gray-100 text-red-700 flex items-center md:w-auto shadow-none"
                   >
                     <Trash2 className="w-5 h-5" />
                   </Button>

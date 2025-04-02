@@ -45,7 +45,7 @@ export function FilterDropDown({
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button className="rounded-xl" variant="outline">
+        <Button className="rounded-xl " variant="outline">
           <Filter size={16} /> <span className="hidden sm:block">Filters</span>
         </Button>
       </DropdownMenuTrigger>

@@ -106,7 +106,7 @@ export default function SearchBar() {
 
       {/* Search Results Dropdown */}
       {isFocused && (searchTerm.length > 1 || filteredProducts.length > 0) && (
-        <div className="absolute mt-12 w-full bg-background rounded-xl border border-border shadow-lg z-50 overflow-hidden transition-all duration-200 ease-in-out">
+        <div className="absolute mt-2 md:mt-14 lg:mt-12 w-full bg-background rounded-xl border border-border shadow-lg z-50 overflow-hidden transition-all duration-200 ease-in-out">
           {isLoading ? (
             <div className="flex items-center justify-center p-4">
               <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />

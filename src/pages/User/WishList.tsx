@@ -102,7 +102,7 @@ export function Wishlist() {
             {wishlistItems.map((item) => (
               <div
                 key={item.id}
-                className="flex flex-col sm:flex-row items-center gap-4 p-3 md:p-4 border rounded-xl bg-slate-50/35 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-primary/5 hover:border-primary/35 shadow-sm"
+                className="flex flex-col sm:flex-row items-center gap-4 p-3 md:p-4 border rounded-xl bg-slate-50/35 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-primary/5 hover:border-slate-500 dark:hover:border-primary/35 shadow-sm"
               >
                 {/* Product Image */}
                 <img

@@ -137,19 +137,19 @@ const Navbar = () => {
 
           {/* Navigation Menu */}
           <NavigationMenu
-            className="hidden   lg:flex"
+            className="hidden   rounded-xl lg:flex"
             onValueChange={(value) => setOpen(value === "open")}
           >
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger>Deals</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="bg-transparent ">Deals</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid gap-4 p-6  md:w-[400px] lg:w-[500px] lg:grid-cols-1">
                     {dealProduct ? (
-                      <li className="row-span-3 relative overflow-hidden rounded-lg shadow-md transition-all hover:scale-[1.02] group">
+                      <li className="row-span-3 relative overflow-hidden rounded-xl bg-muted/35 shadow-md  p-4 group">
                         <NavigationMenuLink asChild>
                           <a
-                            className="flex h-full w-full select-none flex-col justify-end rounded-lg bg-gradient-to-b from-muted/10 to-muted/80 p-0 no-underline outline-none focus:shadow-md"
+                            className="flex h-full w-full select-none flex-col justify-end rounded-lg  no-underline outline-none focus:shadow-md"
                             href={`/product/${dealProduct?.id}`}
                           >
                             {/* Offer Badge */}
@@ -174,7 +174,7 @@ const Navbar = () => {
                             </div>
 
                             {/* Product Image */}
-                            <div className="relative h-48 overflow-hidden rounded-t-lg">
+                            <div className="relative h-56 w-56 mx-auto overflow-hidden rounded-t-lg">
                               <img
                                 src={dealProduct?.images[0].url}
                                 alt="Deal Product"
@@ -184,13 +184,13 @@ const Navbar = () => {
 
                             {/* Product Info Overlay */}
                             <div className="p-4">
-                              <h3 className="font-bold text-lg mb-1">
+                              <h3 className="font-semibold text-lg mb-1">
                                 {dealProduct?.name || "Premium Product"}
                               </h3>
 
                               {/* Price Section */}
                               <div className="flex items-center space-x-2">
-                                <span className="text-gray-500 line-through text-sm">
+                                <span className="text-gray-500 font-semibold line-through text-sm">
                                   ₹{formatPrice(dealProduct!.price) || 0}
                                 </span>
                                 <span className="text-xl font-bold text-emerald-600">
@@ -218,44 +218,51 @@ const Navbar = () => {
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
-              <NavigationMenuItem>
+              <NavigationMenuItem className="rounded-full">
                 <NavigationMenuTrigger
-                  className="rounded-full"
+                  className="rounded-full bg-transparent"
                   onClick={() => setOpen(!open)}
                 >
                   Category
                 </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                <NavigationMenuContent className="rounded-xl" >
+                  <ul className="grid w-[400px] gap-4 p-4 rounded-lg md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     {components.map((component) => (
                       <Link
                         to={component.href}
                         key={component.title}
                         onClick={() => setOpen(false)}
+                        className="group"
                       >
-                        <ListItem className="flex flex-row items-center p-2 py-1 border rounded-md ">
-                          <div className="flex flex-row items-center gap-3">
+                        <ListItem className="flex flex-row items-center  p-3 border  shadow-none rounded-xl transition-all duration-300 hover:shadow-sm  hover:border-primary/50 hover:bg-primary/5 dark:hover:bg-gradient-to-br from-primary/5 via-black to-primary/5">
+                          <div className="flex flex-row items-center gap-4">
+                            {/* Category Image */}
                             <img
                               src={component.img}
                               alt={component.title}
-                              className="w-20 h-20 rounded-md object-cover"
+                              className="w-20 h-20 rounded-lg object-contain "
                             />
 
-                            <div className="flex flex-col items-start">
-                              <div className="font-medium text-md">
+                            {/* Category Text */}
+                            <div className="flex flex-col">
+                              <div className="font-semibold text-xl hover:text-primary text-accent-foreground">
                                 {component.title}
                               </div>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">
+                                Discover the latest & top-rated {component.title} products. 
+                              </p>
                             </div>
                           </div>
                         </ListItem>
                       </Link>
                     ))}
                   </ul>
+
                 </NavigationMenuContent>
               </NavigationMenuItem>
-              <NavigationMenuItem>
+              <NavigationMenuItem className="bg-transparent">
                 <Link to="/about">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  <NavigationMenuLink  className={navigationMenuTriggerStyle()}>
                     About
                   </NavigationMenuLink>
                 </Link>
@@ -271,25 +278,25 @@ const Navbar = () => {
             </NavigationMenuList>
           </NavigationMenu>
 
-          
-            {/* Search Bar */}
-            <SearchBar />
-          
-        
-        {/* User Account/Profile */}
-        <div className="hidden  md:flex gap-6 ">
-          {isAuthenticated && user ? (
-            <UserProfileButton name={user.name} imageUrl={pfp!} />
-          ) : (
-            <div
-              onClick={() => navigate("/user/auth/signin")}
-              className="flex gap-1 md:pl-4 items-center cursor-pointer hover:text-orange-600"
-            >
-              <UserRound className="text-black  dark:text-white" />
-              <p className="hidden lg:block">Account</p>
-            </div>
-          )}
-        </div>
+
+          {/* Search Bar */}
+          <SearchBar />
+
+
+          {/* User Account/Profile */}
+          <div className="hidden  md:flex gap-6 ">
+            {isAuthenticated && user ? (
+              <UserProfileButton name={user.name} imageUrl={pfp!} />
+            ) : (
+              <div
+                onClick={() => navigate("/user/auth/signin")}
+                className="flex gap-1 md:pl-4 items-center cursor-pointer hover:text-orange-600"
+              >
+                <UserRound className="text-black  dark:text-white" />
+                <p className="hidden lg:block">Account</p>
+              </div>
+            )}
+          </div>
         </div>
       </nav>
 

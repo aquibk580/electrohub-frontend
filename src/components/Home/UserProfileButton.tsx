@@ -22,13 +22,28 @@ interface UserProfileButtonProps {
 
 export function getRandomColor() {
   const colors = [
-    "bg-gradient-to-br from-red-500 via-orange-400 to-yellow-500",
-    "bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500",
-    "bg-gradient-to-br from-green-500 via-teal-400 to-cyan-500",
-    "bg-gradient-to-br from-blue-500 via-sky-400 to-green-400",
-    "bg-gradient-to-br from-fuchsia-500 via-violet-500 to-indigo-500",
-    "bg-gradient-to-br from-rose-500 via-pink-500 to-amber-500",
+    "bg-red-500",
+    "bg-red-600",
+    "bg-orange-500",
+    "bg-amber-500",
+    "bg-yellow-500",
+    "bg-lime-500",
+    "bg-green-500",
+    "bg-emerald-500",
+    "bg-teal-500",
+    "bg-cyan-500",
+    "bg-sky-500",
+    "bg-blue-500",
+    "bg-indigo-500",
+    "bg-violet-500",
+    "bg-purple-500",
+    "bg-fuchsia-500",
+    "bg-pink-500",
+    "bg-rose-500",
+    "bg-gray-500",
+    "bg-stone-500",
   ];
+  
   
   return colors[Math.floor(Math.random() * colors.length)];
 }
