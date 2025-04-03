@@ -1,4 +1,7 @@
-import { assets } from "@/assets/assets";
+"use client"
+
+import type React from "react"
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,82 +12,103 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import axios from "@/lib/axios";
-import { useState } from "react";
-import { toast } from "react-toastify";
-import { BannerCrousel } from "@/pages/Admin/ContentManagement";
+} from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
+import axios from "@/lib/axios"
+import { useState } from "react"
+import { toast } from "react-toastify"
+import { BannerCrousel } from "@/pages/Admin/ContentManagement"
+import { AlertTriangle, Loader2, Trash2 } from 'lucide-react'
+import { Badge } from "@/components/ui/badge"
 
 interface DeleteBannerCarouselButtonProps {
-  id: number;
-  setBannerCarousel: React.Dispatch<React.SetStateAction<BannerCrousel[]>>;
+  id: number
+  setBannerCarousel: React.Dispatch<React.SetStateAction<BannerCrousel[]>>
+  title?: string
 }
 
-export default function DeleteBannerCarouselButton({
-  id,
-  setBannerCarousel,
-}: DeleteBannerCarouselButtonProps) {
-  const [deletingBannerCarosuelId, setDeletingBannerCarosuelId] = useState<
-    number | null
-  >(null);
-  const handleDelete = async (id: number) => {
-    setDeletingBannerCarosuelId(id);
+export default function DeleteBannerCarouselButton({ id, setBannerCarousel, title }: DeleteBannerCarouselButtonProps) {
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [open, setOpen] = useState(false)
+
+  const handleDelete = async () => {
+    setIsDeleting(true)
     try {
-      const response = await axios.delete(
-        `${import.meta.env.VITE_API_URL}/api/admin/cms/banner-carousels/${id}`
-      );
+      const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/admin/cms/banner-carousels/${id}`)
 
       if (response.status === 200) {
-        setBannerCarousel((prev) =>
-          prev.filter(
-            (bannerCarousel: BannerCrousel) => bannerCarousel.id !== id
-          )
-        );
-        toast.success(`Baner Carousel Deleted Successfully`, {
+        setBannerCarousel((prev) => prev.filter((bannerCarousel) => bannerCarousel.id !== id))
+        toast.success("Banner deleted successfully", {
           position: "top-center",
           theme: "dark",
-        });
+        })
+        setOpen(false)
       }
     } catch (error: any) {
-      console.log(error);
-      toast.error(error.message, {
+      console.error("Failed to delete banner:", error)
+      toast.error(error.message || "Failed to delete banner", {
         position: "top-center",
         theme: "dark",
-      });
+      })
     } finally {
-      setDeletingBannerCarosuelId(null);
+      setIsDeleting(false)
     }
-  };
+  }
+
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button className="bg-red-50 dark:border-none dark:bg-red-200 text-red-700 border border-red-400 flex items-center space-x-2 p-1.5 px-2.5 shadow-none rounded-lg hover:bg-red-100">
-          <div className=" w-4 h-4  flex items-center  justify-center rounded-lg">
-            <img src={assets.del} className="w-6" />
-          </div>
-          {deletingBannerCarosuelId === id ? "Deleting..." : "Delete"}
+        <Button
+          variant="outline"
+          size="sm"
+          className="flex items-center gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg border-destructive/20"
+        >
+          <Trash2 className="h-4 w-4" />
+          <span className="hidden sm:inline">Delete</span>
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="max-w-md">
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. Deleting this Banner will permanently
-            remove it from our system, and it cannot be restored. Are you sure
-            you want to continue?
+          <div className="flex items-center gap-2 text-destructive">
+            <AlertTriangle className="h-5 w-5" />
+            <AlertDialogTitle>Delete Banner</AlertDialogTitle>
+          </div>
+          <AlertDialogDescription className="pt-2">
+            This action cannot be undone. This will permanently delete the banner
+            {title && (
+              <Badge variant="outline" className="mx-1 font-semibold">
+                {title}
+              </Badge>
+            )}
+            from the carousel slider.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            className="bg-red-600 hover:bg-red-700 text-white"
-            onClick={() => handleDelete(id)}
+        <AlertDialogFooter className="gap-2 sm:gap-0">
+          <AlertDialogCancel 
+            disabled={isDeleting}
+            className="rounded-lg"
           >
-            {deletingBannerCarosuelId !== id ? "Continue" : "Deleting..."}
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction
+            onClick={(e) => {
+              e.preventDefault()
+              handleDelete()
+            }}
+            disabled={isDeleting}
+            className="bg-destructive hover:bg-destructive/90 rounded-lg"
+          >
+            {isDeleting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Deleting...
+              </>
+            ) : (
+              "Delete"
+            )}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  );
+  )
 }

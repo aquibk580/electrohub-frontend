@@ -204,7 +204,7 @@ const MainViewOrder = () => {
                     <div className="flex items-center">
                       <span className="text-accent-foreground/80 mr-1">Price:</span>
                       <span className="font-medium">
-                        {formatPrice(
+                      ₹ {formatPrice(
                           orderItem.product.price - (orderItem.product.price / 100) * orderItem.product.offerPercentage,
                         )}
                       </span>
