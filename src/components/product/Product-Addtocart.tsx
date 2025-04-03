@@ -4,12 +4,14 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "../ui/tooltip";
-import { Heart } from "lucide-react";
+import { AlertCircle, Heart } from "lucide-react";
 import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import axios from "@/lib/axios";
 import { toast } from "react-toastify";
 import Checkout from "../User/Checkout";
+import { Card, CardContent } from "../ui/card";
 
 type ProductAddtocartProps = {
   id: number;
@@ -150,9 +152,36 @@ const ProductAddtocart = ({
             </TooltipProvider>
           </>
         ) : (
-          <h1 className="font-medium text-red-500 text-lg">
-            This product is currently out of stock
-          </h1>
+          <Card className="overflow-hidden border-0 shadow-lg">
+            <div className="bg-gradient-to-r" />
+            <CardContent className="p-6">
+              <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 rounded-full bg-rose-50 flex items-center justify-center">
+                    <AlertCircle className="h-6 w-6 text-rose-500" />
+                  </div>
+                </div>
+
+                <div className="flex-grow space-y-3 text-center md:text-left">
+                  <div className="space-y-1">
+                    <Badge
+                      variant="outline"
+                      className="bg-rose-50 text-rose-700 border-rose-200 mb-2"
+                    >
+                      Currently Unavailable
+                    </Badge>
+                    <h3 className="text-xl font-semibold tracking-tight">
+                      This product is currently out of stock
+                    </h3>
+                    <p className="text-muted-foreground">
+                      We're working hard to restock this item. Sign up to be
+                      notified when it becomes available.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         )}
 
         <TooltipProvider>

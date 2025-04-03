@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { Product } from "@/types/entityTypes";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { formatPrice } from "@/utils/FormatPrice";
 
 export function Wishlist() {
   const navigate = useNavigate();
@@ -83,15 +84,15 @@ export function Wishlist() {
 
   return (
     <Card className="h-full flex flex-col rounded-xl shadow-md">
-       <Helmet
-              title="Wishlist | Electrohub"
-              meta={[
-                {
-                  name: "description",
-                  content: "All Wishlist products Of You",
-                },
-              ]}
-            />
+      <Helmet
+        title="Wishlist | Electrohub"
+        meta={[
+          {
+            name: "description",
+            content: "All Wishlist products Of You",
+          },
+        ]}
+      />
       <CardHeader>
         <div className="flex items-center gap-4 mb-6">
           <img
@@ -128,7 +129,12 @@ export function Wishlist() {
                   className="flex-1 text-center sm:text-left cursor-pointer"
                 >
                   <h3 className="font-medium text-lg mb-1">{item.name}</h3>
-                  <span className="text-lg font-bold">₹{item.price}</span>
+                  <span className="text-lg font-bold">
+                    ₹
+                    {formatPrice(
+                      item.price * 1 - (item.offerPercentage / 100) * item.price
+                    )}
+                  </span>
                   <div
                     className={`text-sm font-medium ${
                       item.status !== "OutOfStock"
@@ -170,24 +176,23 @@ export function Wishlist() {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-center px-4">
-  <HeartOff className="h-24 w-24 text-red-500 bg-red-100/75 dark:bg-red-700/30 shadow-sm p-4 rounded-full mb-4" />
-  
-  <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
-    Oops! Your Wishlist is Empty 
-  </h2>
-  
-  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-    Start adding your favorite products and save them for later!
-  </p>
-  
-  <Button
-    onClick={() => navigate("/")}
-    className="mt-5 px-6 py-3 bg-primary hover:bg-primary/90 transition-all text-white font-bold rounded-lg shadow-md"
-  >
-    Browse Products
-  </Button>
-</div>
+            <HeartOff className="h-24 w-24 text-red-500 bg-red-100/75 dark:bg-red-700/30 shadow-sm p-4 rounded-full mb-4" />
 
+            <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
+              Oops! Your Wishlist is Empty
+            </h2>
+
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              Start adding your favorite products and save them for later!
+            </p>
+
+            <Button
+              onClick={() => navigate("/")}
+              className="mt-5 px-6 py-3 bg-primary hover:bg-primary/90 transition-all text-white font-bold rounded-lg shadow-md"
+            >
+              Browse Products
+            </Button>
+          </div>
         )}
       </CardContent>
     </Card>
