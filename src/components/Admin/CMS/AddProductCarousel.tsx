@@ -44,7 +44,7 @@ type ProductCarouselSchemaType = z.infer<typeof productCarouselSchema>
 export default function AddProductCarousel({
   setProductCarousels,
 }: {
-  setProductCarousels: React.Dispatch<React.SetStateAction<ProductCarousel[]>>
+  setProductCarousels: React.Dispatch<React.SetStateAction<ProductCrousel[]>>
 }) {
   const [open, setOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState<string | null>(null)

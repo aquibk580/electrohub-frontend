@@ -39,7 +39,7 @@ type BannerCarouselSchemaType = z.infer<typeof bannerCarouselSchema>
 export default function AddBannerCarousel({
   setBannerCarousels,
 }: {
-  setBannerCarousels: React.Dispatch<React.SetStateAction<BannerCarousel[]>>
+  setBannerCarousels: React.Dispatch<React.SetStateAction<BannerCrousel[]>>
 }) {
   const [open, setOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState<string | null>(null)
