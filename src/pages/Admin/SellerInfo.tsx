@@ -11,6 +11,8 @@ import { OrderItem, Product, Seller } from "@/types/entityTypes";
 import { getRandomColor } from "@/components/Home/UserProfileButton";
 import { formatPrice } from "@/utils/FormatPrice";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Helmet } from "react-helmet-async";
+import { SellerInfoSkeleton } from "@/components/Admin/Skeletons";
 
 const SellerDetails = () => {
   const navigate = useNavigate();
@@ -58,16 +60,26 @@ const SellerDetails = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-        <p className="text-muted-foreground">Loading Seller Details...</p>
-      </div>
+      // <div className="flex flex-col justify-center items-center h-screen">
+      //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+      //   <p className="text-muted-foreground">Loading Seller Details...</p>
+      // </div>
+      <SellerInfoSkeleton/>
     );
   }
 
   return (
     //<SidbarLayout breadcrumbs={breadcrumbs}>
     <div className="w-full px-4 py-6 space-y-6">
+      <Helmet
+        title={seller?.name || "Seller Info"}
+        meta={[
+          {
+            name: "description",
+            content: "Complete Info Ablut Seller",
+          },
+        ]}
+      />
       {/* Seller Overview */}
       <Card className="border-primary/65 bg-primary/5 dark:bg-gradient-to-br from-primary/5 via-slate-900/30 to-primary/5">
         <CardHeader>
@@ -89,8 +101,8 @@ const SellerDetails = () => {
                 </AvatarFallback>
               </Avatar>
               <div className="flex space-x-1 items-center">
-              <h3 className="text-xl  font-bold">{seller?.name}</h3>
-              <VerifiedIcon className="w-5 h-5 text-blue-600"/>
+                <h3 className="text-xl  font-bold">{seller?.name}</h3>
+                <VerifiedIcon className="w-5 h-5 text-blue-600" />
               </div>
               {/* <div className="flex items-center space-x-2 mt-2">
                 <Badge variant="secondary">{seller.email}</Badge>
@@ -211,7 +223,7 @@ const SellerDetails = () => {
               <div className="space-y-2 ">
                 {sellerProducts.map((product: Product) => (
                   <div
-                  onClick={() => navigate(`/admin/productsmanage/${product.id}`)}
+                    onClick={() => navigate(`/admin/productsmanage/${product.id}`)}
                     key={product.id}
                     className="flex flex-col md:flex-row md:items-center justify-between cursor-pointer  border-transparent shadow-none hover:border-primary/70 bg-primary/10   p-4 border rounded-xl"
                   >
@@ -233,19 +245,19 @@ const SellerDetails = () => {
                         ₹
                         {formatPrice(
                           product.price -
-                            (product.offerPercentage / 100) * product.price
+                          (product.offerPercentage / 100) * product.price
                         )}
                       </p>
                       <Badge
-  variant="outline"
-  className={`mt-1 
+                        variant="outline"
+                        className={`mt-1 
     ${product.status === "Active" ? "bg-green-100 text-green-700 border-green-500" : ""} 
     ${product.status === "Inactive" ? "bg-gray-100 text-gray-700 border-gray-500" : ""} 
     ${product.status === "Out of Stock" ? "bg-red-100 text-red-700 border-red-500" : ""} 
   `}
->
-  {product.status}
-</Badge>
+                      >
+                        {product.status}
+                      </Badge>
 
                     </div>
                   </div>
@@ -265,10 +277,10 @@ const SellerDetails = () => {
               <div className="space-y-2">
                 {orders.map((order: OrderItem) => (
                   <div
-                  onClick={() => navigate(`/admin/ordersmanage/${order.id}`)}
+                    onClick={() => navigate(`/admin/ordersmanage/${order.id}`)}
                     key={order.id}
                     className="flex flex-col md:flex-row md:items-center border-transparent cursor-pointer bg-primary/10 hover:border-primary/70  justify-between p-4 border rounded-xl"
-                  
+
                   >
                     <div className="flex  items-center space-x-4">
                       <img
@@ -292,22 +304,22 @@ const SellerDetails = () => {
                         ₹
                         {formatPrice(
                           order.product.price -
-                            (order.product.offerPercentage / 100) *
-                              order.product.price
+                          (order.product.offerPercentage / 100) *
+                          order.product.price
                         )}
                       </p>
                       <Badge
-  variant="outline"
-  className={`mt-1 
+                        variant="outline"
+                        className={`mt-1 
     ${order.status === "Delivered" ? "bg-green-100 text-green-700 border-green-500" : ""} 
     ${order.status === "OrderConfirmed" ? "bg-blue-100 text-blue-700 border-blue-500" : ""} 
     ${order.status === "Shipped" ? "bg-yellow-100 text-yellow-700 border-yellow-500" : ""} 
     ${order.status === "Cancelled" ? "bg-red-100 text-red-700 border-red-500" : ""} 
     ${order.status === "Returned" ? "bg-purple-100 text-purple-700 border-purple-500" : ""} 
   `}
->
-  {order.status}
-</Badge>
+                      >
+                        {order.status}
+                      </Badge>
 
                     </div>
                   </div>

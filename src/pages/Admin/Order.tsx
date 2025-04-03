@@ -18,6 +18,8 @@ import { OrderItem } from "@/types/entityTypes";
 import axios from "@/lib/axios";
 import { formatDate } from "@/lib/utils";
 import { formatPrice } from "@/utils/FormatPrice";
+import { Helmet } from "react-helmet-async";
+import { AdminDashboardSkeleton } from "@/components/Admin/Skeletons";
 
 type OrderStats = Array<{ label: string; value: string; icon: ReactElement }>;
 type ExtendedOrderItem = Array<OrderItem & { customerName: string }>;
@@ -160,7 +162,7 @@ const Order = () => {
         "₹" +
         formatPrice(
           order?.product?.price -
-            (order?.product?.offerPercentage / 100) * order?.product?.price
+          (order?.product?.offerPercentage / 100) * order?.product?.price
         ),
       status:
         order?.status === "OrderConfirmed" ? "Order Placed" : order?.status,
@@ -199,16 +201,26 @@ const Order = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-        <p className="text-muted-foreground">Loading Orders...</p>
-      </div>
+      // <div className="flex flex-col justify-center items-center h-screen">
+      //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+      //   <p className="text-muted-foreground">Loading Orders...</p>
+      // </div>
+      <AdminDashboardSkeleton type="orders" />
     );
   }
 
   return (
     // <SidebarLayout breadcrumbs={breadcrumbs}>
     <div className="w-full px-2 py-2 sm:px-4 sm:py-4 space-y-4">
+      <Helmet
+        title="Orders | Admin"
+        meta={[
+          {
+            name: "description",
+            content: "Orders List of All Users",
+          },
+        ]}
+      />
       <DashboardStats
         stats={orderStats}
         filterOptions={orderFilterOptions}

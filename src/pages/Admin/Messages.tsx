@@ -29,6 +29,8 @@ import { toast } from "react-toastify";
 import axios from "@/lib/axios";
 import { Message } from "@/types/entityTypes";
 import AnimatedCounter from "@/components/Common/AnimatedCounter";
+import { Helmet } from "react-helmet-async";
+import { MessagesSkeleton } from "@/components/Admin/Skeletons";
 
 const Messages = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -110,8 +112,8 @@ const Messages = () => {
       return senderTypeFilter === "User"
         ? (result = messages?.filter((message) => message.userType === "User"))
         : (result = messages?.filter(
-            (message) => message.userType === "Seller"
-          ));
+          (message) => message.userType === "Seller"
+        ));
     }
 
     return result;
@@ -149,7 +151,7 @@ const Messages = () => {
               <h3 className="font-semibold text-lg text-accent-foreground">
                 {message.name}
               </h3>
-              <Badge  className="text-[8px] dark:bg-primary/35 text-white">
+              <Badge className="text-[8px] dark:bg-primary/35 text-white">
                 {message.email}
               </Badge>
             </div>
@@ -195,9 +197,22 @@ const Messages = () => {
       ))}
     </div>
   );
+  
+  if (isLoading){
+    return <MessagesSkeleton/>
+  }
 
   return (
     <div className="min-h-screen p-6">
+      <Helmet
+        title="Messages | Admin"
+        meta={[
+          {
+            name: "description",
+            content: "Shows All messages form Users and Sellers",
+          },
+        ]}
+      />
       <div className="max-w-7xl mx-auto space-y-6">
         <Card className=" shadow-md rounded-xl  bg-primary/5 border-primary/75 dark:bg-gradient-to-br from-primary/15 via-slate-900/15 to-primary/10">
           <CardContent className="p-6">
@@ -239,16 +254,16 @@ const Messages = () => {
                           {senderTypeFilter === "all"
                             ? "All"
                             : senderTypeFilter === "User"
-                            ? "User"
-                            : "Seller"}
+                              ? "User"
+                              : "Seller"}
                         </span>
                       </div>
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="rounded-xl  ">
-                    <SelectItem className="rounded-lg"  value="all">All</SelectItem>
-                    <SelectItem className="rounded-lg"  value="User">User</SelectItem>
-                    <SelectItem className="rounded-lg"  value="Seller">Seller</SelectItem>
+                    <SelectItem className="rounded-lg" value="all">All</SelectItem>
+                    <SelectItem className="rounded-lg" value="User">User</SelectItem>
+                    <SelectItem className="rounded-lg" value="Seller">Seller</SelectItem>
                   </SelectContent>
                 </Select>
                 <Select value={sortBy} onValueChange={setSortBy}>
@@ -260,16 +275,16 @@ const Messages = () => {
                           {sortBy === "default"
                             ? "Default"
                             : sortBy === "newest"
-                            ? "Newest"
-                            : "Oldest"}
+                              ? "Newest"
+                              : "Oldest"}
                         </span>
                       </div>
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="rounded-xl">
-                    <SelectItem  className="rounded-lg"  value="default">Default</SelectItem>
-                    <SelectItem className="rounded-lg"  value="newest">Newest First</SelectItem>
-                    <SelectItem  className="rounded-lg" value="oldest">Oldest First</SelectItem>
+                    <SelectItem className="rounded-lg" value="default">Default</SelectItem>
+                    <SelectItem className="rounded-lg" value="newest">Newest First</SelectItem>
+                    <SelectItem className="rounded-lg" value="oldest">Oldest First</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

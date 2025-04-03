@@ -8,7 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "@/lib/axios";
-
+import { Helmet } from "react-helmet-async";
+import {  BuyerSkeleton } from "@/components/Admin/Skeletons";
 
 
 const Buyer = () => {
@@ -96,15 +97,6 @@ const Buyer = () => {
     return filteredData.slice(startIndex, startIndex + itemsPerPage);
   }, [filteredData, currentPage, itemsPerPage]);
 
-  // useEffect(() => {
-
-  //   setCurrentPage(1);
-    
-  //   // Update URL to page 1 when filters change
-  //   const params = new URLSearchParams(location.search);
-  //   params.set("page", "1");
-  //   navigate(`${location.pathname}?${params.toString()}`, { replace: true });
-  // }, [searchTerm, sortBy, filterBy]);
 
   useEffect(() => {
     const returnPage = searchParams.get("returnPage");
@@ -148,8 +140,21 @@ const Buyer = () => {
     getAllUsers();
   }, []);
 
+  if(loading){
+    return <BuyerSkeleton/>
+  }
+
   return (
     <div className="w-full px-2 py-2 sm:px-4 sm:py-4">
+      <Helmet
+        title="Buyers | Admin"
+        meta={[
+          {
+            name: "description",
+            content: "Users List ",
+          },
+        ]}
+      />
       <Card className="shadow-md rounded-xl bg-primary/5 border-primary/75 dark:bg-gradient-to-br from-primary/20 via-slate-900/20 to-primary/10 py-4">
         <CardHeader className="px-4 py-2 sm:p-5">
           <CardTitle className="text-xl sm:text-2xl">Buyers</CardTitle>

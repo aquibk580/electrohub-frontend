@@ -4,12 +4,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { SearchFilterSort } from "@/components/Admin/search-filter-sort";
 import { DataTable } from "@/components/Admin/data-table";
 import { PaginationControls } from "@/components/Admin/pagination-controls";
-import { mockData, tableHeaders } from "@/data/mock-data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Box,
-  TagIcon,
   CheckCircle2,
   XCircle,
   SquareMenu,
@@ -20,6 +18,8 @@ import { DashboardStats } from "@/components/Admin/dashboard-stats";
 import { Category, Product } from "@/types/entityTypes";
 import axios from "@/lib/axios";
 import { formatPrice } from "@/utils/FormatPrice";
+import { Helmet } from "react-helmet-async";
+import { AdminDashboardSkeleton  } from "@/components/Admin/Skeletons";
 
 interface TableWrapperProps {
   children: ReactNode;
@@ -216,15 +216,24 @@ const ProductManagement = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-        <p className="text-muted-foreground">Loading Products Statistcis...</p>
-      </div>
-    );
+      // <div className="flex flex-col justify-center items-center h-screen">
+      //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+      //   <p className="text-muted-foreground">Loading Products Statistcis...</p>
+      // </div>
+<AdminDashboardSkeleton type="products" />    );
   }
 
   return (
     <div className="w-full px-2 py-2 sm:px-4 sm:py-4 space-y-4">
+      <Helmet
+              title="Products | Admin"
+              meta={[
+                {
+                  name: "description",
+                  content: "All Products By Sellers",
+                },
+              ]}
+            />
       <Card className="shadow-md rounded-xl border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/20 via-slate-900/20 to-primary/10 py-4">
         <CardContent className="p-4 ">
           <DashboardStats

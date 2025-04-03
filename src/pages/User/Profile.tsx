@@ -150,6 +150,15 @@ const PersonalInfo = () => {
 
   return (
     <Card className="rounded-xl shadow-md">
+       <Helmet
+              title="Profile | Electrohub"
+              meta={[
+                {
+                  name: "description",
+                  content: "Buy Products at very Reasonable cost",
+                },
+              ]}
+            />
       <CardContent className="p-6">
         <h1 className="text-2xl font-semibold mb-8">Personal Information</h1>
 

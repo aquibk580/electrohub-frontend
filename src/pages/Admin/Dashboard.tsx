@@ -27,7 +27,8 @@ import { formatDate } from "@/lib/utils";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { ChartPie } from "@/components/Admin/Chart-Pie";
-import DashboardSkeleton from "@/components/Admin/Skeletons";
+import {DashboardSkeleton} from "@/components/Admin/Skeletons";
+import { Helmet } from "react-helmet-async";
 const IndiaSalesMap = React.lazy(
   () => import("@/components/Admin/india-sales-map")
 );
@@ -179,6 +180,15 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col gap-4 p-4">
+      <Helmet
+                    title="Admin Dashboard"
+                    meta={[
+                      {
+                        name: "description",
+                        content: "Admin Dashboard For to Overview Sales and Categories",
+                      },
+                    ]}
+                  />
       {statisticsLoading ? (
         // <div className="flex flex-col justify-center items-center h-screen">
         //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />

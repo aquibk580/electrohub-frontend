@@ -34,7 +34,7 @@ import Seller from "./pages/Admin/Seller";
 import SellerInfo from "./pages/Admin/SellerInfo";
 import Buyer from "./pages/Admin/Buyer";
 import BuyerDetails from "./pages/Admin/BuyerDetails";
-import ProductManagement from "./pages/Admin/Product-Management";
+import ProductManagement from "./pages/Admin/Products";
 import ProductDetails from "./pages/Admin/ProductsManage";
 import Order from "./pages/Admin/Order";
 import OrderInfo from "./pages/Admin/OrdersManage";

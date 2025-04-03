@@ -17,6 +17,7 @@ import axios from "@/lib/axios";
 import ProductCard from "@/components/Home/ProductCard";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { Helmet } from "react-helmet-async";
 
 export default function CategoryPage() {
   const { categoryName } = useParams<{ categoryName: string }>();
@@ -106,6 +107,15 @@ export default function CategoryPage() {
 
   return (
     <div className="container px-4 pt-20 md:py-8 mx-auto">
+       <Helmet
+              title={categoryName}
+              meta={[
+                {
+                  name: "description",
+                  content: "Category Of Electrohub Products",
+                },
+              ]}
+            />
       {/* Category Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="border-l-[6px] border-primary pl-6">

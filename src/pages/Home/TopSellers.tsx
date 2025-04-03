@@ -157,7 +157,7 @@ const TopSellerPage: React.FC = () => {
                   <div className="flex  gap-3">
                     <Calendar className="w-5 h-5 text-gray-400" />
                     <span className="text-gray-600  dark:text-gray-300">
-                    Member since in {new Date(seller?.createdAt).getFullYear()}
+                    Member since in {seller?.createdAt ? new Date(seller.createdAt).getFullYear() : 'N/A'}
                     </span>
                   </div>
 

@@ -11,6 +11,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "@/lib/axios";
 import { Seller as S } from "@/types/entityTypes";
 import { Loader2 } from "lucide-react";
+import { TableWrapper } from "@/components/Admin/table-wrapper";
+// import { AdminTableSkeleton } from "@/components/Admin/Skeletons";
+import { SellerSkeleton } from "@/components/Admin/Skeletons";
+import { Helmet } from "react-helmet-async";
 
 const Seller = () => {
   const [sellers, setSellers] = useState<S[]>([]);
@@ -65,22 +69,21 @@ const Seller = () => {
 
   const filteredData = useMemo(() => {
     let result = activeTab === "top" ? topSellerData : sellerData;
-  
+
     if (searchTerm) {
       result = result.filter((seller) =>
         seller.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-  
+
     if (filterBy) {
-     
-      result = result.filter((seller) => 
+
+      result = result.filter((seller) =>
         seller.address && seller.address.includes(filterBy)
       );
     }
-  
+
     if (sortBy) {
-      // Adjust sorting based on your actual data
       result.sort((a, b) => {
         if (sortBy === "Profits") {
           console.log("Profits");
@@ -91,9 +94,10 @@ const Seller = () => {
         return 0;
       });
     }
-  
+
     return result;
   }, [activeTab, searchTerm, sortBy, filterBy, topSellerData, sellerData]);
+
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return filteredData.slice(startIndex, startIndex + itemsPerPage);
@@ -127,7 +131,7 @@ const Seller = () => {
       try {
         const [sellerRes, topSellerRes] = await Promise.all([
           axios.get(`${import.meta.env.VITE_API_URL}/api/admin/sellers`),
-          axios.get( `${import.meta.env.VITE_API_URL}/api/admin/sellers/topsellers`),
+          axios.get(`${import.meta.env.VITE_API_URL}/api/admin/sellers/topsellers`),
         ]);
 
         if (sellerRes.status === 200) {
@@ -145,29 +149,29 @@ const Seller = () => {
     getAllSellers();
   }, []);
 
-  const TableWrapper = ({ children }: TableWrapperProps) => {
-    if (isMobile) {
-      return (
-        <ScrollArea className="w-[calc(100vw-2rem)] max-w-full rounded-md">
-          <div className="min-w-[600px]">{children}</div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-      );
-    }
-    return <>{children}</>;
-  };
-
   if (loading) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-        <p className="text-muted-foreground">Loading Sellers...</p>
-      </div>
+      // <div className="flex flex-col justify-center items-center h-screen">
+      //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+      //   <p className="text-muted-foreground">Loading Sellers...</p>
+      // </div>
+      <SellerSkeleton />
+
     );
   }
 
   return (
     <div className="w-full px-2 py-2 sm:px-4 sm:py-4">
+      <Helmet
+        title="Sellers | Admin"
+        meta={[
+          {
+            name: "description",
+            content: "List of all Sellers",
+          },
+        ]}
+      />
+
       <Tabs
         defaultValue="top"
         onValueChange={setActiveTab}
@@ -264,7 +268,7 @@ const Seller = () => {
                     { key: "productsCount", label: "Products" },
                     { key: "id", label: "ID" },
                   ]}
-                  data={sellerData}
+                  data={paginatedData}
                   type="allSeller"
                   onRowClick={handleRowClick}
                 />
@@ -273,7 +277,7 @@ const Seller = () => {
                 currentPage={currentPage}
                 totalPages={Math.ceil(filteredData.length / itemsPerPage)}
                 itemsPerPage={itemsPerPage}
-                onPageChange={handlePageChange} // This was incorrectly set to setCurrentPage
+                onPageChange={handlePageChange}
                 onItemsPerPageChange={setItemsPerPage}
               />
             </CardContent>

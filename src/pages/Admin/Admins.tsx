@@ -13,6 +13,7 @@ import { formatDate } from "@/lib/utils";
 import { Admin } from "@/types/entityTypes";
 import { toast } from "react-toastify";
 import axios from "@/lib/axios";
+import { Helmet } from "react-helmet-async";
 
 const Admins = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -67,6 +68,17 @@ const Admins = () => {
 
   return (
     <div className="p-4">
+       <Helmet
+              title="Admins List"
+              meta={[
+                {
+                  name: "og:url",
+                  property: "og:url",
+                  content: `${import.meta.env.VITE_APP_URL}/admin/admins`,
+                }
+              ]}
+            />
+
       <Card className="rounded-xl bg-primary/5 border-primary/75 dark:bg-gradient-to-br from-primary/10 via-slate-900/20 to-primary/5">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">

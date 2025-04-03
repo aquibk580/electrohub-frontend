@@ -25,6 +25,7 @@ import DeleteProductCarouselButton from "@/components/Admin/CMS/DeleteProductCar
 import EditProductCarouselButton from "@/components/Admin/CMS/EditProductCarousel";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Helmet } from "react-helmet-async";
 
 interface Category {
   name: string;
@@ -408,6 +409,15 @@ const ContentManagement = () => {
 
   return (
     <div className="w-full px-2 py-2 sm:px-4 sm:py-6 space-y-4">
+      <Helmet
+                    title="CMS | Admin"
+                    meta={[
+                      {
+                        name: "description",
+                        content: "Content Management System",
+                      },
+                    ]}
+                  />
       <Card className="shadow-lg rounded-xl border border-primary/20 bg-card relative overflow-hidden">
         <CardHeader className="px-4 py-3 sm:p-6 bg-primary/5 border-b border-primary/10">
           <CardTitle className="text-xl sm:text-2xl flex items-center">

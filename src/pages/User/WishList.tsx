@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Product } from "@/types/entityTypes";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 export function Wishlist() {
   const navigate = useNavigate();
@@ -82,6 +83,15 @@ export function Wishlist() {
 
   return (
     <Card className="h-full flex flex-col rounded-xl shadow-md">
+       <Helmet
+              title="Wishlist | Electrohub"
+              meta={[
+                {
+                  name: "description",
+                  content: "All Wishlist products Of You",
+                },
+              ]}
+            />
       <CardHeader>
         <div className="flex items-center gap-4 mb-6">
           <img

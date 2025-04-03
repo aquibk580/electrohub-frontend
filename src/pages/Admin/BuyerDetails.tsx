@@ -33,7 +33,8 @@ import type { OrderItem, User } from "@/types/entityTypes";
 import { getRandomColor } from "@/components/Home/UserProfileButton";
 import { formatDate } from "@/lib/utils";
 import { formatPrice } from "@/utils/FormatPrice";
-import { Button } from "@/components/ui/button";
+import { Helmet } from "react-helmet-async";
+import { BuyerDetailsSkeleton } from "@/components/Admin/Skeletons";
 
 type ExtendedUser = User & {
   totalSpend: number;
@@ -73,7 +74,7 @@ const BuyerDetails = () => {
             returns: response.data.returns,
             avgOrderValue: response.data.avgOrderValue,
           });
-         
+
           setOrderItems(response.data.orderItems);
         }
       } catch (error) {
@@ -97,16 +98,26 @@ const BuyerDetails = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-        <p className="text-muted-foreground">Loading User Details...</p>
-      </div>
+      // <div className="flex flex-col justify-center items-center h-screen">
+      //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+      //   <p className="text-muted-foreground">Loading User Details...</p>
+      // </div>
+      <BuyerDetailsSkeleton/>
     );
   }
   console.log(user);
 
   return (
     <div className="container mx-auto p-4 space-y-6">
+      <Helmet
+        title={user?.name}
+        meta={[
+          {
+            name: "description",
+            content: "Users Info ",
+          },
+        ]}
+      />
       <button
         onClick={handleBackClick}
         className="flex items-center gap-2 group text-primary hover:text-primary/60 w-fit transition-colors"
@@ -129,7 +140,7 @@ const BuyerDetails = () => {
             <div className="space-y-1">
               <CardTitle className="text-2xl ">{user?.name}</CardTitle>
               <div className="flex items-center space-x-2 text-sm text-accent-foreground/80">
-              <ContactRound className="h-5 w-5 text-primary" />
+                <ContactRound className="h-5 w-5 text-primary" />
                 <span>Member since {formatDate(user!.createdAt)}</span>
               </div>
             </div>
@@ -290,10 +301,10 @@ const BuyerDetails = () => {
                 {user?.reviews?.map((review) => (
                   <Card onClick={() => navigate(`/admin/productsmanage/${review.product.id}`)} className="hover:border-primary/55 cursor-pointer border-transparent shadow-none bg-primary/10 " key={review.productId}>
                     <CardContent className="px-4 py-4 space-y-1.5">
-                     
+
                       <div className="flex justify-between sapce-y-3 items-start">
                         <div>
-                         
+
                           <h4 className="font-semibold text-accent-foreground hover:text-primary">
                             {review.product.name}
                           </h4>
@@ -305,8 +316,8 @@ const BuyerDetails = () => {
                               <Star
                                 key={i}
                                 className={`h-4 w-4 ${i < review.rating
-                                    ? "fill-primary text-primary"
-                                    : "text-white fill-current"
+                                  ? "fill-primary text-primary"
+                                  : "text-white fill-current"
                                   }`}
                               />
                             ))}

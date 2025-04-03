@@ -11,11 +11,11 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { 
-  Shield, 
-  AlertTriangle, 
-  UserCheck, 
-  Globe, 
+import {
+  Shield,
+  AlertTriangle,
+  UserCheck,
+  Globe,
   Lock,
   Key,
   FileText,
@@ -24,6 +24,7 @@ import {
   Download,
   AlertCircle
 } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 const LogsAndSecurity = () => {
   const isMobile = useMediaQuery({ maxWidth: 768 });
@@ -236,7 +237,7 @@ const LogsAndSecurity = () => {
           5 failed login attempts detected from IP 192.168.1.100 in the last hour.
         </AlertDescription>
       </Alert>
-      
+
       <Alert>
         <Key className="h-4 w-4" />
         <AlertTitle>Password Expiring Soon</AlertTitle>
@@ -257,59 +258,68 @@ const LogsAndSecurity = () => {
 
   return (
     <>
-     <div className="absolute flex z-50 items-center h-full w-full justify-center h-screentext-white overflow-hidden">
-      {/* Bubble Animation */}
-      {[...Array(10)].map((_, i) => (
-        <div
-          key={i}
-          className="absolute w-10 h-10 bg-white bg-opacity-20 rounded-full  animate-bounce"
-          style={{
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 3}s`,
-          }}
-        ></div>
-      ))}
+      <div className="absolute flex z-50 items-center h-full w-full justify-center h-screentext-white overflow-hidden">
+        <Helmet
+          title="Logs | Admin"
+          meta={[
+            {
+              name: "description",
+              content: "Logs of all Operations",
+            },
+          ]}
+        />
+        {/* Bubble Animation */}
+        {[...Array(10)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-10 h-10 bg-white bg-opacity-20 rounded-full  animate-bounce"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+            }}
+          ></div>
+        ))}
 
-      {/* Content */}
-      <div className="text-center">
-        <h1 className="text-5xl p-2 bg-gradient-to-br  from-primary to-primary/55 text-transparent bg-clip-text  font-extrabold tracking-wide animate-pulse">
-          Coming Soon
-        </h1>
-        <p className="text-lg mt-3 opacity-80">Stay tuned for something amazing!</p>
+        {/* Content */}
+        <div className="text-center">
+          <h1 className="text-5xl p-2 bg-gradient-to-br  from-primary to-primary/55 text-transparent bg-clip-text  font-extrabold tracking-wide animate-pulse">
+            Coming Soon
+          </h1>
+          <p className="text-lg mt-3 opacity-80">Stay tuned for something amazing!</p>
+        </div>
       </div>
-    </div>
 
-    <div className="w-full  px-2 py-2 blur sm:px-4 sm:py-4 space-y-4">
-      <SecurityOverview />
-      
-      <Card className="shadow-md rounded-lg">
-        <CardHeader className="px-4 py-2 sm:p-5">
-          <CardTitle className="text-xl sm:text-2xl">Logs & Security</CardTitle>
-        </CardHeader>
-        <CardContent className="p-2 sm:p-4">
-          <Tabs defaultValue="activity" className="w-full">
-            <TabsList className="w-auto justify-start mb-4">
-              <TabsTrigger value="activity">Activity Logs</TabsTrigger>
-              <TabsTrigger value="security">Security Settings</TabsTrigger>
-              <TabsTrigger value="alerts">Security Alerts</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="activity">
-              <ActivityLogs />
-            </TabsContent>
-            
-            <TabsContent value="security">
-              <SecuritySettings />
-            </TabsContent>
-            
-            <TabsContent value="alerts">
-              <SecurityAlerts />
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
-    </div>
+      <div className="w-full  px-2 py-2 blur sm:px-4 sm:py-4 space-y-4">
+        <SecurityOverview />
+
+        <Card className="shadow-md rounded-lg">
+          <CardHeader className="px-4 py-2 sm:p-5">
+            <CardTitle className="text-xl sm:text-2xl">Logs & Security</CardTitle>
+          </CardHeader>
+          <CardContent className="p-2 sm:p-4">
+            <Tabs defaultValue="activity" className="w-full">
+              <TabsList className="w-auto justify-start mb-4">
+                <TabsTrigger value="activity">Activity Logs</TabsTrigger>
+                <TabsTrigger value="security">Security Settings</TabsTrigger>
+                <TabsTrigger value="alerts">Security Alerts</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="activity">
+                <ActivityLogs />
+              </TabsContent>
+
+              <TabsContent value="security">
+                <SecuritySettings />
+              </TabsContent>
+
+              <TabsContent value="alerts">
+                <SecurityAlerts />
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
+      </div>
     </>
   );
 };

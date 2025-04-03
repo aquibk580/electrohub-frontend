@@ -26,6 +26,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Helmet } from "react-helmet-async";
+import { DetailPageSkeleton } from "@/components/Admin/Skeletons";
 
 interface ProductVariant {
   color: string;
@@ -64,7 +66,7 @@ const ProductDetails = () => {
           `${import.meta.env.VITE_API_URL}/api/admin/products/${id}`
         );
         if (response.status === 200) {
-          
+
           setProduct(response.data);
         }
       } catch (error) {
@@ -90,8 +92,7 @@ const ProductDetails = () => {
     setLoading(true);
     try {
       const response = await axios.patch(
-        `${import.meta.env.VITE_API_URL}/api/admin/products/updateStatus/${
-          product!.id
+        `${import.meta.env.VITE_API_URL}/api/admin/products/updateStatus/${product!.id
         }`,
         { status: newStatus }
       );
@@ -120,15 +121,21 @@ const ProductDetails = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-        <p className="text-muted-foreground">Loading Product Details...</p>
-      </div>
+      <DetailPageSkeleton type="product" />
     );
   }
 
   return (
     <div className="w-full px-4 py-6 space-y-6">
+      <Helmet
+        title={product?.productInfo.brand || "Product"}
+        meta={[
+          {
+            name: "description",
+            content: "Orders List of All Users",
+          },
+        ]}
+      />
       <button
         onClick={handleBackClick}
         className="flex items-center gap-2 group text-primary hover:text-primary/60 w-fit transition-colors"
@@ -235,33 +242,32 @@ const ProductDetails = () => {
             {product!.reviews?.length > 0 ? (
               product?.reviews.map((review, index: number) => (
                 <div key={index}
-                // onClick={() => navigate(`/admin/buyer/${review.user.userId}`)} 
-                 className="bg-primary/10  border  hover:border-primary px-6 py-4 rounded-xl  pb-4">
+                  // onClick={() => navigate(`/admin/buyer/${review.user.userId}`)} 
+                  className="bg-primary/10  border  hover:border-primary px-6 py-4 rounded-xl  pb-4">
                   <div className="flex items-center justify-between space-x-2">
                     {/* <User className="w-6 h-6" /> */}
-                   <div className="space-x-3">
-                   <span className=" text-white  font-semibold bg-gradient-to-br from-primary to-blue-600 px-2.5 py-1.5  rounded-full ">{review.user.name[0]}</span>
-                   <span className="font-semibold  hover:text-primary">{review.user.name}</span>
-                   </div>
+                    <div className="space-x-3">
+                      <span className=" text-white  font-semibold bg-gradient-to-br from-primary to-blue-600 px-2.5 py-1.5  rounded-full ">{review.user.name[0]}</span>
+                      <span className="font-semibold  hover:text-primary">{review.user.name}</span>
+                    </div>
                     <div className="flex items-center space-x-1">
-  {[...Array(5)].map((_, i) => {
-    const starValue = i + 1;
-    return (
-      <Star
-        key={i}
-        className={`w-4 h-4 ${
-          review.rating >= starValue
-            ? "text-primary fill-current" // Full star
-            : " dark:fill-current text-white fill-current " // Empty star
-        }`}
-      />
-    );
-  })}
-  <span className="ml-2 text-accent-foreground text-xs">{review.rating.toFixed(1)}/5</span>
-</div>
+                      {[...Array(5)].map((_, i) => {
+                        const starValue = i + 1;
+                        return (
+                          <Star
+                            key={i}
+                            className={`w-4 h-4 ${review.rating >= starValue
+                                ? "text-primary fill-current" // Full star
+                                : " dark:fill-current text-white fill-current " // Empty star
+                              }`}
+                          />
+                        );
+                      })}
+                      <span className="ml-2 text-accent-foreground text-xs">{review.rating.toFixed(1)}/5</span>
+                    </div>
 
                   </div>
-                 
+
                   <p className="mt-2 text-sm">{review.content}</p>
 
                   <div className="flex items-center space-x-2 text-xs text-accent-foreground/85 mt-1">

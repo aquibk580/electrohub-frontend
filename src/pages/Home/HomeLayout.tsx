@@ -8,6 +8,7 @@ import { setPfp, setUser } from "@/redux/slices/user";
 import axios from "../../lib/axios";
 import API from "axios";
 import { ChatBot } from "@/components/Home/ChatBot";
+import { Helmet } from "react-helmet-async";
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [isVisible, setIsVisible] = useState(false);
@@ -89,12 +90,20 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   }, []);
   return (
     <div className="selection:bg-primary selection:text-primary-foreground">
+      <Helmet
+        title="Electrohub"
+        meta={[
+          {
+            name: "description",
+            content: "Buy Products at very Reasonable cost",
+          },
+        ]}
+      />
       <Navbar />
       <div className="pt-[4rem] lg:pt-[6.7rem] ">{children}</div>
       <div
-        className={` transition-opacity duration-500 ${
-          isVisible ? "opacity-100" : "opacity-0 hidden"
-        }`}
+        className={` transition-opacity duration-500 ${isVisible ? "opacity-100" : "opacity-0 hidden"
+          }`}
       >
         <ChatBot
           botName="Electro Bot"

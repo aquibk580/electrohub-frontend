@@ -5,13 +5,14 @@ import { Seller } from "../../types/entityTypes";
 import { useNavigate } from "react-router-dom";
 import { BadgeCheck, Loader2 } from "lucide-react";
 import { getRandomColor } from "./UserProfileButton";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface SellerProps {
   name: string;
   logo: string;
   deliveryTime?: string;
   onClick?: () => void;
+  verified?: boolean;
 }
 
 const SellerCard = ({
@@ -19,65 +20,75 @@ const SellerCard = ({
   logo,
   deliveryTime = "Delivery within 24 hours",
   onClick,
+  verified = false,
 }: SellerProps) => {
   const initials = name
     .split(" ")
-    .map((name) => name[0])
+    .map((word) => word[0])
     .join("")
     .slice(0, 2)
     .toUpperCase();
   const bgColor = useMemo(() => getRandomColor(), []);
+
   return (
     <div
       onClick={onClick}
-      className={`
-         lg:h-[120px]
-        rounded-xl p-2 sm:p-3 md:p-4 
-        flex items-center gap-2 sm:gap-3 md:gap-4 
-        cursor-pointer transition-all duration-300
-        bg-slate-50/15
-         dark:bg-gradient-to-r from-gray-800 to-black
-        shadow-sm  border  dark:border-gray-700
-        hover:shadow-lg hover:scale-105
-      `}
+      className="
+        group relative
+        flex items-center gap-4
+        rounded-xl p-5
+        bg-white dark:bg-gray-800/60
+        border border-gray-200 dark:border-gray-700
+        shadow-md hover:shadow-lg
+        transition-all duration-300 ease-in-out hover:scale-[1.03]
+        cursor-pointer
+        overflow-hidden
+      "
     >
-      <div
-        className="w-16  h-16  sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-24 lg:h-24  p-1 border-2 border-gray-400 dark:border-white 
-        rounded-full overflow-hidden flex-shrink-0
-        flex items-center justify-center 
-      dark:bg-gray-900"
-      >
-        <Avatar className="w-20 h-20  rounded-full overflow-hidden">
+      {/* Avatar Section */}
+      <div className="relative flex-shrink-0 w-16 h-16 md:w-20 md:h-20">
+        <Avatar className="w-full h-full rounded-full border-2 border-gray-200 dark:border-gray-600">
           <AvatarImage
             src={logo}
-            alt="Brand_Logo"
-            className="w-full h-full object-fill  rounded-full " 
+            alt={`${name} logo`}
+            className="w-full h-full object-cover"
           />
           <AvatarFallback
-            className={`${bgColor} flex items-center justify-center text-3xl font-extrabold rounded-full w-20 h-20`}
+            className={`${bgColor} flex items-center justify-center text-xl md:text-2xl font-bold text-white w-full h-full`}
           >
             {initials}
           </AvatarFallback>
         </Avatar>
+
+        {verified && (
+          <div className="absolute -bottom-1 -right-1 bg-white dark:bg-gray-800 rounded-full p-1 shadow-md">
+            <BadgeCheck className="w-5 h-5 text-blue-500" />
+          </div>
+        )}
       </div>
-      <div className="flex flex-col min-w-0">
-        <h3
-          className="font-semibold text-sm sm:text-base md:text-lg lg:text-xl truncate 
-        text-gray-900 dark:text-white"
-        >
+
+      {/* Seller Info */}
+      <div className="flex flex-col flex-1 min-w-0">
+        <h3 className="font-semibold text-lg md:text-xl truncate text-gray-900 dark:text-white">
           {name}
         </h3>
-
-        <p
-          className="text-xs sm:text-sm  truncate 
-                    text-gray-500 dark:text-gray-300"
-        >
+        <p className="text-sm md:text-base truncate text-gray-500 dark:text-gray-300">
           {deliveryTime}
         </p>
       </div>
+
+      {/* Hover Effect Overlay */}
+      <div className="
+        absolute inset-0 
+        opacity-0 group-hover:opacity-100
+        bg-gradient-to-r from-primary/20 to-primary/10 dark:from-primary/30 dark:to-primary/20
+        rounded-xl 
+        transition-opacity duration-300
+      "></div>
     </div>
   );
 };
+
 
 export default function TopSellers() {
   const navigate = useNavigate();
@@ -109,29 +120,39 @@ export default function TopSellers() {
 
   if (loading) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-        <p className="text-muted-foreground">Loading Top Sellers...</p>
+      <div className="flex flex-col justify-center items-center h-[50vh]">
+        <Loader2 className="h-10 w-10 animate-spin text-primary mb-3" />
+        <p className="text-muted-foreground text-sm">Loading Top Sellers...</p>
       </div>
     );
   }
 
   return (
-    <section className={`w-full  sm:py-6  px-2 sm:px-3 md:px-4 lg:px-1`}>
-      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-6">
-        Top Sellers & Brands
-      </h2>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
-        {sellers.map((seller) => (
-          <SellerCard
-            key={seller.id}
-            name={seller.name}
-            logo={seller.pfp}
-            deliveryTime={"24 Hours Delivery"}
-            onClick={() => handleSellerClick(seller.id)}
-          />
-        ))}
+    <section className="w-full  mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+          Top Sellers & Brands
+        </h2>
       </div>
+      
+      {sellers.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground">No sellers found</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4">
+          {sellers.map((seller) => (
+            <SellerCard
+              key={seller.id}
+              name={seller.name}
+              logo={seller.pfp}
+              deliveryTime="24 Hours Delivery"
+              onClick={() => handleSellerClick(seller.id)}
+              verified
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

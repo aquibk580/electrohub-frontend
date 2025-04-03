@@ -19,6 +19,8 @@ import { formatPrice } from "@/utils/FormatPrice";
 import { cn, formatDate } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Helmet } from "react-helmet-async";
+import { DetailPageSkeleton } from "@/components/Admin/Skeletons";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -134,15 +136,21 @@ const OrderDetails = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-        <p className="text-muted-foreground">Loading Order Details...</p>
-      </div>
+      <DetailPageSkeleton type="order" />
     );
   }
 
   return (
     <div className="w-full px-4 py-6 space-y-6">
+      <Helmet
+                title={orderItem?.product?.name || "Order"}
+                meta={[
+                  {
+                    name: "description",
+                    content: "Order Management",
+                  },
+                ]}
+              />
       <button
         onClick={handleBackClick}
         className="flex items-center gap-2 group text-primary hover:text-primary/60 w-fit transition-colors"
