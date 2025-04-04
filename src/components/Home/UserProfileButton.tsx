@@ -4,10 +4,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, ShoppingCart, User, Heart } from "lucide-react";
-import { useMemo, useState } from "react";
+import { LogOut, ShoppingCart, User, Heart, Settings } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
 import axios from "../../lib/axios";
 import { clearUser } from "@/redux/slices/user";
 import { useDispatch } from "react-redux";
@@ -52,6 +54,7 @@ export default function UserProfileButton({
   name,
   imageUrl,
 }: UserProfileButtonProps) {
+  let closeTimeout: NodeJS.Timeout;
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const initials = name
@@ -62,7 +65,8 @@ export default function UserProfileButton({
     .toUpperCase();
   const bgColor = useMemo(() => getRandomColor(), []);
   const [open, setOpen] = useState(false);
-  let closeTimeout: NodeJS.Timeout;
+  // const navigate = useNavigate();
+  const closeTimeoutRef = useRef<NodeJS.Timeout>();
 
   const handleLogOut = async () => {
     try {
@@ -80,6 +84,22 @@ export default function UserProfileButton({
     }
   };
 
+  const navigateTo = (path: string) => {
+    setOpen(false);
+    navigate(path);
+  };
+
+  const handleMouseEnter = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+    }
+    setOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    closeTimeoutRef.current = setTimeout(() => setOpen(false), 300);
+  };
+
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
       <DropdownMenuTrigger asChild>
@@ -87,7 +107,7 @@ export default function UserProfileButton({
           variant="ghost"
           className="flex items-center  px-0 hover:bg-transparent md:pl-6 lg:p-5 py-6"
           onMouseEnter={() => {
-            clearTimeout(closeTimeout); // Prevents immediate closing
+            // clearTimeout(closeTimeout); // Prevents immediate closing
             setOpen(true);
           }}
         >
@@ -102,42 +122,61 @@ export default function UserProfileButton({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        align="end"
-        className="w-40 rounded-[8px]"
-        onMouseEnter={() => {
-          clearTimeout(closeTimeout); // Keeps dropdown open
-          setOpen(true);
-        }}
-        onMouseLeave={() => {
-          closeTimeout = setTimeout(() => setOpen(false), 300); // Adds delay before closing
-        }}
-      >
-        <DropdownMenuItem
-          className="flex items-center gap-2 rounded-lg cursor-pointer"
-          onClick={() => navigate("/user/profile")}
+          align="end"
+          className="w-56 p-2"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
-          <User size={16} /> Profile
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="flex items-center gap-2 rounded-lg cursor-pointer"
-          onClick={() => navigate("/user/cart")}
-        >
-          <ShoppingCart size={16} /> Cart
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="flex items-center gap-2 rounded-lg cursor-pointer"
-          onClick={() => navigate("/user/wishlist")}
-        >
-          <Heart size={16} /> Wishlist
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          className="flex items-center gap-2 rounded-lg cursor-pointer focus-visible:ring-0 text-red-500 hover:bg-red-600"
-          onClick={handleLogOut}
-        >
-          <LogOut size={16} /> Logout
-        </DropdownMenuItem>
-      </DropdownMenuContent>
+          <DropdownMenuLabel className="font-normal">
+            <div className="flex flex-col space-y-1">
+              <p className="text-sm font-medium">{name}</p>
+              <p className="text-xs text-muted-foreground truncate">Signed in</p>
+            </div>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          
+          <DropdownMenuItem
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => navigateTo("/user/profile")}
+          >
+            <User size={16} className="text-primary" />
+            <span>Profile</span>
+          </DropdownMenuItem>
+          
+          <DropdownMenuItem
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => navigateTo("/user/cart")}
+          >
+            <ShoppingCart size={16} className="text-primary" />
+            <span>Cart</span>
+          </DropdownMenuItem>
+          
+          <DropdownMenuItem
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => navigateTo("/user/wishlist")}
+          >
+            <Heart size={16} className="text-primary" />
+            <span>Wishlist</span>
+          </DropdownMenuItem>
+          
+          <DropdownMenuItem
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => navigateTo("/user/settings")}
+          >
+            <Settings size={16} className="text-primary" />
+            <span>Settings</span>
+          </DropdownMenuItem>
+          
+          <DropdownMenuSeparator />
+          
+          <DropdownMenuItem
+            className="flex items-center gap-2 cursor-pointer text-red-500 hover:text-red-500 focus:text-red-500"
+            onClick={handleLogOut}
+          >
+            <LogOut size={16} />
+            <span>Log out</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
     </DropdownMenu>
   );
 }
