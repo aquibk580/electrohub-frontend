@@ -29,6 +29,8 @@ API.interceptors.response.use(
     ) {
       store.dispatch(clearAdmin());
     }
+
+    return Promise.reject(error);
   }
 );
 

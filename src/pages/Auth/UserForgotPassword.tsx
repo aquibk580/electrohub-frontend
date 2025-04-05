@@ -42,6 +42,8 @@ const UserForgotPassword = () => {
           theme: "light",
         });
       }
+
+      setIsSubmitting(false);
     }
   };
   return (
