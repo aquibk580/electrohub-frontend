@@ -30,7 +30,6 @@ const PersonalInfo = () => {
   const user = useSelector((state: RootState) => state.user.user);
   const [editingField, setEditingField] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
-  
 
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
@@ -60,10 +59,14 @@ const PersonalInfo = () => {
     gender: "Male" | "Female";
   }
 
-  const onSubmit = (data: FormData) => { };
+  const onSubmit = (data: FormData) => {};
 
   const handleEdit = (field: string) => {
     setEditingField(field);
+
+    if (field === "answer") {
+      setValue("answer", "");
+    }
   };
 
   type FieldType = "name" | "address" | "phone" | "gender" | "answer";
@@ -90,11 +93,22 @@ const PersonalInfo = () => {
   };
 
   const handleSave = async (field: FieldType) => {
+    const value = watch(field as keyof FormData);
+
+    if (!value || value.trim() === "") {
+      toast.error("Field cannot be empty", {
+        position: "top-center",
+        theme: "light",
+      });
+      return;
+    }
+
     setEditingField(null);
+
     try {
       const response = await axios.patch(
         `${import.meta.env.VITE_API_URL}/api/user/${user!.id}`,
-        { [field]: watch(field as keyof FormData) }
+        { [field]: value }
       );
 
       if (response.status === 200) {
@@ -104,11 +118,14 @@ const PersonalInfo = () => {
             [field]: response.data?.user[field],
           })
         );
+        toast.success(`${field} updated successfully`, {
+          position: "top-center",
+          theme: "light",
+        });
       }
     } catch (error) {
       console.log(error);
     }
-    console.log(`Saving ${field}:`, watch(field as keyof FormData));
   };
 
   const renderField = (field: keyof FormData, label: string) => (
@@ -144,21 +161,41 @@ const PersonalInfo = () => {
           </Button>
         )}
       </div>
-      <Input {...register(field)} className="bg-none  py-5 rounded-lg" disabled={editingField !== field} />
+      {field === "answer" ? (
+        editingField === "answer" ? (
+          <Input
+            {...register(field)}
+            className="bg-none  py-5 rounded-lg"
+            disabled={editingField !== field}
+          />
+        ) : (
+          <Input
+            value="....."
+            className="bg-none  py-5 rounded-lg"
+            disabled={editingField !== field}
+          />
+        )
+      ) : (
+        <Input
+          {...register(field)}
+          className="bg-none  py-5 rounded-lg"
+          disabled={editingField !== field}
+        />
+      )}
     </div>
   );
 
   return (
     <Card className="rounded-xl shadow-md">
-       <Helmet
-              title="Profile | Electrohub"
-              meta={[
-                {
-                  name: "description",
-                  content: "Buy Products at very Reasonable cost",
-                },
-              ]}
-            />
+      <Helmet
+        title="Profile | Electrohub"
+        meta={[
+          {
+            name: "description",
+            content: "Buy Products at very Reasonable cost",
+          },
+        ]}
+      />
       <CardContent className="p-6">
         <h1 className="text-2xl font-semibold mb-8">Personal Information</h1>
 
