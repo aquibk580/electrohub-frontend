@@ -58,6 +58,8 @@ import NotFound from "./components/ui/not-found";
 import Admins from "./pages/Admin/Admins";
 import SellerContact from "./pages/Seller/Contact";
 import Category from "./pages/Home/Category";
+import Test from "./pages/test";
+
 
 const App = () => {
   return (
@@ -491,6 +493,7 @@ const App = () => {
             }
           />
         </Route>
+        <Route path="/test" element={<Test />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
