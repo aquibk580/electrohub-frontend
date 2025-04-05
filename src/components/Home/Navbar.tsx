@@ -20,6 +20,7 @@ import SearchBar from "./Searchbar";
 import axios from "@/lib/axios";
 import { Category, Product } from "@/types/entityTypes";
 import { formatPrice } from "@/utils/FormatPrice";
+import { assets } from "../../assets/assets.ts";
 
 const Navbar = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -106,7 +107,8 @@ const Navbar = () => {
               className="font-bold gap-1 text-3xl flex items-center cursor-pointer"
               onClick={() => navigate("/")}
             >
-              <ShoppingCart className="text-green-500" /> {""}
+             
+              <img src={assets.logo1} className="w-12 h-12" alt="Logo" />
               Electrohub
             </div>
             <div className="md:hidden">
@@ -122,8 +124,6 @@ const Navbar = () => {
                 </div>
               )}
             </div>
-
-
           </div>
 
           {/* Desktop Logo */}
@@ -131,7 +131,7 @@ const Navbar = () => {
             className="font-bold text-2xl hidden lg:flex    items-center cursor-pointer"
             onClick={() => navigate("/")}
           >
-            <ShoppingCart className="text-green-500 p-[1.5px]" />
+            <img src={assets.logo1} className="w-12 h-12" alt="Logo" />
             Electrohub
           </div>
 
@@ -142,7 +142,9 @@ const Navbar = () => {
           >
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-transparent ">Deals</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="bg-transparent ">
+                  Deals
+                </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid gap-4 p-6  md:w-[400px] lg:w-[500px] lg:grid-cols-1">
                     {dealProduct ? (
@@ -197,9 +199,10 @@ const Navbar = () => {
                                   ₹
                                   {dealProduct?.offerPercentage
                                     ? formatPrice(
-                                      dealProduct!.price *
-                                      (1 - dealProduct!.offerPercentage / 100)
-                                    )
+                                        dealProduct!.price *
+                                          (1 -
+                                            dealProduct!.offerPercentage / 100)
+                                      )
                                     : dealProduct?.price}
                                 </span>
                               </div>
@@ -212,7 +215,9 @@ const Navbar = () => {
                     ) : (
                       <div className="flex flex-col justify-center items-center h-screen">
                         <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-                        <p className="text-muted-foreground">Loading Deals...</p>
+                        <p className="text-muted-foreground">
+                          Loading Deals...
+                        </p>
                       </div>
                     )}
                   </ul>
@@ -225,7 +230,7 @@ const Navbar = () => {
                 >
                   Category
                 </NavigationMenuTrigger>
-                <NavigationMenuContent className="rounded-xl" >
+                <NavigationMenuContent className="rounded-xl">
                   <ul className="grid w-[400px] gap-4 p-4 rounded-lg md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     {components.map((component) => (
                       <Link
@@ -249,7 +254,8 @@ const Navbar = () => {
                                 {component.title}
                               </div>
                               <p className="text-xs text-gray-500 dark:text-gray-400">
-                                Discover the latest & top-rated {component.title} products. 
+                                Discover the latest & top-rated{" "}
+                                {component.title} products.
                               </p>
                             </div>
                           </div>
@@ -257,12 +263,11 @@ const Navbar = () => {
                       </Link>
                     ))}
                   </ul>
-
                 </NavigationMenuContent>
               </NavigationMenuItem>
               <NavigationMenuItem className="bg-transparent">
                 <Link to="/about">
-                  <NavigationMenuLink  className={navigationMenuTriggerStyle()}>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     About
                   </NavigationMenuLink>
                 </Link>
@@ -278,10 +283,8 @@ const Navbar = () => {
             </NavigationMenuList>
           </NavigationMenu>
 
-
           {/* Search Bar */}
           <SearchBar />
-
 
           {/* User Account/Profile */}
           <div className="hidden  md:flex gap-6 ">
@@ -302,8 +305,9 @@ const Navbar = () => {
 
       {/* Mobile Sidebar Overlay */}
       <div
-        className={`fixed inset-0 transition-opacity duration-300 lg:hidden ${showSidebar ? "opacity-100 visible" : "opacity-0 invisible"
-          }`}
+        className={`fixed inset-0 transition-opacity duration-300 lg:hidden ${
+          showSidebar ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
       >
         <MobileSideBar
           showSidebar={showSidebar}
