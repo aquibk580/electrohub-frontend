@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 import axios from "@/lib/axios";
 import ReviewForm from "@/components/User/ReviewForm";
 import { Helmet } from "react-helmet-async";
+import Mail from "@/lib/Mail";
 
 const OrderDetails = () => {
   const navigate = useNavigate();
@@ -140,6 +141,13 @@ const OrderDetails = () => {
           position: "top-center",
           theme: "dark",
         });
+        if (!user) return;
+        if (status === "Cancelled") {
+          console.log(response.data);
+          await Mail.Cancelled({ order: response.data.order, user });
+        } else if (status === "Returned") {
+          await Mail.Returned({ order: response.data.order, user });
+        }
       }
     } catch (error: any) {
       console.log(error);
@@ -162,7 +170,10 @@ const OrderDetails = () => {
 
       {/* Order Details */}
       <Card className="max-h-screen overflow-y-auto">
-        <CardContent  onClick={() => navigate(`/product/${orderItem.product.id}`)} className="pt-6 grid  grid-cols-2">
+        <CardContent
+          onClick={() => navigate(`/product/${orderItem.product.id}`)}
+          className="pt-6 grid  grid-cols-2"
+        >
           <div>
             <h2 className="text-base md:text-lg cursor-pointer font-semibold mb-4">
               {orderItem.product.name.substring(0, 100) + "..."}
@@ -175,13 +186,12 @@ const OrderDetails = () => {
               ₹
               {formatPrice(
                 orderItem.product.price -
-                (orderItem.product.price / 100) *
-                orderItem.product.offerPercentage
+                  (orderItem.product.price / 100) *
+                    orderItem.product.offerPercentage
               )}
             </div>
           </div>
           <img
-
             src={orderItem.product.images[0].url}
             alt=""
             className="object-contain w-52 cursor-pointer xl:place-self-end"
@@ -203,14 +213,14 @@ const OrderDetails = () => {
           )}
           {(orderItem.status === "OrderConfirmed" ||
             orderItem.status === "Shipped") && (
-              <Button
-                variant="outline"
-                className="bg-background text-foreground rounded-lg hover:bg-destructive/10 dark:hover:bg-red-700 border border-input transition-colors"
-                onClick={() => handleOrderStatusUpdate("Cancelled")}
-              >
-                Cancel Order
-              </Button>
-            )}
+            <Button
+              variant="outline"
+              className="bg-background text-foreground rounded-lg hover:bg-destructive/10 dark:hover:bg-red-700 border border-input transition-colors"
+              onClick={() => handleOrderStatusUpdate("Cancelled")}
+            >
+              Cancel Order
+            </Button>
+          )}
         </CardFooter>
       </Card>
 
@@ -253,8 +263,8 @@ const OrderDetails = () => {
                   ₹
                   {formatPrice(
                     orderItem.product.price -
-                    (orderItem.product.price / 100) *
-                    orderItem.product.offerPercentage
+                      (orderItem.product.price / 100) *
+                        orderItem.product.offerPercentage
                   )}
                 </span>
               </div>
@@ -269,8 +279,8 @@ const OrderDetails = () => {
                   {formatPrice(
                     (orderItem.product.price -
                       (orderItem.product.price / 100) *
-                      orderItem.product.offerPercentage) *
-                    orderItem.quantity
+                        orderItem.product.offerPercentage) *
+                      orderItem.quantity
                   )}
                 </span>
               </div>

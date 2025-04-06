@@ -1,50 +1,58 @@
-import { Order } from "@/types/entityTypes";
+import { Order, OrderItem } from "@/types/entityTypes";
 import axios from "axios";
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  address: string;
+  phone: string;
+  answer: string;
+  gender: "Male" | "Female";
+}
 
-type EmailOptions = {
-  to: string;
-  subject: string;
-  message?: string;
-  image?: string;
-  templateData?: Record<string, any>;
-};
+type OrderPayload = Order;
+type OrderItemPayload = { order: OrderItem; user: User };
 
 class Mail {
   private static API_URL = `${import.meta.env.VITE_API_URL}/api/sendmail`;
-
-  /**
-   * Send a success email
-   */
-  static async success(order: Order): Promise<boolean> {
-    return this.send(order, "success");
-  }
 
   static async OrderConfirmed(order: Order): Promise<boolean> {
     return this.send(order, "OrderConfirmed");
   }
 
-  /**
-   * Send an error/failure email
-   */
-  static async error(order: Order): Promise<boolean> {
-    return this.send(order, "error");
+  static async Shipped(data: {
+    order: OrderItem;
+    user: User;
+  }): Promise<boolean> {
+    return this.send(data, "Shipped");
   }
 
-  /**
-   * Send an info email
-   */
-  static async info(order: Order): Promise<boolean> {
-    return this.send(order, "info");
+  static async Delivered(data: {
+    order: OrderItem;
+    user: User;
+  }): Promise<boolean> {
+    return this.send(data, "Delivered");
   }
 
-  /**
-   * Send a custom email
-   */
+  static async Cancelled(data: {
+    order: OrderItem;
+    user: User;
+  }): Promise<boolean> {
+    return this.send(data, "Cancelled");
+  }
+
+  static async Returned(data: {
+    order: OrderItem;
+    user: User;
+  }): Promise<boolean> {
+    return this.send(data, "Returned");
+  }
+
   static async custom(order: Order & { type: string }): Promise<boolean> {
     try {
       const response = await axios.post(this.API_URL, {
-        order,
-        type: "custom",
+        ...order,
+        type: order.type,
       });
 
       return response.status === 200;
@@ -54,16 +62,13 @@ class Mail {
     }
   }
 
-  /**
-   * Send an email with a predefined template
-   */
-  private static async send(data: Order, type: string): Promise<boolean> {
+  private static async send(
+    data: OrderPayload | OrderItemPayload,
+    type: string
+  ): Promise<boolean> {
     try {
-      const response = await axios.post(this.API_URL, {
-        ...data,
-        type,
-      });
-
+      const payload = { ...data, type };
+      const response = await axios.post(this.API_URL, payload);
       return response.status === 200;
     } catch (error) {
       console.error("Error sending email:", error);
