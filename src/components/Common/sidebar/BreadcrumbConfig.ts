@@ -43,7 +43,7 @@ const breadcrumbConfig: Record<string, { href: string; label: string }[]> = {
   "/user/cart": [{ href: "/user/cart", label: "Cart" }],
   "/user/profile": [{ href: "/user/profile", label: "Profile" }],
   "/user/orders": [{ href: "/user/orders", label: "Orders" }],
-  "/user/orders/:id": [{ href: "/user/orders/:id", label: "Order Details" }],
+  "/user/orders/:id": [{ href: "/user/orders", label: "Orders" }, { href: "/user/orders/:id", label: "Order Details" }],
   "/user/reviews": [{ href: "/user/reviews", label: "Reviews" }],
 };
 
@@ -82,6 +82,12 @@ export const findBreadcrumbConfig = (pathname: string): { href: string; label: s
     }
   }
 
+  // Return a default breadcrumb for the root segment if no match found
+  const rootSegment = '/' + pathSegments[1];
+  if (pathSegments.length > 1) {
+    return [{ href: rootSegment, label: capitalizeFirstLetter(pathSegments[1]) }];
+  }
+
   return []; // Return empty array if no match found
 };
 
@@ -102,5 +108,9 @@ const replaceDynamicSegments = (href: string, actualPath: string): string => {
     .join('/');
 };
 
+// Helper function to capitalize the first letter
+const capitalizeFirstLetter = (string: string): string => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
 
 export default breadcrumbConfig;
