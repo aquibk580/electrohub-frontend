@@ -16,7 +16,6 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
   const [contentHeight, setContentHeight] = useState<number | null>(null);
 
   useEffect(() => {
-    
     const adjustHeight = () => {
       setTimeout(() => {
         if (sidebarRef.current) {
@@ -34,32 +33,32 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
-
-
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/user/auth/signin");
     }
   }, []);
 
-  return (
-    <div className="flex flex-col min-h-screen selection:bg-primary selection:text-primary-foreground">
-      <Navbar />
-      <div className="flex flex-1 bg-muted dark:bg-gray-600/10 pt-[8rem] md:pt-[4.45rem] lg:pt-[6rem]">
-        <div ref={sidebarRef} className="h-fit">
-          <Sidebar />
+  if (isAuthenticated) {
+    return (
+      <div className="flex flex-col min-h-screen selection:bg-primary selection:text-primary-foreground">
+        <Navbar />
+        <div className="flex flex-1 bg-muted dark:bg-gray-600/10 pt-[8rem] md:pt-[4.45rem] lg:pt-[6rem]">
+          <div ref={sidebarRef} className="h-fit">
+            <Sidebar />
+          </div>
+          <div
+            ref={contentRef}
+            className="flex-1 sm:p-6 p-4 overflow-hidden"
+            style={{ height: contentHeight ? `${contentHeight}px` : "auto" }}
+          >
+            {children}
+          </div>
         </div>
-        <div
-          ref={contentRef}
-          className="flex-1 sm:p-6 p-4 overflow-hidden"
-          style={{ height: contentHeight ? `${contentHeight}px` : "auto" }}
-        >
-          {children}
-        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
-  );
+    );
+  }
 };
 
 export default UserLayout;

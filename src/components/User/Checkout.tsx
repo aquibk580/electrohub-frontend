@@ -5,6 +5,7 @@ import { useState } from "react";
 import { RootState } from "@/redux/store";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Mail from "@/lib/Mail";
 
 interface OrderInput {
   total: number;
@@ -72,6 +73,7 @@ const Checkout = ({ orderData, styles, text, flag }: CheckoutProps) => {
                 theme: "dark",
               });
               navigate("/user/orders");
+              await Mail.OrderConfirmed(verifyRes.data?.order);
             } else {
               toast.error("Payment Verification Failed!", {
                 position: "top-center",

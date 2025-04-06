@@ -1,119 +1,75 @@
-import axios from "axios"
+import { Order } from "@/types/entityTypes";
+import axios from "axios";
 
 type EmailOptions = {
-  to: string
-  subject: string
-  message?: string
-  image?: string
-  templateData?: Record<string, any>
-}
+  to: string;
+  subject: string;
+  message?: string;
+  image?: string;
+  templateData?: Record<string, any>;
+};
 
 class Mail {
-  private static API_URL = "http://localhost:8000/api/sendmail"
+  private static API_URL = `${import.meta.env.VITE_API_URL}/api/sendmail`;
 
   /**
    * Send a success email
    */
-  static async success(options: EmailOptions): Promise<boolean> {
-    return this.send({
-      ...options,
-      type: "success",
-    })
+  static async success(order: Order): Promise<boolean> {
+    return this.send(order, "success");
+  }
+
+  static async OrderConfirmed(order: Order): Promise<boolean> {
+    return this.send(order, "OrderConfirmed");
   }
 
   /**
    * Send an error/failure email
    */
-  static async error(options: EmailOptions): Promise<boolean> {
-    return this.send({
-      ...options,
-      type: "error",
-    })
+  static async error(order: Order): Promise<boolean> {
+    return this.send(order, "error");
   }
 
   /**
    * Send an info email
    */
-  static async info(options: EmailOptions): Promise<boolean> {
-    return this.send({
-      ...options,
-      type: "info",
-    })
+  static async info(order: Order): Promise<boolean> {
+    return this.send(order, "info");
   }
 
   /**
    * Send a custom email
    */
-  static async custom(options: EmailOptions & { html: string }): Promise<boolean> {
+  static async custom(order: Order & { type: string }): Promise<boolean> {
     try {
       const response = await axios.post(this.API_URL, {
-        to: options.to,
-        subject: options.subject,
-        message: options.html,
+        order,
         type: "custom",
-      })
+      });
 
-      return response.status === 200
+      return response.status === 200;
     } catch (error) {
-      console.error("Error sending email:", error)
-      return false
+      console.error("Error sending email:", error);
+      return false;
     }
   }
 
   /**
    * Send an email with a predefined template
    */
-  private static async send(data: EmailOptions & { type: string }): Promise<boolean> {
+  private static async send(data: Order, type: string): Promise<boolean> {
     try {
       const response = await axios.post(this.API_URL, {
-        to: data.to,
-        subject: data.subject,
-        message: data.message || "",
-        type: data.type,
-        image: data.image,
-        templateData: data.templateData,
-      })
+        ...data,
+        type,
+      });
 
-      return response.status === 200
+      return response.status === 200;
     } catch (error) {
-      console.error("Error sending email:", error)
-      return false
+      console.error("Error sending email:", error);
+      return false;
     }
   }
 }
 
-export default Mail
-
-
-
-
-
-// // Send a success email
-// await Mail.success({
-//   to: "customer@example.com",
-//   subject: "Order Confirmation",
-//   message: "Thank you for your purchase! Your order #12345 has been confirmed."
-// });
-
-// // Send an error notification
-// await Mail.error({
-//   to: "user@example.com",
-//   subject: "Login Attempt Failed",
-//   message: "We detected a failed login attempt on your account."
-// });
-
-// // Send an information email with an image
-// await Mail.info({
-//   to: "subscriber@example.com",
-//   subject: "Weekly Newsletter",
-//   message: "Here are this week's top stories...",
-//   image: "https://example.com/newsletter-header.jpg"
-// });
-
-// // Send a completely custom HTML email
-// await Mail.custom({
-//   to: "developer@example.com",
-//   subject: "API Documentation",
-//   html: "<div style='color: blue;'>Your custom HTML content here</div>"
-// });
-
+export default Mail;
