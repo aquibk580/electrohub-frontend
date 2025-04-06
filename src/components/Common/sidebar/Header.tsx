@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { useLocation } from "react-router-dom";
+import { findBreadcrumbConfig } from "./BreadcrumbConfig";
 
 interface BreadcrumbItemProps {
   href: string;
@@ -15,12 +17,21 @@ interface BreadcrumbItemProps {
 }
 
 interface BreadcrumbHeaderProps {
-  items: BreadcrumbItemProps[];
+  items?: BreadcrumbItemProps[];
 }
 
 export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
-  items,
+  items: propItems,
 }) => {
+  const location = useLocation();
+  const [items, setItems] = useState<BreadcrumbItemProps[]>([]);
+
+  useEffect(() => {
+    // Use provided items or get from config based on current path
+    const breadcrumbItems = propItems || findBreadcrumbConfig(location.pathname);
+    setItems(breadcrumbItems);
+  }, [location.pathname, propItems]);
+
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 px-4 border-b sticky top-0 bg-background z-10">
       <SidebarTrigger className="-ml-1" />
@@ -28,7 +39,7 @@ export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
       <Breadcrumb>
         <BreadcrumbList>
           {items.map((item, index) => (
-            <React.Fragment key={item.href}>
+            <React.Fragment key={`${item.href}-${index}`}>
               <BreadcrumbItem className="hidden md:block">
                 {index === items.length - 1 ? (
                   <BreadcrumbLink href={item.href} className="font-semibold">
