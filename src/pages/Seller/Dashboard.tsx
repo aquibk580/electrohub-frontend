@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, Suspense, lazy } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, Filter, CalendarCheck, ChevronRight, Loader2 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -96,8 +96,8 @@ export default function Dashboard() {
         }
       } catch (error) {
         console.error("Failed to fetch orders:", error);
-        setStatsLoading(false);
-        setOrdersLoading(false);
+        setStatsLoading(true);
+        setOrdersLoading(true);
       }
     };
 

@@ -48,6 +48,7 @@ export default function Profile() {
         setProfileData(data);
       }
     } catch (error: any) {
+      setLoading(true);
       toast.error(error.message, {
         position: "top-center",
         theme: "dark",
