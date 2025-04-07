@@ -21,6 +21,7 @@ import axios from "@/lib/axios";
 import { Category, Product } from "@/types/entityTypes";
 import { formatPrice } from "@/utils/FormatPrice";
 import { assets } from "../../assets/assets.ts";
+import DealCarousel from "./Deals.tsx";
 
 const Navbar = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -107,7 +108,7 @@ const Navbar = () => {
               className="font-bold gap-1 text-3xl flex items-center cursor-pointer"
               onClick={() => navigate("/")}
             >
-             
+
               <img src={assets.logo1} className="w-12 h-12" alt="Logo" />
               Electrohub
             </div>
@@ -146,80 +147,10 @@ const Navbar = () => {
                   Deals
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid gap-4 p-6  md:w-[400px] lg:w-[500px] lg:grid-cols-1">
-                    {dealProduct ? (
-                      <li className="row-span-3 relative overflow-hidden rounded-xl bg-muted/35 shadow-md  p-4 group">
-                        <NavigationMenuLink asChild>
-                          <a
-                            className="flex h-full w-full select-none flex-col justify-end rounded-lg  no-underline outline-none focus:shadow-md"
-                            href={`/product/${dealProduct?.id}`}
-                          >
-                            {/* Offer Badge */}
-                            <div className="absolute top-3 right-3 z-10">
-                              <span className="bg-red-500 text-white font-bold px-3 py-1 rounded-full shadow-md transform -rotate-6 flex items-center justify-center">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-4 w-4 mr-1"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                  />
-                                </svg>
-                                {dealProduct?.offerPercentage || 0}% OFF
-                              </span>
-                            </div>
-
-                            {/* Product Image */}
-                            <div className="relative h-56 w-56 mx-auto overflow-hidden rounded-t-lg">
-                              <img
-                                src={dealProduct?.images[0].url}
-                                alt="Deal Product"
-                                className="object-contain h-full w-full transition-transform group-hover:scale-110 duration-300"
-                              />
-                            </div>
-
-                            {/* Product Info Overlay */}
-                            <div className="p-4">
-                              <h3 className="font-semibold text-lg mb-1">
-                                {dealProduct?.name || "Premium Product"}
-                              </h3>
-
-                              {/* Price Section */}
-                              <div className="flex items-center space-x-2">
-                                <span className="text-gray-500 font-semibold line-through text-sm">
-                                  ₹{formatPrice(dealProduct!.price) || 0}
-                                </span>
-                                <span className="text-xl font-bold text-emerald-600">
-                                  ₹
-                                  {dealProduct?.offerPercentage
-                                    ? formatPrice(
-                                        dealProduct!.price *
-                                          (1 -
-                                            dealProduct!.offerPercentage / 100)
-                                      )
-                                    : dealProduct?.price}
-                                </span>
-                              </div>
-
-                              {/* Rating */}
-                            </div>
-                          </a>
-                        </NavigationMenuLink>
-                      </li>
-                    ) : (
-                      <div className="flex flex-col justify-center items-center h-screen">
-                        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-                        <p className="text-muted-foreground">
-                          Loading Deals...
-                        </p>
-                      </div>
-                    )}
+                  <ul className="grid place-items-center md:w-[200px] lg:w-[300px] p-4">
+                    <li className="w-full">
+                      <DealCarousel />
+                    </li>
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
@@ -305,9 +236,8 @@ const Navbar = () => {
 
       {/* Mobile Sidebar Overlay */}
       <div
-        className={`fixed inset-0 transition-opacity duration-300 lg:hidden ${
-          showSidebar ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
+        className={`fixed inset-0 transition-opacity duration-300 lg:hidden ${showSidebar ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
       >
         <MobileSideBar
           showSidebar={showSidebar}
