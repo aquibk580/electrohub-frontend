@@ -147,7 +147,7 @@ const Navbar = () => {
                   Deals
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid place-items-center md:w-[200px] lg:w-[300px] p-4">
+                  <ul className="grid place-items-center md:w-[200px] lg:w-[350px] p-4">
                     <li className="w-full">
                       <DealCarousel />
                     </li>

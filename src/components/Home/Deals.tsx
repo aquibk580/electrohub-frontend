@@ -98,14 +98,13 @@ const deals = [
 export default function DealCarousel() {
   const [currentDeal, setCurrentDeal] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-//   const { theme } = useTheme();
   
   // Auto-rotate carousel
   useEffect(() => {
     if (!isPaused) {
       const interval = setInterval(() => {
         setCurrentDeal((prev) => (prev + 1) % deals.length);
-      }, 4000);
+      }, 3000);
       
       return () => clearInterval(interval);
     }
@@ -169,7 +168,7 @@ export default function DealCarousel() {
       {/* Carousel Controls */}
       <div className="absolute inset-0 flex items-center justify-between px-2 opacity-0 hover:opacity-100 transition-opacity">
         <Button 
-          variant="outline" 
+          variant="ghost" 
           size="icon" 
           className="rounded-full bg-white/70 hover:bg-white dark:bg-gray-800/70 dark:hover:bg-gray-800 shadow-md"
           onClick={prevDeal}

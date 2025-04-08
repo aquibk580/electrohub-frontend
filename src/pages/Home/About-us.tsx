@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CheckCircle, ExternalLink, ShoppingBag, Store, TrendingUp, Users } from "lucide-react"
 import { Helmet } from "react-helmet-async"
+import { Compare } from "@/components/ui/compare"
 
 // Counter animation component
 const AnimatedCounter = ({ end, duration = 2000, label }: { end: string; duration?: number; label: string }) => {
@@ -155,11 +156,19 @@ export default function AboutUs() {
           </div>
         </div>
         <div className="rounded-lg overflow-hidden h-[400px] bg-muted">
-          <img
+          {/* <img
             src="/placeholder.svg?height=400&width=600"
             alt="ElectroHub marketplace"
             className="w-full h-full object-cover"
-          />
+          /> */}
+           <Compare
+                  firstImage="/webDark.png"
+                  secondImage="/webLight.png"
+                  firstImageClassName="object-cover w-full"
+                  secondImageClassname="object-cover w-full"
+                  className="h-full w-full "
+                  slideMode="hover"
+                />
         </div>
       </div>
 
@@ -433,11 +442,11 @@ export default function AboutUs() {
           ElectroHub is the platform for you.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="gap-2">
+          <Button size="lg" className="gap-2" onClick={() => window.open("/", "_self")}>
             <ShoppingBag className="h-4 w-4" />
             Shop Now
           </Button>
-          <Button variant="outline" size="lg" className="gap-2">
+          <Button variant="outline" size="lg" className="gap-2" onClick={() => window.open("/seller", "_self")}>
             <Store className="h-4 w-4" />
             Become a Seller
           </Button>

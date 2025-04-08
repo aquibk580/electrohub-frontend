@@ -1,0 +1,70 @@
+name: Deploy Express.js to AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout Code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Step 2: Setup SSH Key
+    - name: Setup SSH Key
+      run: |
+        echo "${{ secrets.AWS_PRIVATE_KEY }}" > private_key.pem
+        chmod 600 private_key.pem
+
+    # Step 3: Deploy to EC2
+    - name: Deploy to EC2
+      run: |
+        # ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.AWS_EC2_USERNAME }}@${{ secrets.AWS_EC2_HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.AWS_EC2_HOST }} << 'EOF'
+          
+         # Step A: Clone or Pull Frontend Repo
+        if [ ! -d "/var/www/react-client" ]; then
+          cd /var/www
+          sudo git clone https://github.com/aquibk580/electrohub-frontend.git react-client
+        else
+          cd /var/www/react-client
+          sudo git reset --hard HEAD
+          sudo git pull origin main
+        fi
+
+        # Step B: Set permissions
+        sudo chown -R $USER:$USER /var/www/react-client
+        sudo chmod -R 755 /var/www/react-client
+
+        # Step C: Install dependencies & generate prisma
+        cd /var/www/react-client
+        npm install --unsafe-perm
+        
+        npm run build
+
+        # Step D: Serve with Nginx (build output is in /var/www/react-client/dist)
+        sudo tee /etc/nginx/sites-available/react-client > /dev/null <<EOL
+        server {
+            listen 80;
+            server_name yourdomain.com;
+
+            location / {
+                root /var/www/react-client/dist;
+                index index.html index.htm;
+                try_files \$uri /index.html;
+            }
+        }
+        EOL
+
+        # Step E: Enable site & reload nginx
+        sudo ln -sf /etc/nginx/sites-available/react-client /etc/nginx/sites-enabled/
+        sudo nginx -t
+        sudo systemctl reload nginx
+
+    # Step 4: Clean Up
+    - name: Clean up
+      run: rm -f private_key.pem
