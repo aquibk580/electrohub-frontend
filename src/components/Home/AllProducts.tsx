@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Loader2, Filter } from "lucide-react";
 import type { Category, Product } from "../../types/entityTypes";

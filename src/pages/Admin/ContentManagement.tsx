@@ -204,24 +204,35 @@ const ContentManagement = () => {
                 <TableHead className="text-center font-medium">Title</TableHead>
                 <TableHead className="text-center font-medium">Image</TableHead>
                 <TableHead className="text-center font-medium">Link</TableHead>
-                <TableHead className="text-center font-medium">Status</TableHead>
-                <TableHead className="text-center font-medium">Actions</TableHead>
+                <TableHead className="text-center font-medium">
+                  Status
+                </TableHead>
+                <TableHead className="text-center font-medium">
+                  Actions
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {bannerCarousels.length > 0 ? (
                 bannerCarousels.map((bannerCarousel, index) => (
-                  <TableRow 
-                    className="border-b border-b-primary/10 hover:bg-primary/5 transition-colors" 
+                  <TableRow
+                    className="border-b border-b-primary/10 hover:bg-primary/5 transition-colors"
                     key={bannerCarousel.id}
                   >
                     <TableCell className="text-center">{index + 1}</TableCell>
-                    <TableCell className="text-center font-medium">{bannerCarousel.title}</TableCell>
+                    <TableCell className="text-center font-medium">
+                      {bannerCarousel.title}
+                    </TableCell>
                     <TableCell className="flex justify-center py-4">
-                      <ImageCell url={bannerCarousel.imageUrl} alt="Banner Image" />
+                      <ImageCell
+                        url={bannerCarousel.imageUrl}
+                        alt="Banner Image"
+                      />
                     </TableCell>
                     <TableCell className="text-center">
-                      <span className="max-w-xs truncate inline-block">{bannerCarousel.href}</span>
+                      <span className="max-w-xs truncate inline-block">
+                        {bannerCarousel.href}
+                      </span>
                     </TableCell>
                     <TableCell className="text-center">
                       <StatusBadge active={bannerCarousel.isActive} />
@@ -245,7 +256,9 @@ const ContentManagement = () => {
                   <TableCell colSpan={6} className="text-center py-8">
                     <div className="flex flex-col items-center justify-center space-y-2">
                       <ImageIcon className="w-12 h-12 text-gray-400" />
-                      <p className="text-lg text-gray-500">No banner images found</p>
+                      <p className="text-lg text-gray-500">
+                        No banner images found
+                      </p>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -275,25 +288,38 @@ const ContentManagement = () => {
                 <TableHead className="text-center font-medium">Image</TableHead>
                 <TableHead className="text-center font-medium">Price</TableHead>
                 <TableHead className="text-center font-medium">Link</TableHead>
-                <TableHead className="text-center font-medium">Status</TableHead>
-                <TableHead className="text-center font-medium">Actions</TableHead>
+                <TableHead className="text-center font-medium">
+                  Status
+                </TableHead>
+                <TableHead className="text-center font-medium">
+                  Actions
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {productCarousels.length > 0 ? (
                 productCarousels.map((productCarousel, index) => (
-                  <TableRow 
-                    className="border-b border-b-primary/10 hover:bg-primary/5 transition-colors" 
+                  <TableRow
+                    className="border-b border-b-primary/10 hover:bg-primary/5 transition-colors"
                     key={productCarousel.id}
                   >
                     <TableCell className="text-center">{index + 1}</TableCell>
-                    <TableCell className="text-center font-medium">{productCarousel.name}</TableCell>
-                    <TableCell className="flex justify-center py-4">
-                      <ImageCell url={productCarousel.imageUrl} alt="Product Image" />
+                    <TableCell className="text-center font-medium">
+                      {productCarousel.name}
                     </TableCell>
-                    <TableCell className="text-center font-medium">₹{formatPrice(productCarousel.price)}</TableCell>
+                    <TableCell className="flex justify-center py-4">
+                      <ImageCell
+                        url={productCarousel.imageUrl}
+                        alt="Product Image"
+                      />
+                    </TableCell>
+                    <TableCell className="text-center font-medium">
+                      ₹{formatPrice(productCarousel.price)}
+                    </TableCell>
                     <TableCell className="text-center">
-                      <span className="max-w-xs truncate inline-block">{productCarousel.href}</span>
+                      <span className="max-w-xs truncate inline-block">
+                        {productCarousel.href}
+                      </span>
                     </TableCell>
                     <TableCell className="text-center">
                       <StatusBadge active={productCarousel.isActive} />
@@ -318,7 +344,9 @@ const ContentManagement = () => {
                   <TableCell colSpan={7} className="text-center py-8">
                     <div className="flex flex-col items-center justify-center space-y-2">
                       <ImageIcon className="w-12 h-12 text-gray-400" />
-                      <p className="text-lg text-gray-500">No product slider images found</p>
+                      <p className="text-lg text-gray-500">
+                        No product slider images found
+                      </p>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -329,7 +357,7 @@ const ContentManagement = () => {
       )}
     </div>
   );
-  
+
   const CategorySection = () => {
     return (
       <div className="space-y-4">
@@ -344,22 +372,33 @@ const ContentManagement = () => {
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent border-b border-b-primary/30 bg-primary/5">
-                  <TableHead className="text-center font-medium">Sr no</TableHead>
-                  <TableHead className="text-center font-medium">Image</TableHead>
-                  <TableHead className="text-center font-medium">Name</TableHead>
-                  <TableHead className="text-center font-medium">Actions</TableHead>
+                  <TableHead className="text-center font-medium">
+                    Sr no
+                  </TableHead>
+                  <TableHead className="text-center font-medium">
+                    Image
+                  </TableHead>
+                  <TableHead className="text-center font-medium">
+                    Name
+                  </TableHead>
+                  <TableHead className="text-center font-medium">
+                    Actions
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {categories.length > 0 ? (
                   categories.map((category, index) => (
-                    <TableRow 
-                      className="border-b border-b-primary/10 hover:bg-primary/5 transition-colors" 
+                    <TableRow
+                      className="border-b border-b-primary/10 hover:bg-primary/5 transition-colors"
                       key={category.name}
                     >
                       <TableCell className="text-center">{index + 1}</TableCell>
                       <TableCell className="flex justify-center py-4">
-                        <ImageCell url={category.imageUrl} alt="Category Image" />
+                        <ImageCell
+                          url={category.imageUrl}
+                          alt="Category Image"
+                        />
                       </TableCell>
                       <TableCell className="font-medium text-center">
                         {category.name}
@@ -384,7 +423,9 @@ const ContentManagement = () => {
                     <TableCell colSpan={4} className="text-center py-8">
                       <div className="flex flex-col items-center justify-center space-y-2">
                         <ImageIcon className="w-12 h-12 text-gray-400" />
-                        <p className="text-lg text-gray-500">No categories found</p>
+                        <p className="text-lg text-gray-500">
+                          No categories found
+                        </p>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -410,14 +451,14 @@ const ContentManagement = () => {
   return (
     <div className="w-full px-2 py-2 sm:px-4 sm:py-6 space-y-4">
       <Helmet
-                    title="CMS | Admin"
-                    meta={[
-                      {
-                        name: "description",
-                        content: "Content Management System",
-                      },
-                    ]}
-                  />
+        title="CMS | Admin"
+        meta={[
+          {
+            name: "description",
+            content: "Content Management System",
+          },
+        ]}
+      />
       <Card className="shadow-lg rounded-xl border border-primary/20 bg-card relative overflow-hidden">
         <CardHeader className="px-4 py-3 sm:p-6 bg-primary/5 border-b border-primary/10">
           <CardTitle className="text-xl sm:text-2xl flex items-center">
@@ -435,26 +476,38 @@ const ContentManagement = () => {
             onValueChange={setActiveTab}
           >
             <TabsList className="w-fit justify-start mb-6 gap-1 bg-primary/5 p-1 rounded-xl">
-              <TabsTrigger 
-                value="categories" 
-                className={`rounded-lg ${activeTab === "categories" ? "bg-primary text-primary-foreground shadow-md" : "hover:bg-primary/10"}`}
+              <TabsTrigger
+                value="categories"
+                className={`rounded-lg ${
+                  activeTab === "categories"
+                    ? "bg-primary text-primary-foreground shadow-md"
+                    : "hover:bg-primary/10"
+                }`}
               >
                 Categories
               </TabsTrigger>
-              <TabsTrigger 
-                value="bannerCarousel" 
-                className={`rounded-lg ${activeTab === "bannerCarousel" ? "bg-primary text-primary-foreground shadow-md" : "hover:bg-primary/10"}`}
+              <TabsTrigger
+                value="bannerCarousel"
+                className={`rounded-lg ${
+                  activeTab === "bannerCarousel"
+                    ? "bg-primary text-primary-foreground shadow-md"
+                    : "hover:bg-primary/10"
+                }`}
               >
                 Banner Images
               </TabsTrigger>
-              <TabsTrigger 
-                value="productCarousel" 
-                className={`rounded-lg ${activeTab === "productCarousel" ? "bg-primary text-primary-foreground shadow-md" : "hover:bg-primary/10"}`}
+              <TabsTrigger
+                value="productCarousel"
+                className={`rounded-lg ${
+                  activeTab === "productCarousel"
+                    ? "bg-primary text-primary-foreground shadow-md"
+                    : "hover:bg-primary/10"
+                }`}
               >
                 Product Slider
               </TabsTrigger>
             </TabsList>
-            
+
             <div className="relative min-h-[400px]">
               <TabsContent value="categories" className="mt-0">
                 <CategorySection />
