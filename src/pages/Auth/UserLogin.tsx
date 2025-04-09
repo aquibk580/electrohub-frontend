@@ -1,32 +1,22 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
-import { type SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  LoginFormSchema,
-  type LoginFormSchemaType,
-} from "@/components/Auth/FormSchema";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
 import "animate.css";
-import axios from "../../lib/axios";
-import { toast } from "react-toastify";
-import { setUser } from "@/redux/slices/user";
-import { GoogleButton } from "@/components/Auth/GoogleButton";
-import { clearSeller } from "@/redux/slices/seller";
-import { Lock, Mail } from "lucide-react"; // Added icon imports
 
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription, } from "@/components/ui/card";
+import { LoginFormSchema, type LoginFormSchemaType, } from "@/components/Auth/FormSchema";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { GoogleButton } from "@/components/Auth/GoogleButton";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { clearSeller } from "@/redux/slices/seller";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { setUser } from "@/redux/slices/user";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { AppDispatch } from "@/redux/store";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { useState } from "react";
+
+import axios from "../../lib/axios";
 export default function UserLogin() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -99,102 +89,85 @@ export default function UserLogin() {
   };
 
   return (
-    <div className="w-full md:max-w-md mx-auto p-4 sm:p-8">
-      <Card className="animate__animated animate__fadeIn border-0 shadow-lg rounded-2xl bg-white dark:bg-gray-900 overflow-hidden">
-        <div className="h-2 bg-gradient-to-r from-primary to-accent" />
-        <CardHeader className="pt-8">
-          <CardTitle className="text-3xl font-bold text-center text-gray-800 dark:text-white">
-            Welcome Back
+    <div className=" md:max-w-md w-full     mx-auto space-y-8 sm:px-8 sm:p-4">
+      <Card className="animate__animated animate__fadeIn shadow-lg rounded-xl">
+        <CardHeader>
+          <CardTitle className="text-3xl font-extrabold text-center">
+            Sign In
           </CardTitle>
-          <CardDescription className="text-center text-gray-600 dark:text-gray-300">
+          <CardDescription className="text-center text-gray-800 dark:text-gray-100">
             Sign in to your User Account
           </CardDescription>
         </CardHeader>
-        <CardContent className="px-6 sm:px-8">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label 
-                htmlFor="email" 
-                className="text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Email Address
-              </Label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
-                <Input
-                  id="email"
-                  type="email"
-                  {...register("email")}
-                  className="pl-10 bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700 focus:ring-primary focus:border-primary dark:focus:ring-accent dark:focus:border-accent"
-                  placeholder="you@example.com"
-                />
-              </div>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /\S+@\S+\.\S+/,
+                    message: "Invalid email address",
+                  },
+                })}
+                placeholder="Email ID"
+              />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-red-500 text-sm">
                   {String(errors.email.message)}
                 </p>
               )}
             </div>
 
             <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <Label 
-                  htmlFor="password" 
-                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Password
-                </Label>
-                <Button
-                  variant="link"
-                  className="p-0 h-auto text-sm font-medium text-primary  hover:text-primary/80 dark:hover:text-accent/80"
-                  onClick={() => navigate("/user/auth/forgot-password")}
-                >
-                  Forgot password?
-                </Button>
-              </div>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  {...register("password")}
-                  className="pl-10 bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700 focus:ring-primary focus:border-primary dark:focus:ring-accent dark:focus:border-accent"
-                  placeholder="••••••••"
-                />
-              </div>
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 8,
+                    message: "Password must be at least 8 characters",
+                  },
+                })}
+                placeholder="Password"
+              />
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-red-500 text-sm">
                   {String(errors.password.message)}
                 </p>
               )}
             </div>
 
+            <div className="flex items-center justify-start">
+              <Button
+                variant="link"
+                className="p-0 h-auto font-medium text-blue-950 dark:text-blue-500"
+                onClick={() => navigate("/user/auth/forgot-password")}
+              >
+                Forgot password?
+              </Button>
+            </div>
+
             <Button
-              className="w-full py-2.5 bg-primary hover:bg-primary/90 text-white dark:bg-accent dark:hover:bg-accent/90 rounded-lg transition-all duration-200 font-medium shadow-md hover:shadow-lg"
+              className="w-full bg-green-700 hover:bg-green-950 text-white"
               type="submit"
               disabled={isSubmitting}
             >
-              {isSubmitting ? (
-                <div className="flex items-center justify-center">
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                  Signing In...
-                </div>
-              ) : (
-                "Sign In"
-              )}
+              {isSubmitting ? "Signing In..." : "Sign In"}
             </Button>
           </form>
 
-          <div className="relative my-6">
+          <div className="relative my-3">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-gray-300 dark:border-gray-700" />
+              <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="px-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">
+              <span className="bg-background px-2 text-muted-foreground">
                 Or continue with
               </span>
             </div>
@@ -203,29 +176,28 @@ export default function UserLogin() {
           <GoogleButton
             onClick={handleGoogleSignIn}
             text="Sign In with Google"
-            className="w-full py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 shadow-sm"          />
+          />
         </CardContent>
-        <CardFooter className="flex flex-col space-y-5 px-6 sm:px-8 pb-8">
-          <p className="text-center text-gray-600 dark:text-gray-400">
-            Don't have an account?{" "}
+        <CardFooter className="flex flex-col space-y-4">
+          <p className="text-center text-sm font-medium">
+            Don't have a User Account?{" "}
             <Button
               variant="link"
-              className="p-0 h-auto font-medium text-primary  hover:underline"
+              className="p-0 h-auto font-semibold text-green-700"
               onClick={() => navigate("/user/auth/signup")}
             >
               Sign Up
             </Button>
           </p>
-          
-          <Button
-            variant="outline"
-            className="w-full border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium rounded-lg transition-all duration-200"
-            onClick={() => navigate("/seller/auth/signin")}
-          >
-            Sign in as Seller
-          </Button>
         </CardFooter>
       </Card>
+      <Button
+        variant="outline"
+        className="w-full shadow-md hover:shadow-lg transition-all font-semibold"
+        onClick={() => navigate("/seller/auth/signin")}
+      >
+        Sign in to your Seller Account
+      </Button>
     </div>
   );
 }

@@ -1,24 +1,17 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { SlidersHorizontal } from "lucide-react";
-import { Product } from "@/types/entityTypes";
-import axios from "@/lib/axios";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import ProductCard from "@/components/Home/ProductCard";
+import { Skeleton } from "@/components/ui/skeleton";
+import { SlidersHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Product } from "@/types/entityTypes";
+import { Badge } from "@/components/ui/badge";
+import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { Helmet } from "react-helmet-async";
-
+import axios from "@/lib/axios";
 export default function CategoryPage() {
   const { categoryName } = useParams<{ categoryName: string }>();
   const [products, setProducts] = useState<Product[]>([]);
