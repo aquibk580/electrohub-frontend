@@ -3,13 +3,13 @@ import Navbar from "@/components/Home/Navbar";
 import { AppDispatch, RootState } from "@/redux/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { setPfp, setUser } from "@/redux/slices/user";
 import axios from "../../lib/axios";
 import API from "axios";
 import { ChatBot } from "@/components/Home/ChatBot";
 import { Helmet } from "react-helmet-async";
-const HomeLayout = ({ children }: { children: React.ReactNode }) => {
+const HomeLayout = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [isVisible, setIsVisible] = useState(false);
 
@@ -100,10 +100,13 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
         ]}
       />
       <Navbar />
-      <div className="pt-[4rem] lg:pt-[6.7rem] ">{children}</div>
+      <div className="pt-[4rem] lg:pt-[6.7rem] ">
+        <Outlet />
+      </div>
       <div
-        className={` transition-opacity duration-500 ${isVisible ? "opacity-100" : "opacity-0 hidden"
-          }`}
+        className={` transition-opacity duration-500 ${
+          isVisible ? "opacity-100" : "opacity-0 hidden"
+        }`}
       >
         <ChatBot
           botName="Electro Bot"

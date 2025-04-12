@@ -1,9 +1,9 @@
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 import React from "react";
 
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
-const AdminAuthLayout = ({ children }: { children: React.ReactNode }) => {
+const AdminAuthLayout = () => {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-muted/45 py-8 px-4 sm:px-6 lg:px-8">
       <nav>
@@ -12,14 +12,12 @@ const AdminAuthLayout = ({ children }: { children: React.ReactNode }) => {
             <ArrowLeft className="h-8 w-8 text-black" />
           </Link>
           <div className="text-3xl flex items-center justify-center gap-2 font-extrabold text-accent-foreground flex-grow text-center">
-   
-           <ShoppingCart className="text-green-500"/> Electrohub
-          
+            <ShoppingCart className="text-green-500" /> Electrohub
           </div>
           <div className="w-6"></div>
         </div>
       </nav>
-      {children}
+      <Outlet />
       <div className="max-w-4xl w-full mx-auto space-y-8">
         <footer className="mt-8">
           <nav className="flex flex-wrap justify-center gap-4 text-sm text-accent-foreground/65">

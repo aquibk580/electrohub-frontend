@@ -4,9 +4,9 @@ import Sidebar from "@/components/User/Sidebar";
 import { RootState } from "@/redux/store";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
-const UserLayout = ({ children }: { children: React.ReactNode }) => {
+const UserLayout = () => {
   const navigate = useNavigate();
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
@@ -52,7 +52,7 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
             className="flex-1 sm:p-6 p-4 overflow-hidden"
             style={{ height: contentHeight ? `${contentHeight}px` : "auto" }}
           >
-            {children}
+            <Outlet />
           </div>
         </div>
         <Footer />
