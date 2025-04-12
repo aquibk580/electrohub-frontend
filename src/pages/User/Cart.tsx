@@ -14,6 +14,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import  {CartSkeleton,
+  OrderSummarySkeleton,
+} from "@/components/User/UserSkeletons";
 
 interface OrderInput {
   total: number;
@@ -57,7 +60,7 @@ const Cart = () => {
       (acc, item) =>
         acc +
         (item.price - (item.price / 100) * item.offerPercentage) *
-        item.quantity,
+          item.quantity,
       0
     );
     setTotal(newTotal);
@@ -117,24 +120,25 @@ const Cart = () => {
 
   return (
     <div className="flex flex-col xl:flex-row gap-4 h-full">
-       <Helmet
-              title="Cart | Electrohub"
-              meta={[
-                {
-                  name: "description",
-                  content: "Cart Products",
-                },
-              ]}
-            />
+      <Helmet
+        title="Cart | Electrohub"
+        meta={[
+          {
+            name: "description",
+            content: "Cart Products",
+          },
+        ]}
+      />
       <Card className="flex flex-col overflow-hidden rounded-xl shadow-md w-full">
         <CardContent className="p-6 flex flex-col h-full">
           <h2 className="text-2xl font-semibold mb-4">Shopping Cart</h2>
           <div className="space-y-6 overflow-y-auto flex-1">
             {isLoading ? (
-              <div className="flex justify-center items-center min-h-screen">
-                <Loader2 className="h-8 w-8 animate-spin" />
-              </div>
-            ) : cartItems.length > 0 ? (
+              <CartSkeleton />
+            ) : // <div className="flex justify-center items-center min-h-screen">
+            //   <Loader2 className="h-8 w-8 animate-spin" />
+            // </div>
+            cartItems.length > 0 ? (
               cartItems.map((item) => (
                 <div
                   key={item.id}
@@ -147,11 +151,18 @@ const Cart = () => {
                       alt={item.name}
                       className="w-36 h-36 sm:w-32 sm:h-32 cursor-pointer md:w-44 md:h-44 object-cover rounded-lg"
                     />
-                    <div  onClick={() => navigate(`/product/${item.id}`)} className="space-y-1  cursor-pointer">
-                      <h3 className="font-medium cursor-pointer">{item.name}</h3>
-                      <h3 className="font-medium text-gray-700 dark:text-gray-300 text-sm">Seller: {item.productInfo.brand}</h3>
+                    <div
+                      onClick={() => navigate(`/product/${item.id}`)}
+                      className="space-y-1  cursor-pointer"
+                    >
+                      <h3 className="font-medium cursor-pointer">
+                        {item.name}
+                      </h3>
+                      <h3 className="font-medium text-gray-700 dark:text-gray-300 text-sm">
+                        Seller: {item.productInfo.brand}
+                      </h3>
                       <div className="text-xl font-semibold mt-1">
-                        ₹ 
+                        ₹
                         {formatPrice(
                           item.price - (item.price / 100) * item.offerPercentage
                         )}
@@ -211,99 +222,108 @@ const Cart = () => {
               ))
             ) : (
               <div className="flex flex-col justify-center items-center h-full gap-1 text-center">
-              <img src={assets.CartEmpty} className="h-36 object-contain" alt="Empty Cart" />
-              <h1 className="font-semibold text-2xl text-gray-800 dark:text-white">
-                Oops! Your Cart is Empty 🛒
-              </h1>
-              <p className="text-gray-500 dark:text-gray-400 text-sm">
-                Looks like you haven’t added anything yet.
-              </p>
-              <Link
-                to="/"
-                className="bg-primary/80 hover:bg-primary/90 transition-all p-2 px-5 rounded-lg text-white font-semibold shadow-md"
-              >
-                Start Shopping
-              </Link>
-            </div>
-            
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="w-full xl:max-w-sm overflow-y-auto">
-        <CardContent className="p-6">
-          <h2 className="text-2xl font-semibold mb-4">Order Summary</h2>
-          <div className="space-y-3">
-            {cartItems.length > 0 && (
-              <div className="flex flex-col space-y-3">
-                {cartItems.map((item) => (
-                  <div className="flex justify-between">
-                    <span>{item.productInfo.brand}</span>
-                    <span>
-                      ₹
-                      {formatPrice(
-                        item.price - (item.price / 100) * item.offerPercentage
-                      )}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Subtotal</span>
-              <span>₹{formatPrice(total)}</span>
-            </div>
-            <div className="flex justify-between text-green-600">
-              <span>Delivery Charges</span>
-              <span>Free</span>
-            </div>
-            <Separator className="my-2 border" />
-            <div className="flex justify-between items-center font-bold text-lg">
-              <span>Grand Total</span>
-              <span>₹{formatPrice(total)}</span>
-            </div>
-          </div>
-
-          <Separator className="my-6" />
-
-          <img
-            src={assets.paymentOptions}
-            className="hidden xl:block"
-            alt="Payment-Options"
-          />
-
-          <Separator className="my-6" />
-
-          <div className="space-y-4">
-            <div className="flex items-start space-x-3">
-              <MapPin className="w-5 h-5 text-muted-foreground mt-0.5" />
-              <div>
-                <h3 className="font-semibold mb-1">Shipping Address</h3>
-                <p className="text-sm text-muted-foreground">{user?.address}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              <Phone className="w-5 h-5 text-muted-foreground" />
-              <div>
-                <h3 className="font-semibold mb-1">Contact Number</h3>
-                <p className="text-sm text-muted-foreground">
-                  +91 {user?.phone}
+                <img
+                  src={assets.CartEmpty}
+                  className="h-36 object-contain"
+                  alt="Empty Cart"
+                />
+                <h1 className="font-semibold text-2xl text-gray-800 dark:text-white">
+                  Oops! Your Cart is Empty 🛒
+                </h1>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                  Looks like you haven’t added anything yet.
                 </p>
+                <Link
+                  to="/"
+                  className="bg-primary/80 hover:bg-primary/90 transition-all p-2 px-5 rounded-lg text-white font-semibold shadow-md"
+                >
+                  Start Shopping
+                </Link>
               </div>
-            </div>
+            )}
           </div>
         </CardContent>
-        <CardFooter>
-          <Checkout
-            orderData={orderData}
-            flag="cart"
-            text="Proceed to Checkout"
-            styles="w-full bg-primary hover:bg-primary text-primary-foreground text-sm rounded-lg"
-          />
-        </CardFooter>
       </Card>
+
+      {isLoading ? (
+        <OrderSummarySkeleton />
+      ) : (
+        <Card className="w-full xl:max-w-sm overflow-y-auto">
+          <CardContent className="p-6">
+            <h2 className="text-2xl font-semibold mb-4">Order Summary</h2>
+            <div className="space-y-3">
+              {cartItems.length > 0 && (
+                <div className="flex flex-col space-y-3">
+                  {cartItems.map((item) => (
+                    <div className="flex justify-between">
+                      <span>{item.productInfo.brand}</span>
+                      <span>
+                        ₹
+                        {formatPrice(
+                          item.price - (item.price / 100) * item.offerPercentage
+                        )}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Subtotal</span>
+                <span>₹{formatPrice(total)}</span>
+              </div>
+              <div className="flex justify-between text-green-600">
+                <span>Delivery Charges</span>
+                <span>Free</span>
+              </div>
+              <Separator className="my-2 border" />
+              <div className="flex justify-between items-center font-bold text-lg">
+                <span>Grand Total</span>
+                <span>₹{formatPrice(total)}</span>
+              </div>
+            </div>
+
+            <Separator className="my-6" />
+
+            <img
+              src={assets.paymentOptions}
+              className="hidden xl:block"
+              alt="Payment-Options"
+            />
+
+            <Separator className="my-6" />
+
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <MapPin className="w-5 h-5 text-muted-foreground mt-0.5" />
+                <div>
+                  <h3 className="font-semibold mb-1">Shipping Address</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {user?.address}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-3">
+                <Phone className="w-5 h-5 text-muted-foreground" />
+                <div>
+                  <h3 className="font-semibold mb-1">Contact Number</h3>
+                  <p className="text-sm text-muted-foreground">
+                    +91 {user?.phone}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Checkout
+              orderData={orderData}
+              flag="cart"
+              text="Proceed to Checkout"
+              styles="w-full bg-primary hover:bg-primary text-primary-foreground text-sm rounded-lg"
+            />
+          </CardFooter>
+        </Card>
+      )}
     </div>
   );
 };
