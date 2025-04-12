@@ -4,14 +4,10 @@ import axios from "../../lib/axios";
 import { setSeller } from "@/redux/slices/seller";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 
-export default function SellerLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function SellerLayout() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const seller = useSelector((state: RootState) => state.seller.seller);
@@ -54,7 +50,8 @@ export default function SellerLayout({
       navigate("/");
       return;
     }
-  }, [isAuthenticated, navigate]);``
+  }, [isAuthenticated, navigate]);
+  ``;
   if (isAuthenticated) {
     return (
       <MainNav>
@@ -69,8 +66,8 @@ export default function SellerLayout({
           ]}
         ></Helmet>
 
-        <div className=" h-full p-1.5 md:p-6 bg-white dark:bg-black">
-          {children}
+        <div className="h-full p-1.5 md:p-6 bg-white dark:bg-black">
+          <Outlet />
         </div>
       </MainNav>
     );

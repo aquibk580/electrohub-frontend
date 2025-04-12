@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "./app-sidebar";
 import { BreadcrumbHeader } from "./Header";
@@ -12,7 +12,7 @@ interface SidebarLayoutProps {
   children: ReactNode;
 }
 
-const SidebarLayout = ({ children }: SidebarLayoutProps) => {
+const SidebarLayout = () => {
   const location = useLocation();
   const breadcrumbs = findBreadcrumbConfig(location.pathname);
 
@@ -36,7 +36,7 @@ const SidebarLayout = ({ children }: SidebarLayoutProps) => {
       <SidebarInset className="flex-1 overflow-auto">
         <BreadcrumbHeader items={breadcrumbs} />
         <div className="bg-slate-50/30 dark:bg-transparent dark:bg-gradient-to-br from-primary/5 to-slate-900/10  ">
-          {children}
+          <Outlet />
         </div>
       </SidebarInset>
     </SidebarProvider>

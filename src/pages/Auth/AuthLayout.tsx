@@ -1,9 +1,9 @@
 import { ArrowLeft, ShoppingCart } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import React, { useEffect } from "react";
-const AuthLayout = ({ children }: { children: React.ReactNode }) => {
+const AuthLayout = () => {
   const navigate = useNavigate();
   const isAuthenticatedUser = useSelector(
     (state: RootState) => state.user.isAuthenticated
@@ -31,7 +31,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
           <div className="w-6"></div>
         </div>
       </nav>
-      {children}
+      <Outlet/>
       <div className="max-w-4xl w-full mx-auto space-y-8">
         <footer className="mt-8">
           <nav className="flex flex-wrap justify-center gap-4 text-sm text-gray-600 dark:text-white">

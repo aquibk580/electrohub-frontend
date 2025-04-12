@@ -37,12 +37,12 @@ const SellerCard = ({
         group relative
         flex items-center gap-4
         rounded-xl p-5
-        bg-white dark:bg-gray-800/60
-        border border-gray-200 dark:border-gray-700
-        shadow-md hover:shadow-lg
-        transition-all duration-300 ease-in-out hover:scale-[1.03]
+        bg-white dark:bg-gradient-to-r from-slate-900 to-black
+        border border-gray-300 dark:border-gray-700
+        shadow-md  hover:shadow-lg
+        transition-all duration-300 ease-in-out hover:scale-[1.01]
         cursor-pointer
-        overflow-hidden
+        overflow-hidden  hover:border-primary dark:hover:border-slate-200 
       "
     >
       {/* Avatar Section */}
@@ -69,22 +69,13 @@ const SellerCard = ({
 
       {/* Seller Info */}
       <div className="flex flex-col flex-1 min-w-0">
-        <h3 className="font-semibold text-lg md:text-xl truncate text-gray-900 dark:text-white">
+        <h3 className=" font-semibold text-lg md:text-xl truncate text-gray-900 dark:text-white">
           {name}
         </h3>
         <p className="text-sm md:text-base truncate text-gray-500 dark:text-gray-300">
           {deliveryTime}
         </p>
       </div>
-
-      {/* Hover Effect Overlay */}
-      <div className="
-        absolute inset-0 
-        opacity-0 group-hover:opacity-100
-        bg-gradient-to-r from-primary/20 to-primary/10 dark:from-primary/30 dark:to-primary/20
-        rounded-xl 
-        transition-opacity duration-300
-      "></div>
     </div>
   );
 };
@@ -128,7 +119,7 @@ export default function TopSellers() {
   }
 
   return (
-    <section className="w-full  mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    <section className="w-full  mx-auto py-6  sm:px-6 lg:px-8">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
           Top Sellers & Brands
