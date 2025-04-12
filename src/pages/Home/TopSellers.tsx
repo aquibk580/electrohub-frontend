@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button"
 import ProductCard from "@/components/Home/ProductCard"
 import { RootState } from "@/redux/store"
 import { useSelector } from "react-redux"
+import TopSellerSkeleton from "@/components/Home/Topseller-Skeleton"
 
 const TopSellerPage: React.FC = () => {
   const { sellerId } = useParams()
@@ -74,10 +75,11 @@ const TopSellerPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen bg-white dark:bg-gray-950">
-        <Loader2 className="h-12 w-12 animate-spin text-gray-400 dark:text-gray-600" />
-        <p className="text-gray-500 dark:text-gray-400 mt-4 font-medium">Loading seller profile...</p>
-      </div>
+      // <div className="flex flex-col justify-center items-center h-screen bg-white dark:bg-gray-950">
+      //   <Loader2 className="h-12 w-12 animate-spin text-gray-400 dark:text-gray-600" />
+      //   <p className="text-gray-500 dark:text-gray-400 mt-4 font-medium">Loading seller profile...</p>
+      // </div>
+      <TopSellerSkeleton/>
     )
   }
 
