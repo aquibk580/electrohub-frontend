@@ -9,6 +9,8 @@ import { Helmet } from "react-helmet-async"
 import "animate.css"
 import { Separator } from "@radix-ui/react-select"
 
+import DiscountOffers from "@/components/Home/Discount-Offers"
+
 const LoadingFallback = () => (
   <div className="flex justify-center items-center min-h-[200px]">
     <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -57,6 +59,11 @@ const Home = () => {
       <section className="w-full animate__animated animate__fadeIn animate__delay-4s">
         <Suspense fallback={<LoadingFallback />}>
           <ServiceSection />
+        </Suspense>
+      </section>
+      <section className="w-full animate__animated animate__fadeIn animate__delay-4s">
+        <Suspense fallback={<LoadingFallback />}>
+          <DiscountOffers />
         </Suspense>
       </section>
     </div>

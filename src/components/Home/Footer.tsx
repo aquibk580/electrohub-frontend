@@ -331,9 +331,13 @@ export default function Footer({ activeTab, setActiveTab }: FooterProps) {
               Categories
             </h2>
             {loading ? (
-              <div className="flex flex-col justify-center items-center h-[200px]">
-                <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-                <p className="text-muted-foreground">Loading Categories...</p>
+              <div className="flex flex-col space-y-2 h-[200px] pt-4">
+                {/* Skeleton items - creating 5 placeholder items */}
+                {[1, 2, 3, 4, 5].map((item) => (
+                  <div key={item} className="animate-pulse flex items-center">
+                    <div className="h-4 bg-gray-200 rounded w-24 md:w-32"></div>
+                  </div>
+                ))}
               </div>
             ) : (
               <ul className="space-y-2">
