@@ -1,12 +1,11 @@
 import React from "react";
-
 type IconProps = {
   containerClass?: string;
   polygonClass?: string;
   frameClass?: string;
 };
 
-const CustomSVG: React.FC<IconProps> = ({
+const ELogo: React.FC<IconProps> = ({
   containerClass = "",
   polygonClass = "",
   frameClass = "",
@@ -31,4 +30,4 @@ const CustomSVG: React.FC<IconProps> = ({
   );
 };
 
-export default CustomSVG;
+export default ELogo;

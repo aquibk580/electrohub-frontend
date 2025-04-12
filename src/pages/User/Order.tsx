@@ -14,6 +14,7 @@ import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet-async";
 import { useDebounce } from "@/hooks/use-debounce";
+import { OrderSkeleton } from "@/components/User/UserSkeletons";
 
 export default function Orders() {
   const [orders, setOrders] = useState<Array<Order>>([]);
@@ -134,7 +135,9 @@ export default function Orders() {
 
       <Card className="flex-1 flex flex-col overflow-hidden rounded-xl shadow-md">
         <CardHeader>
-          <h1 className="font-semibold text-2xl">My Orders</h1>
+          <h1 className="font-semibold text-2xl">
+            My Orders {filteredOrders ? `(${filteredOrders.length})` : "(0)"}
+          </h1>
         </CardHeader>
         <CardContent className="flex-1 overflow-y-auto">
           <div className="space-y-4">
@@ -143,7 +146,7 @@ export default function Orders() {
                 <div className="grid grid-cols-1 gap-6 lg:gap-8 cursor-pointer">
                   {filteredOrders.map((orderItem) => (
                     <div
-                      key={orderItem.id} // Adding key for performance
+                      key={orderItem.id}
                       className="flex flex-row flex-wrap justify-center sm:justify-start items-center gap-4 cursor-pointer border-b border-gray-300 py-4"
                       onClick={() =>
                         navigate(`/user/orders/${orderItem.id}`, {
@@ -231,9 +234,7 @@ export default function Orders() {
                 </div>
               )
             ) : (
-              <div className="flex justify-center items-center min-h-screen">
-                <Loader2 className="h-8 w-8 animate-spin" />
-              </div>
+              <OrderSkeleton />
             )}
           </div>
         </CardContent>

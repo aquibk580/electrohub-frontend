@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useTheme } from "../theme-provider";
+import { Badge } from "@/components/ui/badge";
 import { debounce } from "lodash";
+
+import { useTheme } from "../theme-provider";
 interface IndiaMapProps {
   salesData: { [key: string]: number };
   title?: string;

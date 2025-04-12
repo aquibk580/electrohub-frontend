@@ -1,4 +1,4 @@
-import { Loader2, ShoppingCart, Trash2, HeartOff } from "lucide-react";
+import { ShoppingCart, Trash2, HeartOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { assets } from "@/assets/assets";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -9,6 +9,7 @@ import { Product } from "@/types/entityTypes";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { formatPrice } from "@/utils/FormatPrice";
+import { WishlistSkeleton } from "@/components/User/UserSkeletons";
 
 export function Wishlist() {
   const navigate = useNavigate();
@@ -103,11 +104,9 @@ export function Wishlist() {
           <h1 className="text-2xl font-bold">Your Wishlist</h1>
         </div>
       </CardHeader>
-      <CardContent className="flex-1 overflow-y-auto">
+      <CardContent className="flex-1 overflow-y-auto overflow-x-hidden">
         {isLoading ? (
-          <div className="flex justify-center items-center min-h-[200px]">
-            <Loader2 className="h-8 w-8 animate-spin" />
-          </div>
+          <WishlistSkeleton />
         ) : wishlistItems.length > 0 ? (
           <div className="space-y-4">
             {wishlistItems.map((item) => (
@@ -174,6 +173,7 @@ export function Wishlist() {
               </div>
             ))}
           </div>
+          
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-center px-4">
             <HeartOff className="h-24 w-24 text-red-500 bg-red-100/75 dark:bg-red-700/30 shadow-sm p-4 rounded-full mb-4" />

@@ -1,23 +1,21 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
-import { type SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import "animate.css";
-import axios from "../../lib/axios";
-import { toast } from "react-toastify";
-import {
-  SellerDetailsFormSchema,
-  SellerDetailsFormSchemaType,
-} from "@/components/Auth/FormSchema";
-import { setSeller } from "@/redux/slices/seller";
-import { assets } from "@/assets/assets";
 
+import { SellerDetailsFormSchema, SellerDetailsFormSchemaType, } from "@/components/Auth/FormSchema";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { setSeller } from "@/redux/slices/seller";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { AppDispatch } from "@/redux/store";
+import { useDispatch } from "react-redux";
+import { assets } from "@/assets/assets";
+import { toast } from "react-toastify";
+import { useState } from "react";
+
+import axios from "../../lib/axios";
 export default function SellerDetails() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();

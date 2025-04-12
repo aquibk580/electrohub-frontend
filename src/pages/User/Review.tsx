@@ -8,6 +8,7 @@ import { formatDate } from "@/lib/utils";
 import { Product } from "@/types/entityTypes";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
+import { ReviewSkeleton } from "@/components/User/UserSkeletons";
 
 export interface ReviewType {
   id: number;
@@ -105,13 +106,16 @@ const Reviews = () => {
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`h-4 w-4 ${i < review.rating
+                          className={`h-4 w-4 ${
+                            i < review.rating
                               ? "fill-yellow-400 text-yellow-400"
                               : "fill-gray-200 text-gray-200"
-                            }`}
+                          }`}
                         />
                       ))}
-                      <span className="ml-1 font-semibold">{review.rating}.0/5</span>
+                      <span className="ml-1 font-semibold">
+                        {review.rating}.0/5
+                      </span>
                     </div>
                     <p className="text-accent-foreground/90 text-sm sm:text-base mb-3">
                       {review.content}
@@ -124,6 +128,7 @@ const Reviews = () => {
 
                 {/* Right Section (Buttons) */}
                 <div className="flex justify-center md:justify-end gap-2 w-full md:w-auto">
+                  {/* Just an Edit Button with pencil icon */}
                   <ReviewEditModel
                     reviewId={review.id}
                     oldRating={review.rating}
@@ -141,22 +146,17 @@ const Reviews = () => {
             ))
           ) : (
             <div className="flex flex-col items-center justify-center text-center h-full">
-               <MessageSquareText className="h-16 w-16 text-gray-400 dark:text-gray-500 mb-2" /> 
-  <h1 className="font-semibold text-2xl text-gray-700 dark:text-gray-300">
-    No Reviews Yet 
-  </h1>
-  <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-    Be the first to share your thoughts!
-  </p>
- 
-</div>
-
-          
+              <MessageSquareText className="h-16 w-16 text-gray-400 dark:text-gray-500 mb-2" />
+              <h1 className="font-semibold text-2xl text-gray-700 dark:text-gray-300">
+                No Reviews Yet
+              </h1>
+              <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+                Be the first to share your thoughts!
+              </p>
+            </div>
           )
         ) : (
-          <div className="flex justify-center items-center min-h-screen">
-            <Loader2 className="h-8 w-8 animate-spin" />
-          </div>
+          <ReviewSkeleton />
         )}
       </CardContent>
     </Card>

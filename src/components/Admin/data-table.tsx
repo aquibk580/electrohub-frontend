@@ -1,15 +1,7 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
-import { ChevronRight } from "lucide-react";
 import type { TableProps } from "@/types/dashboard";
-
+import { ChevronRight } from "lucide-react";
 export function DataTable({ headers, data, type, onRowClick }: TableProps) {
   const handleDoubleClick = (row: any) => {
     if (onRowClick) {

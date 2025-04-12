@@ -1,66 +1,63 @@
-import { Route, Routes } from "react-router-dom";
-import Home from "./pages/Home/Home";
-import UserLogin from "./pages/Auth/UserLogin";
-import SellerLogin from "./pages/Auth/SellerLogin";
-import Cart from "./pages/User/Cart";
-import UserRegister from "./pages/Auth/UserRegister";
-import SellerRegister from "./pages/Auth/SellerRegister";
-import ProductDisplay from "./pages/Product/Product";
+import AdminLayout from "@/components/Common/sidebar/SidebarLayout";
 import AuthLayout from "@/pages/Auth/AuthLayout";
+import { Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+
+import AdminForgotPassword from "./pages/Admin/Auth/AdminForgotPassword";
 import SellerForgotPassword from "./pages/Auth/SellerForgotPassword";
 import UserForgotPassword from "./pages/Auth/UserForgotPassword";
-import HomeLayout from "./pages/Home/HomeLayout";
-import { ToastContainer } from "react-toastify";
-import UserDetails from "./pages/Auth/UserDetails";
-import SellerLayout from "./pages/Seller/SellerLayout";
-import ProductList from "./pages/Seller/ProductList";
-import AddProduct from "./pages/Seller/AddProduct";
-import Dashboard from "./pages/Seller/Dashboard";
-import Profile from "./pages/Seller/Profile";
-import UserProfile from "./pages/User/Profile";
-import SellerDetails from "./pages/Auth/SellerDetails";
-import { Wishlist } from "./pages/User/WishList";
-import UserLayout from "./pages/User/UserLayout";
-import Reviews from "./pages/User/Review";
-import UserOrders from "./pages/User/Order";
-import OrderDetails from "./pages/User/OrderDetails";
-import Signin from "./pages/Admin/Auth/Signin";
-import Signup from "./pages/Admin/Auth/Signup";
-import AdminForgotPassword from "./pages/Admin/Auth/AdminForgotPassword";
 import AdminAuthLayout from "./pages/Admin/Auth/AdminAuthLayout";
-import AdminLayout from "@/components/Common/sidebar/SidebarLayout";
-import AdminDashboard from "./pages/Admin/Dashboard";
-import Seller from "./pages/Admin/Seller";
-import SellerInfo from "./pages/Admin/SellerInfo";
-import Buyer from "./pages/Admin/Buyer";
-import BuyerDetails from "./pages/Admin/BuyerDetails";
-import ProductManagement from "./pages/Admin/Products";
-import ProductDetails from "./pages/Admin/ProductsManage";
-import Order from "./pages/Admin/Order";
-import OrderInfo from "./pages/Admin/OrdersManage";
-import Messages from "./pages/Admin/Messages";
-import ChatLayout from "./components/Admin/ChatLayout";
 import ContentManagement from "./pages/Admin/ContentManagement";
-import AdminSettings from "./pages/Admin/Settings";
-import LogsAndSecurity from "./pages/Admin/Logs";
-import Demo from "./pages/Admin/demo";
-import ViewProduct from "./pages/Seller/ViewProduct";
-import EditProduct from "./pages/Seller/EditProduct";
-import ViewOrder from "./pages/Seller/ViewOrder";
-import SellerSettings from "./pages/Seller/Settings";
-import UserSettings from "./pages/User/Settings";
 import ScrollToTop from "./components/Common/Scroll-To-Top";
-import TopSellers from "./pages/Home/TopSellers";
-import AboutUs from "./pages/Home/About-us";
-import ContactUs from "./pages/Home/Contact-us";
-import InfoPage from "./pages/Home/Footer-links";
-import NotFound from "./components/ui/not-found";
-import Admins from "./pages/Admin/Admins";
+import ProductDetails from "./pages/Admin/ProductsManage";
+import SellerRegister from "./pages/Auth/SellerRegister";
+import SellerLayout from "./pages/Seller/SellerLayout";
+import SellerDetails from "./pages/Auth/SellerDetails";
+import ProductManagement from "./pages/Admin/Products";
+import ChatLayout from "./components/Admin/ChatLayout";
+import BuyerDetails from "./pages/Admin/BuyerDetails";
+import ViewProduct from "./pages/Seller/ViewProduct";
+import UserRegister from "./pages/Auth/UserRegister";
+import SellerSettings from "./pages/Seller/Settings";
+import ProductList from "./pages/Seller/ProductList";
+import ProductDisplay from "./pages/Product/Product";
+import OrderDetails from "./pages/User/OrderDetails";
+import EditProduct from "./pages/Seller/EditProduct";
+import AdminDashboard from "./pages/Admin/Dashboard";
+import UserDetails from "./pages/Auth/UserDetails";
+import SellerLogin from "./pages/Auth/SellerLogin";
 import SellerContact from "./pages/Seller/Contact";
+import OrderInfo from "./pages/Admin/OrdersManage";
+import AdminSettings from "./pages/Admin/Settings";
+import AddProduct from "./pages/Seller/AddProduct";
+import SellerInfo from "./pages/Admin/SellerInfo";
+import ViewOrder from "./pages/Seller/ViewOrder";
+import UserSettings from "./pages/User/Settings";
+import UserLayout from "./pages/User/UserLayout";
+import TopSellers from "./pages/Home/TopSellers";
+import NotFound from "./components/ui/not-found";
+import LogsAndSecurity from "./pages/Admin/Logs";
+import InfoPage from "./pages/Home/Footer-links";
+import HomeLayout from "./pages/Home/HomeLayout";
+import Dashboard from "./pages/Seller/Dashboard";
+import { Wishlist } from "./pages/User/WishList";
+import ContactUs from "./pages/Home/Contact-us";
+import UserProfile from "./pages/User/Profile";
+import UserLogin from "./pages/Auth/UserLogin";
+import Signup from "./pages/Admin/Auth/Signup";
+import Signin from "./pages/Admin/Auth/Signin";
+import Messages from "./pages/Admin/Messages";
+import Profile from "./pages/Seller/Profile";
 import Category from "./pages/Home/Category";
-import Test from "./pages/test";
-
-
+import UserOrders from "./pages/User/Order";
+import AboutUs from "./pages/Home/About-us";
+import Seller from "./pages/Admin/Seller";
+import Reviews from "./pages/User/Review";
+import Admins from "./pages/Admin/Admins";
+import Order from "./pages/Admin/Order";
+import Buyer from "./pages/Admin/Buyer";
+import Home from "./pages/Home/Home";
+import Cart from "./pages/User/Cart";
 const App = () => {
   return (
     <>
@@ -484,16 +481,7 @@ const App = () => {
               </AdminLayout>
             }
           />
-          <Route
-            path="demo"
-            element={
-              <AdminLayout>
-                <Demo />
-              </AdminLayout>
-            }
-          />
         </Route>
-        <Route path="/test" element={<Test />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

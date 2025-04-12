@@ -9,9 +9,6 @@ const IndiaMap: React.FC = () => {
       </div>
     );
   };
-
-
-  
   const IndiaMapSkeleton: React.FC<IndiaMapSkeletonProps> = ({ className }) => {
     return (
       <div className="flex justify-center items-center w-full h-full">

@@ -1,11 +1,11 @@
-import { SubmitHandler } from "react-hook-form";
 import { ForgotPasswordFormSchemaType } from "@/components/Auth/FormSchema";
 import ForgetPasswordForm from "@/components/Auth/ForgetPasswordForm";
-import { useState } from "react";
-import axios from "../../lib/axios";
-import { toast } from "react-toastify";
+import { SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useState } from "react";
 
+import axios from "../../lib/axios";
 const UserForgotPassword = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
