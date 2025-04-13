@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { type Dispatch, type SetStateAction, useMemo } from "react"
 import type { Product } from "../../types/entityTypes"
