@@ -37,7 +37,7 @@ const SellerCard = ({
         group relative
         flex items-center gap-4
         rounded-xl p-5
-        bg-white dark:bg-gradient-to-r from-slate-900 to-black
+        bg-white dark:bg-gradient-to-r from-gray-900 via-gray-950 to-black
         border border-gray-300 dark:border-gray-700
         shadow-md  hover:shadow-lg
         transition-all duration-300 ease-in-out hover:scale-[1.01]
@@ -119,7 +119,7 @@ export default function TopSellers() {
   }
 
   return (
-    <section className="w-full  mx-auto py-6  sm:px-6 lg:px-8">
+    <section className="w-full  mx-auto ">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
           Top Sellers & Brands
