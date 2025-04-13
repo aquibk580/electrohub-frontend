@@ -15,6 +15,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import DealsBanner from "./DealsBanner";
+import { Separator } from "@radix-ui/react-separator";
+import { DealsBannerSkeleton } from "./HomeSkeletons";
 const PRODUCTS_PER_PAGE = 12;
 
 const AllProducts = () => {
@@ -165,12 +168,20 @@ const AllProducts = () => {
     [categoryProductsCache]
   );
 
+  const bestProducts = useMemo(() => {
+    if (!products || products.length === 0) return [];
+
+    const shuffled = [...products].sort(() => 0.5 - Math.random());
+
+    return shuffled.slice(0, 5);
+  }, [products]);
+
   if (loading) {
     return (
       <div>
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl md:text-3xl font-bold">Our Products</h1>
-          <Button variant="outline"  size="sm" disabled>
+          <Button variant="outline" size="sm" disabled>
             <Filter className="h-4 w-4 mr-2" />
             Filter
           </Button>
@@ -192,120 +203,138 @@ const AllProducts = () => {
   }
 
   return (
-    <div className="bg-background">
-      <div className="flex flex-col space-y-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl md:text-3xl font-bold">Our Products</h1>
+    <>
+      <div className="bg-background mb-5">
+        <div className="flex flex-col space-y-6">
+          <div className="flex justify-between items-center">
+            <h1 className="text-2xl md:text-3xl font-bold">Our Products</h1>
 
-          {/* Mobile filter */}
-          <div className="block md:hidden">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" className="border-primary  rounded-xl" size="sm">
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filter
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right"  className="dark:bg-black/30 backdrop-blur-3xl ">
-                <SheetHeader>
-                  <SheetTitle>Categories</SheetTitle>
-                  <SheetDescription className="text-accent-foreground/85">
-                    Filter products by category
-                  </SheetDescription>
-                </SheetHeader>
-                <div className="mt-6 flex flex-col gap-2">
+            {/* Mobile filter */}
+            <div className="block md:hidden">
+              <Sheet>
+                <SheetTrigger asChild>
                   <Button
-                    variant={category === "All" ? "default" : "outline"}
-                    className="justify-start rounded-xl"
-                    onClick={() => handleCategoryChange("All")}
+                    variant="outline"
+                    className="border-primary  rounded-xl"
+                    size="sm"
                   >
-                    All
+                    <Filter className="h-4 w-4 mr-2" />
+                    Filter
                   </Button>
-                  {categories.map((item) => (
+                </SheetTrigger>
+                <SheetContent
+                  side="right"
+                  className="dark:bg-black/30 backdrop-blur-3xl "
+                >
+                  <SheetHeader>
+                    <SheetTitle>Categories</SheetTitle>
+                    <SheetDescription className="text-accent-foreground/85">
+                      Filter products by category
+                    </SheetDescription>
+                  </SheetHeader>
+                  <div className="mt-6 flex flex-col gap-2">
                     <Button
-                      key={item.name}
-                      variant={category === item.name ? "default" : "outline"}
+                      variant={category === "All" ? "default" : "outline"}
                       className="justify-start rounded-xl"
-                      onClick={() => handleCategoryChange(item.name)}
+                      onClick={() => handleCategoryChange("All")}
                     >
-                      {item.name}
+                      All
                     </Button>
-                  ))}
-                </div>
-              </SheetContent>
-            </Sheet>
+                    {categories.map((item) => (
+                      <Button
+                        key={item.name}
+                        variant={category === item.name ? "default" : "outline"}
+                        className="justify-start rounded-xl"
+                        onClick={() => handleCategoryChange(item.name)}
+                      >
+                        {item.name}
+                      </Button>
+                    ))}
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
-        </div>
 
-        {/* Desktop Categories */}
-        <div className="hidden md:flex overflow-x-auto py-2 gap-2 no-scrollbar">
-          <Button
-            variant={category === "All" ? "default" : "outline"}
-            size="sm"
-            className="rounded-full"
-            onClick={() => handleCategoryChange("All")}
-          >
-            All
-          </Button>
-          {categories.map((item) => (
+          {/* Desktop Categories */}
+          <div className="hidden md:flex overflow-x-auto py-2 gap-2 no-scrollbar">
             <Button
-              key={item.name}
-              variant={category === item.name ? "default" : "outline"}
+              variant={category === "All" ? "default" : "outline"}
               size="sm"
-              className="rounded-full whitespace-nowrap"
-              onClick={() => handleCategoryChange(item.name)}
+              className="rounded-full"
+              onClick={() => handleCategoryChange("All")}
             >
-              {item.name}
+              All
             </Button>
-          ))}
-        </div>
+            {categories.map((item) => (
+              <Button
+                key={item.name}
+                variant={category === item.name ? "default" : "outline"}
+                size="sm"
+                className="rounded-full whitespace-nowrap"
+                onClick={() => handleCategoryChange(item.name)}
+              >
+                {item.name}
+              </Button>
+            ))}
+          </div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                wishlist={wishlist}
-                setWishlist={setWishlist}
-              />
-            ))
-          ) : (
-            <div className="col-span-full py-12 text-center">
-              <h1 className="text-2xl font-semibold text-foreground">
-                No products found for this category
-              </h1>
-              <p className="mt-2 text-muted-foreground">
-                Try selecting a different category
-              </p>
+          {/* Products Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  wishlist={wishlist}
+                  setWishlist={setWishlist}
+                />
+              ))
+            ) : (
+              <div className="col-span-full py-12 text-center">
+                <h1 className="text-2xl font-semibold text-foreground">
+                  No products found for this category
+                </h1>
+                <p className="mt-2 text-muted-foreground">
+                  Try selecting a different category
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Load More Button */}
+          {hasMore && filteredProducts.length > 0 && (
+            <div className="flex justify-center mt-8">
+              <Button
+                onClick={loadMoreProducts}
+                variant="outline"
+                size="lg"
+                className="min-w-[200px] rounded-xl border-primary/50 bg-none hover:bg-primary/60 hover:text-white"
+                disabled={loadingMore}
+              >
+                {loadingMore ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Loading...
+                  </span>
+                ) : (
+                  "More Products"
+                )}
+              </Button>
             </div>
           )}
         </div>
-
-        {/* Load More Button */}
-        {hasMore && filteredProducts.length > 0 && (
-          <div className="flex justify-center mt-8">
-            <Button
-              onClick={loadMoreProducts}
-              variant="outline"
-              size="lg"
-              className="min-w-[200px] rounded-xl border-primary/50 bg-none hover:bg-primary/60 hover:text-white"
-              disabled={loadingMore}
-            >
-              {loadingMore ? (
-                <span className="flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Loading...
-                </span>
-              ) : (
-                "More Products"
-              )}
-            </Button>
-          </div>
-        )}
       </div>
-    </div>
+      <Separator className="border" />
+      {/* Top Deals */}
+      {loading ? (
+        <DealsBannerSkeleton />
+      ) : (
+        <section className="w-full animate__animated animate__fadeIn animate__delay-3s">
+          <DealsBanner products={bestProducts} />
+        </section>
+      )}
+    </>
   );
 };
 

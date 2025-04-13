@@ -14,12 +14,11 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import UserProfileButton from "./UserProfileButton";
-import { Loader2, Menu, Phone, ShoppingCart, UserRound } from "lucide-react";
+import { Menu, Phone, UserRound } from "lucide-react";
 import MobileSideBar from "./MobileSidebar";
 import SearchBar from "./Searchbar";
 import axios from "@/lib/axios";
-import { Category, Product } from "@/types/entityTypes";
-import { formatPrice } from "@/utils/FormatPrice";
+import { Category } from "@/types/entityTypes";
 import { assets } from "../../assets/assets.ts";
 import DealCarousel from "./Deals.tsx";
 
@@ -29,7 +28,7 @@ const Navbar = () => {
   const user = useSelector((state: RootState) => state.user.user);
   const pfp = useSelector((state: RootState) => state.user.pfp);
   const [categories, setCategories] = useState<Array<Category>>([]);
-  const [dealProduct, setDealProduct] = useState<Product | null>(null);
+
   const [open, setOpen] = useState(false);
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
@@ -49,22 +48,6 @@ const Navbar = () => {
     };
 
     fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    const fetchDealProduct = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/user/products/deal`
-        );
-
-        if (response.status === 200) setDealProduct(response.data);
-      } catch (error: any) {
-        console.error(error);
-      }
-    };
-
-    fetchDealProduct();
   }, []);
 
   const components: {
@@ -108,7 +91,6 @@ const Navbar = () => {
               className="font-bold gap-1 text-3xl flex items-center cursor-pointer"
               onClick={() => navigate("/")}
             >
-
               <img src={assets.logo1} className="w-12 h-12" alt="Logo" />
               Electrohub
             </div>
@@ -142,17 +124,20 @@ const Navbar = () => {
             onValueChange={(value) => setOpen(value === "open")}
           >
             <NavigationMenuList>
+              <NavigationMenuItem className="bg-transparent">
+                <Link to="/about">
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    About
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-transparent ">
-                  Deals
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid place-items-center md:w-[200px] lg:w-[350px] p-4">
-                    <li className="w-full">
-                      <DealCarousel />
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
+                <Link to="/contact">
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Contact
+                  </NavigationMenuLink>
+                </Link>
               </NavigationMenuItem>
               <NavigationMenuItem className="rounded-full">
                 <NavigationMenuTrigger
@@ -197,17 +182,9 @@ const Navbar = () => {
                 </NavigationMenuContent>
               </NavigationMenuItem>
               <NavigationMenuItem className="bg-transparent">
-                <Link to="/about">
+                <Link to="/info/help-center">
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    About
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <Link to="/contact">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Contact
+                    Help
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
@@ -236,8 +213,9 @@ const Navbar = () => {
 
       {/* Mobile Sidebar Overlay */}
       <div
-        className={`fixed inset-0 transition-opacity duration-300 lg:hidden ${showSidebar ? "opacity-100 visible" : "opacity-0 invisible"
-          }`}
+        className={`fixed inset-0 transition-opacity duration-300 lg:hidden ${
+          showSidebar ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
       >
         <MobileSideBar
           showSidebar={showSidebar}
