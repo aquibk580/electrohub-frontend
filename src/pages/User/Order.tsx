@@ -143,11 +143,11 @@ export default function Orders() {
           <div className="space-y-4">
             {!isLoading ? (
               filteredOrders.length > 0 ? (
-                <div className="grid grid-cols-1 gap-6 lg:gap-8 cursor-pointer">
+                <div className="grid grid-cols-1 gap-6 lg:gap-8">
                   {filteredOrders.map((orderItem) => (
-                    <div
+                    <Card
                       key={orderItem.id}
-                      className="flex flex-row flex-wrap justify-center sm:justify-start items-center gap-4 cursor-pointer border-b border-gray-300 py-4"
+                      className="flex flex-col cursor-pointer sm:flex-row items-center p-5 justify-between border-b gap-4 border rounded-xl bg-slate-50/35 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-primary/5 hover:border-slate-500 dark:hover:border-primary/35 shadow-sm"
                       onClick={() =>
                         navigate(`/user/orders/${orderItem.id}`, {
                           state: { orderItem },
@@ -209,7 +209,7 @@ export default function Orders() {
                         </div>
                         <p>{getOrderMessage(orderItem.status)}</p>
                       </div>
-                    </div>
+                    </Card>
                   ))}
                 </div>
               ) : (

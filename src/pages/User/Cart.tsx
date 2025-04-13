@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, MapPin, Minus, Phone, Plus, Trash2 } from "lucide-react";
+import { MapPin, Minus, Phone, Plus, Trash2 } from "lucide-react";
 import { assets } from "@/assets/assets";
 import Checkout from "@/components/User/Checkout";
 import { useEffect, useState } from "react";
@@ -14,9 +14,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import  {CartSkeleton,
+import {
+  CartSkeleton,
   OrderSummarySkeleton,
 } from "@/components/User/UserSkeletons";
+import { Badge } from "@/components/ui/badge";
 
 interface OrderInput {
   total: number;
@@ -140,16 +142,16 @@ const Cart = () => {
             // </div>
             cartItems.length > 0 ? (
               cartItems.map((item) => (
-                <div
+                <Card
                   key={item.id}
-                  className="flex flex-col sm:flex-row items-center justify-between border-b pb-4 gap-4"
+                  className="flex flex-col cursor-pointer sm:flex-row items-center p-5 lg:p-0 justify-between border-b gap-4 border rounded-xl bg-slate-50/35 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-primary/5 hover:border-slate-500 dark:hover:border-primary/35 shadow-sm"
                 >
                   <div className="flex flex-col sm:flex-row sm:gap-6 items-center">
                     <img
                       onClick={() => navigate(`/product/${item.id}`)}
                       src={item.images[0].url}
                       alt={item.name}
-                      className="w-36 h-36 sm:w-32 sm:h-32 cursor-pointer md:w-44 md:h-44 object-cover rounded-lg"
+                      className="w-36 h-36 sm:w-32 sm:h-32 cursor-pointer md:w-44 md:h-44 p-2 object-cover rounded-lg shrink-0"
                     />
                     <div
                       onClick={() => navigate(`/product/${item.id}`)}
@@ -158,14 +160,25 @@ const Cart = () => {
                       <h3 className="font-medium cursor-pointer">
                         {item.name}
                       </h3>
-                      <h3 className="font-medium text-gray-700 dark:text-gray-300 text-sm">
-                        Seller: {item.productInfo.brand}
+                      <h3 className="font-medium text-gray-700 dark:text-gray-300 text-sm py-1 line-clamp-2">
+                        {item.description}
                       </h3>
-                      <div className="text-xl font-semibold mt-1">
-                        ₹
-                        {formatPrice(
-                          item.price - (item.price / 100) * item.offerPercentage
-                        )}
+
+                      <div className="flex items-center gap-4 text-xl font-semibold mt-1">
+                        <span>
+                          {" "}
+                          ₹
+                          {formatPrice(
+                            item.price -
+                              (item.price / 100) * item.offerPercentage
+                          )}
+                        </span>
+                        <span className="text-sm text-muted-foreground line-through">
+                          ₹{formatPrice(item.price)}
+                        </span>
+                        <Badge variant="destructive" className="rounded-lg text-[10px] md:text-sm">
+                          {item.offerPercentage}% OFF
+                        </Badge>
                       </div>
                     </div>
                   </div>
@@ -212,13 +225,13 @@ const Cart = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="hover:bg-red-200/90 py-5 rounded-xl dark:hover:bg-red-900/30"
+                      className="hover:bg-red-200/90 py-5 mx-2 rounded-xl dark:hover:bg-red-900/30"
                       onClick={() => handleDelete(item.cartItemId)}
                     >
                       <Trash2 className="h-4 w-4 text-red-500" />
                     </Button>
                   </div>
-                </div>
+                </Card>
               ))
             ) : (
               <div className="flex flex-col justify-center items-center h-full gap-1 text-center">
@@ -231,7 +244,7 @@ const Cart = () => {
                   Oops! Your Cart is Empty 🛒
                 </h1>
                 <p className="text-gray-500 dark:text-gray-400 text-sm">
-                  Looks like you haven’t added anything yet.
+                  Looks like you haven't added anything yet.
                 </p>
                 <Link
                   to="/"
@@ -256,7 +269,7 @@ const Cart = () => {
                 <div className="flex flex-col space-y-3">
                   {cartItems.map((item) => (
                     <div className="flex justify-between">
-                      <span>{item.productInfo.brand}</span>
+                      <span>{item.name.substring(0, 20)}</span>
                       <span>
                         ₹
                         {formatPrice(

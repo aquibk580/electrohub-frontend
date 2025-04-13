@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Lens } from "../ui/lens";
-import { Skeleton } from "../ui/skeleton";
 import { ThumbnailSkeleton } from "./productSkeletons";
 
 interface ProductImageProps {

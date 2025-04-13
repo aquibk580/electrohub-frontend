@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -17,10 +15,11 @@ import type { Product } from "@/types/entityTypes";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/redux/store";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Separator } from "@radix-ui/react-select";
-import { ProductSpecsSkeleton } from "@/components/product/productSkeletons";
+import ProductPageSkeleton, {
+  ProductSpecsSkeleton,
+} from "@/components/product/productSkeletons";
 
 export default function ProductPage() {
   const isAuthenticated = useSelector(
@@ -116,27 +115,17 @@ export default function ProductPage() {
 
   // Error state
   if (error || !product) {
-    return (
-      <div className="flex flex-col justify-center items-center h-screen gap-4">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md text-center">
-          <p className="text-red-500 font-medium text-lg mb-4">
-            {error || "Product not found"}
-          </p>
-          <p className="text-muted-foreground mb-6">
-            The product you're looking for might have been removed or is
-            temporarily unavailable.
-          </p>
-          <Button onClick={() => navigate("/")}>Return to Home</Button>
-        </div>
-      </div>
-    );
+    return <ProductPageSkeleton />;
   }
 
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>{product.name}</title>
-        <meta name="description" content={product.description} />
+        <title>{product.name || "Loading..."}</title>
+        <meta
+          name="description"
+          content={product.description || "Loading Product"}
+        />
       </Helmet>
       <main className="px-4 py-16 md:py-8">
         <div className="grid lg:grid-cols-2 gap-8">

@@ -83,20 +83,20 @@ const Reviews = () => {
           My Reviews ({reviews.length})
         </h1>
       </CardHeader>
-      <CardContent className="flex-1 overflow-y-auto">
+      <CardContent className="flex-1 overflow-y-auto space-y-6">
         {!isLoading ? (
           reviews.length > 0 ? (
             reviews.map((review) => (
-              <div
+              <Card
                 key={review.id}
-                className="flex flex-col md:flex-row items-center  justify-between gap-4 px-4 py-3 border-b border-gray-300"
+                className="flex flex-col cursor-pointer sm:flex-row items-center p-5 justify-between border-b gap-4 border rounded-xl bg-slate-50/35 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-primary/5 hover:border-slate-500 dark:hover:border-primary/35 shadow-sm"
               >
                 {/* Left Section (Image + Details) */}
                 <div className="flex flex-col sm:flex-row items-center md:items-start gap-4 w-full">
                   <img
                     src={review.product.images[0].url}
                     alt={review.product.name}
-                    className="w-24 h-24 sm:w-32 sm:h-32 md:w-44 md:h-44 object-contain rounded"
+                    className="w-24 h-24 sm:w-32 sm:h-32 md:w-44 md:h-44 object-contain rounded self-center"
                   />
                   <div className="flex-1 p-2 sm:p-5 text-center sm:text-left">
                     <h3 className="text-base sm:text-lg font-medium mb-2">
@@ -137,12 +137,13 @@ const Reviews = () => {
                   />
                   <Button
                     onClick={() => handleDelete(review.id)}
-                    className="bg-red-100 dark:bg-red-700/40 dark:border-red-500 border rounded-xl  hover:bg-gray-100 text-red-700 flex items-center md:w-auto shadow-none"
+                    className="bg-destructive dark:bg-red-700 dark:border-red-500 border rounded-xl text-destructive-foreground hover:bg-gray-100 flex items-center md:w-auto shadow-none"
                   >
+                   Delete
                     <Trash2 className="w-5 h-5" />
                   </Button>
                 </div>
-              </div>
+              </Card>
             ))
           ) : (
             <div className="flex flex-col items-center justify-center text-center h-full">

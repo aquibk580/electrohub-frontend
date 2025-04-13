@@ -126,41 +126,38 @@ export function OrderSummarySkeleton() {
 export function OrderSkeleton() {
   return (
     <div className="flex flex-col gap-4 h-full">
-      <Card className="flex flex-col rounded-xl shadow-md w-full">
-        <CardContent className="p-4 flex flex-col h-full">
-          <div className="space-y-6 overflow-y-auto flex-1">
-            {Array.from({ length: 3 }).map((_, index) => (
-              <div
-                key={index}
-                className="flex flex-row flex-wrap justify-center sm:justify-start items-center gap-4 border-b border-gray-300 py-4"
-              >
-                {/* Image Skeleton */}
-                <div className="w-32 h-32 md:w-40 md:h-40 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
+      {Array.from({ length: 3 }).map((_, index) => (
+        <Card
+          key={index}
+          className="rounded-xl shadow-sm border border-gray-200 dark:border-gray-800"
+        >
+          <CardContent className="p-4 flex flex-col sm:flex-row items-center gap-4">
+            {/* Image Skeleton */}
+            <div className="w-32 h-32 md:w-40 md:h-40 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
 
-                {/* Product Info Skeleton */}
-                <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-md w-3/4 animate-pulse" />
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-md w-1/4 animate-pulse" />
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-md w-1/3 animate-pulse" />
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-md w-2/5 animate-pulse" />
-                </div>
+            {/* Product Info Skeleton */}
+            <div className="flex-1 space-y-2 w-full">
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-md w-3/4 animate-pulse" />
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-md w-1/4 animate-pulse" />
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-md w-1/3 animate-pulse" />
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-md w-2/5 animate-pulse" />
+            </div>
 
-                {/* Status + Message Skeleton */}
-                <div className="flex flex-col items-start sm:items-center gap-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 animate-pulse" />
-                    <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse" />
-                  </div>
-                  <div className="h-4 w-40 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse" />
-                </div>
+            {/* Status + Message Skeleton */}
+            <div className="flex flex-col items-start sm:items-end gap-2">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 animate-pulse" />
+                <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse" />
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+              <div className="h-4 w-40 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse" />
+            </div>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 }
+
 
 export function ReviewSkeleton() {
   return (
