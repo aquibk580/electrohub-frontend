@@ -290,7 +290,7 @@ const AllProducts = () => {
               onClick={loadMoreProducts}
               variant="outline"
               size="lg"
-              className="min-w-[200px] rounded-lg bg-none hover:bg-primary/60 hover:text-white"
+              className="min-w-[200px] rounded-xl border-primary/50 bg-none hover:bg-primary/60 hover:text-white"
               disabled={loadingMore}
             >
               {loadingMore ? (

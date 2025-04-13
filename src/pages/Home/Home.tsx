@@ -10,6 +10,7 @@ import "animate.css"
 import { Separator } from "@radix-ui/react-select"
 
 import DiscountOffers from "@/components/Home/Discount-Offers"
+import DealsBanner from "@/components/Home/DealsBanner"
 
 const LoadingFallback = () => (
   <div className="flex justify-center items-center min-h-[200px]">
@@ -19,7 +20,7 @@ const LoadingFallback = () => (
 
 const Home = () => {
   return (
-    <div className="flex flex-col space-y-7 md:space-y-8 lg:space-y-8 mx-auo px-4 sm:px-6 lg:px-5  md:py-2">
+    <div className="flex flex-col space-y-7 md:space-y-8 lg:space-y-8 mx-auo px-4 sm:px-6 lg:px-6  md:py-2">
       {/* Hero Banner */}
       <section className="w-full animate__animated animate__fadeIn">
         <Suspense fallback={<LoadingFallback />}>
@@ -47,6 +48,14 @@ const Home = () => {
         </Suspense>
       </section>
 
+<Separator className="border"/>
+      {/* Top Deals */}
+      <section className="w-full animate__animated animate__fadeIn animate__delay-3s">
+        <Suspense fallback={<LoadingFallback />}>
+          <DealsBanner/>
+        </Suspense>
+      </section>
+
       <Separator className="border"/>
       {/* Top Sellers */}
       <section className="w-full animate__animated animate__fadeIn animate__delay-3s">
@@ -54,6 +63,7 @@ const Home = () => {
           <TopSellers />
         </Suspense>
       </section>
+
       <Separator className="border"/>
       {/* Services */}
       <section className="w-full animate__animated animate__fadeIn animate__delay-4s">
@@ -61,6 +71,8 @@ const Home = () => {
           <ServiceSection />
         </Suspense>
       </section>
+
+      <Separator className="border"/>
       <section className="w-full animate__animated animate__fadeIn animate__delay-4s">
         <Suspense fallback={<LoadingFallback />}>
           <DiscountOffers />
