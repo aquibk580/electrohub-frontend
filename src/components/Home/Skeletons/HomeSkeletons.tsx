@@ -1,4 +1,4 @@
-import { Card } from "../ui/card";
+import { Card } from "../../ui/card";
 
 const SkeletonBox = ({ className }: { className: string }) => (
   <div className={`bg-muted/40 animate-pulse rounded-md ${className}`} />

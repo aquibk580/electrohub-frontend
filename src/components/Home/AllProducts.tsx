@@ -7,17 +7,12 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/redux/store";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import DealsBanner from "./DealsBanner";
 import { Separator } from "@radix-ui/react-separator";
-import { DealsBannerSkeleton } from "./HomeSkeletons";
+import { DealsBannerSkeleton } from "./Skeletons/HomeSkeletons";
+import ElectrohubOffers from "./Discount-Offers";
+import DiscountOffersSkeleton from "./Skeletons/Offer-Skeleton";
 const PRODUCTS_PER_PAGE = 12;
 
 const AllProducts = () => {
@@ -334,6 +329,16 @@ const AllProducts = () => {
           <DealsBanner products={bestProducts} />
         </section>
       )}
+      <Separator className="border" />
+      {/* Top Offers */}
+
+      {loading ? (
+        <DiscountOffersSkeleton />
+              ):(        <section className="w-full animate__animated animate__fadeIn animate__delay-3s">
+          <ElectrohubOffers products={products} />
+        </section>
+              )}
+      
     </>
   );
 };

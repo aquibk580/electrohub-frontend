@@ -8,7 +8,7 @@ import { Loader2 } from "lucide-react";
 import "animate.css";
 import { Separator } from "@radix-ui/react-select";
 
-import DiscountOffers from "@/components/Home/Discount-Offers";
+// import DiscountOffers from "@/components/Home/Discount-Offers";
 
 const LoadingFallback = () => (
   <div className="flex justify-center items-center min-h-[200px]">
@@ -66,12 +66,12 @@ const Home = () => {
         </Suspense>
       </section>
 
-      <Separator className="border" />
+      {/* <Separator className="border" />
       <section className="w-full animate__animated animate__fadeIn animate__delay-4s">
         <Suspense fallback={<LoadingFallback />}>
           <DiscountOffers />
         </Suspense>
-      </section>
+      </section> */}
     </div>
   );
 };

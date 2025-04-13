@@ -1,241 +1,214 @@
-"use client"
-
-import type React from "react"
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useMemo } from "react";
 import {
   ChevronLeft,
   ChevronRight,
-  Laptop,
-  Smartphone,
-  Headphones,
-  Watch,
-  Tv,
-  Camera,
-  Speaker,
-  Gamepad,
-  Printer,
-  Tablet,
-} from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
+  Flame,
+  ThumbsUp,
+  Clock,
+  Zap,
+  Gift,
+  Tag
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import type { Product } from "../../types/entityTypes";
+import { useNavigate } from "react-router-dom";
 
-// Types for our offers
-type OfferType = "featured" | "discount" | "clearance" | "all"
-
-interface Offer {
-  id: number
-  title: string
-  discount: string
-  subtitle: string
-  icon: React.ReactNode
-  color: string
-  type: OfferType
-  image?: string
-  couponCode?: string
-  expiresIn?: string
+interface ElectrohubOffersProps {
+  products: Product[];
 }
 
-// Enhanced offers data for Electrohub electronics store
-const offers: Offer[] = [
-  {
-    id: 1,
-    title: "Premium Laptops",
-    discount: "25% OFF",
-    subtitle: "MacBook, Dell XPS & more",
-    icon: <Laptop className="h-5 w-5" />,
-    color: "from-blue-500 to-indigo-600",
-    type: "featured",
-    image: "/api/placeholder/480/240",
-    couponCode: "LAPTOP25",
-    expiresIn: "2 days",
-  },
-  {
-    id: 2,
-    title: "Smartphones",
-    discount: "20% OFF",
-    subtitle: "Latest iPhone & Samsung models",
-    icon: <Smartphone className="h-5 w-5" />,
-    color: "from-emerald-500 to-teal-600",
-    type: "discount",
-    couponCode: "PHONE20",
-  },
-  {
-    id: 3,
-    title: "Audio Devices",
-    discount: "30% OFF",
-    subtitle: "Premium headphones & earbuds",
-    icon: <Headphones className="h-5 w-5" />,
-    color: "from-violet-500 to-purple-600",
-    type: "discount",
-  },
-  {
-    id: 4,
-    title: "Smart Watches",
-    discount: "15% OFF",
-    subtitle: "Apple Watch, Fitbit & Garmin",
-    icon: <Watch className="h-5 w-5" />,
-    color: "from-rose-500 to-pink-600",
-    type: "discount",
-    couponCode: "WATCH15",
-  },
-  {
-    id: 5,
-    title: "Smart TVs",
-    discount: "30% OFF",
-    subtitle: "4K & OLED displays",
-    icon: <Tv className="h-5 w-5" />,
-    color: "from-amber-500 to-orange-600",
-    type: "clearance",
-    image: "/orders/img-6.jpg",
-  },
-  {
-    id: 6,
-    title: "Cameras",
-    discount: "35% OFF",
-    subtitle: "DSLRs & Mirrorless",
-    icon: <Camera className="h-5 w-5" />,
-    color: "from-gray-700 to-gray-900",
-    type: "clearance",
-    couponCode: "CAMERA35",
-    image: "/orders/img-6.jpg",
-  },
-  {
-    id: 7,
-    title: "Gaming",
-    discount: "20% OFF",
-    subtitle: "Consoles & Accessories",
-    icon: <Gamepad className="h-5 w-5" />,
-    color: "from-red-500 to-red-700",
-    type: "featured",
-    image: "/api/placeholder/480/240",
-    
-  },
-  {
-    id: 8,
-    title: "Speakers",
-    discount: "40% OFF",
-    subtitle: "Bluetooth & Smart Speakers",
-    icon: <Speaker className="h-5 w-5" />,
-    color: "from-cyan-500 to-blue-600",
-    type: "discount",
-  },
-  {
-    id: 9,
-    title: "Printers",
-    discount: "25% OFF",
-    subtitle: "Laser & InkJet models",
-    icon: <Printer className="h-5 w-5" />,
-    color: "from-lime-500 to-green-600",
-    type: "clearance",
-  },
-  {
-    id: 10,
-    title: "Tablets",
-    discount: "15% OFF",
-    subtitle: "iPad & Android tablets",
-    icon: <Tablet className="h-5 w-5" />,
-    color: "from-fuchsia-500 to-purple-600",
-    type: "featured",
-  },
-]
+// Array of background colors for random assignment
+const bgColors = [
+  "bg-blue-600",
+  "bg-purple-600",
+  "bg-emerald-600",
+  "bg-amber-600",
+  "bg-rose-600",
+  "bg-indigo-600",
+  "bg-orange-600",
+  "bg-cyan-600",
+  "bg-lime-600",
+  "bg-fuchsia-600",
+  "bg-teal-600",
+];
 
-export default function ElectrohubOffers() {
-  const [activeTab, setActiveTab] = useState<string>("all")
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null)
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const [showLeftScroll, setShowLeftScroll] = useState(false)
-  const [showRightScroll, setShowRightScroll] = useState(true)
+// Catchy deal names based on discount percentage
+const getDealName = (percentage: number): string => {
+  if (percentage >= 60) {
+    const hotTitles = ["Blazing Deal", "Fire Sale", "Hot Pick", "Sizzling Offer"];
+    return hotTitles[Math.floor(Math.random() * hotTitles.length)];
+  } else if (percentage >= 30) {
+    const highTitles = ["Epic Savings", "Deal Bonanza", "Killer Discount", "Budget Buster"];
+    return highTitles[Math.floor(Math.random() * highTitles.length)];
+  } else if (percentage >= 15) {
+    const mediumTitles = ["Limited Time", "Flash Deal", "Deal Drop", "Treasure", "Hype Pick"];
+    return mediumTitles[Math.floor(Math.random() * mediumTitles.length)];
+  } else {
+    const lowTitles = ["Today Only!", "Daily Scoop", "Snag It Now", "Last Call", "Going, Gone"];
+    return lowTitles[Math.floor(Math.random() * lowTitles.length)];
+  }
+};
 
-  // Filter offers based on active tab
-  const filteredOffers =
-    activeTab === "all" ? offers : offers.filter((offer) => offer.type === activeTab)
+export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
+  const navigate = useNavigate();
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [showLeftScroll, setShowLeftScroll] = useState(false);
+  const [showRightScroll, setShowRightScroll] = useState(true);
+  const [activeDiscount, setActiveDiscount] = useState<string>("all");
+
+  // Generate random background color for each product
+  const productsWithColors = useMemo(() => {
+    return products.map(product => ({
+      ...product,
+      bgColor: bgColors[Math.floor(Math.random() * bgColors.length)],
+      dealName: getDealName(product.offerPercentage)
+    }));
+  }, [products]);
+
+  // Filter out products with offers and limit to 15 random products to differentiate from all products view
+  const productsWithOffers = useMemo(() => {
+    const filtered = productsWithColors
+      .filter(product => product.offerPercentage && product.offerPercentage > 0)
+      // Shuffle the products to display them in random order
+      .sort(() => 0.1 - Math.random())
+    // .slice(0, 15); // Limit to 15 random products
+
+    // Sort so that items with highest discount show first
+    return filtered.sort((a, b) => b.offerPercentage - a.offerPercentage);
+  }, [productsWithColors]);
 
   // Check if scroll buttons should be visible
   const checkScrollButtons = () => {
     if (scrollContainerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
-      setShowLeftScroll(scrollLeft > 0)
-      setShowRightScroll(scrollLeft < scrollWidth - clientWidth - 10)
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setShowLeftScroll(scrollLeft > 0);
+      setShowRightScroll(scrollLeft < scrollWidth - clientWidth - 10);
     }
-  }
+  };
+
+  const offerTime = useMemo(() => {
+    return {
+      hours: Math.floor(Math.random() * 24) + 1,
+      minutes: Math.floor(Math.random() * 60),
+    };
+  }, []);
 
   useEffect(() => {
-    const scrollContainer = scrollContainerRef.current
+    const scrollContainer = scrollContainerRef.current;
     if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', checkScrollButtons)
+      scrollContainer.addEventListener('scroll', checkScrollButtons);
       // Initial check
-      checkScrollButtons()
-      return () => scrollContainer.removeEventListener('scroll', checkScrollButtons)
+      checkScrollButtons();
+      return () => scrollContainer.removeEventListener('scroll', checkScrollButtons);
     }
-  }, [filteredOffers])
+  }, [productsWithOffers]);
 
   // Scroll functions
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' })
+      scrollContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' });
     }
-  }
+  };
 
   const scrollRight = () => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' })
+      scrollContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' });
     }
+  };
+
+  // Filter products based on discount percentage
+  const filterByDiscount = (offerPercentage: number): boolean => {
+    if (activeDiscount === "all") return true;
+
+    switch (activeDiscount) {
+      case "hot": return offerPercentage >= 60;
+      case "high": return offerPercentage >= 30 && offerPercentage < 60;
+      case "medium": return offerPercentage >= 15 && offerPercentage < 30;
+      case "low": return offerPercentage < 15;
+      default: return true;
+    }
+  };
+
+  // Get filtered products
+  const filteredProducts = productsWithOffers.filter(product =>
+    filterByDiscount(product.offerPercentage)
+  );
+
+  // Navigate to product detail
+  const handleProductClick = (productId: number) => {
+    navigate(`/product/${productId}`);
+  };
+
+  // Check if we have any hot deals (>60% off)
+  const hasHotDeals = productsWithOffers.some(product => product.offerPercentage >= 60);
+
+  if (filteredProducts.length === 0) {
+    return null;
   }
 
   return (
-    <div className="w-full mx-auto px-4 py-8">
+    <div className="w-full mx-auto px-4 py-8 mt-8 border-t rounded-xl">
       <div className="flex flex-col mb-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-primary">ElectroHub Deals</h2>
-            <p className="text-foreground mt-1 ">Discover amazing offers on the latest electronics</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary flex items-center">
+              <Zap className="mr-2 h-6 w-6 text-yellow-500" />
+              Deal Dash
+            </h2>
+            <p className="text-foreground mt-1">Electrifying savings you can't resist</p>
           </div>
-          {/* <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="hidden md:block">
-            <TabsList>
-              <TabsTrigger value="all">All Deals</TabsTrigger>
-              <TabsTrigger value="featured">Featured</TabsTrigger>
-              <TabsTrigger value="discount">Discounts</TabsTrigger>
-              <TabsTrigger value="clearance">Clearance</TabsTrigger>
-            </TabsList>
-          </Tabs> */}
         </div>
-        
-        {/* Mobile tabs */}
-        <div className="md:hidden mb-4 overflow-x-auto pb-2">
+
+        {/* Filter buttons */}
+        <div className="mb-4 overflow-x-auto pb-2">
           <div className="flex space-x-2">
-            <Button 
-              variant={activeTab === "all" ? "default" : "outline"} 
-              size="sm" 
-              onClick={() => setActiveTab("all")}
-              className="whitespace-nowrap"
+            <Button
+              variant={activeDiscount === "all" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setActiveDiscount("all")}
+              className="whitespace-nowrap rounded-full"
             >
               All Deals
             </Button>
-            <Button 
-              variant={activeTab === "featured" ? "default" : "outline"} 
-              size="sm" 
-              onClick={() => setActiveTab("featured")}
-              className="whitespace-nowrap"
+            {hasHotDeals && (
+              <Button
+                variant={activeDiscount === "hot" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setActiveDiscount("hot")}
+                className="whitespace-nowrap rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-600 hover:to-orange-600"
+              >
+                <Flame className="mr-1 h-4 w-4" />
+                Blazing Deals (60%+ Off)
+              </Button>
+            )}
+            <Button
+              variant={activeDiscount === "high" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setActiveDiscount("high")}
+              className="whitespace-nowrap rounded-full"
             >
-              Featured
+              <Gift className="mr-1 h-4 w-4" />
+              Epic Savings (30-59%)
             </Button>
-            <Button 
-              variant={activeTab === "discount" ? "default" : "outline"} 
-              size="sm" 
-              onClick={() => setActiveTab("discount")}
-              className="whitespace-nowrap"
+            <Button
+              variant={activeDiscount === "medium" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setActiveDiscount("medium")}
+              className="whitespace-nowrap rounded-full"
             >
-              Discounts
+              <Tag className="mr-1 h-4 w-4" />
+              Flash Deals (15-29%)
             </Button>
-            <Button 
-              variant={activeTab === "clearance" ? "default" : "outline"} 
-              size="sm" 
-              onClick={() => setActiveTab("clearance")}
-              className="whitespace-nowrap"
+            <Button
+              variant={activeDiscount === "low" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setActiveDiscount("low")}
+              className="whitespace-nowrap rounded-full"
             >
-              Clearance
+              <Clock className="mr-1 h-4 w-4" />
+              Today Only (Up to 15%)
             </Button>
           </div>
         </div>
@@ -244,8 +217,8 @@ export default function ElectrohubOffers() {
       <div className="relative">
         {/* Left scroll button */}
         {showLeftScroll && (
-          <button 
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur-sm rounded-full shadow-lg p-2 hidden md:flex items-center justify-center"
+          <button
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 dark:bg-black/50 backdrop-blur-sm rounded-full shadow-lg p-2 hidden md:flex items-center justify-center"
             onClick={scrollLeft}
           >
             <ChevronLeft className="h-6 w-6" />
@@ -253,100 +226,99 @@ export default function ElectrohubOffers() {
         )}
 
         {/* Scrollable container */}
-        <div 
+        <div
           ref={scrollContainerRef}
           className="flex overflow-x-auto scrollbar-hide gap-4 pb-4 scroll-smooth snap-x"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {filteredOffers.map((offer) => (
-            <div
-              key={offer.id}
-              className={cn(
-                "relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shrink-0 snap-start",
-                "w-[280px] sm:w-[320px] md:w-[300px] lg:w-[280px]",
-                hoveredCard === offer.id ? "shadow-xl" : "shadow-md"
-              )}
-              onMouseEnter={() => setHoveredCard(offer.id)}
-              onMouseLeave={() => setHoveredCard(null)}
-            >
-              {offer.image ? (
-                // Image-based card
-                <div className="relative h-52">
+          {filteredProducts.map((product) => {
+            const discountedPrice = product.price - (product.price * (product.offerPercentage / 100));
+            const mainImageUrl = product.images && product.images.length > 0
+              ? product.images[0].url
+              : "/api/placeholder/480/240";
+
+            const isHotDeal = product.offerPercentage >= 60;
+
+            return (
+              <div
+                key={product.id}
+                className={cn(
+                  "relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shrink-0 snap-start",
+                  "w-[220px] sm:w-[260px] md:w-[240px] lg:w-[220px]",
+                  hoveredCard === product.id ? "shadow-xl scale-105" : "shadow-md",
+                  isHotDeal ? "ring-2 ring-red-500" : ""
+                )}
+                onMouseEnter={() => setHoveredCard(product.id)}
+                onMouseLeave={() => setHoveredCard(null)}
+                onClick={() => handleProductClick(product.id)}
+              >
+                <div className={cn("relative h-64", product.bgColor)}>
                   <img
-                    src={offer.image}
-                    alt={offer.title}
-                    className="w-full h-full object-cover"
+                    src={mainImageUrl}
+                    alt={product.name}
+                    className="w-full h-full object-contain p-4 "
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/20 p-4 flex flex-col justify-end">
-                    <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full w-fit text-white font-bold text-lg">
-                      {offer.discount}
+
+                  {/* Floating discount tag */}
+                  <div className={cn(
+                    "absolute top-4 left-3 px-3 py-1 rounded-full font-bold text-white",
+                    isHotDeal ? "bg-red-500" : "bg-amber-500"
+                  )}>
+                    {product.offerPercentage}% OFF
+                  </div>
+
+                  {/* Deal name badge */}
+                  <div className="absolute top-4 right-3">
+                    <div className={cn(
+                      "px-3 py-1 rounded-lg font-bold text-white text-[11px]",
+                      isHotDeal ? "bg-gradient-to-r from-red-600 to-orange-500" : "bg-black/70"
+                    )}>
+                      {product.dealName}
                     </div>
-                    <div className="text-white font-medium text-xl mt-2">{offer.title}</div>
-                    <div className="text-white/90 text-sm mt-1">{offer.subtitle}</div>
-                    
-                    {offer.expiresIn && (
-                      <div className="mt-2 flex items-center gap-1 text-black/80 text-xs">
-                        <span className="bg-red-500 h-1.5 w-1.5 rounded-full animate-pulse"></span>
-                        Ends in {offer.expiresIn}
+                  </div>
+
+                  {/* Product info overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-black/0 p-4">
+                    <h3 className="text-white font-bold text-lg line-clamp-1">{product.name}</h3>
+
+                    <div className="flex items-center mt-2">
+                      <div className="text-white font-semibold">${discountedPrice.toFixed(2)}</div>
+                      <div className="text-white/70 line-through ml-2 text-sm">${product.price.toFixed(2)}</div>
+                    </div>
+
+                    {/* Save amount */}
+                    {product.offerPercentage >= 10 && (
+                      <div className="mt-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full w-fit">
+                        Save ${(product.price - discountedPrice).toFixed(2)}
                       </div>
                     )}
                   </div>
                 </div>
-              ) : (
-                // Gradient-based card
-                <div className={cn("bg-gradient-to-br p-5 h-52 flex flex-col justify-between", offer.color)}>
-                  <div className="bg-white/20 backdrop-blur-sm rounded-full w-10 h-10 flex items-center justify-center text-white">
-                    {offer.icon}
+
+                {/* Hot deal indicator */}
+                {isHotDeal && (
+                  <div className="absolute top-16 right-0 bg-red-600 text-white px-2 py-1 text-xs font-bold transform rotate-45 translate-x-6 shadow-lg">
+                    <Flame className="h-3 w-3 inline mr-1" />
+                    HOT!
                   </div>
+                )}
 
-                  <div>
-                    <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full w-fit text-white font-bold text-lg">
-                      {offer.discount}
-                    </div>
-                    <div className="text-white font-medium text-xl mt-2">{offer.title}</div>
-                    <div className="text-white/90 text-sm mt-1">{offer.subtitle}</div>
-                    
-                    {offer.expiresIn && (
-                      <div className="mt-2 flex items-center gap-1 text-white/80 text-xs">
-                        <span className="bg-red-500 h-1.5 w-1.5 rounded-full animate-pulse"></span>
-                        Ends in {offer.expiresIn}
-                      </div>
-                    )}
+                {/* Timer for urgency */}
+                {product.offerPercentage >= 30 && (
+                  <div className="bg-black text-white p-2 text-xs text-center font-medium flex items-center justify-center">
+                    <Clock className="h-3 w-3 mr-1" />
+                    {offerTime.hours}h {offerTime.minutes}m left
                   </div>
-                </div>
-              )}
-
-              {/* Hover effect with coupon code */}
-              {offer.couponCode && hoveredCard === offer.id && (
-                <div className="absolute inset-0 bg-black/70 flex items-center justify-center flex-col p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <p className="text-white text-sm mb-2">Use code:</p>
-                  <p className="text-white font-bold text-lg bg-white/20 px-4 py-2 rounded-md tracking-wide">
-                    {offer.couponCode}
-                  </p>
-                  <Button size="sm" className="mt-4">
-                    Shop Now
-                  </Button>
-                </div>
-              )}
-
-              {/* Bottom actions */}
-              <div className="bg-white border-t border-gray-100 text-black p-3 flex items-center justify-between">
-                <div className="flex items-center">
-                  {offer.icon}
-                  <span className="ml-2 text-sm font-medium">{offer.type === "clearance" ? "Limited Stock" : "In Stock"}</span>
-                </div>
-                <Button variant="ghost" size="sm" className="text-sm font-medium">
-                  Shop Now <ChevronRight className="ml-1 h-4 w-4" />
-                </Button>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Right scroll button */}
         {showRightScroll && (
-          <button 
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur-sm rounded-full shadow-lg p-2 hidden md:flex items-center justify-center"
+          <button
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 dark:bg-black/50 backdrop-blur-sm rounded-full shadow-lg p-2 hidden md:flex items-center justify-center"
             onClick={scrollRight}
           >
             <ChevronRight className="h-6 w-6" />
@@ -356,10 +328,14 @@ export default function ElectrohubOffers() {
 
       {/* View all deals button */}
       <div className="mt-6 text-center">
-        <Button variant="outline" className="mx-auto">
-          View All ElectroHub Deals
+        <Button
+          variant="default"
+          className="mx-auto px-6 py-2 font-medium bg-gradient-to-r from-primary to-primary/80"
+          onClick={() => navigate("/offers")}
+        >
+          Explore All Deals
         </Button>
       </div>
     </div>
-  )
+  );
 }

@@ -25,7 +25,7 @@ import { Button } from "@/components/ui/button"
 import ProductCard from "@/components/Home/ProductCard"
 import { RootState } from "@/redux/store"
 import { useSelector } from "react-redux"
-import TopSellerSkeleton from "@/components/Home/Topseller-Skeleton"
+import TopSellerSkeleton from "@/components/Home/Skeletons/Topseller-Skeleton"
 
 const TopSellerPage: React.FC = () => {
   const { sellerId } = useParams()
