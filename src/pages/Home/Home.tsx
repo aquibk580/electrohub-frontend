@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import AllProducts from "@/components/Home/AllProducts";
 import BannerCarousel from "@/components/Home/BannerCarousel";
 import TopSellers from "@/components/Home/Brand-Selector";
 import ProductCarousel from "@/components/Home/ProductCarousel";
@@ -7,6 +6,7 @@ import ServiceSection from "@/components/Home/ServiceSection";
 import { Loader2 } from "lucide-react";
 import "animate.css";
 import { Separator } from "@radix-ui/react-select";
+import MasterProduct from "@/components/Home/MasterProduct";
 
 // import DiscountOffers from "@/components/Home/Discount-Offers";
 
@@ -43,12 +43,9 @@ const Home = () => {
       </section>
       <Separator className="border" />
       {/* All Products */}
-      <section className="w-full animate__animated animate__fadeIn animate__delay-2s">
-        <Suspense fallback={<LoadingFallback />}>
-          <AllProducts />
-        </Suspense>
+      <section className="w-full animate__animated animate__fadeIn">
+        <MasterProduct />
       </section>
-
 
       <Separator className="border" />
       {/* Top Sellers */}

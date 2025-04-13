@@ -3,16 +3,16 @@ import {
   ChevronLeft,
   ChevronRight,
   Flame,
-  ThumbsUp,
   Clock,
   Zap,
   Gift,
-  Tag
+  Tag,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import type { Product } from "../../types/entityTypes";
 import { useNavigate } from "react-router-dom";
+import { formatPrice } from "@/utils/FormatPrice";
 
 interface ElectrohubOffersProps {
   products: Product[];
@@ -36,16 +36,38 @@ const bgColors = [
 // Catchy deal names based on discount percentage
 const getDealName = (percentage: number): string => {
   if (percentage >= 60) {
-    const hotTitles = ["Blazing Deal", "Fire Sale", "Hot Pick", "Sizzling Offer"];
+    const hotTitles = [
+      "Blazing Deal",
+      "Fire Sale",
+      "Hot Pick",
+      "Sizzling Offer",
+    ];
     return hotTitles[Math.floor(Math.random() * hotTitles.length)];
   } else if (percentage >= 30) {
-    const highTitles = ["Epic Savings", "Deal Bonanza", "Killer Discount", "Budget Buster"];
+    const highTitles = [
+      "Epic Savings",
+      "Deal Bonanza",
+      "Killer Discount",
+      "Budget Buster",
+    ];
     return highTitles[Math.floor(Math.random() * highTitles.length)];
   } else if (percentage >= 15) {
-    const mediumTitles = ["Limited Time", "Flash Deal", "Deal Drop", "Treasure", "Hype Pick"];
+    const mediumTitles = [
+      "Limited Time",
+      "Flash Deal",
+      "Deal Drop",
+      "Treasure",
+      "Hype Pick",
+    ];
     return mediumTitles[Math.floor(Math.random() * mediumTitles.length)];
   } else {
-    const lowTitles = ["Today Only!", "Daily Scoop", "Snag It Now", "Last Call", "Going, Gone"];
+    const lowTitles = [
+      "Today Only!",
+      "Daily Scoop",
+      "Snag It Now",
+      "Last Call",
+      "Going, Gone",
+    ];
     return lowTitles[Math.floor(Math.random() * lowTitles.length)];
   }
 };
@@ -60,19 +82,21 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
 
   // Generate random background color for each product
   const productsWithColors = useMemo(() => {
-    return products.map(product => ({
+    return products.map((product) => ({
       ...product,
       bgColor: bgColors[Math.floor(Math.random() * bgColors.length)],
-      dealName: getDealName(product.offerPercentage)
+      dealName: getDealName(product.offerPercentage),
     }));
   }, [products]);
 
   // Filter out products with offers and limit to 15 random products to differentiate from all products view
   const productsWithOffers = useMemo(() => {
     const filtered = productsWithColors
-      .filter(product => product.offerPercentage && product.offerPercentage > 0)
+      .filter(
+        (product) => product.offerPercentage && product.offerPercentage > 0
+      )
       // Shuffle the products to display them in random order
-      .sort(() => 0.1 - Math.random())
+      .sort(() => 0.1 - Math.random());
     // .slice(0, 15); // Limit to 15 random products
 
     // Sort so that items with highest discount show first
@@ -82,7 +106,8 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
   // Check if scroll buttons should be visible
   const checkScrollButtons = () => {
     if (scrollContainerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      const { scrollLeft, scrollWidth, clientWidth } =
+        scrollContainerRef.current;
       setShowLeftScroll(scrollLeft > 0);
       setShowRightScroll(scrollLeft < scrollWidth - clientWidth - 10);
     }
@@ -98,23 +123,24 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
     if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', checkScrollButtons);
+      scrollContainer.addEventListener("scroll", checkScrollButtons);
       // Initial check
       checkScrollButtons();
-      return () => scrollContainer.removeEventListener('scroll', checkScrollButtons);
+      return () =>
+        scrollContainer.removeEventListener("scroll", checkScrollButtons);
     }
   }, [productsWithOffers]);
 
   // Scroll functions
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+      scrollContainerRef.current.scrollBy({ left: -300, behavior: "smooth" });
     }
   };
 
   const scrollRight = () => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+      scrollContainerRef.current.scrollBy({ left: 300, behavior: "smooth" });
     }
   };
 
@@ -123,16 +149,21 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
     if (activeDiscount === "all") return true;
 
     switch (activeDiscount) {
-      case "hot": return offerPercentage >= 60;
-      case "high": return offerPercentage >= 30 && offerPercentage < 60;
-      case "medium": return offerPercentage >= 15 && offerPercentage < 30;
-      case "low": return offerPercentage < 15;
-      default: return true;
+      case "hot":
+        return offerPercentage >= 60;
+      case "high":
+        return offerPercentage >= 30 && offerPercentage < 60;
+      case "medium":
+        return offerPercentage >= 15 && offerPercentage < 30;
+      case "low":
+        return offerPercentage < 15;
+      default:
+        return true;
     }
   };
 
   // Get filtered products
-  const filteredProducts = productsWithOffers.filter(product =>
+  const filteredProducts = productsWithOffers.filter((product) =>
     filterByDiscount(product.offerPercentage)
   );
 
@@ -142,14 +173,16 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
   };
 
   // Check if we have any hot deals (>60% off)
-  const hasHotDeals = productsWithOffers.some(product => product.offerPercentage >= 60);
+  const hasHotDeals = productsWithOffers.some(
+    (product) => product.offerPercentage >= 60
+  );
 
   if (filteredProducts.length === 0) {
     return null;
   }
 
   return (
-    <div className="w-full mx-auto px-4 py-8 mt-8 border-t rounded-xl">
+    <div className="w-full mx-auto px-4 py-8 mt-2 rounded-xl">
       <div className="flex flex-col mb-8">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -157,7 +190,9 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
               <Zap className="mr-2 h-6 w-6 text-yellow-500" />
               Deal Dash
             </h2>
-            <p className="text-foreground mt-1">Electrifying savings you can't resist</p>
+            <p className="text-foreground mt-1">
+              Electrifying savings you can't resist
+            </p>
           </div>
         </div>
 
@@ -229,13 +264,15 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
         <div
           ref={scrollContainerRef}
           className="flex overflow-x-auto scrollbar-hide gap-4 pb-4 scroll-smooth snap-x"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {filteredProducts.map((product) => {
-            const discountedPrice = product.price - (product.price * (product.offerPercentage / 100));
-            const mainImageUrl = product.images && product.images.length > 0
-              ? product.images[0].url
-              : "/api/placeholder/480/240";
+            const discountedPrice =
+              product.price - product.price * (product.offerPercentage / 100);
+            const mainImageUrl =
+              product.images && product.images.length > 0
+                ? product.images[0].url
+                : "/api/placeholder/480/240";
 
             const isHotDeal = product.offerPercentage >= 60;
 
@@ -245,7 +282,9 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
                 className={cn(
                   "relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shrink-0 snap-start",
                   "w-[220px] sm:w-[260px] md:w-[240px] lg:w-[220px]",
-                  hoveredCard === product.id ? "shadow-xl scale-105" : "shadow-md",
+                  hoveredCard === product.id
+                    ? "shadow-xl scale-105"
+                    : "shadow-md",
                   isHotDeal ? "ring-2 ring-red-500" : ""
                 )}
                 onMouseEnter={() => setHoveredCard(product.id)}
@@ -260,36 +299,48 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
                   />
 
                   {/* Floating discount tag */}
-                  <div className={cn(
-                    "absolute top-4 left-3 px-3 py-1 rounded-full font-bold text-white",
-                    isHotDeal ? "bg-red-500" : "bg-amber-500"
-                  )}>
+                  <div
+                    className={cn(
+                      "absolute top-4 left-3 px-3 py-1 rounded-full font-bold text-white",
+                      isHotDeal ? "bg-red-500" : "bg-amber-500"
+                    )}
+                  >
                     {product.offerPercentage}% OFF
                   </div>
 
                   {/* Deal name badge */}
                   <div className="absolute top-4 right-3">
-                    <div className={cn(
-                      "px-3 py-1 rounded-lg font-bold text-white text-[11px]",
-                      isHotDeal ? "bg-gradient-to-r from-red-600 to-orange-500" : "bg-black/70"
-                    )}>
+                    <div
+                      className={cn(
+                        "px-3 py-1 rounded-lg font-bold text-white text-[11px]",
+                        isHotDeal
+                          ? "bg-gradient-to-r from-red-600 to-orange-500"
+                          : "bg-black/70"
+                      )}
+                    >
                       {product.dealName}
                     </div>
                   </div>
 
                   {/* Product info overlay */}
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-black/0 p-4">
-                    <h3 className="text-white font-bold text-lg line-clamp-1">{product.name}</h3>
+                    <h3 className="text-white font-bold text-lg line-clamp-1">
+                      {product.name}
+                    </h3>
 
                     <div className="flex items-center mt-2">
-                      <div className="text-white font-semibold">${discountedPrice.toFixed(2)}</div>
-                      <div className="text-white/70 line-through ml-2 text-sm">${product.price.toFixed(2)}</div>
+                      <div className="text-white font-semibold">
+                        ₹{formatPrice(discountedPrice)}
+                      </div>
+                      <div className="text-white/70 line-through ml-2 text-sm">
+                        ₹{formatPrice(product.price)}
+                      </div>
                     </div>
 
                     {/* Save amount */}
                     {product.offerPercentage >= 10 && (
                       <div className="mt-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full w-fit">
-                        Save ${(product.price - discountedPrice).toFixed(2)}
+                        Save ₹{formatPrice(product.price - discountedPrice)}
                       </div>
                     )}
                   </div>
@@ -324,17 +375,6 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
             <ChevronRight className="h-6 w-6" />
           </button>
         )}
-      </div>
-
-      {/* View all deals button */}
-      <div className="mt-6 text-center">
-        <Button
-          variant="default"
-          className="mx-auto px-6 py-2 font-medium bg-gradient-to-r from-primary to-primary/80"
-          onClick={() => navigate("/offers")}
-        >
-          Explore All Deals
-        </Button>
       </div>
     </div>
   );

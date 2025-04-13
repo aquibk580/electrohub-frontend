@@ -30,7 +30,7 @@ const DealsBanner = ({ products }: DealBannerProps) => {
                 <h1 className="text-4xl lg:text-5xl text-accent-foreground font-bold">
                   {products[0].name.split(" ")[0]}
                 </h1>
-                <p className=" text-xl lg:text-2xl text-accent-foreground/85 font-light">
+                <p className=" text-xl lg:text-2xl text-accent-foreground/85 font-light line-clamp-2">
                   {products[0].name}
                 </p>
               </div>
@@ -104,10 +104,10 @@ const DealsBanner = ({ products }: DealBannerProps) => {
             <div className="text-black dark:text-slate-50 h-full  flex flex-col items-start pl-2 lg:pl-4 space-y-2 lg:space-y-6 justify-center  ">
               <div className=" lg:space-y-2">
                 <h1 className="text-lg md:text-xl lg:text-3xl font-bold">
-                  {products[2].name.split(" ")[0]}
+                  {products[2].name.split(" ")[0] || "Unknown"}
                 </h1>
                 <p className=" text-xs md:text-md lg:text-xl font-light">
-                  {products[2].name}
+                  {products[2].name || "Unknown"}
                 </p>
               </div>
 
