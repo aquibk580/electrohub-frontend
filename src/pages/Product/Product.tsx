@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Separator } from "@radix-ui/react-select";
+import { ProductSpecsSkeleton } from "@/components/product/productSkeletons";
 
 export default function ProductPage() {
   const isAuthenticated = useSelector(
@@ -113,16 +114,6 @@ export default function ProductPage() {
       : 0;
   };
 
-  // Loading state
-  // if (loading) {
-  //   return (
-  //     <div className="flex flex-col justify-center items-center h-screen">
-  //       <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-  //       <p className="text-muted-foreground">Loading product details...</p>
-  //     </div>
-  //   );
-  // }  
-
   // Error state
   if (error || !product) {
     return (
@@ -155,11 +146,13 @@ export default function ProductPage() {
               <ProductImageTablet
                 images={product.images.map((image) => image.url)}
                 title={product.name}
+                loading={loading}
               />
             ) : (
               <ProductImage
                 images={product.images.map((image) => image.url)}
                 title={product.name}
+                loading={loading}
               />
             )}
           </div>
@@ -204,12 +197,16 @@ export default function ProductPage() {
         </div>
 
         {/* Product Specifications and Related Products */}
-        <ProductSpects
-          reviews={product.reviews}
-          details={product.productInfo?.details || []}
-          loading={loading}
-        />
-        <Separator className="border"/>
+        {loading ? (
+          <ProductSpecsSkeleton />
+        ) : (
+          <ProductSpects
+            reviews={product.reviews}
+            details={product.productInfo?.details || []}
+          />
+        )}
+
+        <Separator className="border" />
         <RelatedProducts
           wishlist={wishlist}
           setWishlist={setWishlist}

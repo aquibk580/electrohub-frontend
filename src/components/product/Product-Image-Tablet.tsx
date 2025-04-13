@@ -2,13 +2,19 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Lens } from "../ui/lens";
+import { ThumbnailSkeleton } from "./productSkeletons";
 
 interface ProductImageProps {
   images: string[];
   title: string;
+  loading: boolean;
 }
 
-export default function ProductImageTablet({ images, title }: ProductImageProps) {
+export default function ProductImageTablet({
+  images,
+  title,
+  loading,
+}: ProductImageProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hovering, setHovering] = useState(false);
 
@@ -24,20 +30,28 @@ export default function ProductImageTablet({ images, title }: ProductImageProps)
     <div className="flex gap-4 items-center">
       {/* Vertical Thumbnail Stack */}
       <div className="flex flex-col gap-2 w-20 max-h-96 overflow-y-auto">
-        <div className="my-auto">
-          {images.map((img, index) => (
-            <div key={index} className="mb-2 last:mb-0">
-              <img
-                src={img}
-                alt={`Thumbnail ${index}`}
-                className={`w-full h-20 object-cover rounded-lg border 
-                  ${index === currentIndex ? "border-blue-500" : "border-transparent"}
-                  cursor-pointer transition-all hover:opacity-80`}
-                onClick={() => setCurrentIndex(index)}
-              />
-            </div>
-          ))}
-        </div>
+        {loading ? (
+          <ThumbnailSkeleton />
+        ) : (
+          <div className="my-auto">
+            {images.map((img, index) => (
+              <div key={index} className="mb-2 last:mb-0">
+                <img
+                  src={img}
+                  alt={`Thumbnail ${index}`}
+                  className={`w-full h-20 object-cover rounded-lg border 
+                 ${
+                   index === currentIndex
+                     ? "border-blue-500"
+                     : "border-transparent"
+                 }
+                 cursor-pointer transition-all hover:opacity-80`}
+                  onClick={() => setCurrentIndex(index)}
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Main Image */}
