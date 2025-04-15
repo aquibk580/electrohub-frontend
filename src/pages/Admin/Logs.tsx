@@ -271,8 +271,8 @@ const LogsAndSecurity = () => {
        
         {/* Content */}
         <div className="text-center">
-          <h1 className="text-7xl font-bold ">
-          🫷 Coming Soon 🫸
+          <h1 className=" text-6xl lg:text-7xl font-bold ">
+        Coming Soon 
           </h1>
           <p className="text-lg mt-3 opacity-80">Stay tuned for something amazing!</p>
         </div>
