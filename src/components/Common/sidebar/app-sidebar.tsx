@@ -168,12 +168,12 @@ export function AppSidebar({ userRole, ...props }: AppSidebarProps) {
         },
         {
           title: "Contact",
-          url: "/seller/contact",
+          url: "/seller/dashboard/contact",
           icon: Contact,
         },
         {
           title: "Settings",
-          url: "/seller/settings",
+          url: "/seller/dashboard/settings",
           icon: Settings2,
         },
       ],

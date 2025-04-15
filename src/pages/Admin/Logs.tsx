@@ -48,7 +48,7 @@ const LogsAndSecurity = () => {
   };
 
   const SecurityOverview = () => (
-    <div className="grid gap-4 blur md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4  md:grid-cols-2 lg:grid-cols-3">
       <Card>
         <CardContent className="p-4">
           <div className="flex items-center space-x-4">
@@ -268,29 +268,17 @@ const LogsAndSecurity = () => {
             },
           ]}
         />
-        {/* Bubble Animation */}
-        {[...Array(10)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-10 h-10 bg-white bg-opacity-20 rounded-full  animate-bounce"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-            }}
-          ></div>
-        ))}
-
+       
         {/* Content */}
         <div className="text-center">
-          <h1 className="text-5xl p-2 bg-gradient-to-br  from-primary to-primary/55 text-transparent bg-clip-text  font-extrabold tracking-wide animate-pulse">
-            Coming Soon
+          <h1 className="text-7xl font-bold ">
+          🫷 Coming Soon 🫸
           </h1>
           <p className="text-lg mt-3 opacity-80">Stay tuned for something amazing!</p>
         </div>
       </div>
 
-      <div className="w-full  px-2 py-2 blur sm:px-4 sm:py-4 space-y-4">
+      <div className="w-full  px-2 py-2 blur-xl sm:px-4 sm:py-4 space-y-4">
         <SecurityOverview />
 
         <Card className="shadow-md rounded-lg">

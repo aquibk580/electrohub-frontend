@@ -5,6 +5,7 @@ import { DropdownMenu, DropdownMenuTrigger } from "@/components/ui/dropdown-menu
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import CustomSVG from "@/components/Admin/logo"
 import { ShoppingCart } from "lucide-react"
+import {assets} from "../../../assets/assets.ts";
 
 export function TeamSwitcher({
   teams,
@@ -28,8 +29,8 @@ export function TeamSwitcher({
             >
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg ">
                 {/* <activeTeam.logo className="size-4" /> */}
-                {/* <img src="/e.svg" alt="Team Logo" className="size-4 text-white" /> */}
-                <ShoppingCart className="text-green-500"/>
+                <img src={assets.logo1} alt="Team Logo" className="h-full w-full text-white" />
+                {/* <ShoppingCart className="text-green-500"/> */}
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-bold text-2xl ">{activeTeam.name}</span>

@@ -1,4 +1,4 @@
-import { Pencil, Mail, Phone, Building2, EllipsisVertical, MoveUp, IndianRupee, RotateCw, PackageMinus, Loader2, RefreshCcw } from "lucide-react";
+import { Pencil, Mail, Phone, Building2, EllipsisVertical, MoveUp, IndianRupee, RotateCw, PackageMinus, Loader2, RefreshCcw, BadgeCheck } from "lucide-react";
 import { assets } from "@/assets/assets";
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
@@ -246,11 +246,12 @@ export default function Profile() {
           <h1 className="text-3xl -mt-6 font-bold flex items-center gap-2">
             {seller!.name}
             <span className="text-blue-500">
-              <img
+              {/* <img
                 className="w-8 -mt-3 mr-3"
                 src={assets.verify}
                 alt="Verify_Icon"
-              />
+              /> */}
+              <BadgeCheck className="fill-blue-500 text-white h-5 w-5" />
             </span>
           </h1>
         )}
@@ -338,8 +339,7 @@ export default function Profile() {
             <div className="flex  justify-center md:justify-start">
             <AlertDialogTrigger  asChild>
               <Button 
-                variant="destructive" 
-                className="w-[100%] md:w-80 place-content-center rounded-xl md:px-24 py-5"
+                className="w-[100%] md:w-80 place-content-center bg-red-600 hover:bg-red-700 rounded-xl dark:text-white md:px-24 py-5"
                 disabled={isDeleting}
               >
                 {isDeleting ? (
@@ -353,7 +353,7 @@ export default function Profile() {
               </Button>
             </AlertDialogTrigger>
             </div>
-            <AlertDialogContent>
+            <AlertDialogContent className="rounded-xl">
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
@@ -363,13 +363,13 @@ export default function Profile() {
               </AlertDialogHeader>
 
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel className="rounded-xl border-accent-foreground/50 hover:bg-gray-700/30">Cancel</AlertDialogCancel>
 
                 <Button
                   variant="destructive"
                   onClick={handleAccountDelete}
                   disabled={isDeleting}
-                  className="flex items-center gap-2"
+                  className="flex items-center rounded-xl gap-2"
                 >
                   {isDeleting ? (
                     <Loader2 className="w-4 h-4 animate-spin" />

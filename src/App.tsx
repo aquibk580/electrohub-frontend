@@ -123,9 +123,10 @@ const App = () => {
             </Route>
             <Route path="add-product" element={<AddProduct />} />
             <Route path="profile" element={<Profile />} />
-          </Route>
-          <Route path="contact" element={<SellerContact />} />
+            <Route path="contact" element={<SellerContact />} />
           <Route path="settings" element={<SellerSettings />} />
+          </Route>
+          
         </Route>
         <Route path="/admin">
           <Route path="auth" element={<AdminAuthLayout />}>
