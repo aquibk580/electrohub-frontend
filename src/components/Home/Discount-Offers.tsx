@@ -214,11 +214,11 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
   }
 
   return (
-    <div className="w-full mx-auto px-4 mt-2 rounded-xl">
-      <div className="flex flex-col mb-">
+    <div className="w-full mx-auto  mt-5 rounded-xl">
+      <div className="flex flex-col">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-primary flex items-center">
+            <h2 className="text-2xl md:text-3xl font-bold  flex items-center">
               <Zap className="mr-2 h-6 w-6 text-yellow-500" />
               Deal Dash
             </h2>
@@ -363,7 +363,7 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
         {/* Left scroll button */}
         {showLeftScroll && (
           <button
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 dark:bg-black/50 backdrop-blur-sm rounded-full shadow-lg p-2 hidden md:flex items-center justify-center"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/65 dark:bg-black/50 backdrop-blur-xl rounded-r-xl shadow-lg p-2 py-4 hidden md:flex items-center justify-center"
             onClick={scrollLeft}
           >
             <ChevronLeft className="h-6 w-6" />
@@ -391,7 +391,7 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
                 key={product.id}
                 className={cn(
                   "relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shrink-0 snap-start mt-6",
-                  "w-[220px] sm:w-[260px] md:w-[240px] lg:w-[220px]",
+                  "w-[220px] sm:w-[280px] md:w-[260px] lg:w-[250px]",
                   hoveredCard === product.id
                     ? "shadow-xl scale-105"
                     : "shadow-md",
@@ -401,7 +401,7 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
                 onMouseLeave={() => setHoveredCard(null)}
                 onClick={() => handleProductClick(product.id)}
               >
-                <div className={cn("relative h-64", product.bgColor)}>
+                <div className={cn("relative h-64 sm:h-72", product.bgColor)}>
                   <img
                     src={mainImageUrl}
                     alt={product.name}
@@ -411,7 +411,7 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
                   {/* Floating discount tag */}
                   <div
                     className={cn(
-                      "absolute top-4 left-3 px-3 py-1 rounded-full font-bold text-white",
+                      "absolute top-4 left-3 px-3 py-1 text-sm rounded-full font-bold text-white",
                       isHotDeal ? "bg-red-500" : "bg-amber-500"
                     )}
                   >
@@ -439,7 +439,7 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
                     </h3>
 
                     <div className="flex items-center mt-2">
-                      <div className="text-white font-semibold">
+                      <div className="text-white  font-semibold">
                         ₹{formatPrice(discountedPrice)}
                       </div>
                       <div className="text-white/70 line-through ml-2 text-sm">
@@ -471,7 +471,7 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
         {/* Right scroll button */}
         {showRightScroll && (
           <button
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 dark:bg-black/50 backdrop-blur-sm rounded-full shadow-lg p-2 hidden md:flex items-center justify-center"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/65 dark:bg-black/50 backdrop-blur- rounded-l-xl shadow-lg p-2 py-4 hidden md:flex items-center justify-center"
             onClick={scrollRight}
           >
             <ChevronRight className="h-6 w-6" />

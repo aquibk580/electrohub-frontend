@@ -82,7 +82,7 @@ const RelatedProducts = ({
   if (error) {
     return (
       <div className="w-full py-8">
-        <h2 className="text-2xl font-bold mb-6">Similar Products</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-6">Similar Products</h2>
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
           Error: {error}
           <div className="flex justify-center items-center h-40">
@@ -96,7 +96,7 @@ const RelatedProducts = ({
   if (products.length === 0) {
     return (
       <div className="w-full py-8">
-        <h2 className="text-2xl font-bold mb-6">Similar Products</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-6">Similar Products</h2>
         <p className="text-muted-foreground">No similar products found.</p>
       </div>
     );
@@ -105,7 +105,7 @@ const RelatedProducts = ({
   return (
     <div className="w-full py-4 relative overflow-x-hidden ">
       <div className="relative mb-6">
-        <h2 className="text-2xl font-bold ">Similar Products</h2>
+        <h2 className="text-2xl md:text-3xl font-bold ">Similar Products</h2>
       </div>
 
       <div
@@ -133,7 +133,7 @@ const RelatedProducts = ({
         {products.map((product) => (
           <div
             key={product.id}
-            className="flex-shrink-0 lg:w-1/4 md:w-2/4 w-5/6 snap-start"
+            className="flex-shrink-0 lg:w-1/4 md:w-2/4 sm:w-5/6 w-7/12 snap-start"
           >
             <ProductCard
               product={product}

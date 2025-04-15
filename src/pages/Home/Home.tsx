@@ -18,13 +18,16 @@ const LoadingFallback = () => (
 
 const Home = () => {
   return (
-    <div className="flex flex-col space-y-7 md:space-y-8 lg:space-y-8 mx-auo px-4 sm:px-6 lg:px-6  md:py-2">
-      {/* Hero Banner */}
-      <section className="w-full animate__animated animate__fadeIn">
+    <>
+       {/* Hero Banner */}
+       <section className="w-full px-2 py-2 animate__animated animate__fadeIn">
         <Suspense fallback={<LoadingFallback />}>
           <BannerCarousel />
         </Suspense>
       </section>
+
+    <div className="flex flex-col space-y-8 md:space-y-8 lg:space-y-8 mx-auo px-4 sm:px-6 lg:px-6  md:py-2">
+   
 
       {/* Featured Products */}
       <section className="w-full animate__animated animate__fadeIn animate__delay-1s">
@@ -70,6 +73,7 @@ const Home = () => {
         </Suspense>
       </section> */}
     </div>
+    </>
   );
 };
 

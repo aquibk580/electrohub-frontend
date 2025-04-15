@@ -102,7 +102,7 @@ const MobileServiceSection = () => {
           {serviceContain.map((item) => (
             <TabsTrigger key={item.id} value={item.id.toString()} className="flex items-center hover:bg-primary/30  rounded-xl gap-">
               {/* Icon visible on mobile only */}
-              <item.icon className="h-5 w-5 "/> {/* Render icon */}
+              <item.icon className="h-5 w-5 text-black/90 dark:text-white/90  sm:hidden   "/> {/* Render icon */}
              
 
               {/* Text visible on larger screens */}
@@ -116,7 +116,7 @@ const MobileServiceSection = () => {
 
           return (
             <TabsContent key={item.id} value={item.id.toString()}>
-              <Card>
+              <Card className="mb-4">
                 <CardHeader className="pb-2">
                   <CardTitle>{item.title}</CardTitle>
                   <CardDescription>{item.desc}</CardDescription>

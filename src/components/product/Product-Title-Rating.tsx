@@ -46,7 +46,7 @@ export default function ProductTitleRating({
       </h1>
       <h3
         onClick={displayDescription}
-        className={`text-xs sm:text-sm font-medium text-gray-600 dark:text-slate-500 ${
+        className={`text-xs sm:text-sm font-medium text-accent-foreground/75 ${
           showDescription ? "" : "line-clamp-2"
         }`}
       >
