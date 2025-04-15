@@ -20,13 +20,13 @@ const AuthLayout = () => {
   }, []);
 
   return (
-    <div className="min-h-screen w-full dark:bg-muted/45 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen w-full bg-muted/30  dark:bg-muted/45 py-8 px-4 sm:px-6 lg:px-8">
       <nav>
         <div className="flex items-center justify-start mb-8">
-          <ArrowLeft
-            onClick={() => navigate(-1)}
-            className="h-6 w-6 cursor-pointer text-black dark:text-white"
-          />
+          <div onClick={() => navigate(-1)} className="flex absolute items-center justify-center space-x-1.5 font-semibold text-md hover:bg-primary/15 cursor-pointer px-4 py-1.5 rounded-full">
+            <ArrowLeft className="h-5 w-5 cursor-pointer text-black dark:text-white"/>
+            <span>Back</span>
+          </div>
 
           <div className="text-3xl flex items-center justify-center gap-2 font-extrabold text-gray-900 dark:text-inherit flex-grow text-center">
             <ShoppingCart className="text-green-500" /> Electrohub

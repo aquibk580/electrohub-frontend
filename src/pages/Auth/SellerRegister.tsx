@@ -144,7 +144,7 @@ export default function SellerRegister() {
                 className="hidden"
                 onChange={onFileChange}
               />
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-accent-foreground/85">
                 Upload your company logo or profile picture
               </p>
             </div>

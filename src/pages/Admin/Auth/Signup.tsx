@@ -89,7 +89,7 @@ const Signup = () => {
           <CardTitle className="text-3xl font-extrabold text-center">
             Sign Up
           </CardTitle>
-          <CardDescription className="text-center text-gray-800">
+          <CardDescription className="text-center text-accent-foreground/80">
             Sign Up to your Admin Account
           </CardDescription>
         </CardHeader>
@@ -174,7 +174,7 @@ const Signup = () => {
             <div className="flex items-center justify-start">
               <Button
                 variant="link"
-                className="p-0 h-auto font-medium text-blue-950"
+                className="p-0 h-auto font-medium text-blue-800 "
                 onClick={() => navigate("/admin/auth/forgot-password")}
               >
                 Forgot password?
