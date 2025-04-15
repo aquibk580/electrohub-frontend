@@ -7,6 +7,8 @@ import {
   Zap,
   Gift,
   Tag,
+  ChevronDown,
+  Filter
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -79,6 +81,7 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
   const [showLeftScroll, setShowLeftScroll] = useState(false);
   const [showRightScroll, setShowRightScroll] = useState(true);
   const [activeDiscount, setActiveDiscount] = useState<string>("all");
+  const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
 
   // Generate random background color for each product
   const productsWithColors = useMemo(() => {
@@ -177,13 +180,42 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
     (product) => product.offerPercentage >= 60
   );
 
+  // Toggle filter dropdown
+  const toggleFilterDropdown = () => {
+    setIsFilterDropdownOpen(!isFilterDropdownOpen);
+  };
+
+  // Set filter and close dropdown
+  const setFilterAndCloseDropdown = (filter: string) => {
+    setActiveDiscount(filter);
+    setIsFilterDropdownOpen(false);
+  };
+
+  // Get filter button label for mobile
+  const getActiveFilterLabel = (): string => {
+    switch (activeDiscount) {
+      case "all":
+        return "All Deals";
+      case "hot":
+        return "Blazing Deals";
+      case "high":
+        return "Epic Savings";
+      case "medium":
+        return "Flash Deals";
+      case "low":
+        return "Today Only";
+      default:
+        return "Filter";
+    }
+  };
+
   if (filteredProducts.length === 0) {
     return null;
   }
 
   return (
-    <div className="w-full mx-auto px-4 py-8 mt-2 rounded-xl">
-      <div className="flex flex-col mb-8">
+    <div className="w-full mx-auto px-4 mt-2 rounded-xl">
+      <div className="flex flex-col mb-">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-2xl md:text-3xl font-bold text-primary flex items-center">
@@ -194,10 +226,88 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
               Electrifying savings you can't resist
             </p>
           </div>
+        
+
+        {/* Mobile filter dropdown */}
+        <div className="md:hidden mb-4 relative w-44">
+          <Button 
+            variant="outline" 
+            className="w-full justify-between rounded-lg" 
+            onClick={toggleFilterDropdown}
+          >
+            <div className="flex items-center">
+              <Filter className="h-4 w-4 mr-2" />
+              <span>{getActiveFilterLabel()}</span>
+            </div>
+            <ChevronDown className={cn("h-4 w-4 transition-transform", isFilterDropdownOpen ? "transform rotate-180" : "")} />
+          </Button>
+          
+          {isFilterDropdownOpen && (
+            <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg  w-44">
+              <div className="p-2 flex flex-col space-y-1">
+                <button 
+                  className={cn(
+                    "text-left px-3 py-2 rounded-md flex items-center",
+                    activeDiscount === "all" ? "bg-primary text-primary-foreground" : "hover:bg-muted"
+                  )}
+                  onClick={() => setFilterAndCloseDropdown("all")}
+                >
+                  All Deals
+                </button>
+                
+                {hasHotDeals && (
+                  <button 
+                    className={cn(
+                      "text-left px-3 py-2 rounded-md flex items-center text-[1px]",
+                      activeDiscount === "hot" ? "bg-red-500 text-white" : "hover:bg-muted"
+                    )}
+                    onClick={() => setFilterAndCloseDropdown("hot")}
+                  >
+                    <Flame className="mr-2 h-4 w-4" />
+                    Blazing Deals (60%+ Off)
+                  </button>
+                )}
+                
+                <button 
+                  className={cn(
+                    "text-left px-3 py-2 rounded-md flex items-center",
+                    activeDiscount === "high" ? "bg-primary text-primary-foreground" : "hover:bg-muted"
+                  )}
+                  onClick={() => setFilterAndCloseDropdown("high")}
+                >
+                  <Gift className="mr-2 h-4 w-4" />
+                  Epic Savings (30-59%)
+                </button>
+                
+                <button 
+                  className={cn(
+                    "text-left px-3 py-2 rounded-md flex items-center",
+                    activeDiscount === "medium" ? "bg-primary text-primary-foreground" : "hover:bg-muted"
+                  )}
+                  onClick={() => setFilterAndCloseDropdown("medium")}
+                >
+                  <Tag className="mr-2 h-4 w-4" />
+                  Flash Deals (15-29%)
+                </button>
+                
+                <button 
+                  className={cn(
+                    "text-left px-3 py-2 rounded-md flex items-center",
+                    activeDiscount === "low" ? "bg-primary text-primary-foreground" : "hover:bg-muted"
+                  )}
+                  onClick={() => setFilterAndCloseDropdown("low")}
+                >
+                  <Clock className="mr-2 h-4 w-4" />
+                  Today Only (Up to 15%)
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
         </div>
 
-        {/* Filter buttons */}
-        <div className="mb-4 overflow-x-auto pb-2">
+        {/* Desktop filter buttons - hidden on mobile */}
+        <div className="hidden md:block mb-4 overflow-x-auto pb-2">
           <div className="flex space-x-2">
             <Button
               variant={activeDiscount === "all" ? "default" : "outline"}
@@ -263,7 +373,7 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
         {/* Scrollable container */}
         <div
           ref={scrollContainerRef}
-          className="flex overflow-x-auto scrollbar-hide gap-4 pb-4 scroll-smooth snap-x"
+          className="flex overflow-x-auto scrollbar-hide gap-4 pb-4 scroll-smooth snap-x px-2 smap-start snap-mandatory"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {filteredProducts.map((product) => {
@@ -280,7 +390,7 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
               <div
                 key={product.id}
                 className={cn(
-                  "relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shrink-0 snap-start",
+                  "relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shrink-0 snap-start mt-6",
                   "w-[220px] sm:w-[260px] md:w-[240px] lg:w-[220px]",
                   hoveredCard === product.id
                     ? "shadow-xl scale-105"
@@ -351,14 +461,6 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
                   <div className="absolute top-16 right-0 bg-red-600 text-white px-2 py-1 text-xs font-bold transform rotate-45 translate-x-6 shadow-lg">
                     <Flame className="h-3 w-3 inline mr-1" />
                     HOT!
-                  </div>
-                )}
-
-                {/* Timer for urgency */}
-                {product.offerPercentage >= 30 && (
-                  <div className="bg-black text-white p-2 text-xs text-center font-medium flex items-center justify-center">
-                    <Clock className="h-3 w-3 mr-1" />
-                    {offerTime.hours}h {offerTime.minutes}m left
                   </div>
                 )}
               </div>
