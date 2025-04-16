@@ -22,7 +22,7 @@ export const AddProductSchema = z.object({
   ),
   stock: z.preprocess(
     (val) => Number(val),
-    z.number().int().nonnegative("Stock must be a non-negative integer")
+    z.number().int().positive("Stock must be a positive integer")
   ),
   categoryName: z.string().min(1, "Category is required"),
   status: z.string().min(1, "Status is required"),

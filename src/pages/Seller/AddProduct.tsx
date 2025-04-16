@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect, useState, useRef, Suspense } from "react"
 import type React from "react"
 import { useForm, useFieldArray, Controller } from "react-hook-form"
@@ -17,7 +15,6 @@ import type { RootState } from "@/redux/store"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { removeBackground } from "@imgly/background-removal"
 import { AddProductSkeleton } from "@/components/Seller/Skeletons"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Helmet } from "react-helmet-async"
