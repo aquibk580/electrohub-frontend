@@ -141,7 +141,7 @@ const DealsBanner = ({ products }: DealBannerProps) => {
             <div className="text-black dark:text-slate-50 h-full  flex flex-col items-start pl-2 lg:pl-4 space-y-2 lg:space-y-6 justify-center  ">
               <div className=" lg:space-y-2">
                 <h1 className="text-lg md:text-xl lg:text-3xl font-bold">
-                  {products[3].name.split(" ")[0]}
+                  {products[3].name.split(" ")[0] || "Unknown"}
                 </h1>
                 <p className=" text-xs md:text-md lg:text-xl font-light line-clamp-2">
                   {products[3].name}
@@ -178,17 +178,15 @@ const DealsBanner = ({ products }: DealBannerProps) => {
             <div className="text-black dark:text-slate-50 h-full  flex flex-col items-start pl-2 lg:pl-4 space-y-2 lg:space-y-6 justify-center  ">
               <div className=" lg:space-y-2">
                 <h1 className="text-lg md:text-xl lg:text-3xl font-bold">
-                  {products[4].name.split(" ")[0]}
+                  {products[4].name.split(" ")[0] || "Unknown"}
                 </h1>
                 <p className=" text-xs md:text-md lg:text-xl font-light line-clamp-2">
                   {products[4].name}
                 </p>
-              </div>
-
-              <div>
                 <span className="text-xs md:text-sm lg:text-lg">
                   Starting at
                 </span>
+                
                 <h2 className="text-md  lg:text-2xl text-primary/95 font-bold">
                   ₹
                   <span className="text-2xl">
@@ -209,8 +207,10 @@ const DealsBanner = ({ products }: DealBannerProps) => {
             </div>
           </Card>
         </div>
+        </div>
       </div>
-    </div>
+    
+    
   );
 };
 
