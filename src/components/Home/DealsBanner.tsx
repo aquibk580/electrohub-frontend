@@ -23,14 +23,14 @@ const DealsBanner = ({ products }: DealBannerProps) => {
         <div className="grid  grid-cols-1 md:grid-cols-2  gap-3 ">
           <Card
             onClick={() => navigate(`/product/${products[0].id}`)}
-            className="bg-muted/70  dark:bg-transparent dark:bg-gradient-to-br from-gray-900 via-primary/10 to-black/60 shadow-none border-slate-400 dark:border-none cursor-pointer rounded-2xl flex justify-between h-56 md:h-60  lg:h-72 px-2 "
+            className="bg-muted/70  dark:bg-transparent dark:bg-gradient-to-br from-gray-900 via-primary/10 to-black/60 shadow-none border-slate-400 dark:border-none cursor-pointer rounded-2xl flex justify-between h-52 md:h-60  lg:h-72 px-2 "
           >
             <div className="h-full  w-3/4  flex flex-col items-start pl-4 lg:pl-8 space-y-6 justify-center  ">
               <div className="space-y-1 lg:space-y-2.5">
-                <h1 className="text-4xl lg:text-5xl text-accent-foreground font-bold">
+                <h1 className="text-lg md:text-4xl lg:text-5xl text-accent-foreground font-bold">
                   {products[0].name.split(" ")[0]}
                 </h1>
-                <p className=" text-xl lg:text-2xl text-accent-foreground/85 font-light line-clamp-2">
+                <p className="md:text-xl lg:text-2xl text-accent-foreground/85 font-light line-clamp-2">
                   {products[0].name}
                 </p>
               </div>
@@ -39,9 +39,9 @@ const DealsBanner = ({ products }: DealBannerProps) => {
                 <span className="text-lg text-accent-foreground/85">
                   Starting at
                 </span>
-                <h2 className="text-3xl text-primary/95 font-bold">
+                <h2 className="text-xl md:text-3xl text-primary/95 font-bold">
                   ₹
-                  <span className="text-2xl">
+                  <span className=" md:text-2xl">
                     {formatPrice(
                       products[0].price -
                         (products[0].price / 100) * products[0].offerPercentage
@@ -60,14 +60,14 @@ const DealsBanner = ({ products }: DealBannerProps) => {
           </Card>
           <Card
             onClick={() => navigate(`/product/${products[1].id}`)}
-            className="bg-muted/70  dark:bg-transparent dark:bg-gradient-to-br from-gray-900 via-primary/10 to-black/60 shadow-none border-slate-400 dark:border-none cursor-pointer rounded-2xl flex justify-between h-56 md:h-60  lg:h-72 px-2 "
+            className="bg-muted/70  dark:bg-transparent dark:bg-gradient-to-br from-gray-900 via-primary/10 to-black/60 shadow-none border-slate-400 dark:border-none cursor-pointer rounded-2xl flex justify-between h-52 md:h-60  lg:h-72 px-2 "
           >
             <div className="h-full  w-3/4  flex flex-col items-start pl-4 lg:pl-8 space-y-6 justify-center  ">
               <div className="space-y-1 lg:space-y-2.5">
-                <h1 className="text-4xl lg:text-5xl text-accent-foreground font-bold">
+                <h1 className=" text-xl md:text-4xl lg:text-5xl text-accent-foreground font-bold">
                   {products[1].name.split(" ")[0]}
                 </h1>
-                <p className=" text-xl lg:text-2xl text-accent-foreground/85 font-light">
+                <p className=" text-xl lg:text-2xl text-accent-foreground/85 font-light line-clamp-2">
                   {products[1].name}
                 </p>
               </div>
@@ -76,9 +76,9 @@ const DealsBanner = ({ products }: DealBannerProps) => {
                 <span className="text-lg text-accent-foreground/85">
                   Starting at
                 </span>
-                <h2 className="text-3xl text-primary/95 font-bold">
+                <h2 className="text-xl md:text-3xl text-primary/95 font-bold">
                   ₹
-                  <span className="text-2xl">
+                  <span className="md:text-2xl">
                     {formatPrice(
                       products[1].price -
                         (products[1].price / 100) * products[1].offerPercentage
@@ -99,14 +99,14 @@ const DealsBanner = ({ products }: DealBannerProps) => {
         <div className="grid grid-cols-2 md:grid-cols-3  gap-3">
           <Card
             onClick={() => navigate(`/product/${products[2].id}`)}
-            className="bg-muted/70 dark:bg-gradient-to-br from-gray-900 via-primary/10 to-black/60 shadow-none border-slate-400 dark:border-none cursor-pointer rounded-2xl flex h-40 lg:h-60 px-2 "
+            className="flex flex-col-reverse md:flex-row bg-muted/70 dark:bg-gradient-to-br from-gray-900 via-primary/10 to-black/60 shadow-none border-slate-400 dark:border-none cursor-pointer rounded-2xl  h-72 py-2.5 md:py-0 md:h-40 lg:h-60 px-2 "
           >
             <div className="text-black dark:text-slate-50 h-full  flex flex-col items-start pl-2 lg:pl-4 space-y-2 lg:space-y-6 justify-center  ">
-              <div className=" lg:space-y-2">
+              <div className=" lg:space-y-2 ">
                 <h1 className="text-lg md:text-xl lg:text-3xl font-bold">
                   {products[2].name.split(" ")[0] || "Unknown"}
                 </h1>
-                <p className=" text-xs md:text-md lg:text-xl font-light">
+                <p className=" text-xs md:text-md lg:text-xl font-light line-clamp-2">
                   {products[2].name || "Unknown"}
                 </p>
               </div>
@@ -115,9 +115,9 @@ const DealsBanner = ({ products }: DealBannerProps) => {
                 <span className="text-xs md:text-sm lg:text-lg">
                   Starting at
                 </span>
-                <h2 className="text-md  lg:text-2xl text-primary/95 font-bold">
+                <h2 className="text-xl  md:text-2xl text-primary/95 font-bold">
                   ₹
-                  <span className="text-2xl">
+                  <span className="md:text-2xl">
                     {formatPrice(
                       products[2].price -
                         (products[2].price / 100) * products[2].offerPercentage
@@ -136,14 +136,14 @@ const DealsBanner = ({ products }: DealBannerProps) => {
           </Card>
           <Card
             onClick={() => navigate(`/product/${products[3].id}`)}
-            className="bg-muted/70 dark:bg-gradient-to-br from-gray-900 via-primary/10 to-black/60 shadow-none border-slate-400 dark:border-none cursor-pointer rounded-2xl flex h-40 lg:h-60 px-2 "
+            className="flex flex-col-reverse md:flex-row bg-muted/70 dark:bg-gradient-to-br from-gray-900 via-primary/10 to-black/60 shadow-none border-slate-400 dark:border-none cursor-pointer rounded-2xl h-72 py-2.5 md:py-0 md:h-40 lg:h-60 px-2 "
           >
             <div className="text-black dark:text-slate-50 h-full  flex flex-col items-start pl-2 lg:pl-4 space-y-2 lg:space-y-6 justify-center  ">
               <div className=" lg:space-y-2">
                 <h1 className="text-lg md:text-xl lg:text-3xl font-bold">
                   {products[3].name.split(" ")[0]}
                 </h1>
-                <p className=" text-xs md:text-md lg:text-xl font-light">
+                <p className=" text-xs md:text-md lg:text-xl font-light line-clamp-2">
                   {products[3].name}
                 </p>
               </div>
@@ -152,9 +152,9 @@ const DealsBanner = ({ products }: DealBannerProps) => {
                 <span className="text-xs md:text-sm lg:text-lg">
                   Starting at
                 </span>
-                <h2 className="text-md  lg:text-2xl text-primary/95 font-bold">
+                <h2 className="text-xl  lg:text-2xl text-primary/95 font-bold">
                   ₹
-                  <span className="text-2xl">
+                  <span className="md:text-2xl">
                     {formatPrice(
                       products[3].price -
                         (products[3].price / 100) * products[3].offerPercentage
@@ -180,7 +180,7 @@ const DealsBanner = ({ products }: DealBannerProps) => {
                 <h1 className="text-lg md:text-xl lg:text-3xl font-bold">
                   {products[4].name.split(" ")[0]}
                 </h1>
-                <p className=" text-xs md:text-md lg:text-xl font-light">
+                <p className=" text-xs md:text-md lg:text-xl font-light line-clamp-2">
                   {products[4].name}
                 </p>
               </div>

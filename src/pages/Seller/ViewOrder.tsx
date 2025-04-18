@@ -281,7 +281,7 @@ const MainViewOrder = () => {
             <div className="bg-primary/5  dark:bg-gradient-to-br from-primary/10 via-black to-primary/10 rounded-xl border border-primary/75 p-6">
               <div className="flex items-center mb-4">
                 <Package className="h-6 w-6 mr-2 text-primary" />
-                <h3 className="text-xl font-semibold">Update Order Status</h3>
+                <h3 className="text-xl whitespace-nowrap font-semibold">Update Order Status</h3>
               </div>
               <Select
                 onValueChange={(value) => handleOrderStatusUpdate(value)}
@@ -314,7 +314,7 @@ const MainViewOrder = () => {
             <div className="bg-primary/5  dark:bg-gradient-to-br from-primary/10 via-black to-primary/10 rounded-xl border border-primary/75 p-6">
               <div className="flex items-center mb-4">
                 <UserIcon className="h-6 w-6 mr-2 text-primary" />
-                <h3 className="text-xl font-semibold">Customer Details</h3>
+                <h3 className="text-xl whitespace-nowrap font-semibold">Customer Details</h3>
               </div>
               {user ? (
                 <div className="space-y-3">
