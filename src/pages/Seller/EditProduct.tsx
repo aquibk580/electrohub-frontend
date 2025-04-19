@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import type React from "react"
 import { useForm, Controller, useFieldArray } from "react-hook-form"
@@ -44,7 +42,7 @@ export default function EditProduct() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [isLoading, setIsLoading] = useState<boolean>(true) // Added loading state
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isEditting, setIsEditting] = useState<boolean>(false)
   const [product, setProduct] = useState<Product | null>(location.state?.product || null)
   const [categories, setCategories] = useState<Category[]>([])
@@ -59,7 +57,7 @@ export default function EditProduct() {
       : [],
   )
 
-  const [fileNames, setFileNames] = useState<string[]>(Array(previews.length).fill("No Selected File"))
+  const [fileNames, setFileNames] = useState<string[]>(Array(5).fill("No Selected File"))
 
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
   const [bgColor, setBgColor] = useState<string>("#ffffff")
@@ -102,8 +100,8 @@ export default function EditProduct() {
           setProduct(response.data)
         }
       } catch (error: any) {
-        console.log(error)
-        toast.error(error.message, { position: "top-center", theme: "dark" })
+        console.error("Error fetching product:", error)
+        toast.error(error.response?.data?.error || error.message, { position: "top-center", theme: "dark" })
       }
     }
 
@@ -114,53 +112,88 @@ export default function EditProduct() {
           setCategories(response.data)
         }
       } catch (error: any) {
-        console.log(error)
+        console.error("Error fetching categories:", error)
+        toast.error(error.response?.data?.error || error.message, { position: "top-center", theme: "dark" })
       }
     }
 
     const loadData = async () => {
       setIsLoading(true)
-      await Promise.all([getProduct(), getAllCategories()])
-      setIsLoading(false)
+      try {
+        await Promise.all([getProduct(), getAllCategories()])
+      } catch (error) {
+        console.error("Error loading data:", error)
+      } finally {
+        setIsLoading(false)
+      }
     }
 
     loadData()
   }, [id])
 
   useEffect(() => {
-    if (product?.images) {
-      setPreviews(
-        product.images.map((image) => ({
-          id: image.id,
-          url: image.url,
-        })),
-      )
+    if (!product) return
+
+    // Initialize previews from product images
+    if (product.images && product.images.length > 0) {
+      const productPreviews = product.images.map((image) => ({
+        id: image.id,
+        url: image.url,
+      }))
+
+      setPreviews(productPreviews)
+
+      // Update fileNames based on image URLs
+      const newFileNames = Array(5).fill("No Selected File")
+      productPreviews.forEach((preview, index) => {
+        if (preview.url) {
+          const fileName = preview.url.split("/").pop() || `image-${index}.jpg`
+          newFileNames[index] = fileName
+        }
+      })
+      setFileNames(newFileNames)
     }
-    setValue("name", product?.name)
-    setValue("description", product?.description)
-    setValue("categoryName", product?.categoryName)
-    setValue("price", product?.price)
-    setValue("brand", product?.productInfo?.brand)
-    setValue("offerPercentage", product?.offerPercentage)
-    setValue("status", product?.status)
-    setValue("stock", product?.stock)
-    if (product?.productInfo?.details) {
+
+    // Set form values
+    setValue("name", product.name || "")
+    setValue("description", product.description || "")
+    setValue("categoryName", product.categoryName || "")
+    setValue("price", product.price || 0)
+    setValue("brand", product.productInfo?.brand || "")
+    setValue("offerPercentage", product.offerPercentage || 0)
+    setValue("status", product.status || "")
+    setValue("stock", product.stock || 0)
+
+    // Handle details
+    if (product.productInfo?.details) {
       const parsedDetails =
         typeof product.productInfo.details === "string"
           ? JSON.parse(product.productInfo.details)
           : product.productInfo.details
 
-      setValue("details", parsedDetails)
+      // Ensure details is an array
+      if (Array.isArray(parsedDetails) && parsedDetails.length > 0) {
+        setValue("details", parsedDetails)
+      } else {
+        setValue("details", [{ key: "", value: "" }])
+      }
     }
   }, [product, setValue])
-
-  const previewSlots = Array.from({ length: 5 }, (_, index) => previews[index] || { id: null, url: null })
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const file = e.target.files?.[0]
     if (!file) return
 
+    // Reset the input value to allow selecting the same file again
     e.target.value = ""
+
+    // Validate file before processing
+    try {
+      validateFile(file)
+    } catch (error: any) {
+      toast.error(error.message, { position: "top-center", theme: "dark" })
+      return
+    }
 
     const reader = new FileReader()
     reader.onloadend = () => {
@@ -184,6 +217,21 @@ export default function EditProduct() {
     }
 
     reader.readAsDataURL(file)
+  }
+
+  const validateFile = (file: File) => {
+    const validTypes = ["image/jpeg", "image/png", "image/jpg", "image/gif", "image/webp"]
+    const maxSize = 5 * 1024 * 1024 // 5MB
+
+    if (!validTypes.includes(file.type)) {
+      throw new Error("Invalid file type. Only JPEG, PNG, JPG, GIF, and WEBP are allowed")
+    }
+
+    if (file.size > maxSize) {
+      throw new Error("File size must not exceed 5MB")
+    }
+
+    return true
   }
 
   // Server-side background removal function
@@ -318,48 +366,82 @@ export default function EditProduct() {
   }
 
   const onSubmit = async (data: EditProductSchemaType) => {
+    if (!product?.id) {
+      toast.error("Product ID is missing", { position: "top-center", theme: "dark" })
+      return
+    }
+
     setIsEditting(true)
     const formData = new FormData()
 
+    // Add all form data to formData
     Object.entries(data).forEach(([key, value]) => {
       if (key === "details" && Array.isArray(value)) {
-        formData.append(key, JSON.stringify(value))
+        // Filter out empty details
+        const filteredDetails = value.filter((detail) => detail.key.trim() !== "" && detail.value.trim() !== "")
+        formData.append(key, JSON.stringify(filteredDetails))
       } else {
         formData.append(key, value.toString())
       }
     })
 
+    // Add images to formData
+    let imageCount = 0
     images.forEach((image) => {
       if (image) {
         formData.append("images", image)
+        imageCount++
       }
     })
 
+    // Count existing images that aren't being replaced
+    const existingImageCount = previews.filter((preview) => preview.id !== null && preview.url).length
+
+    // Check if we have at least 3 images total (existing + new)
+    const totalImages = existingImageCount + imageCount
+    if (totalImages < 3) {
+      toast.error("At least 3 product images are required", { position: "top-center", theme: "dark" })
+      setIsEditting(false)
+      return
+    }
+
     try {
-      const response = await axios.patch(`${import.meta.env.VITE_API_URL}/api/seller/products/${product!.id}`, formData)
+      const response = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/api/seller/products/${product.id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      )
+
       if (response.status === 200) {
-        toast.success("Product Updated successfully", {
+        toast.success("Product updated successfully", {
           position: "top-center",
           theme: "dark",
         })
-        navigate(`/seller/dashboard/products/view-product/${product?.id}`, {
+
+        // Navigate to product view page with updated product
+        navigate(`/seller/dashboard/products/view-product/${product.id}`, {
           state: {
-            product,
+            product: response.data.product,
           },
         })
       }
     } catch (error: any) {
-      if (error.response.data.flag) {
-        toast.warn(error.response.data.error, {
+      console.error("Error updating product:", error)
+
+      if (error.response?.data?.error) {
+        toast.error(error.response.data.error, {
           position: "top-center",
           theme: "dark",
         })
       } else {
-        toast.error(error.message, {
+        toast.error("Failed to update product. Please try again.", {
           position: "top-center",
           theme: "dark",
         })
-        console.log(error)
       }
     } finally {
       setIsEditting(false)
@@ -371,46 +453,86 @@ export default function EditProduct() {
 
     const maxLength = 10 // Limit the name length
     const extension = fileName.split(".").pop() // Get file extension
-    const namePart = fileName.slice(0, maxLength) // Get the first 15 characters of the file name
+    const namePart = fileName.slice(0, maxLength) // Get the first characters of the file name
 
     return `${namePart}...${extension ? "." + extension : ""}`
   }
 
   // Function to remove the image at a specific index
   const removeImage = async (index: number, imageId: number | null) => {
-    console.log("Working")
     try {
+      // Count how many images we have (excluding the one being removed)
+      const currentImageCount = previews.filter((p, i) => p.url && i !== index).length
+
+      if (currentImageCount < 3) {
+        toast.warning("At least 3 product images are required", {
+          position: "top-center",
+          theme: "dark",
+        })
+        return
+      }
+
       if (imageId) {
+        // This is an existing image in the database
         const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/seller/products/image/${imageId}`)
 
         if (response.status === 200) {
-          setPreviews((prev) => prev.map((item, i) => (i === index ? { id: null, url: "" } : item)))
-          setFileNames((prev) => prev.map((name, i) => (i === index ? "No Selected File" : name)))
-        }
-      } else {
-        setPreviews((prev) => prev.map((item, i) => (i === index ? { id: null, url: "" } : item)))
-        setImages((prev) => prev.map((item, i) => (i === index ? null : item)))
-        setFileNames((prev) => prev.map((name, i) => (i === index ? "No Selected File" : name)))
-      }
-    } catch (error: any) {
-      if (error.response) {
-        const { status, data } = error.response
+          setPreviews((prev) => {
+            const newPreviews = [...prev]
+            newPreviews[index] = { id: null, url: "" }
+            return newPreviews
+          })
 
-        if (status === 400 && data?.status === "ImageQuantityError") {
-          toast.warning(data.error, {
+          setFileNames((prev) => {
+            const newFileNames = [...prev]
+            newFileNames[index] = "No Selected File"
+            return newFileNames
+          })
+
+          toast.success("Image removed successfully", {
             position: "top-center",
             theme: "dark",
           })
-          return
         }
+      } else {
+        // This is a new image that hasn't been saved to the database yet
+        setPreviews((prev) => {
+          const newPreviews = [...prev]
+          newPreviews[index] = { id: null, url: "" }
+          return newPreviews
+        })
+
+        setImages((prev) => {
+          const newImages = [...prev]
+          newImages[index] = null
+          return newImages
+        })
+
+        setFileNames((prev) => {
+          const newFileNames = [...prev]
+          newFileNames[index] = "No Selected File"
+          return newFileNames
+        })
       }
-      console.error(error)
-      toast.error(error.message || "Failed to remove image", {
-        position: "top-center",
-        theme: "dark",
-      })
+    } catch (error: any) {
+      console.error("Error removing image:", error)
+
+      if (error.response?.status === 400 && error.response?.data?.status === "ImageQuantityError") {
+        toast.warning(error.response.data.error, {
+          position: "top-center",
+          theme: "dark",
+        })
+      } else {
+        toast.error(error.response?.data?.error || "Failed to remove image", {
+          position: "top-center",
+          theme: "dark",
+        })
+      }
     }
   }
+
+  // Prepare image slots for rendering
+  const previewSlots = Array.from({ length: 5 }, (_, index) => previews[index] || { id: null, url: "" })
 
   // If loading, show skeleton
   if (isLoading) {
@@ -442,24 +564,22 @@ export default function EditProduct() {
         <meta property="og:url" content={`${import.meta.env.VITE_APP_URL}/seller/edit-product/${id}`} />
         <meta property="og:type" content="website" />
       </Helmet>
-      <div className=" mx-auto p-2  rounded-xl   animate__animated animate__fadeIn">
+      <div className="mx-auto p-2 rounded-xl animate__animated animate__fadeIn">
         <Button
           variant="outline"
           className="text-sm bg-transparent border-none text-muted-foreground rounded-full hover:bg-accent shadow-none"
           onClick={() => navigate(-1)}
         >
-          <MoveLeft /> Back to Orders
+          <MoveLeft className="mr-2" /> Back
         </Button>
-        <h1 className="text-xl mt-4 bg-primary/30 text-primary  pl-5 p-2 rounded-lg font-semibold mb-2">
-          Edit Product
-        </h1>
+        <h1 className="text-xl mt-4 bg-primary/30 text-primary pl-5 p-2 rounded-lg font-semibold mb-2">Edit Product</h1>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4  p-2">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 p-2">
           {/* Image Upload Section */}
-          <div className="flex flex-wrap place-content-center gap-5 p-2 ">
+          <div className="flex flex-wrap place-content-center gap-5 p-2">
             {previewSlots.map((preview, index) => (
-              <div key={index} className="space-y-2 flex flex-col w-fit h-fit items-center  ">
-                <p className="text-sm font-semibold text-center ">
+              <div key={index} className="space-y-2 flex flex-col w-fit h-fit items-center">
+                <p className="text-sm font-semibold text-center">
                   Upload Product Image
                   <li key={index} className="list-none">
                     {index === 0 ? "(Primary)" : ""}
@@ -469,7 +589,7 @@ export default function EditProduct() {
                   </li>
                 </p>
 
-                <div className="relative w-[21rem] h-64 md:h-48 md:w-48 lg:w-52  lg:h-52 sm:h-64 sm:w-64 p-2 rounded-lg    ">
+                <div className="relative w-[21rem] h-64 md:h-48 md:w-48 lg:w-52 lg:h-52 sm:h-64 sm:w-64 p-2 rounded-lg">
                   <input
                     type="file"
                     accept="image/*"
@@ -498,9 +618,8 @@ export default function EditProduct() {
                       </Button>
                     </div>
                   ) : (
-                    <div className="flex flex-col justify-center shadow-sm   border-dashed border-2 rounded-md border-gray-400 items-center w-full h-full ">
-                      {/* <img className="w-full" src={assets.image || "/placeholder.svg"} alt="" /> */}
-                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-24 ">
+                    <div className="flex flex-col justify-center shadow-sm border-dashed border-2 rounded-md border-gray-400 items-center w-full h-full">
+                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-24">
                         <path
                           d="M7 10V9C7 6.23858 9.23858 4 12 4C14.7614 4 17 6.23858 17 9V10C19.2091 10 21 11.7909 21 14C21 15.4806 20.1956 16.8084 19 17.5M7 10C4.79086 10 3 11.7909 3 14C3 15.4806 3.8044 16.8084 5 17.5M7 10C7.43285 10 7.84965 10.0688 8.24006 10.1959M12 12V21M12 12L15 15M12 12L9 15"
                           className="stroke-current"
@@ -509,25 +628,24 @@ export default function EditProduct() {
                           strokeLinejoin="round"
                         />
                       </svg>
-                      <p className="text-center text-sm ">Browse File to upload!</p>
+                      <p className="text-center text-sm">Browse File to upload!</p>
                     </div>
                   )}
                 </div>
-                <div className="p-1 px-2 w-full flex shadow-sm items-center justify-between rounded-md  ">
-                  <div className=" rounded-full p-1">
-                    {" "}
+                <div className="p-1 px-2 w-full flex shadow-sm items-center justify-between rounded-md">
+                  <div className="rounded-full p-1">
                     <CloudUpload />
                   </div>
-                  <span className="text-sm ">
+                  <span className="text-sm">
                     {fileNames[index]
-                      ? formatFileName(fileNames[index]).substring(0,18)
+                      ? formatFileName(fileNames[index])
                       : preview.url
-                        ? preview?.url?.substring(0, 18)
+                        ? preview.url.split("/").pop()?.substring(0, 18) || "Image"
                         : "No Selected File"}
                   </span>
 
                   <div
-                    className=" rounded-lg cursor-pointer bg-red-100 text-red-600 p-1"
+                    className="rounded-lg cursor-pointer bg-red-100 text-red-600 p-1"
                     onClick={() => removeImage(index, preview.id)}
                   >
                     <Trash2 />
@@ -538,7 +656,7 @@ export default function EditProduct() {
           </div>
 
           {/* Basic Product Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 gap-x-8  ">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 gap-x-8">
             <div className="space-y-1">
               <Label htmlFor="name" className="text-md font-medium">
                 Product Name
@@ -546,14 +664,12 @@ export default function EditProduct() {
               <Controller
                 name="name"
                 control={control}
-                render={({ field }) => (
-                  <Textarea {...field} id="name" className=" text-start " placeholder="Type here" />
-                )}
+                render={({ field }) => <Textarea {...field} id="name" className="text-start" placeholder="Type here" />}
               />
               {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
             </div>
 
-            <div className="space-y-1 ">
+            <div className="space-y-1">
               <Label htmlFor="description" className="text-md font-medium">
                 Product Description
               </Label>
@@ -655,7 +771,7 @@ export default function EditProduct() {
               />
               {errors.status && <p className="text-red-500 text-sm">{errors.status.message}</p>}
             </div>
-            <div className="grid grid-cols-1  gap-3 gap-x-8">
+            <div className="grid grid-cols-1 gap-3 gap-x-8">
               <div className="space-y-1">
                 <Label htmlFor="brand" className="text-md font-medium">
                   Brand
@@ -671,7 +787,6 @@ export default function EditProduct() {
           </div>
 
           {/* Product Specifications */}
-
           <Separator />
           <h2 className="text-xl font-semibold mb-4 bg-primary/30 text-primary border-border pl-4 p-2 rounded-lg">
             Additional Product Details
@@ -702,12 +817,13 @@ export default function EditProduct() {
           <div className="flex items-center justify-center">
             <Button
               type="submit"
-              className="  bg-accent hover:bg-primary/5 font-semibold text-lg rounded-lg md:px-32 py-6 shadow-lg text-accent-foreground"
+              className="bg-accent hover:bg-primary/5 font-semibold text-lg rounded-lg md:px-32 py-6 shadow-lg text-accent-foreground"
               disabled={isEditting}
             >
-              {!isEditting ? "Edit Product" : "Editting..."}
+              {!isEditting ? "Update Product" : "Updating..."}
             </Button>
           </div>
+
           {/* Image Editor Dialog */}
           <Dialog open={editingIndex !== null} onOpenChange={(open) => !open && setEditingIndex(null)}>
             <DialogContent className="max-w-4xl w-[90vw]">
@@ -802,4 +918,3 @@ export default function EditProduct() {
     </div>
   )
 }
-

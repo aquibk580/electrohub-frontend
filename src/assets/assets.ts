@@ -34,9 +34,17 @@ import bannerdash from "./orderbanner.png";
 import demoimg from "./demopimg.png";
 import paymentOptions from "./payment-options.png";
 import logo1 from "./logo1.png";
+import aquibpfp from "./aquib.jpg";
+import aadarshpfp from "./aadarsh.jpg";
+import raihanpfp from "./raihan.jpg";
+import sumitpfp from "./sumit.jpeg";
 
 // all the icons and image
 export const assets = {
+  aquibpfp,
+  aadarshpfp,
+  raihanpfp,
+  sumitpfp,
   heart_icon,
   rupees_icon,
   phone_icon,

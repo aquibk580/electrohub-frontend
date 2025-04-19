@@ -56,7 +56,7 @@ export function FilterDropDown({
         {/* Order Status Filters */}
         <DropdownMenuGroup>
           <DropdownMenuLabel>Order Status</DropdownMenuLabel>
-          {["Pending", "Shipped", "Delivered", "Cancelled", "Returned"].map(
+          {["Shipped", "Delivered", "Cancelled", "Returned"].map(
             (status, index) => (
               <DropdownMenuItem
                 key={index}

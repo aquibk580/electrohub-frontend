@@ -4,21 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  ArrowLeft,
-  Check,
-  Loader2,
-  Package,
-  Star,
-  Truck,
-  X,
-} from "lucide-react";
+import { ArrowLeft, Check, Package, Star, Truck, X } from "lucide-react";
 import type { OrderItem, User } from "@/types/entityTypes";
 import axios from "@/lib/axios";
 import { formatPrice } from "@/utils/FormatPrice";
 import { cn, formatDate } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
 import { DetailPageSkeleton } from "@/components/Admin/Skeletons";
 
@@ -29,10 +20,10 @@ const OrderDetails = () => {
   const [loading, setLoading] = useState(true);
   const [orderItem, setOrderItem] = useState<
     | (OrderItem & {
-      user: User;
-      sellerAverageRating: number;
-      totalSellerOrders: number;
-    })
+        user: User;
+        sellerAverageRating: number;
+        totalSellerOrders: number;
+      })
     | null
   >(null);
 
@@ -104,7 +95,9 @@ const OrderDetails = () => {
         id: "Delivered",
         label: "Delivered",
         icon: <Check className="w-5 h-5" />,
-        isCompleted: ["Delivered", "Returned"].includes(orderItem?.status || ""),
+        isCompleted: ["Delivered", "Returned"].includes(
+          orderItem?.status || ""
+        ),
         date: ["Delivered", "Returned"].includes(orderItem?.status || "")
           ? formatDate(orderItem!.updatedAt)
           : null,
@@ -135,22 +128,20 @@ const OrderDetails = () => {
   }, [orderItem]);
 
   if (loading) {
-    return (
-      <DetailPageSkeleton type="order" />
-    );
+    return <DetailPageSkeleton type="order" />;
   }
 
   return (
     <div className="w-full px-4 py-6 space-y-6">
       <Helmet
-                title={orderItem?.product?.name || "Order"}
-                meta={[
-                  {
-                    name: "description",
-                    content: "Order Management",
-                  },
-                ]}
-              />
+        title={orderItem?.product?.name || "Order"}
+        meta={[
+          {
+            name: "description",
+            content: "Order Management",
+          },
+        ]}
+      />
       <button
         onClick={handleBackClick}
         className="flex items-center gap-2 group text-primary hover:text-primary/60 w-fit transition-colors"
@@ -167,21 +158,34 @@ const OrderDetails = () => {
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <div className="flex items-center space-x-4">
-              <img
-                src={orderItem?.product?.images[0]?.url || "/placeholder.svg"}
-                alt={orderItem?.product?.name}
-                className="w-32 h-32 rounded-lg object-cover"
-              />
+              {orderItem?.product ? (
+                <img
+                  src={orderItem?.product?.images[0]?.url || "/placeholder.svg"}
+                  alt={orderItem?.product?.name}
+                  className="w-32 h-32 rounded-lg object-cover"
+                />
+              ) : (
+                <div className="w-24 h-24 md:w-20 md:h-20 flex items-center justify-center bg-gray-200 dark:bg-gray-800 rounded-lg text-center text-xs text-gray-600 dark:text-gray-400">
+                  N/A
+                </div>
+              )}
+
               <div>
-                <h3 className="font-medium">{orderItem?.product?.name}</h3>
-                <p className="text-base text-muted-foreground">
-                  {"₹" +
-                    formatPrice(
-                      orderItem!.product.price -
-                      (orderItem!.product.offerPercentage / 100) *
-                      orderItem!.product.price
-                    )}
-                </p>
+                {orderItem?.product ? (
+                  <>
+                    <h3 className="font-medium">{orderItem?.product?.name}</h3>
+                    <p className="text-base text-muted-foreground">
+                      {"₹" +
+                        formatPrice(
+                          orderItem!.product.price -
+                            (orderItem!.product.offerPercentage / 100) *
+                              orderItem!.product.price
+                        )}
+                    </p>
+                  </>
+                ) : (
+                  <h1>Product not available</h1>
+                )}
                 <Badge
                   className={`${getStatusColor(
                     orderItem!.status
@@ -199,7 +203,7 @@ const OrderDetails = () => {
               <span>{orderItem?.product?.seller?.name}</span>
               <div className="flex items-center">
                 <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                <span className="ml-1">{orderItem?.sellerAverageRating}</span>
+                <span className="ml-1">{orderItem?.sellerAverageRating || 0}</span>
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -266,7 +270,10 @@ const OrderDetails = () => {
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: "100%" }}
-                          transition={{ delay: index * 0.1 + 0.3, duration: 0.5 }}
+                          transition={{
+                            delay: index * 0.1 + 0.3,
+                            duration: 0.5,
+                          }}
                           className="h-1 bg-primary rounded-full mt-2"
                         />
                       )}

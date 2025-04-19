@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -64,7 +64,7 @@ const SellerDetails = () => {
       //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
       //   <p className="text-muted-foreground">Loading Seller Details...</p>
       // </div>
-      <SellerInfoSkeleton/>
+      <SellerInfoSkeleton />
     );
   }
 
@@ -117,7 +117,7 @@ const SellerDetails = () => {
           </div>
           <div className="space-y-2">
             <p>
-              <strong>Member Since :  </strong> {formatDate(seller!?.createdAt)}
+              <strong>Member Since : </strong> {formatDate(seller!?.createdAt)}
             </p>
             <p>
               <strong>Email : </strong> {seller?.email}
@@ -192,7 +192,7 @@ const SellerDetails = () => {
         </CardHeader>
         <CardContent className="space-y-2 ">
           <div className="flex justify-between">
-            <span >Email :</span>
+            <span>Email :</span>
             <span>{seller?.email}</span>
           </div>
           <Separator />
@@ -221,47 +221,68 @@ const SellerDetails = () => {
             </CardHeader>
             <CardContent className="">
               <div className="space-y-2 ">
-                {sellerProducts.map((product: Product) => (
-                  <div
-                    onClick={() => navigate(`/admin/productsmanage/${product.id}`)}
-                    key={product.id}
-                    className="flex flex-col md:flex-row md:items-center justify-between cursor-pointer  border-transparent shadow-none hover:border-primary/70 bg-primary/10   p-4 border rounded-xl"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <img
-                        src={product.images[0].url}
-                        alt={product.name}
-                        className=" w-24 h-24 md:w-20 md:h-20 rounded object-cover"
-                      />
-                      <div>
-                        <p className="font-medium text-sm md:text-md">{product.name}</p>
-                        <p className="text-sm text-accent-foreground">
-                          {formatDate(product.createAt)}
+                {sellerProducts.length > 0 ? (
+                  sellerProducts.map((product: Product) => (
+                    <div
+                      onClick={() =>
+                        navigate(`/admin/productsmanage/${product.id}`)
+                      }
+                      key={product.id}
+                      className="flex flex-col md:flex-row md:items-center justify-between cursor-pointer  border-transparent shadow-none hover:border-primary/70 bg-primary/10   p-4 border rounded-xl"
+                    >
+                      <div className="flex items-center space-x-4">
+                        <img
+                          src={product.images[0].url}
+                          alt={product.name}
+                          className=" w-24 h-24 md:w-20 md:h-20 rounded object-cover"
+                        />
+                        <div>
+                          <p className="font-medium text-sm md:text-md">
+                            {product.name}
+                          </p>
+                          <p className="text-sm text-accent-foreground">
+                            {formatDate(product.createAt)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-medium">
+                          ₹
+                          {formatPrice(
+                            product.price -
+                              (product.offerPercentage / 100) * product.price
+                          )}
                         </p>
+                        <Badge
+                          variant="outline"
+                          className={`mt-1 
+      ${
+        product.status === "Active"
+          ? "bg-green-100 text-green-700 border-green-500"
+          : ""
+      } 
+      ${
+        product.status === "Inactive"
+          ? "bg-gray-100 text-gray-700 border-gray-500"
+          : ""
+      } 
+      ${
+        product.status === "Out of Stock"
+          ? "bg-red-100 text-red-700 border-red-500"
+          : ""
+      } 
+    `}
+                        >
+                          {product.status}
+                        </Badge>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="font-medium">
-                        ₹
-                        {formatPrice(
-                          product.price -
-                          (product.offerPercentage / 100) * product.price
-                        )}
-                      </p>
-                      <Badge
-                        variant="outline"
-                        className={`mt-1 
-    ${product.status === "Active" ? "bg-green-100 text-green-700 border-green-500" : ""} 
-    ${product.status === "Inactive" ? "bg-gray-100 text-gray-700 border-gray-500" : ""} 
-    ${product.status === "Out of Stock" ? "bg-red-100 text-red-700 border-red-500" : ""} 
-  `}
-                      >
-                        {product.status}
-                      </Badge>
-
-                    </div>
+                  ))
+                ) : (
+                  <div className="bg-primary/5 rounded-xl border border-primary/75 p-6 text-muted-foreground italic">
+                    Products not available
                   </div>
-                ))}
+                )}
               </div>
             </CardContent>
           </Card>
@@ -275,55 +296,92 @@ const SellerDetails = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {orders.map((order: OrderItem) => (
-                  <div
-                    onClick={() => navigate(`/admin/ordersmanage/${order.id}`)}
-                    key={order.id}
-                    className="flex flex-col md:flex-row md:items-center border-transparent cursor-pointer bg-primary/10 hover:border-primary/70  justify-between p-4 border rounded-xl"
+                {orders.length > 0 ? (
+                  orders.map((order: OrderItem) => (
+                    <div
+                      onClick={() =>
+                        navigate(`/admin/ordersmanage/${order.id}`)
+                      }
+                      key={order.id}
+                      className="flex flex-col md:flex-row md:items-center border-transparent cursor-pointer bg-primary/10 hover:border-primary/70  justify-between p-4 border rounded-xl"
+                    >
+                      <div className="flex  items-center space-x-4">
+                        {order.product ? (
+                          <img
+                            src={order.product.images[0].url}
+                            alt={order.product.name}
+                            className="w-24 h-24 md:w-20 md:h-20 rounded object-cover"
+                          />
+                        ) : (
+                          <div className="w-24 h-24 md:w-20 md:h-20 flex items-center justify-center bg-gray-200 dark:bg-gray-800 rounded-lg text-center text-xs text-gray-600 dark:text-gray-400">
+                            Product Deleted
+                          </div>
+                        )}
 
-                  >
-                    <div className="flex  items-center space-x-4">
-                      <img
-                        src={order.product.images[0].url}
-                        alt={order.product.name}
-                        className="w-24 h-24 md:w-20 md:h-20 rounded object-cover"
-                      />
-                      <div>
-                        <p className="font-semibold">
-                          <strong>Order ID : </strong>
-                          {order.id}
-                        </p>
-                        <p className="font-medium">{order.product.name}</p>
-                        <p className="text-sm text-accent-foreground/80">
-                          {formatDate(order.createdAt)}
-                        </p>
+                        <div>
+                          <p className="font-semibold">
+                            <strong>Order ID : </strong>
+                            {order.id}
+                          </p>
+                          <p className="font-medium">
+                            {order.product ? order.product.name : "Unknown"}
+                          </p>
+                          <p className="text-sm text-accent-foreground/80">
+                            {formatDate(order.createdAt)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        {order.product && (
+                          <p className="font-medium">
+                            ₹
+                            {formatPrice(
+                              order.product.price -
+                                (order.product.offerPercentage / 100) *
+                                  order.product.price
+                            )}
+                          </p>
+                        )}
+                        <Badge
+                          variant="outline"
+                          className={`mt-1 
+      ${
+        order.status === "Delivered"
+          ? "bg-green-100 text-green-700 border-green-500"
+          : ""
+      } 
+      ${
+        order.status === "OrderConfirmed"
+          ? "bg-blue-100 text-blue-700 border-blue-500"
+          : ""
+      } 
+      ${
+        order.status === "Shipped"
+          ? "bg-yellow-100 text-yellow-700 border-yellow-500"
+          : ""
+      } 
+      ${
+        order.status === "Cancelled"
+          ? "bg-red-100 text-red-700 border-red-500"
+          : ""
+      } 
+      ${
+        order.status === "Returned"
+          ? "bg-purple-100 text-purple-700 border-purple-500"
+          : ""
+      } 
+    `}
+                        >
+                          {order.status}
+                        </Badge>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="font-medium">
-                        ₹
-                        {formatPrice(
-                          order.product.price -
-                          (order.product.offerPercentage / 100) *
-                          order.product.price
-                        )}
-                      </p>
-                      <Badge
-                        variant="outline"
-                        className={`mt-1 
-    ${order.status === "Delivered" ? "bg-green-100 text-green-700 border-green-500" : ""} 
-    ${order.status === "OrderConfirmed" ? "bg-blue-100 text-blue-700 border-blue-500" : ""} 
-    ${order.status === "Shipped" ? "bg-yellow-100 text-yellow-700 border-yellow-500" : ""} 
-    ${order.status === "Cancelled" ? "bg-red-100 text-red-700 border-red-500" : ""} 
-    ${order.status === "Returned" ? "bg-purple-100 text-purple-700 border-purple-500" : ""} 
-  `}
-                      >
-                        {order.status}
-                      </Badge>
-
-                    </div>
+                  ))
+                ) : (
+                  <div className="bg-primary/5 rounded-xl border border-primary/75 p-6 text-muted-foreground italic">
+                    Orders not available
                   </div>
-                ))}
+                )}
               </div>
             </CardContent>
           </Card>

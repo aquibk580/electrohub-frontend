@@ -66,10 +66,12 @@ export default function Orders() {
     let result = orders.flatMap((order) => order.orderItems);
 
     if (debouncedSearchTerm) {
-      result = result.filter((orderItem) =>
-        orderItem.product.name
-          .toLowerCase()
-          .includes(debouncedSearchTerm.toLowerCase())
+      result = result.filter(
+        (orderItem) =>
+          orderItem?.product &&
+          orderItem.product.name
+            .toLowerCase()
+            .includes(debouncedSearchTerm.toLowerCase())
       );
     }
 

@@ -1,23 +1,64 @@
 import { useEffect, useMemo, useState } from "react";
-import { Search, Filter, CalendarCheck, ChevronRight, Loader2 } from "lucide-react";
+import {
+  Search,
+  Filter,
+  CalendarCheck,
+  ChevronRight,
+  Loader2,
+} from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Category, Order, OrderItem } from "@/types/entityTypes";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatDate } from "@/lib/utils";
 import { formatPrice } from "@/utils/FormatPrice";
 import { useNavigate } from "react-router-dom";
-import { ResponsiveContainer, CartesianGrid, XAxis, YAxis, Tooltip, Line, LineChart } from "recharts";
+import {
+  ResponsiveContainer,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Line,
+  LineChart,
+} from "recharts";
 import { ChartPie } from "@/components/Admin/Chart-Pie";
 import AnimatedCounter from "@/components/Common/AnimatedCounter";
 import axios from "@/lib/axios";
 import { DynamicSkeleton } from "@/components/Seller/Skeletons";
 
 import { Helmet } from "react-helmet-async";
+import { assets } from "@/assets/assets";
 
 interface Stat {
   label: string;
@@ -26,19 +67,23 @@ interface Stat {
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  
+
   // Independent loading states for each component
   const [statsLoading, setStatsLoading] = useState(true);
   const [salesChartLoading, setSalesChartLoading] = useState(true);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [ordersLoading, setOrdersLoading] = useState(true);
-  
+
   // Data states
   const [orders, setOrders] = useState<Array<Order>>([]);
   const [stats, setStats] = useState<Stat[]>([]);
-  const [categories, setCategories] = useState<Array<Category & { productCount: string }>>([]);
-  const [salesGraph, setSalesGraph] = useState<Array<{ date: string; amount: number }>>([]);
-  
+  const [categories, setCategories] = useState<
+    Array<Category & { productCount: string }>
+  >([]);
+  const [salesGraph, setSalesGraph] = useState<
+    Array<{ date: string; amount: number }>
+  >([]);
+
   // UI states
   const [productsPerPage, setProductsPerPage] = useState(5);
   const [selectedTab, setSelectedTab] = useState("All");
@@ -55,10 +100,13 @@ export default function Dashboard() {
 
         if (ordersResponse.status === 200) {
           setOrders(ordersResponse.data?.orders);
-          
+
           // Set stats from orders data
           setStats([
-            { label: "Total Orders", value: ordersResponse.data?.orders?.length },
+            {
+              label: "Total Orders",
+              value: ordersResponse.data?.orders?.length,
+            },
             {
               label: "Order Items Overtime",
               value: ordersResponse.data?.orders?.reduce(
@@ -89,7 +137,7 @@ export default function Dashboard() {
               ),
             },
           ]);
-          
+
           // Mark orders and stats as loaded
           setStatsLoading(false);
           setOrdersLoading(false);
@@ -125,7 +173,7 @@ export default function Dashboard() {
             )
           );
           setSalesChartLoading(false);
-          
+
           // Update categories data
           setCategories(salesResponse.data?.categories);
           setCategoriesLoading(false);
@@ -189,10 +237,10 @@ export default function Dashboard() {
             name: "og:url",
             property: "og:url",
             content: `${import.meta.env.VITE_APP_URL}/seller/dashboard`,
-          }
+          },
         ]}
       />
-      
+
       {/* Stats Section */}
       <div className="border border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/5 via-slate-900/25 to-primary/5 rounded-xl p-4 space-y-4 animate__animated animate__fadeIn shadow-sm">
         <h2 className="text-2xl text-primary font-semibold">Orders</h2>
@@ -262,7 +310,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         )}
-        
+
         {/* Pie Chart */}
         {categoriesLoading ? (
           <DynamicSkeleton type="pie" showHeader={true} />
@@ -282,7 +330,7 @@ export default function Dashboard() {
         <h2 className="text-xl pl-2 text-primary font-semibold">
           Orders Management
         </h2>
-        
+
         {/* Search and filters */}
         <div className="flex flex-nowrap gap-2 items-center justify-between">
           <div className="relative w-full sm:w-72">
@@ -369,50 +417,62 @@ export default function Dashboard() {
                     <TableRow
                       key={orderItem.id}
                       onClick={() =>
-                        navigate(
-                          `/seller/dashboard/orders/${orderItem.id}`,
-                          {
-                            state: {
-                              user: orders.find(
-                                (order) => order.id === orderItem.orderId
-                              )?.user,
-                              orderItem,
-                            },
-                          }
-                        )
+                        navigate(`/seller/dashboard/orders/${orderItem.id}`, {
+                          state: {
+                            user: orders.find(
+                              (order) => order.id === orderItem.orderId
+                            )?.user,
+                            orderItem,
+                          },
+                        })
                       }
                       className="border-b-primary/30 cursor-pointer h-[60px] hover:bg-primary/5"
                     >
                       <TableCell>
                         <div className="flex items-center gap-5">
-                          <img
-                            src={
-                              orderItem.product.images[0].url ||
-                              "/placeholder.svg"
-                            }
-                            alt="Product"
-                            width={48}
-                            height={48}
-                            className="w-16"
-                          />
-                          <div className="text-sm w-56">
-                            {orderItem.product.name}
-                          </div>
+                          {/* Check if product is null */}
+                          {orderItem.product ? (
+                            <>
+                              <img
+                                src={
+                                  orderItem.product.images[0]?.url ||
+                                  assets.shoppingBoyGif
+                                }
+                                alt="Product"
+                                width={48}
+                                height={48}
+                                className="w-16"
+                              />
+                              <div className="text-sm w-56">
+                                {orderItem.product.name}
+                              </div>
+                            </>
+                          ) : (
+                            <span className="text-sm text-red-500">
+                              Product Deleted
+                            </span> // Show message if product is null
+                          )}
                         </div>
                       </TableCell>
                       <TableCell className="space-x-2 whitespace-nowrap">
                         <span className="p-1.5 border bg-primary/10 text-primary font-semibold rounded-full">
-                          {orders.find((order) => order.id === orderItem.orderId)?.user?.name
+                          {orders.find(
+                            (order) => order.id === orderItem.orderId
+                          )?.user?.name
                             ? orders
-                              .find((order) => order.id === orderItem.orderId)!
-                              .user.name.split(" ")
-                              .map((letter: string) => letter[0])
-                              .join("")
-                              .toUpperCase()
+                                .find(
+                                  (order) => order.id === orderItem.orderId
+                                )!
+                                .user.name.split(" ")
+                                .map((letter: string) => letter[0])
+                                .join("")
+                                .toUpperCase()
                             : "UN"}
                         </span>
                         <span>
-                          {orders.find((order) => order.id === orderItem.orderId)?.user?.name || "Unknown"}
+                          {orders.find(
+                            (order) => order.id === orderItem.orderId
+                          )?.user?.name || "Unknown"}
                         </span>
                       </TableCell>
                       <TableCell className="whitespace-nowrap">
@@ -420,12 +480,15 @@ export default function Dashboard() {
                       </TableCell>
                       <TableCell>
                         ₹
-                        {formatPrice(
-                          (orderItem.product.price -
-                            (orderItem.product.price / 100) *
-                            orderItem.product.offerPercentage) *
-                          orderItem.quantity
-                        )}
+                        {orderItem.product
+                          ? formatPrice(
+                              (orderItem.product.price -
+                                (orderItem.product.price / 100) *
+                                  orderItem.product.offerPercentage) *
+                                orderItem.quantity
+                            )
+                          : "N/A"}{" "}
+                        {/* Show "N/A" for deleted products */}
                       </TableCell>
                       <TableCell>
                         <span
@@ -433,14 +496,14 @@ export default function Dashboard() {
                             orderItem.status === "Confirmed"
                               ? "bg-yellow-100 text-yellow-800"
                               : orderItem.status === "Shipped"
-                                ? "bg-blue-100 text-blue-800"
-                                : orderItem.status === "Delivered"
-                                  ? "bg-green-100 text-green-800"
-                                  : orderItem.status === "Cancelled"
-                                    ? "bg-red-100 text-red-800"
-                                    : orderItem.status === "Returned"
-                                      ? "bg-gray-100 text-gray-800"
-                                      : "bg-gray-200 text-gray-800"
+                              ? "bg-blue-100 text-blue-800"
+                              : orderItem.status === "Delivered"
+                              ? "bg-green-100 text-green-800"
+                              : orderItem.status === "Cancelled"
+                              ? "bg-red-100 text-red-800"
+                              : orderItem.status === "Returned"
+                              ? "bg-gray-100 text-gray-800"
+                              : "bg-gray-200 text-gray-800"
                           }`}
                         >
                           {orderItem.status}
@@ -483,7 +546,9 @@ export default function Dashboard() {
         <div className="flex p-2 items-center justify-between">
           <div className="flex whitespace-nowrap space-x-2 items-center">
             <label className="text-sm">Items per page</label>
-            <Select onValueChange={(value) => setProductsPerPage(Number(value))}>
+            <Select
+              onValueChange={(value) => setProductsPerPage(Number(value))}
+            >
               <SelectTrigger className="w-[70px]">
                 <SelectValue placeholder={String(productsPerPage)} />
               </SelectTrigger>

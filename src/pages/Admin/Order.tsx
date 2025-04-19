@@ -10,7 +10,6 @@ import {
   RotateCcw,
   CheckCircle,
   ListOrdered,
-  Loader2,
 } from "lucide-react";
 import { DashboardStats } from "@/components/Admin/dashboard-stats";
 import { TableWrapper } from "@/components/Admin/table-wrapper";
@@ -155,18 +154,27 @@ const Order = () => {
 
     return result.map((order) => ({
       id: order?.id,
-      productName: order?.product?.name.substring(0, 30),
+      productName: order?.product
+        ? order.product.name.substring(0, 30)
+        : "Product Deleted",
       date: formatDate(order?.createdAt),
       customerName: order.customerName,
-      total:
-        "₹" +
-        formatPrice(
-          order?.product?.price -
+      total: order.product ?  "₹" +
+      formatPrice(
+        order?.product?.price -
           (order?.product?.offerPercentage / 100) * order?.product?.price
-        ),
+      ) : "N/A",
       status:
         order?.status === "OrderConfirmed" ? "Order Placed" : order?.status,
-      image: formatImageCell(order?.product?.images[0]?.url),
+      image: order.product ? (
+        formatImageCell(order?.product?.images[0]?.url)
+      ) : (
+        <>
+          <div className="w-12 h-12 flex items-center justify-center bg-gray-200 dark:bg-gray-800 rounded-lg text-center text-xs text-gray-600 dark:text-gray-400">
+            N/A
+          </div>
+        </>
+      ),
     }));
   }, [statusFilter, searchTerm, sortBy, filterBy, orderItems]);
 
