@@ -19,62 +19,52 @@ const LoadingFallback = () => (
 const Home = () => {
   return (
     <>
-       {/* Hero Banner */}
-       <section className="w-full px-2 py-2 animate__animated animate__fadeIn">
+      {/* Hero Banner */}
+      <section className="w-full px-2 py-2 animate__animated animate__fadeIn">
         <Suspense fallback={<LoadingFallback />}>
           <BannerCarousel />
         </Suspense>
       </section>
 
-    <div className="flex flex-col space-y-8 md:space-y-8 lg:space-y-8 mx-auo px-4 sm:px-6 lg:px-6  md:py-2">
-   
+      <div className="flex flex-col space-y-8 md:space-y-8 lg:space-y-8 mx-auo px-4 sm:px-6 lg:px-6  md:py-2">
+        {/* Featured Products */}
+        <section className="w-full animate__animated animate__fadeIn animate__delay-1s">
+          <div className="mb-3 md:mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+              Featured Products
+            </h2>
+            <p className="dark:text-gray-300  mt-2">
+              Explore our curated collection of top-quality, must-have products
+              just for you
+            </p>
+          </div>
+          <Suspense fallback={<LoadingFallback />}>
+            <ProductCarousel />
+          </Suspense>
+        </section>
+        <Separator className="border" />
+        {/* All Products */}
+        <section className="w-full animate__animated animate__fadeIn">
+          <MasterProduct />
+        </section>
 
-      {/* Featured Products */}
-      <section className="w-full animate__animated animate__fadeIn animate__delay-1s">
-        <div className="mb-3 md:mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
-            Featured Products
-          </h2>
-          <p className="dark:text-gray-300  mt-2">
-            Explore our curated collection of top-quality, must-have products
-            just for you
-          </p>
-        </div>
-        <Suspense fallback={<LoadingFallback />}>
-          <ProductCarousel />
-        </Suspense>
-      </section>
-      <Separator className="border" />
-      {/* All Products */}
-      <section className="w-full animate__animated animate__fadeIn">
-        <MasterProduct />
-      </section>
+        <Separator className="border" />
+        {/* Top Sellers */}
+        <section className="w-full animate__animated animate__fadeIn animate__delay-3s">
+          <Suspense fallback={<LoadingFallback />}>
+            <TopSellers />
+          </Suspense>
+        </section>
 
-      <Separator className="border" />
-      {/* Top Sellers */}
-      <section className="w-full animate__animated animate__fadeIn animate__delay-3s">
-        <Suspense fallback={<LoadingFallback />}>
-          <TopSellers />
-        </Suspense>
-      </section>
-
-      <Separator className="border" />
-      {/* Services */}
-      <section className="w-full animate__animated animate__fadeIn animate__delay-4s">
-        <Suspense fallback={<LoadingFallback />}>
-          <ServiceSection />
-        </Suspense>
-      </section>
-
-      {/* <Separator className="border" />
-      <section className="w-full animate__animated animate__fadeIn animate__delay-4s">
-        <Suspense fallback={<LoadingFallback />}>
-          <DiscountOffers />
-        </Suspense>
-      </section> */}
-    </div>
+        <Separator className="border" />
+        {/* Services */}
+        <section className="w-full animate__animated animate__fadeIn animate__delay-4s">
+          <Suspense fallback={<LoadingFallback />}>
+            <ServiceSection />
+          </Suspense>
+        </section>
+      </div>
     </>
   );
 };
-
 export default Home;

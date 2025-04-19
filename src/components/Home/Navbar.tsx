@@ -96,7 +96,7 @@ const Navbar = () => {
             </div>
             <div className="md:hidden">
               {isAuthenticated && user ? (
-                <UserProfileButton name={user.name} imageUrl={pfp!} />
+                <UserProfileButton name={user.name} email={user.email} imageUrl={pfp!} />
               ) : (
                 <div
                   onClick={() => navigate("/user/auth/signin")}
@@ -197,7 +197,7 @@ const Navbar = () => {
           {/* User Account/Profile */}
           <div className="hidden  md:flex gap-6 ">
             {isAuthenticated && user ? (
-              <UserProfileButton name={user.name} imageUrl={pfp!} />
+              <UserProfileButton name={user.name} email={user?.email} imageUrl={pfp!} />
             ) : (
               <div
                 onClick={() => navigate("/user/auth/signin")}

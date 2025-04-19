@@ -109,7 +109,7 @@ export default function EditProduct() {
 
     const getAllCategories = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/categories`)
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/categories/all`)
         if (response.status === 200) {
           setCategories(response.data)
         }
@@ -378,6 +378,7 @@ export default function EditProduct() {
 
   // Function to remove the image at a specific index
   const removeImage = async (index: number, imageId: number | null) => {
+    console.log("Working")
     try {
       if (imageId) {
         const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/seller/products/image/${imageId}`)
@@ -519,7 +520,7 @@ export default function EditProduct() {
                   </div>
                   <span className="text-sm ">
                     {fileNames[index]
-                      ? formatFileName(fileNames[index])
+                      ? formatFileName(fileNames[index]).substring(0,18)
                       : preview.url
                         ? preview?.url?.substring(0, 18)
                         : "No Selected File"}

@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 interface UserProfileButtonProps {
   name: string;
   imageUrl: string;
+  email: string;
 }
 
 export function getRandomColor() {
@@ -45,14 +46,14 @@ export function getRandomColor() {
     "bg-gray-500",
     "bg-stone-500",
   ];
-  
-  
+
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
 export default function UserProfileButton({
   name,
   imageUrl,
+  email,
 }: UserProfileButtonProps) {
   let closeTimeout: NodeJS.Timeout;
   const navigate = useNavigate();
@@ -70,7 +71,9 @@ export default function UserProfileButton({
 
   const handleLogOut = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/logout`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/auth/logout`
+      );
       if (response.status === 200) {
         dispatch(clearUser());
         toast.success("Logged out successfully", {
@@ -112,8 +115,14 @@ export default function UserProfileButton({
           }}
         >
           <Avatar>
-            <AvatarImage src={imageUrl} alt="User" className="w-full h-full object-cover rounded-full" />
-            <AvatarFallback className={`${bgColor}  to-black text-white font-extrabold`}>
+            <AvatarImage
+              src={imageUrl}
+              alt="User"
+              className="w-full h-full object-cover rounded-full"
+            />
+            <AvatarFallback
+              className={`${bgColor}  to-black text-white font-extrabold`}
+            >
               {initials}
             </AvatarFallback>
           </Avatar>
@@ -122,61 +131,61 @@ export default function UserProfileButton({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-          align="end"
-          className="w-56 p-2"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
+        align="end"
+        className="w-56 p-2"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium">{name}</p>
+            <p className="text-xs text-muted-foreground truncate">{email}</p>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => navigateTo("/user/profile")}
         >
-          <DropdownMenuLabel className="font-normal">
-            <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium">{name}</p>
-              <p className="text-xs text-muted-foreground truncate">Signed in</p>
-            </div>
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          
-          <DropdownMenuItem
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={() => navigateTo("/user/profile")}
-          >
-            <User size={16} className="text-primary" />
-            <span>Profile</span>
-          </DropdownMenuItem>
-          
-          <DropdownMenuItem
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={() => navigateTo("/user/cart")}
-          >
-            <ShoppingCart size={16} className="text-primary" />
-            <span>Cart</span>
-          </DropdownMenuItem>
-          
-          <DropdownMenuItem
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={() => navigateTo("/user/wishlist")}
-          >
-            <Heart size={16} className="text-primary" />
-            <span>Wishlist</span>
-          </DropdownMenuItem>
-          
-          <DropdownMenuItem
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={() => navigateTo("/user/settings")}
-          >
-            <Settings size={16} className="text-primary" />
-            <span>Settings</span>
-          </DropdownMenuItem>
-          
-          <DropdownMenuSeparator />
-          
-          <DropdownMenuItem
-            className="flex items-center gap-2 cursor-pointer text-red-500 hover:text-red-500 focus:text-red-500"
-            onClick={handleLogOut}
-          >
-            <LogOut size={16} />
-            <span>Log out</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
+          <User size={16} className="text-primary" />
+          <span>Profile</span>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => navigateTo("/user/cart")}
+        >
+          <ShoppingCart size={16} className="text-primary" />
+          <span>Cart</span>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => navigateTo("/user/wishlist")}
+        >
+          <Heart size={16} className="text-primary" />
+          <span>Wishlist</span>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => navigateTo("/user/settings")}
+        >
+          <Settings size={16} className="text-primary" />
+          <span>Settings</span>
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem
+          className="flex items-center gap-2 cursor-pointer text-red-500 hover:text-red-500 focus:text-red-500"
+          onClick={handleLogOut}
+        >
+          <LogOut size={16} />
+          <span>Log out</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
     </DropdownMenu>
   );
 }

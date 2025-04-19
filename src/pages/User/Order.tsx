@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet-async";
 import { useDebounce } from "@/hooks/use-debounce";
 import { OrderSkeleton } from "@/components/User/UserSkeletons";
+import { assets } from "@/assets/assets";
 
 export default function Orders() {
   const [orders, setOrders] = useState<Array<Order>>([]);
@@ -89,25 +90,31 @@ export default function Orders() {
     return result;
   }, [orders, filters, debouncedSearchTerm]);
 
-  const getOrderMessage = (status: string): string => {
-    let result = "";
+  const getOrderMessage = (
+    status: string,
+    isProductMissing: boolean
+  ): string => {
+    if (
+      isProductMissing &&
+      (status === "OrderConfirmed" || status === "Shipped")
+    ) {
+      return "Product removed. Refund will be processed in 2 working days.";
+    }
+
     switch (status) {
       case "OrderConfirmed":
-        result = "Your Order has been Confirmed";
-        break;
+        return "Your Order has been Confirmed";
       case "Shipped":
-        result = "Your Order has been Shipped";
-        break;
+        return "Your Order has been Shipped";
       case "Delivered":
-        result = "Your Order has been Delivered";
-        break;
+        return "Your Order has been Delivered";
       case "Cancelled":
-        result = "Your Order has been Cancelled";
-        break;
+        return "Your Order has been Cancelled";
       case "Returned":
-        result = "Your Order has been Returned";
+        return "Your Order has been Returned";
+      default:
+        return "";
     }
-    return result;
   };
 
   return (
@@ -146,44 +153,75 @@ export default function Orders() {
                 <div className="grid grid-cols-1 gap-6 lg:gap-8">
                   {filteredOrders.map((orderItem) => (
                     <Card
-                      key={orderItem.id}
-                      className="flex flex-col cursor-pointer sm:flex-row items-center p-5 justify-between border-b gap-4 border rounded-xl bg-slate-50/35 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-primary/5 hover:border-slate-500 dark:hover:border-primary/35 shadow-sm"
                       onClick={() =>
-                        navigate(`/user/orders/${orderItem.id}`, {
-                          state: { orderItem },
-                        })
+                        navigate(
+                          orderItem.product && `/user/orders/${orderItem.id}`,
+                          {
+                            state: {
+                              orderItem,
+                            },
+                          }
+                        )
                       }
+                      key={orderItem.id}
+                      className={`flex flex-col sm:flex-row items-center p-5 justify-between border-b gap-4 border rounded-xl bg-slate-50/35 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-primary/5 hover:border-slate-500 dark:hover:border-primary/35 shadow-sm ${
+                        orderItem.product && "cursor-pointer"
+                      }`}
                     >
-                      <img
-                        src={orderItem.product.images[0].url}
-                        alt="Product Image"
-                        className="w-32 h-32 md:w-40 md:h-40 object-contain rounded-lg"
-                      />
+                      {orderItem.product ? (
+                        <img
+                          src={
+                            orderItem.product.images.length > 0
+                              ? orderItem.product.images[0].url
+                              : assets.shoppingBoyGif
+                          }
+                          alt="Product Image"
+                          className="w-32 h-32 md:w-40 md:h-40 object-contain rounded-lg"
+                        />
+                      ) : (
+                        <div className="w-32 h-32 md:w-40 md:h-40 flex items-center justify-center bg-gray-200 dark:bg-gray-800 rounded-lg text-center text-xs text-gray-600 dark:text-gray-400">
+                          Product Deleted
+                        </div>
+                      )}
+
                       <div className="flex-1">
-                        <h3 className="text-sm md:text-lg font-semibold">
-                          {orderItem.product.name.substring(0, 50)}
-                        </h3>
-                        <p className="text-black dark:text-slate-200 font-semibold text-base">
-                          ₹
-                          {formatPrice(
-                            orderItem.product.price -
-                              (orderItem.product.price / 100) *
-                                orderItem.product.offerPercentage
-                          )}
-                        </p>
+                        {orderItem.product ? (
+                          <>
+                            <h3 className="text-sm md:text-lg font-semibold">
+                              {orderItem.product.name.substring(0, 50)}
+                            </h3>
+                            <p className="text-black dark:text-slate-200 font-semibold text-base">
+                              ₹
+                              {formatPrice(
+                                orderItem.product.price -
+                                  (orderItem.product.price / 100) *
+                                    orderItem.product.offerPercentage
+                              )}
+                            </p>
+                          </>
+                        ) : (
+                          <h3 className="text-sm md:text-base font-semibold text-red-600 dark:text-red-400">
+                            This product has been deleted from the website.
+                          </h3>
+                        )}
+
                         <p className="text-gray-500">
                           Quantity: {orderItem.quantity}
                         </p>
-                        <p className="text-black dark:text-slate-200 font-semibold text-lg">
-                          Total: ₹
-                          {formatPrice(
-                            orderItem.quantity *
-                              (orderItem.product.price -
-                                (orderItem.product.price / 100) *
-                                  orderItem.product.offerPercentage)
-                          )}
-                        </p>
+
+                        {orderItem.product && (
+                          <p className="text-black dark:text-slate-200 font-semibold text-lg">
+                            Total: ₹
+                            {formatPrice(
+                              orderItem.quantity *
+                                (orderItem.product.price -
+                                  (orderItem.product.price / 100) *
+                                    orderItem.product.offerPercentage)
+                            )}
+                          </p>
+                        )}
                       </div>
+
                       <div className="flex flex-col items-start sm:items-center gap-2">
                         <div className="flex items-center gap-2">
                           <span
@@ -193,7 +231,7 @@ export default function Orders() {
                               (orderItem.status === "Cancelled" ||
                                 orderItem.status === "Returned") &&
                               "bg-red-500"
-                            }  ${
+                            } ${
                               orderItem.status === "Shipped" && "bg-yellow-500"
                             } ${
                               orderItem.status === "OrderConfirmed" &&
@@ -207,7 +245,12 @@ export default function Orders() {
                             on {formatDate(new Date(orderItem.createdAt))}
                           </p>
                         </div>
-                        <p>{getOrderMessage(orderItem.status)}</p>
+                        <p>
+                          {getOrderMessage(
+                            orderItem.status,
+                            !orderItem.product
+                          )}
+                        </p>
                       </div>
                     </Card>
                   ))}

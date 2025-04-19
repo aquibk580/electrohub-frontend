@@ -18,6 +18,7 @@ import axios from "@/lib/axios";
 import ReviewForm from "@/components/User/ReviewForm";
 import { Helmet } from "react-helmet-async";
 import Mail from "@/lib/Mail";
+import { assets } from "@/assets/assets";
 
 const OrderDetails = () => {
   const navigate = useNavigate();
@@ -192,7 +193,11 @@ const OrderDetails = () => {
             </div>
           </div>
           <img
-            src={orderItem.product.images[0].url}
+            src={
+              orderItem.product.images.length > 0
+                ? orderItem.product.images[0].url
+                : assets.shoppingBoyGif
+            }
             alt=""
             className="object-contain w-52 cursor-pointer xl:place-self-end"
           />
