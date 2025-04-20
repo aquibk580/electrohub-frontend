@@ -108,10 +108,10 @@ const ProductAddtocart = ({
 
   useEffect(() => {
     setOrderData({
-      total: total,
+      total,
       items: [{ productId: id, quantity: 1, sellerId }],
     });
-  }, []);
+  }, [total, id, sellerId]);
 
   return (
     <div>

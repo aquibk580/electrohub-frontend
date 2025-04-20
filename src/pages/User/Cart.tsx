@@ -77,7 +77,7 @@ const Cart = () => {
         sellerId: item.sellerId,
       })),
     });
-  }, [total]);
+  }, [total, cartItems]);
 
   const handleQuantityChange = async (
     cartItemId: number,
