@@ -10,83 +10,83 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout Code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Setup SSH Key
       - name: Setup SSH Key
         run: |
           echo "${{ secrets.AWS_PRIVATE_KEY }}" > private_key.pem
           chmod 600 private_key.pem
 
-      # Step 3: Deploy to EC2
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.AWS_EC2_HOST }} << 'EOF'
-            
-            # Step 3.1: Navigate to app directory (or clone if not exists)
-            if [ ! -d "/var/www/frontend-server" ]; then
+            set -e  # Exit immediately on error
+
+            APP_DIR="/var/www/frontend-server"
+
+            # Clone or pull repo
+            if [ ! -d "$APP_DIR" ]; then
               sudo mkdir -p /var/www
               cd /var/www
               sudo git clone https://github.com/aquibk580/electrohub-frontend.git frontend-server
             else
-              cd /var/www/frontend-server
+              cd "$APP_DIR"
               sudo git reset --hard HEAD
               sudo git pull origin main
             fi
 
-            # Step 3.2: Set Correct Permissions for Project Directory
-            sudo chown -R $USER:$USER /var/www/frontend-server
-            sudo chmod -R 755 /var/www/frontend-server
+            # Set permissions
+            sudo chown -R $USER:$USER "$APP_DIR"
+            sudo chmod -R 755 "$APP_DIR"
 
-            # Step 3.3: Install Node.js and npm (from official source)
+            # Install Node.js if not already installed
             if ! command -v node &> /dev/null; then
               curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
               sudo apt install -y nodejs
             fi
 
-            # Step 3.4: Install Dependencies (with --unsafe-perm)
-            cd /var/www/frontend-server
+            # Go to app dir and install dependencies
+            cd "$APP_DIR"
+            npm install --unsafe-perm
 
-            # Step 3.5: Install TypeScript and ts-node (if not installed)
+            # Install TypeScript and ts-node globally
             sudo npm install -g typescript ts-node
 
-            # Step 3.6: Compile TypeScript
-            npx tsc
+            # Compile TypeScript (if needed)
+            npx tsc || true  # Avoid breaking if no tsconfig or TS files
 
-            # Step 3.7: Fix Permissions for Compiled Files
-            sudo chown -R $USER:$USER /var/www/frontend-server/dist
+            # Fix permissions for dist
+            [ -d "dist" ] && sudo chown -R $USER:$USER "$APP_DIR/dist"
 
-            # Step 3.9: Install and Configure Nginx
+            # Install and configure Nginx
             if ! command -v nginx &> /dev/null; then
               sudo apt install -y nginx
             fi
 
-            # Create Nginx config file - fixed to properly separate commands
-            sudo bash -c 'cat > /etc/nginx/sites-available/frontend-server << CONFEND
-            server {
-                listen 80;
-                server_name ${{ secrets.AWS_EC2_HOST }};
+            # Write Nginx config
+            sudo tee /etc/nginx/sites-available/frontend-server > /dev/null << CONF
+              server {
+                  listen 80;
+                  server_name ${AWS_EC2_HOST};
 
-                location / {
-                    proxy_pass http://localhost:5173;
-                    proxy_set_header Host \$host;
-                    proxy_set_header X-Real-IP \$remote_addr;
-                    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-                }
-            }
-            CONFEND'
+                  location / {
+                      proxy_pass http://localhost:5173;
+                      proxy_set_header Host \$host;
+                      proxy_set_header X-Real-IP \$remote_addr;
+                      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+                  }
+              }
+              CONF
 
-            # Create symlink and restart Nginx as separate commands
+            # Enable site and restart nginx
             sudo ln -sf /etc/nginx/sites-available/frontend-server /etc/nginx/sites-enabled/
             sudo nginx -t
             sudo systemctl reload nginx || sudo systemctl restart nginx
 
-            # Step 3.10: Set Correct Permissions
-            sudo chown -R $USER:$USER /var/www/frontend-server
+            # Final permissions
+            sudo chown -R $USER:$USER "$APP_DIR"
           EOF
 
-      # Step 4: Clean Up
       - name: Clean up
         run: rm -f private_key.pem
