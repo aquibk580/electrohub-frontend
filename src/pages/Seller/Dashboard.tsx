@@ -1,11 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  Search,
-  Filter,
-  CalendarCheck,
-  ChevronRight,
-  Loader2,
-} from "lucide-react";
+import { Search, CalendarCheck, ChevronRight } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Table,
@@ -214,9 +208,10 @@ export default function Dashboard() {
     }
 
     if (searchTerm) {
-      result = result.filter((orderItem) =>
-        orderItem.product.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      result = result.filter((orderItem) => {
+        const productName = orderItem.product?.name || "Product Deleted";
+        return productName.toLowerCase().includes(searchTerm.toLowerCase());
+      });
     }
 
     return result;
@@ -385,7 +380,9 @@ export default function Dashboard() {
             <DynamicSkeleton type="table" rows={5} />
           </Card>
         ) : paginatedOrders?.length === 0 ? (
-          <h2 className="font-bold text-center text-xl p-16">No Orders!</h2>
+          <div className="bg-primary/5 rounded-xl border border-primary/75 p-6 text-muted-foreground text-lg italic text-center">
+            Orders not available
+          </div>
         ) : (
           <Card className="p-2 md:p-4 border border-primary/30 rounded-xl overflow-hidden">
             <div className="overflow-x-auto">
@@ -544,7 +541,7 @@ export default function Dashboard() {
         <DynamicSkeleton type="pagination" />
       ) : (
         <div className="flex p-2 items-center justify-between">
-          <div className="flex whitespace-nowrap space-x-2 items-center">
+          <div className="flex whitespace-nowrap space-x-2 items-center justify-start">
             <label className="text-sm">Items per page</label>
             <Select
               onValueChange={(value) => setProductsPerPage(Number(value))}
@@ -560,7 +557,7 @@ export default function Dashboard() {
             </Select>
           </div>
           {totalPages > 1 && (
-            <Pagination>
+            <Pagination className="justify-end">
               <PaginationContent>
                 <PaginationItem>
                   <PaginationPrevious

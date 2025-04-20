@@ -220,7 +220,7 @@ const MainViewOrder = () => {
             <div className=" lg:col-span-2 md:col-span-1 flex items-center bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-black to-primary/10 rounded-xl border border-primary/75 overflow-hidden">
               <div className="p-6">
                 <div className="flex flex-col md:flex-row items-center lg:items-start gap-6">
-                  <div className="lg:col-span-2 md:col-span-1 flex items-center bg-primary/5 ...">
+                  <div className="lg:col-span-2 md:col-span-1 flex items-center">
                     {/* Product image */}
                     <Link
                       to={`product/${orderItem.id}`}
@@ -284,7 +284,11 @@ const MainViewOrder = () => {
           {/* Right sidebar with status update and customer info */}
           <div className="space-y-4 ">
             {/* Status update card */}
-            {orderItem.product ? (
+            {orderItem.product &&
+            user &&
+            !["Returned", "Delivered", "Cancelled"].includes(
+              orderItem.status
+            ) ? (
               <div className="bg-primary/5  dark:bg-gradient-to-br from-primary/10 via-black to-primary/10 rounded-xl border border-primary/75 p-6">
                 <div className="flex items-center mb-4">
                   <Package className="h-6 w-6 mr-2 text-primary" />
@@ -323,7 +327,16 @@ const MainViewOrder = () => {
             )}
 
             {/* Customer details card */}
-            <div className="bg-primary/5  dark:bg-gradient-to-br from-primary/10 via-black to-primary/10 rounded-xl border border-primary/75 p-6">
+            <div
+              className={`${
+                !user ||
+                ["Returned", "Delivered", "Cancelled"].includes(
+                  orderItem.status
+                )
+                  ? "h-full"
+                  : ""
+              } bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-black to-primary/10 rounded-xl border border-primary/75 p-6`}
+            >
               <div className="flex items-center mb-4">
                 <UserIcon className="h-6 w-6 mr-2 text-primary" />
                 <h3 className="text-xl whitespace-nowrap font-semibold">

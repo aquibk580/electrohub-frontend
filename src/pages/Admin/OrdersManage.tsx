@@ -195,19 +195,27 @@ const OrderDetails = () => {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <h3 className="font-medium">Seller Information</h3>
-            <div className="flex items-center space-x-2">
-              <span>{orderItem?.product?.seller?.name}</span>
-              <div className="flex items-center">
-                <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                <span className="ml-1">{orderItem?.sellerAverageRating || 0}</span>
+          {orderItem?.product.seller ? (
+            <div className="space-y-2">
+              <h3 className="font-medium">Seller Information</h3>
+              <div className="flex items-center space-x-2">
+                <span>{orderItem?.product?.seller?.name}</span>
+                <div className="flex items-center">
+                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                  <span className="ml-1">
+                    {orderItem?.sellerAverageRating || 0}
+                  </span>
+                </div>
               </div>
+              <p className="text-sm text-muted-foreground">
+                Total Orders: {orderItem?.totalSellerOrders}
+              </p>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Total Orders: {orderItem?.totalSellerOrders}
-            </p>
-          </div>
+          ) : (
+            <div className="bg-primary/5 rounded-xl border border-primary/75 p-6 text-muted-foreground italic">
+              Seller information not available
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -282,18 +290,24 @@ const OrderDetails = () => {
             </CardContent>
           </Card>
 
-          <div className="lg:col-span-2 w-full">
-            <Card className="h-full border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-black to-primary/5">
-              <CardHeader>
-                <CardTitle>Shipping Details</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <p className="font-medium">{orderItem?.user?.name}</p>
-                <p>{orderItem?.user?.address}</p>
-                <p>{orderItem?.user?.phone}</p>
-              </CardContent>
-            </Card>
-          </div>
+          {orderItem?.user ? (
+            <div className="lg:col-span-2 w-full">
+              <Card className="h-full border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-black to-primary/5">
+                <CardHeader>
+                  <CardTitle>Shipping Details</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <p className="font-medium">{orderItem?.user?.name}</p>
+                  <p>{orderItem?.user?.address}</p>
+                  <p>{orderItem?.user?.phone}</p>
+                </CardContent>
+              </Card>
+            </div>
+          ) : (
+            <div className="bg-primary/5 rounded-xl border border-primary/75 p-6 text-muted-foreground italic">
+              Shipping Details unavailable
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -246,11 +246,6 @@ export default function Profile() {
           <h1 className="text-3xl -mt-6 font-bold flex items-center gap-2">
             {seller!.name}
             <span className="text-blue-500">
-              {/* <img
-                className="w-8 -mt-3 mr-3"
-                src={assets.verify}
-                alt="Verify_Icon"
-              /> */}
               <BadgeCheck className="fill-blue-500 text-white h-5 w-5" />
             </span>
           </h1>

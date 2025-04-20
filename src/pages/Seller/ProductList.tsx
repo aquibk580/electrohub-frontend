@@ -1,10 +1,30 @@
 import { Button } from "@/components/ui/button";
-import { CalendarCheck, ChevronRight, Filter, Search } from "lucide-react";
+import { CalendarCheck, ChevronRight, Search } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useEffect, useState } from "react";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useEffect, useMemo, useState } from "react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import axios from "@/lib/axios";
@@ -16,7 +36,7 @@ import { Product } from "@/types/entityTypes";
 import AnimatedCounter from "@/components/Common/AnimatedCounter";
 import { ProductListSkeleton } from "@/components/Seller/Skeletons";
 import { Helmet } from "react-helmet-async";
-
+import { formatPrice } from "@/utils/FormatPrice";
 
 export default function ProductList() {
   const seller = useSelector((state: RootState) => state.seller.seller);
@@ -25,8 +45,8 @@ export default function ProductList() {
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const [productsPerPage, setProductsPerPage] = useState(5);
-
 
   const stats = [
     { label: "Total Products", value: products.length },
@@ -68,49 +88,53 @@ export default function ProductList() {
     getAllProducts();
   }, []);
 
-  const filteredProducts =
-    selectedTab === "All"
-      ? products
-      : products.filter((product) => product.status === selectedTab);
+  const filteredProducts = useMemo(() => {
+    let result = [...products];
 
+    if (searchTerm) {
+      result = result.filter((product) => {
+        return product?.name.toLowerCase().includes(searchTerm.toLowerCase());
+      });
+    }
+    if (selectedTab !== "All") {
+      result = result.filter((product) => product.status === selectedTab);
+    }
 
-   const totalPages = Math.ceil(filteredProducts?.length / productsPerPage);
-const paginatedProducts = (filteredProducts || []).slice(
-  (currentPage - 1) * productsPerPage,
-  currentPage * productsPerPage
-);
+    return result;
+  }, [searchTerm, selectedTab]);
+
+  const totalPages = Math.ceil(filteredProducts?.length / productsPerPage);
+  const paginatedProducts = (filteredProducts || []).slice(
+    (currentPage - 1) * productsPerPage,
+    currentPage * productsPerPage
+  );
 
   if (loading) {
     return (
       <>
-      <Helmet
-        title="Product List"
-        meta={[
-          {
-            name: "description",
-            content: "Electrohub Seller Product List Page",
-          },
-          {
-            property: "og:title",
-            content: "Product List",
-          },
-          {
-            property: "og:description",
-            content: "Electrohub Seller Product List Page",
-          },
-          {
-            property: "og:type",
-            content: "website",
-          },
-        ]}
-      ></Helmet>
-            <ProductListSkeleton/>
-
+        <Helmet
+          title="Product List"
+          meta={[
+            {
+              name: "description",
+              content: "Electrohub Seller Product List Page",
+            },
+            {
+              property: "og:title",
+              content: "Product List",
+            },
+            {
+              property: "og:description",
+              content: "Electrohub Seller Product List Page",
+            },
+            {
+              property: "og:type",
+              content: "website",
+            },
+          ]}
+        ></Helmet>
+        <ProductListSkeleton />
       </>
-      // <div className="flex flex-col justify-center items-center h-screen">
-      //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-      //   <p className="text-muted-foreground">Loading Product List...</p>
-      // </div>
     );
   }
 
@@ -192,22 +216,18 @@ const paginatedProducts = (filteredProducts || []).slice(
           <div className="relative w-full sm:w-72">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-secondary-foreground" />
             <Input
+              onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search Order..."
               className="pl-8 bg-white dark:bg-black border-primary/70 rounded-full  transition-colors"
             />
           </div>
-
-          {/* <div className="flex gap-2">
-            <Button className="bg-primary text-primary-foreground shadow-md border rounded-lg px-5 py-3 hover:bg-primary/80 flex items-center gap-2">
-              <Filter size={24} />
-              <span className="hidden sm:block font-medium">Filter</span>
-            </Button>
-          </div> */}
         </div>
 
         {/* Orders Table */}
         {paginatedProducts.length === 0 ? (
-          <h2 className=" font-bold text-center text-xl p-16">No Products!</h2>
+          <div className="bg-primary/5 rounded-xl border border-primary/75 p-6 text-muted-foreground italic text-center text-lg ">
+            Products not available
+          </div>
         ) : (
           <Card className="p-2 md:p-4rounded-xl bg-background  border-primary/70 overflow-hidden">
             <div className="overflow-x-auto ">
@@ -240,16 +260,16 @@ const paginatedProducts = (filteredProducts || []).slice(
                 <TableBody>
                   {paginatedProducts.map((product, index) => (
                     <TableRow
-                    onClick={() =>
-                      navigate(
-                        `/seller/dashboard/products/view-product/${product.id}`,
-                        {
-                          state: {
-                            product,
-                          },
-                        }
-                      )
-                    }
+                      onClick={() =>
+                        navigate(
+                          `/seller/dashboard/products/view-product/${product.id}`,
+                          {
+                            state: {
+                              product,
+                            },
+                          }
+                        )
+                      }
                       key={product.id}
                       className="border-b-primary/25 cursor-pointer h-[60px] hover:bg-primary/5"
                     >
@@ -270,8 +290,12 @@ const paginatedProducts = (filteredProducts || []).slice(
                         {product.name}
                       </TableCell>
                       <TableCell className="whitespace-nowrap text-center">
-                        {" "}
-                        ₹{product.price}/-
+                        ₹
+                        {formatPrice(
+                          product.price -
+                            (product.price / 100) * product.offerPercentage
+                        )}
+                        /-
                       </TableCell>
                       <TableCell className="text-center">
                         {product.stock}
