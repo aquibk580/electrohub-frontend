@@ -16,11 +16,7 @@ export type TableHeader = {
   
   export interface SearchFilterProps {
     onSearch: (value: string) => void
-    onSort: (value: string) => void
-    onFilter: (value: string) => void
     placeholder?: string  
-    filterOptions?: { value: string; label: string }[]
-    sortOptions?: { value: string; label: string }[]
 }
 
   

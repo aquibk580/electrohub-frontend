@@ -1,9 +1,5 @@
-"use client";
-
 import { useState, useMemo, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -18,7 +14,6 @@ import {
 import {
   MessageSquare,
   Search,
-  Filter,
   Trash2,
   Users,
   SortAsc,
@@ -97,28 +92,24 @@ const Messages = () => {
       );
     }
 
+    // Sender Type Filter
+    if (senderTypeFilter !== "all") {
+      result = result.filter(
+        (message) => message.userType === senderTypeFilter
+      );
+    }
+
     // Sorting
     if (sortBy !== "default") {
       result.sort((a, b) => {
-        const dateA = new Date(a.createdAt);
-        const dateB = new Date(b.createdAt);
-        return sortBy === "newest"
-          ? dateB.getTime() - dateA.getTime()
-          : dateA.getTime() - dateB.getTime();
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        return sortBy === "newest" ? dateB - dateA : dateA - dateB;
       });
-    }
-
-    if (senderTypeFilter !== "all") {
-      return senderTypeFilter === "User"
-        ? (result = messages?.filter((message) => message.userType === "User"))
-        : (result = messages?.filter(
-          (message) => message.userType === "Seller"
-        ));
     }
 
     return result;
   }, [messages, searchTerm, sortBy, senderTypeFilter]);
-
   const handleDelete = async (id: number) => {
     try {
       const response = await axios.delete(
@@ -147,7 +138,9 @@ const Messages = () => {
         <div className="flex-1 space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <span className="p-1 bg-gradient-to-br from-primary to-blue-900 text-white font-bold px-2.5 rounded-full ">{message.name[0]}</span>
+              <span className="p-1 bg-gradient-to-br from-primary to-blue-900 text-white font-bold px-2.5 rounded-full ">
+                {message.name[0]}
+              </span>
               <h3 className="font-semibold text-lg text-accent-foreground">
                 {message.name}
               </h3>
@@ -166,7 +159,9 @@ const Messages = () => {
           </div>
 
           <div className="space-y-1">
-            <p className="font-medium text-gray-700 dark:text-slate-300">{message.subject}</p>
+            <p className="font-medium text-gray-700 dark:text-slate-300">
+              {message.subject}
+            </p>
             <p className="text-sm text-gray-500  dark:text-gray-300 line-clamp-2">
               {message.message}
             </p>
@@ -190,16 +185,18 @@ const Messages = () => {
         >
           <div className="rounded-full bg-primary/10  p-3 ">{stat.icon}</div>
           <div>
-            <p className="text-sm text-gray-600 dark:text-white font-medium">{stat.label}</p>
+            <p className="text-sm text-gray-600 dark:text-white font-medium">
+              {stat.label}
+            </p>
             <AnimatedCounter end={String(stat.value)} duration={500} />
           </div>
         </div>
       ))}
     </div>
   );
-  
-  if (isLoading){
-    return <MessagesSkeleton/>
+
+  if (isLoading) {
+    return <MessagesSkeleton />;
   }
 
   return (
@@ -254,16 +251,22 @@ const Messages = () => {
                           {senderTypeFilter === "all"
                             ? "All"
                             : senderTypeFilter === "User"
-                              ? "User"
-                              : "Seller"}
+                            ? "User"
+                            : "Seller"}
                         </span>
                       </div>
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="rounded-xl  ">
-                    <SelectItem className="rounded-lg" value="all">All</SelectItem>
-                    <SelectItem className="rounded-lg" value="User">User</SelectItem>
-                    <SelectItem className="rounded-lg" value="Seller">Seller</SelectItem>
+                    <SelectItem className="rounded-lg" value="all">
+                      All
+                    </SelectItem>
+                    <SelectItem className="rounded-lg" value="User">
+                      User
+                    </SelectItem>
+                    <SelectItem className="rounded-lg" value="Seller">
+                      Seller
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 <Select value={sortBy} onValueChange={setSortBy}>
@@ -275,16 +278,22 @@ const Messages = () => {
                           {sortBy === "default"
                             ? "Default"
                             : sortBy === "newest"
-                              ? "Newest"
-                              : "Oldest"}
+                            ? "Newest"
+                            : "Oldest"}
                         </span>
                       </div>
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="rounded-xl">
-                    <SelectItem className="rounded-lg" value="default">Default</SelectItem>
-                    <SelectItem className="rounded-lg" value="newest">Newest First</SelectItem>
-                    <SelectItem className="rounded-lg" value="oldest">Oldest First</SelectItem>
+                    <SelectItem className="rounded-lg" value="default">
+                      Default
+                    </SelectItem>
+                    <SelectItem className="rounded-lg" value="newest">
+                      Newest First
+                    </SelectItem>
+                    <SelectItem className="rounded-lg" value="oldest">
+                      Oldest First
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -302,7 +311,7 @@ const Messages = () => {
                     <MessageCard key={message.id} message={message} />
                   ))
                 ) : (
-                  <div className="text-center text-gray-500 py-10">
+                  <div className="bg-primary/5 rounded-xl border border-primary/75 p-6 text-muted-foreground italic">
                     No messages found
                   </div>
                 )}

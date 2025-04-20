@@ -1,38 +1,26 @@
-import { useState, useEffect, useMemo, ReactNode } from "react";
-import { useMediaQuery } from "react-responsive";
+import { useState, useEffect, useMemo } from "react";
 import { SearchFilterSort } from "@/components/Admin/search-filter-sort";
 import { DataTable } from "@/components/Admin/data-table";
 import { PaginationControls } from "@/components/Admin/pagination-controls";
-import { mockData, tableHeaders } from "@/data/mock-data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "@/lib/axios";
 import { Seller as S } from "@/types/entityTypes";
-import { Loader2 } from "lucide-react";
 import { TableWrapper } from "@/components/Admin/table-wrapper";
-// import { AdminTableSkeleton } from "@/components/Admin/Skeletons";
 import { SellerSkeleton } from "@/components/Admin/Skeletons";
 import { Helmet } from "react-helmet-async";
 
 const Seller = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [sellers, setSellers] = useState<S[]>([]);
   const [topSellers, setTopSellers] = useState<S[]>([]);
   const [loading, setLoading] = useState(true);
-  const isMobile = useMediaQuery({ maxWidth: 768 });
-  const navigate = useNavigate();
-  const location = useLocation();
-  // const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(7);
   const [activeTab, setActiveTab] = useState("top");
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState("");
-  const [filterBy, setFilterBy] = useState("");
 
-  interface TableWrapperProps {
-    children: ReactNode;
-  }
   // Get initial page from URL params or default to 1
   const searchParams = new URLSearchParams(location.search);
   const initialPage = parseInt(searchParams.get("page") || "1");
@@ -76,27 +64,8 @@ const Seller = () => {
       );
     }
 
-    if (filterBy) {
-
-      result = result.filter((seller) =>
-        seller.address && seller.address.includes(filterBy)
-      );
-    }
-
-    if (sortBy) {
-      result.sort((a, b) => {
-        if (sortBy === "Profits") {
-          console.log("Profits");
-        }
-        if (sortBy === "Items Sold") {
-          console.log("Items Sold");
-        }
-        return 0;
-      });
-    }
-
     return result;
-  }, [activeTab, searchTerm, sortBy, filterBy, topSellerData, sellerData]);
+  }, [activeTab, searchTerm, topSellerData, sellerData]);
 
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -131,7 +100,9 @@ const Seller = () => {
       try {
         const [sellerRes, topSellerRes] = await Promise.all([
           axios.get(`${import.meta.env.VITE_API_URL}/api/admin/sellers`),
-          axios.get(`${import.meta.env.VITE_API_URL}/api/admin/sellers/topsellers`),
+          axios.get(
+            `${import.meta.env.VITE_API_URL}/api/admin/sellers/topsellers`
+          ),
         ]);
 
         if (sellerRes.status === 200) {
@@ -150,14 +121,7 @@ const Seller = () => {
   }, []);
 
   if (loading) {
-    return (
-      // <div className="flex flex-col justify-center items-center h-screen">
-      //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-      //   <p className="text-muted-foreground">Loading Sellers...</p>
-      // </div>
-      <SellerSkeleton />
-
-    );
+    return <SellerSkeleton />;
   }
 
   return (
@@ -199,34 +163,28 @@ const Seller = () => {
               <CardTitle className="text-xl sm:text-2xl">Top Sellers</CardTitle>
             </CardHeader>
             <CardContent className="p-2 sm:p-4 space-y-3">
-              <SearchFilterSort
-                onSearch={setSearchTerm}
-                onSort={setSortBy}
-                onFilter={setFilterBy}
-                sortOptions={[
-                  { value: "Profits", label: "Profits" },
-                  { value: "Items Sold", label: "Items Sold" },
-                ]}
-                filterOptions={[
-                  { value: "Electronics", label: "Electronics" },
-                  { value: "Clothing", label: "Clothing" },
-                ]}
-              />
+              <SearchFilterSort onSearch={setSearchTerm} />
               <TableWrapper>
-                <DataTable
-                  headers={[
-                    { key: "srNumber", label: "Sr No." },
-                    { key: "name", label: "Seller Name" },
-                    { key: "email", label: "Seller Email" },
-                    { key: "phone", label: "Contact" },
-                    { key: "address", label: "Location" },
-                    { key: "productsCount", label: "Products" },
-                    { key: "id", label: "ID" },
-                  ]}
-                  data={paginatedData}
-                  type="topSeller"
-                  onRowClick={handleRowClick}
-                />
+                {paginatedData.length > 0 ? (
+                  <DataTable
+                    headers={[
+                      { key: "srNumber", label: "Sr No." },
+                      { key: "name", label: "Seller Name" },
+                      { key: "email", label: "Seller Email" },
+                      { key: "phone", label: "Contact" },
+                      { key: "address", label: "Location" },
+                      { key: "productsCount", label: "Products" },
+                      { key: "id", label: "ID" },
+                    ]}
+                    data={paginatedData}
+                    type="topSeller"
+                    onRowClick={handleRowClick}
+                  />
+                ) : (
+                  <div className="bg-primary/5 rounded-xl border border-primary/75 p-6 text-muted-foreground italic">
+                    Sellers not available
+                  </div>
+                )}
               </TableWrapper>
               <PaginationControls
                 currentPage={currentPage}
@@ -244,34 +202,28 @@ const Seller = () => {
               <CardTitle className="text-xl sm:text-2xl">All Sellers</CardTitle>
             </CardHeader>
             <CardContent className="p-2 sm:p-4 space-y-3">
-              <SearchFilterSort
-                onSearch={setSearchTerm}
-                onSort={setSortBy}
-                onFilter={setFilterBy}
-                sortOptions={[
-                  { value: "Profits", label: "Profits" },
-                  { value: "Items Sold", label: "Items Sold" },
-                ]}
-                filterOptions={[
-                  { value: "Electronics", label: "Electronics" },
-                  { value: "Clothing", label: "Clothing" },
-                ]}
-              />
+              <SearchFilterSort onSearch={setSearchTerm} />
               <TableWrapper>
-                <DataTable
-                  headers={[
-                    { key: "srNumber", label: "Sr No." },
-                    { key: "name", label: "Seller Name" },
-                    { key: "email", label: "Seller Email" },
-                    { key: "phone", label: "Contact" },
-                    { key: "address", label: "Location" },
-                    { key: "productsCount", label: "Products" },
-                    { key: "id", label: "ID" },
-                  ]}
-                  data={paginatedData}
-                  type="allSeller"
-                  onRowClick={handleRowClick}
-                />
+                {paginatedData.length > 0 ? (
+                  <DataTable
+                    headers={[
+                      { key: "srNumber", label: "Sr No." },
+                      { key: "name", label: "Seller Name" },
+                      { key: "email", label: "Seller Email" },
+                      { key: "phone", label: "Contact" },
+                      { key: "address", label: "Location" },
+                      { key: "productsCount", label: "Products" },
+                      { key: "id", label: "ID" },
+                    ]}
+                    data={paginatedData}
+                    type="allSeller"
+                    onRowClick={handleRowClick}
+                  />
+                ) : (
+                  <div className="bg-primary/5 rounded-xl border border-primary/75 p-6 text-muted-foreground italic">
+                    Sellers not available
+                  </div>
+                )}
               </TableWrapper>
               <PaginationControls
                 currentPage={currentPage}

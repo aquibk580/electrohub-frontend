@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Star, Package, Users, Loader2, VerifiedIcon } from "lucide-react";
+import { Star, Package, Users, VerifiedIcon } from "lucide-react";
 import axios from "@/lib/axios";
 import { formatDate } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
@@ -59,17 +59,10 @@ const SellerDetails = () => {
   const bgColor = useMemo(() => getRandomColor(), []);
 
   if (loading) {
-    return (
-      // <div className="flex flex-col justify-center items-center h-screen">
-      //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-      //   <p className="text-muted-foreground">Loading Seller Details...</p>
-      // </div>
-      <SellerInfoSkeleton />
-    );
+    return <SellerInfoSkeleton />;
   }
 
   return (
-    //<SidbarLayout breadcrumbs={breadcrumbs}>
     <div className="w-full px-4 py-6 space-y-6">
       <Helmet
         title={seller?.name || "Seller Info"}
@@ -104,15 +97,6 @@ const SellerDetails = () => {
                 <h3 className="text-xl  font-bold">{seller?.name}</h3>
                 <VerifiedIcon className="w-5 h-5 text-blue-600" />
               </div>
-              {/* <div className="flex items-center space-x-2 mt-2">
-                <Badge variant="secondary">{seller.email}</Badge>
-                <Badge
-                  variant="outline"
-                  className="bg-green-500/10 text-green-500"
-                >
-                  {seller.phone}
-                </Badge>
-              </div> */}
             </div>
           </div>
           <div className="space-y-2">

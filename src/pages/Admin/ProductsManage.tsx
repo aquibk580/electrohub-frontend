@@ -2,19 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   Star,
-  Edit2,
-  Save,
-  X,
-  User,
-  Calendar,
   ArrowLeft,
-  Loader2,
+  Calendar,
 } from "lucide-react";
-import { mockData } from "@/data/mock-data";
 import axios from "@/lib/axios";
 import { Product } from "@/types/entityTypes";
 import { formatDate } from "@/lib/utils";

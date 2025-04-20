@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Loader2, ShieldCheck, Users } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -14,6 +14,7 @@ import { Admin } from "@/types/entityTypes";
 import { toast } from "react-toastify";
 import axios from "@/lib/axios";
 import { Helmet } from "react-helmet-async";
+import { TableWrapper } from "@/components/Admin/table-wrapper";
 
 const Admins = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -61,23 +62,18 @@ const Admins = () => {
     createdAt: formatDate(admin.createdAt),
   }));
 
-  // const handleRowClick = (row: any) => {
-  //   // Handle row click if needed
-  //   console.log("Admin clicked:", row);
-  // };
-
   return (
     <div className="p-4">
-       <Helmet
-              title="Admins List"
-              meta={[
-                {
-                  name: "og:url",
-                  property: "og:url",
-                  content: `${import.meta.env.VITE_APP_URL}/admin/admins`,
-                }
-              ]}
-            />
+      <Helmet
+        title="Admins List"
+        meta={[
+          {
+            name: "og:url",
+            property: "og:url",
+            content: `${import.meta.env.VITE_APP_URL}/admin/admins`,
+          },
+        ]}
+      />
 
       <Card className="rounded-xl bg-primary/5 border-primary/75 dark:bg-gradient-to-br from-primary/10 via-slate-900/20 to-primary/5">
         <CardHeader>
@@ -92,12 +88,15 @@ const Admins = () => {
             {loading ? (
               <AdminTableSkeleton />
             ) : (
-              <DataTable
-                headers={tableHeaders}
-                data={tableData}
-                // type="admins"
-                // onRowClick={handleRowClick}
-              />
+              <TableWrapper>
+                {tableData.length > 0 ? (
+                  <DataTable headers={tableHeaders} data={tableData} />
+                ) : (
+                  <div className="bg-primary/5 rounded-xl border border-primary/75 p-6 text-muted-foreground italic">
+                    Admins not available
+                  </div>
+                )}
+              </TableWrapper>
             )}
           </div>
         </CardContent>
@@ -121,11 +120,14 @@ const AdminTableSkeleton = () => {
               ))}
               <div className="w-[50px]"></div>
             </div>
-            
+
             {/* Skeleton Rows */}
             <div className="bg-white dark:bg-black">
               {[1, 2, 3, 4].map((row) => (
-                <div key={row} className="flex items-center p-3 border-b border-primary/25">
+                <div
+                  key={row}
+                  className="flex items-center p-3 border-b border-primary/25"
+                >
                   {[1, 2, 3, 4, 5].map((cell) => (
                     <div key={cell} className="flex-1 min-w-32">
                       <Skeleton className="h-5 w-full max-w-32 bg-primary/10" />

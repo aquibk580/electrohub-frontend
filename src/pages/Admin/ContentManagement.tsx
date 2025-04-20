@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Image as ImageIcon, Loader2 } from "lucide-react";
+import { Image as ImageIcon } from "lucide-react";
 import axios from "@/lib/axios";
 import DeleteCategoryButton from "@/components/Admin/CMS/DeleteCategoryButton";
 import AddCategoryDialog from "@/components/Admin/CMS/AddCategoryDialog";
@@ -437,16 +437,6 @@ const ContentManagement = () => {
       </div>
     );
   };
-
-  const LoadingOverlay = ({ visible }: { visible: boolean }) =>
-    visible ? (
-      <div className="absolute inset-0 bg-white/80 dark:bg-black/80 flex items-center justify-center z-10 rounded-xl">
-        <div className="flex flex-col items-center space-y-4">
-          <Loader2 className="h-12 w-12 animate-spin text-primary" />
-          <p className="text-lg font-medium text-primary">Loading content...</p>
-        </div>
-      </div>
-    ) : null;
 
   return (
     <div className="w-full px-2 py-2 sm:px-4 sm:py-6 space-y-4">

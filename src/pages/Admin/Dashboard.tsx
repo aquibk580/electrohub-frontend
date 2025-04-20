@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -27,11 +27,8 @@ import { formatDate } from "@/lib/utils";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { ChartPie } from "@/components/Admin/Chart-Pie";
-import {DashboardSkeleton} from "@/components/Admin/Skeletons";
+import { DashboardSkeleton } from "@/components/Admin/Skeletons";
 import { Helmet } from "react-helmet-async";
-const IndiaSalesMap = React.lazy(
-  () => import("@/components/Admin/india-sales-map")
-);
 
 const Dashboard = () => {
   const isAuthenticated = useSelector(
@@ -181,20 +178,16 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col gap-4 p-4">
       <Helmet
-                    title="Admin Dashboard"
-                    meta={[
-                      {
-                        name: "description",
-                        content: "Admin Dashboard For to Overview Sales and Categories",
-                      },
-                    ]}
-                  />
+        title="Admin Dashboard"
+        meta={[
+          {
+            name: "description",
+            content: "Admin Dashboard For to Overview Sales and Categories",
+          },
+        ]}
+      />
       {statisticsLoading ? (
-        // <div className="flex flex-col justify-center items-center h-screen">
-        //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-        //   <p className="text-muted-foreground">Loading Sales Statistcis...</p>
-        // </div>
-        <DashboardSkeleton/>
+        <DashboardSkeleton />
       ) : (
         <>
           <DashboardStats stats={stats} variant="payment" />
@@ -253,7 +246,7 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 gap-4">
         {/* Top Products Table */}
-        <Card className=" border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-slate-900/20 to-primary/5" >
+        <Card className=" border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-slate-900/20 to-primary/5">
           <CardHeader>
             <CardTitle>Top Selling Products</CardTitle>
           </CardHeader>
@@ -267,16 +260,22 @@ const Dashboard = () => {
               </div>
             ) : (
               <TableWrapper>
-                <DataTable
-                  headers={[
-                    { key: "srNumber", label: "Sr No." },
-                    { key: "productName", label: "Product Name" },
-                    { key: "unitsSold", label: "Units Sold" },
-                    { key: "totalSales", label: "Total Sales" },
-                  ]}
-                  data={topProducts}
-                  type={"seller"}
-                />
+                {topProducts.length > 0 ? (
+                  <DataTable
+                    headers={[
+                      { key: "srNumber", label: "Sr No." },
+                      { key: "productName", label: "Product Name" },
+                      { key: "unitsSold", label: "Units Sold" },
+                      { key: "totalSales", label: "Total Sales" },
+                    ]}
+                    data={topProducts}
+                    type={"seller"}
+                  />
+                ) : (
+                  <div className="bg-primary/5 rounded-xl border border-primary/75 p-6 text-muted-foreground italic">
+                    Products not available
+                  </div>
+                )}
               </TableWrapper>
             )}
           </CardContent>

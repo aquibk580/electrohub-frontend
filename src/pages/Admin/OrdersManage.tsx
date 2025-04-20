@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -160,7 +158,7 @@ const OrderDetails = () => {
             <div className="flex items-center space-x-4">
               {orderItem?.product ? (
                 <img
-                  src={orderItem?.product?.images[0]?.url || "/placeholder.svg"}
+                  src={orderItem?.product?.images[0]?.url}
                   alt={orderItem?.product?.name}
                   className="w-32 h-32 rounded-lg object-cover"
                 />

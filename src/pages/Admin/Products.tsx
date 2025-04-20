@@ -6,20 +6,13 @@ import { DataTable } from "@/components/Admin/data-table";
 import { PaginationControls } from "@/components/Admin/pagination-controls";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import {
-  Box,
-  CheckCircle2,
-  XCircle,
-  SquareMenu,
-  Loader2,
-  Ban,
-} from "lucide-react";
+import { Box, CheckCircle2, XCircle, SquareMenu, Ban } from "lucide-react";
 import { DashboardStats } from "@/components/Admin/dashboard-stats";
 import { Category, Product } from "@/types/entityTypes";
 import axios from "@/lib/axios";
 import { formatPrice } from "@/utils/FormatPrice";
 import { Helmet } from "react-helmet-async";
-import { AdminDashboardSkeleton  } from "@/components/Admin/Skeletons";
+import { AdminDashboardSkeleton } from "@/components/Admin/Skeletons";
 
 interface TableWrapperProps {
   children: ReactNode;
@@ -40,8 +33,6 @@ const ProductManagement = () => {
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [itemsPerPage, setItemsPerPage] = useState(7);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState("");
-  const [filterBy, setFilterBy] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Array<Category>>([]);
@@ -110,30 +101,20 @@ const ProductManagement = () => {
       );
     }
 
-    if (sortBy) {
-      result.sort((a, b) => {
-        if (sortBy === "Price") {
-          return (
-            parseFloat(String(b.price).replace(/[^0-9.-]+/g, "")) -
-            parseFloat(String(b.price).replace(/[^0-9.-]+/g, ""))
-          );
-        }
-        return 0;
-      });
-    }
-
     return result.map((product) => ({
       id: product.id,
       name: product.name.substring(0, 30) + "...",
       image: formatImageCell(product.images[0].url),
-      price: "₹" + formatPrice(
-        product.price - (product.offerPercentage / 100) * product.price
-      ),
+      price:
+        "₹" +
+        formatPrice(
+          product.price - (product.offerPercentage / 100) * product.price
+        ),
       stock: product.stock,
       status: product.status,
-      discount: product.offerPercentage + "%"
+      discount: product.offerPercentage + "%",
     }));
-  }, [products, categoryFilter, searchTerm, sortBy,filterBy]);
+  }, [products, categoryFilter, searchTerm]);
 
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -215,25 +196,20 @@ const ProductManagement = () => {
   categoryOptions.unshift({ label: "All", value: "All" });
 
   if (loading) {
-    return (
-      // <div className="flex flex-col justify-center items-center h-screen">
-      //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-      //   <p className="text-muted-foreground">Loading Products Statistcis...</p>
-      // </div>
-<AdminDashboardSkeleton type="products" />    );
+    return <AdminDashboardSkeleton type="products" />;
   }
 
   return (
     <div className="w-full px-2 py-2 sm:px-4 sm:py-4 space-y-4">
       <Helmet
-              title="Products | Admin"
-              meta={[
-                {
-                  name: "description",
-                  content: "All Products By Sellers",
-                },
-              ]}
-            />
+        title="Products | Admin"
+        meta={[
+          {
+            name: "description",
+            content: "All Products By Sellers",
+          },
+        ]}
+      />
       <Card className="shadow-md rounded-xl border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/20 via-slate-900/20 to-primary/10 py-4">
         <CardContent className="p-4 ">
           <DashboardStats
@@ -253,35 +229,29 @@ const ProductManagement = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="p-2 sm:p-4 space-y-3">
-          <SearchFilterSort
-            onSearch={setSearchTerm}
-            onSort={setSortBy}
-            onFilter={setFilterBy}
-            sortOptions={[
-              { value: "Price", label: "Price" },
-              { value: "Quantity", label: "Quantity" },
-            ]}
-            filterOptions={[
-              { value: "Active", label: "In Stock" },
-              { value: "outOfStock", label: "Out of Stock" },
-            ]}
-          />
+          <SearchFilterSort onSearch={setSearchTerm} />
 
           <TableWrapper>
-            <DataTable
-              headers={[
-                { key: "id", label: "ID" },
-                { key: "image", label: "image" },
-                { key: "name", label: "Name" },
-                { key: "price", label: "Price" },
-                { key: "stock", label: "Stock" },
-                { key: "status", label: "Status" },
-                { key: "discount", label: "Discount" },
-              ]}
-              data={paginatedData}
-              type="products"
-              onRowClick={handleRowClick}
-            />
+            {paginatedData.length > 0 ? (
+              <DataTable
+                headers={[
+                  { key: "id", label: "ID" },
+                  { key: "image", label: "image" },
+                  { key: "name", label: "Name" },
+                  { key: "price", label: "Price" },
+                  { key: "stock", label: "Stock" },
+                  { key: "status", label: "Status" },
+                  { key: "discount", label: "Discount" },
+                ]}
+                data={paginatedData}
+                type="products"
+                onRowClick={handleRowClick}
+              />
+            ) : (
+              <div className="bg-primary/5 rounded-xl border border-primary/75 p-6 text-muted-foreground italic">
+                Products not available
+              </div>
+            )}
           </TableWrapper>
 
           <PaginationControls

@@ -58,8 +58,6 @@ const Order = () => {
   // const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(7);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState("");
-  const [filterBy, setFilterBy] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [orderItems, setOrderItems] = useState<ExtendedOrderItem>([]);
   const [orderStats, setOrderStats] = useState<OrderStats>([]);
@@ -135,20 +133,9 @@ const Order = () => {
     }
 
     if (searchTerm) {
-      result = result.filter((order) =>
-        order.product.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    if (sortBy) {
-      result.sort((a, b) => {
-        if (sortBy === "total") {
-          return (
-            parseFloat(String(b.product.price).replace(/[^0-9.-]+/g, "")) -
-            parseFloat(String(a.product.price).replace(/[^0-9.-]+/g, ""))
-          );
-        }
-        return 0;
+      result = result.filter((order) => {
+        const productName = order.product?.name || "Product Deleted";
+        return productName.toLowerCase().includes(searchTerm.toLowerCase());
       });
     }
 
@@ -159,11 +146,13 @@ const Order = () => {
         : "Product Deleted",
       date: formatDate(order?.createdAt),
       customerName: order.customerName,
-      total: order.product ?  "₹" +
-      formatPrice(
-        order?.product?.price -
-          (order?.product?.offerPercentage / 100) * order?.product?.price
-      ) : "N/A",
+      total: order.product
+        ? "₹" +
+          formatPrice(
+            order?.product?.price -
+              (order?.product?.offerPercentage / 100) * order?.product?.price
+          )
+        : "N/A",
       status:
         order?.status === "OrderConfirmed" ? "Order Placed" : order?.status,
       image: order.product ? (
@@ -176,7 +165,7 @@ const Order = () => {
         </>
       ),
     }));
-  }, [statusFilter, searchTerm, sortBy, filterBy, orderItems]);
+  }, [statusFilter, searchTerm, orderItems]);
 
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -208,13 +197,7 @@ const Order = () => {
   }, [location.search]);
 
   if (loading) {
-    return (
-      // <div className="flex flex-col justify-center items-center h-screen">
-      //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-      //   <p className="text-muted-foreground">Loading Orders...</p>
-      // </div>
-      <AdminDashboardSkeleton type="orders" />
-    );
+    return <AdminDashboardSkeleton type="orders" />;
   }
 
   return (
@@ -243,34 +226,28 @@ const Order = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="p-2 sm:p-4 space-y-3">
-          <SearchFilterSort
-            onSearch={setSearchTerm}
-            onSort={setSortBy}
-            onFilter={setFilterBy}
-            sortOptions={[
-              { value: "total", label: "Price" },
-              { value: "Purchased", label: "Purchased" },
-            ]}
-            filterOptions={[
-              { value: "Electronics", label: "Electronics" },
-              { value: "Clothing", label: "Clothing" },
-            ]}
-          />
+          <SearchFilterSort onSearch={setSearchTerm} />
           <TableWrapper>
-            <DataTable
-              headers={[
-                { key: "id", label: "ID" },
-                { key: "image", label: "Image" },
-                { key: "productName", label: "Product Name" },
-                { key: "customerName", label: "Customer Name" },
-                { key: "date", label: "Date" },
-                { key: "total", label: "Total" },
-                { key: "status", label: "Status" },
-              ]}
-              data={paginatedData}
-              type="orders"
-              onRowClick={handleRowClick}
-            />
+            {paginatedData.length > 0 ? (
+              <DataTable
+                headers={[
+                  { key: "id", label: "ID" },
+                  { key: "image", label: "Image" },
+                  { key: "productName", label: "Product Name" },
+                  { key: "customerName", label: "Customer Name" },
+                  { key: "date", label: "Date" },
+                  { key: "total", label: "Total" },
+                  { key: "status", label: "Status" },
+                ]}
+                data={paginatedData}
+                type="orders"
+                onRowClick={handleRowClick}
+              />
+            ) : (
+              <div className="bg-primary/5 rounded-xl border border-primary/75 p-6 text-muted-foreground italic">
+                Orders not available
+              </div>
+            )}
           </TableWrapper>
           <PaginationControls
             currentPage={currentPage}
