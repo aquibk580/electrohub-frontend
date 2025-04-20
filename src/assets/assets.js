@@ -19,9 +19,7 @@ import wishList from "./wishlist.png";
 import CartEmpty from "./CartEmpty.png";
 import BannerLogo from "./banner-logo.png";
 import shoppingBoyGif from "./little-boy.png";
-import samsungs25Banner from "./Samsung-s25-banner.jpg";
 import iphone16Banner from "./iphone-16-banner.png";
-import PS5Banner from "./PS5-banner.jpg";
 import pfpimg from "./pfpimg.png";
 import del from "./del.png";
 import edit from "./edit.png";
@@ -60,9 +58,7 @@ export const assets = {
   CartEmpty,
   BannerLogo,
   shoppingBoyGif,
-  samsungs25Banner,
   iphone16Banner,
-  PS5Banner,
   image,
   edit,
   del,
