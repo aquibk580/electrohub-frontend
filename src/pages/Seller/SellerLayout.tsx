@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import MainNav from "../../components/Seller/MainNav";
 import axios from "../../lib/axios";
 import { setSeller } from "@/redux/slices/seller";

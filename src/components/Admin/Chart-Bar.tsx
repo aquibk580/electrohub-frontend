@@ -1,10 +1,7 @@
-"use client"
-
 import { MoreHorizontal } from "lucide-react"
 import { Bar, BarChart, ResponsiveContainer, Tooltip } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import CustomCursor from "../ui/CustomCursor"
 
 interface DataPoint {
   month: string

@@ -1,11 +1,8 @@
-"use client"
-
 import type React from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Package, Star, ShoppingCart } from "lucide-react"
-import { Button } from "@/components/ui/button"
 
 const TopSellerSkeleton: React.FC = () => {
   return (

@@ -2,7 +2,7 @@ import Footer from "@/components/Home/Footer";
 import Navbar from "@/components/Home/Navbar";
 import Sidebar from "@/components/User/Sidebar";
 import { RootState } from "@/redux/store";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 

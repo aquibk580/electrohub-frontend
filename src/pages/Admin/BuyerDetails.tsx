@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "@/lib/axios";
@@ -24,7 +22,6 @@ import {
   CreditCard,
   ShoppingBag,
   RefreshCcw,
-  Loader2,
   ArrowLeft,
   BadgeIndianRupee,
   ContactRound,

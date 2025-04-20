@@ -20,7 +20,6 @@ import SearchBar from "./Searchbar";
 import axios from "@/lib/axios";
 import { Category } from "@/types/entityTypes";
 import { assets } from "../../assets/assets.ts";
-import DealCarousel from "./Deals.tsx";
 
 const Navbar = () => {
   const [showSidebar, setShowSidebar] = useState(false);

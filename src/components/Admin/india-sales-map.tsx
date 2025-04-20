@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
 import { debounce } from "lodash";
 
 import { useTheme } from "../theme-provider";
@@ -53,7 +52,6 @@ const stateNames: { [key: string]: string } = {
 
 const IndiaSalesMap: React.FC<IndiaMapProps> = ({ 
   salesData, 
-  title = "Most Sales by States",
   className = "",
   height = "100%",
   width = "100%"

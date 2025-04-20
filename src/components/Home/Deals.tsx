@@ -6,7 +6,6 @@ import {
   Sparkles, 
   Tag, 
   BadgePercent, 
-  Package, 
   Gift, 
   ThumbsUp,
   ChevronLeft,

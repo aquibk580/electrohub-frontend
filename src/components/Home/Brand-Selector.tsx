@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from "react";
-import { useTheme } from "@/components/theme-provider";
 import axios from "@/lib/axios";
 import { Seller } from "../../types/entityTypes";
 import { useNavigate } from "react-router-dom";
@@ -83,7 +82,6 @@ const SellerCard = ({
 
 export default function TopSellers() {
   const navigate = useNavigate();
-  const { theme } = useTheme();
   const [sellers, setSellers] = useState<Seller[]>([]);
   const [loading, setLoading] = useState(true);
 

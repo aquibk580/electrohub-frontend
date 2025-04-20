@@ -55,7 +55,6 @@ export default function UserProfileButton({
   imageUrl,
   email,
 }: UserProfileButtonProps) {
-  let closeTimeout: NodeJS.Timeout;
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const initials = name

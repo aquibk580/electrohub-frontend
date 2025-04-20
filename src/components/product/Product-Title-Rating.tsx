@@ -1,5 +1,4 @@
 import { Star } from "lucide-react";
-import { Badge } from "../ui/badge";
 import { useMemo, useState } from "react";
 import { Review } from "../../types/entityTypes";
 

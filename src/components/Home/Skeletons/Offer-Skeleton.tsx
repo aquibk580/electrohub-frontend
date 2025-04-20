@@ -1,5 +1,4 @@
-import { ChevronLeft, ChevronRight, Zap } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function DiscountOffersSkeleton() {
   // Generate an array of placeholder items

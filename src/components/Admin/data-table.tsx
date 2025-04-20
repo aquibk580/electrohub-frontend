@@ -1,8 +1,15 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
 import type { TableProps } from "@/types/dashboard";
 import { ChevronRight } from "lucide-react";
-export function DataTable({ headers, data, type, onRowClick }: TableProps) {
+export function DataTable({ headers, data, onRowClick }: TableProps) {
   const handleDoubleClick = (row: any) => {
     if (onRowClick) {
       onRowClick(row);
@@ -19,7 +26,7 @@ export function DataTable({ headers, data, type, onRowClick }: TableProps) {
                 {headers.map((header) => (
                   <TableHead
                     className="pl-3 sticky top-0  border-b-2 border-primary/50 text-white/95 text-base min-w-32 whitespace-nowrap"
-                    key={header.key} 
+                    key={header.key}
                   >
                     {header.label}
                   </TableHead>
@@ -49,7 +56,7 @@ export function DataTable({ headers, data, type, onRowClick }: TableProps) {
                     </TableCell>
                   ))}
                   {onRowClick && (
-                    <TableCell >
+                    <TableCell>
                       <ChevronRight className="h-5 w-5" />
                     </TableCell>
                   )}

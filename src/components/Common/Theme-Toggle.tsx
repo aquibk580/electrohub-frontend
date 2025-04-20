@@ -5,7 +5,6 @@ import {
   type Color,
 } from "@/components/theme-provider";
 import { Moon, Sun, Check, Palette } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,

@@ -1,4 +1,4 @@
-import { BadgeCheck, Loader2, MessageSquareMore, Star } from "lucide-react";
+import { BadgeCheck, MessageSquareMore, Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMemo } from "react";
 import { formatDate } from "@/lib/utils";

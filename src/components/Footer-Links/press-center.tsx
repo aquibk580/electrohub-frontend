@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { CalendarIcon, Clock, ExternalLink } from "lucide-react"
-// import Image from "next/image"
 import Image from "../Common/Image"
 
 export default function PressCenter() {

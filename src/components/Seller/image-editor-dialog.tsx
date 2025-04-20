@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import * as bodyPix from "@tensorflow-models/body-pix"
@@ -13,10 +11,6 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
-// Import the background removal libraries
-// Note: These would need to be installed in your project
-// npm install @imgly/background-removal
-// npm install bgremove
 
 interface ImageEditorDialogProps {
   isOpen: boolean

@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader2, Package, Search, ShoppingBag } from "lucide-react";
+import { Search, ShoppingBag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { FilterDropDown } from "@/components/User/OrderFilterDropDown";
 import { useEffect, useMemo, useState } from "react";

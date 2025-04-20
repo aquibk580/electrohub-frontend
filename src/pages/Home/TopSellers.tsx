@@ -1,14 +1,10 @@
-"use client"
-
 import type React from "react"
-import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import {
   Package,
   Star,
   ShoppingCart,
-  Loader2,
   BadgeCheck,
   MapPin,
   Calendar,
@@ -19,7 +15,7 @@ import {
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "@/lib/axios"
-import type { Seller, Product } from "@/types/entityTypes"
+import type { Seller } from "@/types/entityTypes"
 import { Helmet } from "react-helmet-async"
 import { Button } from "@/components/ui/button"
 import ProductCard from "@/components/Home/ProductCard"

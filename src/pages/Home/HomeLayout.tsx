@@ -1,7 +1,7 @@
 import Footer from "@/components/Home/Footer";
 import Navbar from "@/components/Home/Navbar";
 import { AppDispatch, RootState } from "@/redux/store";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import { setPfp, setUser } from "@/redux/slices/user";

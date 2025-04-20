@@ -15,12 +15,8 @@ import {
   Shield,
   AlertTriangle,
   UserCheck,
-  Globe,
-  Lock,
   Key,
-  FileText,
   RefreshCcw,
-  Search,
   Download,
   AlertCircle
 } from "lucide-react";

@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -30,7 +28,7 @@ interface FooterProps {
   setActiveTab?: (tab: string) => void;
 }
 
-export default function Footer({ activeTab, setActiveTab }: FooterProps) {
+export default function Footer({ setActiveTab }: FooterProps) {
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
   const [categories, setCategories] = useState<Array<Category>>([]);
   const [loading, setLoading] = useState(true);

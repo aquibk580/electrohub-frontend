@@ -1,30 +1,48 @@
-"use client"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Link } from "react-router-dom"
-import { ForgotPasswordFormSchema, type ForgotPasswordFormSchemaType } from "@/components/Auth/FormSchema"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { MailIcon, ArrowLeftIcon, Loader2 } from "lucide-react"
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "react-router-dom";
+import {
+  ForgotPasswordFormSchema,
+  type ForgotPasswordFormSchemaType,
+} from "@/components/Auth/FormSchema";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { MailIcon, ArrowLeftIcon, Loader2 } from "lucide-react";
 
 interface ForgotPasswordFormProps {
-  onSubmit: (data: ForgotPasswordFormSchemaType) => void
-  isSubmitting: boolean
-  navigateUrl: string
-  userType: "user" | "seller"
+  onSubmit: (data: ForgotPasswordFormSchemaType) => void;
+  isSubmitting: boolean;
+  navigateUrl: string;
+  userType: "user" | "seller";
 }
 
-export function ForgotPasswordForm({ onSubmit, isSubmitting, navigateUrl, userType }: ForgotPasswordFormProps) {
+export function ForgotPasswordForm({
+  onSubmit,
+  isSubmitting,
+  navigateUrl,
+}: ForgotPasswordFormProps) {
   const form = useForm<ForgotPasswordFormSchemaType>({
     resolver: zodResolver(ForgotPasswordFormSchema),
     defaultValues: {
       email: "",
     },
-  })
+  });
 
-  const handleSubmit = form.handleSubmit(onSubmit)
+  const handleSubmit = form.handleSubmit(onSubmit);
 
   return (
     <Card className="border shadow-lg">
@@ -43,7 +61,12 @@ export function ForgotPasswordForm({ onSubmit, isSubmitting, navigateUrl, userTy
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your email address" type="email" {...field} className="bg-background" />
+                    <Input
+                      placeholder="Enter your email address"
+                      type="email"
+                      {...field}
+                      className="bg-background"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -72,5 +95,5 @@ export function ForgotPasswordForm({ onSubmit, isSubmitting, navigateUrl, userTy
         </Link>
       </CardFooter>
     </Card>
-  )
+  );
 }
