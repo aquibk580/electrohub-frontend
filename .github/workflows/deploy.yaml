@@ -81,12 +81,12 @@ jobs:
           # EOL
 
           #Create symlink and restart Nginx (AFTER ending heredoc)
-          sudo ln -sf /etc/nginx/sites-available/express-server /etc/nginx/sites-enabled/
+          sudo ln -sf /etc/nginx/sites-available/frontend-server /etc/nginx/sites-enabled/
           sudo nginx -t
           sudo systemctl reload nginx || sudo systemctl restart nginx
 
           # Step 3.10: Set Correct Permissions and Enable Firewall
-          sudo chown -R $USER:$USER /var/www/express-server
+          sudo chown -R $USER:$USER /var/www/frontend-server
           sudo ufw allow 'Nginx Full'
           sudo ufw allow OpenSSH
           sudo ufw allow 9000
