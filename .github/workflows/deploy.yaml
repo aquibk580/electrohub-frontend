@@ -66,19 +66,19 @@ jobs:
           fi
 
           #Write Nginx config
-          sudo tee /etc/nginx/sites-available/frontend-server > /dev/null <<EOL
-          server {
-              listen 80;
-              server_name ${{ secrets.AWS_EC2_HOST }};
+          # sudo tee /etc/nginx/sites-available/frontend-server > /dev/null <<EOL
+          # server {
+          #     listen 80;
+          #     server_name ${{ secrets.AWS_EC2_HOST }};
 
-              location / {
-                  proxy_pass http://localhost:5173;
-                  proxy_set_header Host \$host;
-                  proxy_set_header X-Real-IP \$remote_addr;
-                  proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-              }
-          }
-          EOL
+          #     location / {
+          #         proxy_pass http://localhost:5173;
+          #         proxy_set_header Host \$host;
+          #         proxy_set_header X-Real-IP \$remote_addr;
+          #         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+          #     }
+          # }
+          # EOL
 
           #Create symlink and restart Nginx (AFTER ending heredoc)
           sudo ln -sf /etc/nginx/sites-available/express-server /etc/nginx/sites-enabled/
