@@ -51,7 +51,7 @@ jobs:
 
             # Install dependencies & build with increased memory
             npm install --unsafe-perm
-            NODE_OPTIONS=--max_old_space_size=4096 npm run build
+            NODE_OPTIONS=--max_old_space_size=1024 npm run build
 
             # Setup nginx to serve dist folder
             if ! command -v nginx &> /dev/null; then
