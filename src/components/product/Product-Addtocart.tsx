@@ -19,11 +19,12 @@ type ProductAddtocartProps = {
   setWishlist: Dispatch<SetStateAction<Set<number>>>;
   total: number;
   status: string;
+  sellerId: number;
 };
 
 interface OrderInput {
   total: number;
-  items: Array<{ productId: number; quantity: number }>;
+  items: Array<{ productId: number; quantity: number; sellerId: number }>;
 }
 
 const ProductAddtocart = ({
@@ -32,6 +33,7 @@ const ProductAddtocart = ({
   setWishlist,
   total,
   status,
+  sellerId,
 }: ProductAddtocartProps) => {
   const [orderData, setOrderData] = useState<OrderInput>({
     total: 0,
@@ -107,7 +109,7 @@ const ProductAddtocart = ({
   useEffect(() => {
     setOrderData({
       total: total,
-      items: [{ productId: id, quantity: 1 }],
+      items: [{ productId: id, quantity: 1, sellerId }],
     });
   }, []);
 

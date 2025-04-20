@@ -22,7 +22,7 @@ import { Badge } from "@/components/ui/badge";
 
 interface OrderInput {
   total: number;
-  items: Array<{ productId: number; quantity: number }>;
+  items: Array<{ productId: number; quantity: number; sellerId: number }>;
 }
 
 const Cart = () => {
@@ -74,6 +74,7 @@ const Cart = () => {
       items: cartItems.map((item) => ({
         productId: item.id,
         quantity: item.quantity,
+        sellerId: item.sellerId,
       })),
     });
   }, [total]);
@@ -176,7 +177,10 @@ const Cart = () => {
                         <span className="text-sm text-muted-foreground line-through">
                           ₹{formatPrice(item.price)}
                         </span>
-                        <Badge variant="destructive" className="rounded-lg text-[10px] md:text-sm">
+                        <Badge
+                          variant="destructive"
+                          className="rounded-lg text-[10px] md:text-sm"
+                        >
                           {item.offerPercentage}% OFF
                         </Badge>
                       </div>

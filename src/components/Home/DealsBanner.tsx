@@ -9,6 +9,17 @@ interface DealBannerProps {
 
 const DealsBanner = ({ products }: DealBannerProps) => {
   const navigate = useNavigate();
+
+  if (!products || products.length === 0) {
+    return (
+      <div className="col-span-full py-12 text-center">
+        <h1 className="text-2xl font-semibold text-foreground">
+          No products found
+        </h1>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 my-8">
       <div className="space-y-1.5 ">
@@ -186,7 +197,7 @@ const DealsBanner = ({ products }: DealBannerProps) => {
                 <span className="text-xs md:text-sm lg:text-lg">
                   Starting at
                 </span>
-                
+
                 <h2 className="text-md  lg:text-2xl text-primary/95 font-bold">
                   ₹
                   <span className="text-2xl">
@@ -207,10 +218,8 @@ const DealsBanner = ({ products }: DealBannerProps) => {
             </div>
           </Card>
         </div>
-        </div>
       </div>
-    
-    
+    </div>
   );
 };
 

@@ -9,7 +9,7 @@ import Mail from "@/lib/Mail";
 
 interface OrderInput {
   total: number;
-  items: { productId: number; quantity: number }[];
+  items: { productId: number; quantity: number; sellerId: number }[];
 }
 
 interface CheckoutProps {
@@ -73,6 +73,7 @@ const Checkout = ({ orderData, styles, text, flag }: CheckoutProps) => {
                 theme: "dark",
               });
               navigate("/user/orders");
+              console.log(verifyRes.data)
               await Mail.OrderConfirmed(verifyRes.data?.order);
             } else {
               toast.error("Payment Verification Failed!", {

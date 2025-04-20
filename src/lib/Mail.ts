@@ -16,7 +16,7 @@ type OrderItemPayload = { order: OrderItem; user: User };
 class Mail {
   private static API_URL = `${import.meta.env.VITE_API_URL}/api/sendmail`;
 
-  static async OrderConfirmed(order: Order): Promise<boolean> {
+  static async OrderConfirmed(order: Order & { user: User }): Promise<boolean> {
     return this.send(order, "OrderConfirmed");
   }
 

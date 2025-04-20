@@ -175,6 +175,7 @@ export default function ProductPage() {
                     product.price -
                     (product.price / 100) * product.offerPercentage
                   }
+                  sellerId={product.sellerId}
                 />
               ) : (
                 <Button onClick={() => navigate("/user/auth/signin")}>

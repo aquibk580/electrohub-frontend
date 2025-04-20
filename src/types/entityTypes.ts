@@ -52,6 +52,7 @@ export interface Product {
   reviews: Array<Review> | [];
   averageRating: number;
   seller: Seller;
+  sellerId: number;
   orderItems: OrderItem[];
   _count: {
     orderItems: number;

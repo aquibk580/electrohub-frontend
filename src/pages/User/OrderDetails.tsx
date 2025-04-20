@@ -144,7 +144,6 @@ const OrderDetails = () => {
         });
         if (!user) return;
         if (status === "Cancelled") {
-          console.log(response.data);
           await Mail.Cancelled({ order: response.data.order, user });
         } else if (status === "Returned") {
           await Mail.Returned({ order: response.data.order, user });
