@@ -1,5 +1,4 @@
 const breadcrumbConfig: Record<string, { href: string; label: string }[]> = {
-
   "/admin/auth/signin":[{href: "/admin/auth/signin", label:"Sign in"}],
   "/admin/auth/signup":[{href: "/admin/auth/signup", label:"Sign up"}],
   "/admin/auth/forgot-password":[{href: "/admin/auth/forgot-password", label:"Forgot Password"}],
