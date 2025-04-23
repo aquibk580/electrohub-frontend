@@ -17,7 +17,7 @@ const Seller = () => {
   const [sellers, setSellers] = useState<S[]>([]);
   const [topSellers, setTopSellers] = useState<S[]>([]);
   const [loading, setLoading] = useState(true);
-  const [itemsPerPage, setItemsPerPage] = useState(7);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [activeTab, setActiveTab] = useState("top");
   const [searchTerm, setSearchTerm] = useState("");
 
