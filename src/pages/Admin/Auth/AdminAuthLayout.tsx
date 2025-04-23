@@ -1,3 +1,4 @@
+import { assets } from "@/assets/assets.ts";
 import { RootState } from "@/redux/store";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { useEffect } from "react";
@@ -28,7 +29,7 @@ const AdminAuthLayout = () => {
             <span className="hidden md:flex">Back</span>
           </div>
           <div className="text-3xl flex items-center justify-center gap-2 font-extrabold text-accent-foreground flex-grow text-center">
-            <ShoppingCart className="text-green-500" /> Electrohub
+           <img className="w-12 h-12" src={assets.logo1}/> Electrohub
           </div>
           <div className="w-6"></div>
         </div>

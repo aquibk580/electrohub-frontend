@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/collapsible";
 import axios from "@/lib/axios";
 import { Category } from "@/types/entityTypes";
+import { assets } from "@/assets/assets.ts";
 
 interface FooterProps {
   activeTab?: string;
@@ -119,7 +120,7 @@ export default function Footer({ setActiveTab }: FooterProps) {
           {/* Logo and Description Section */}
           <div className="lg:col-span-6">
             <div className="flex items-center gap-2 mb-3">
-              <ShoppingCart className="h-5 w-5 text-primary" />
+            <img className="w-12 h-12" src={assets.logo1}/>
               <span className="text-2xl font-bold text-foreground">
                 ElectroHub
               </span>

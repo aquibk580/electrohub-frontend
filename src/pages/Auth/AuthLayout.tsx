@@ -1,9 +1,10 @@
-import { ArrowLeft, ShoppingCart } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { assets } from "@/assets/assets.ts";
 const AuthLayout = () => {
   const navigate = useNavigate();
   const isAuthenticatedUser = useSelector(
@@ -29,7 +30,7 @@ const AuthLayout = () => {
           </div>
 
           <div className="text-3xl flex items-center justify-center gap-2 font-extrabold text-gray-900 dark:text-inherit flex-grow text-center">
-            <ShoppingCart className="text-green-500" /> Electrohub
+           <img className="w-12 h-12" src={assets.logo1}/> Electrohub
           </div>
           <div className="w-6"></div>
         </div>

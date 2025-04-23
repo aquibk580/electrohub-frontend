@@ -64,7 +64,7 @@ export function AppSidebar({ userRole, ...props }: AppSidebarProps) {
       },
       teams: [
         {
-          name: "ELECTROHUB",
+          name: "Electrohub",
           logo: GalleryVerticalEnd,
           plan: "Enterprise",
         },

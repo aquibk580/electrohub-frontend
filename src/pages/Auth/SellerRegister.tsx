@@ -129,7 +129,7 @@ export default function SellerRegister() {
                       : assets.upload
                   }
                   alt="Upload company logo or profile picture"
-                  className="w-32 h-32 object-cover border border-gray-300 rounded-full shadow-md"
+                  className="w-32 h-32 object-cover border border-gray-300 rounded-full shadow-md" 
                 />
                 {!profileImage && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 text-white text-sm font-medium rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
@@ -142,6 +142,7 @@ export default function SellerRegister() {
                 type="file"
                 accept="image/*"
                 className="hidden"
+                required
                 onChange={onFileChange}
               />
               <p className="text-sm text-accent-foreground/85">
