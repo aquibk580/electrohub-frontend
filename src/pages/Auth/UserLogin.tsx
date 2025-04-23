@@ -1,7 +1,17 @@
 import "animate.css";
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription, } from "@/components/ui/card";
-import { LoginFormSchema, type LoginFormSchemaType, } from "@/components/Auth/FormSchema";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import {
+  LoginFormSchema,
+  type LoginFormSchemaType,
+} from "@/components/Auth/FormSchema";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { GoogleButton } from "@/components/Auth/GoogleButton";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,7 +48,7 @@ export default function UserLogin() {
       );
       if (response.status === 200) {
         dispatch(setUser(response.data.user));
-        dispatch(clearSeller())
+        dispatch(clearSeller());
         navigate("/");
         toast.success("Signed in successfully", {
           position: "top-center",
@@ -77,14 +87,15 @@ export default function UserLogin() {
       const redirectUrl = `${import.meta.env.VITE_FRONTEND_URL}/`;
       const userType = "user";
 
-      window.location.href = `${import.meta.env.VITE_API_URL
-        }/api/auth/google?redirectUrl=${encodeURIComponent(
-          redirectUrl
-        )}&userType=${encodeURIComponent(userType)}`;
+      window.location.href = `${
+        import.meta.env.VITE_API_URL
+      }/api/auth/google?redirectUrl=${encodeURIComponent(
+        redirectUrl
+      )}&userType=${encodeURIComponent(userType)}`;
     } catch (error: any) {
       console.log(error);
     } finally {
-      dispatch(clearSeller())
+      dispatch(clearSeller());
     }
   };
 
@@ -145,6 +156,7 @@ export default function UserLogin() {
 
             <div className="flex items-center justify-start">
               <Button
+                type="button"
                 variant="link"
                 className="p-0 h-auto font-medium text-blue-950 dark:text-blue-500"
                 onClick={() => navigate("/user/auth/forgot-password")}

@@ -137,6 +137,7 @@ const Signin = () => {
 
             <div className="flex items-center justify-start">
               <Button
+                type="button"
                 variant="link"
                 className="p-0 h-auto font-medium text-blue-800"
                 onClick={() => navigate("/admin/auth/forgot-password")}
