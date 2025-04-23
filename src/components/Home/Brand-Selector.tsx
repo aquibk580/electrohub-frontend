@@ -35,10 +35,10 @@ const SellerCard = ({
       className="
         group relative
         flex items-center justify-center gap-4
-        rounded-xl p-5
+        rounded-xl p-1.5 sm:p-5
         sm:bg-white sm:dark:bg-gradient-to-r from-gray-900 via-gray-950 to-black
         sm:border border-gray-300 dark:border-gray-700
-        shadow-md  hover:shadow-lg
+        sm:shadow-md  sm:hover:shadow-lg
         transition-all duration-300 ease-in-out hover:scale-[1.01]
         cursor-pointer
         overflow-hidden  hover:border-primary dark:hover:border-slate-200 

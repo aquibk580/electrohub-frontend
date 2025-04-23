@@ -210,9 +210,9 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
   };
 
   return (
-    <div className="w-full mx-auto  mt-5 rounded-xl">
-      <div className="flex flex-col">
-        <div className="flex items-center justify-between mb-6">
+    <div className="w-full  mx-auto  mt-5 rounded-xl">
+      <div className="flex  flex-col">
+        <div className="flex flex-col w-full gap-1 justify-between  mb-6">
           <div>
             <h2 className="text-2xl md:text-3xl font-bold  flex items-center">
               <Zap className="mr-2 h-6 w-6 text-yellow-500" />
@@ -224,14 +224,14 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
           </div>
 
           {/* Mobile filter dropdown */}
-          <div className="md:hidden mb-4 relative w-44">
+          <div className="md:hidden mb-4 w-full relative sm:w-44">
             <Button
               variant="outline"
               className="w-full justify-between rounded-lg"
               onClick={toggleFilterDropdown}
             >
               <div className="flex items-center">
-                <Filter className="h-4 w-4 mr-2" />
+                <Filter className="h-4 w-4 mr-5" />
                 <span>{getActiveFilterLabel()}</span>
               </div>
               <ChevronDown
@@ -243,11 +243,11 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
             </Button>
 
             {isFilterDropdownOpen && (
-              <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg  w-44">
+              <div className="absolute z-20 text-sm top-full mt-1 bg-background border border-border rounded-lg shadow-lg  w-full md:w-44">
                 <div className="p-2 flex flex-col space-y-1">
                   <button
                     className={cn(
-                      "text-left px-3 py-2 rounded-md flex items-center",
+                      "text-sm px-3 py-2 rounded-md flex items-center",
                       activeDiscount === "all"
                         ? "bg-primary text-primary-foreground"
                         : "hover:bg-muted"
@@ -260,7 +260,7 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
                   {hasHotDeals && (
                     <button
                       className={cn(
-                        "text-left px-3 py-2 rounded-md flex items-center text-[1px]",
+                        "text-left px-3 py-2 text-sm rounded-md flex items-center text-[1px]",
                         activeDiscount === "hot"
                           ? "bg-red-500 text-white"
                           : "hover:bg-muted"
@@ -274,7 +274,7 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
 
                   <button
                     className={cn(
-                      "text-left px-3 py-2 rounded-md flex items-center",
+                      " text-left text-sm px-3 py-2 rounded-md flex items-center",
                       activeDiscount === "high"
                         ? "bg-primary text-primary-foreground"
                         : "hover:bg-muted"
@@ -287,7 +287,7 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
 
                   <button
                     className={cn(
-                      "text-left px-3 py-2 rounded-md flex items-center",
+                      "text-left text-sm px-3 py-2 rounded-md flex items-center",
                       activeDiscount === "medium"
                         ? "bg-primary text-primary-foreground"
                         : "hover:bg-muted"
@@ -300,7 +300,7 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
 
                   <button
                     className={cn(
-                      "text-left px-3 py-2 rounded-md flex items-center",
+                      "text-left text-sm px-3 py-2 rounded-md flex items-center",
                       activeDiscount === "low"
                         ? "bg-primary text-primary-foreground"
                         : "hover:bg-muted"
@@ -401,7 +401,7 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
                 <div
                   key={product.id}
                   className={cn(
-                    "relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shrink-0 snap-start mt-6",
+                    "relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shrink-0 snap-start md:mt-6",
                     "w-[220px] sm:w-[280px] md:w-[260px] lg:w-[250px]",
                     hoveredCard === product.id
                       ? "shadow-xl scale-105"

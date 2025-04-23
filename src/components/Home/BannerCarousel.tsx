@@ -86,7 +86,7 @@ export default function BannerCarousel() {
   }
 
   return (
-    <div className="relative  w-full  overflow-hidden rounded-xl shadow-xl h-40 sm:h-60 md:h-80 mt-20 md:mt-5  lg:mt-[1svh] lg:h-[83svh] ">
+    <div className="relative  w-full  overflow-hidden rounded-xl shadow-xl h-40 sm:h-60 md:h-80 mt-[70px] md:mt-5  lg:mt-[1svh] lg:h-[83svh] ">
       <div
         className="relative w-full h-full cursor-pointer group"
         onClick={() => navigate(bannerCarousels[index].href)}
