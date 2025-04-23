@@ -40,8 +40,6 @@ type ExtendedUser = User & {
   avgOrderValue: number;
 };
 
-
-
 const BuyerDetails = () => {
   const { id } = useParams();
   const [user, setUser] = useState<ExtendedUser | null>(null);
@@ -94,13 +92,7 @@ const BuyerDetails = () => {
   };
 
   if (loading) {
-    return (
-      // <div className="flex flex-col justify-center items-center h-screen">
-      //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-      //   <p className="text-muted-foreground">Loading User Details...</p>
-      // </div>
-      <BuyerDetailsSkeleton/>
-    );
+    return <BuyerDetailsSkeleton />;
   }
   console.log(user);
 
@@ -224,7 +216,7 @@ const BuyerDetails = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <Calendar className="h-5 w-5 text-primary" />
-                  <span>Gender: {user?.gender}</span>
+                  <span>Gender: {user?.gender || "Unknwon"}</span>
                 </div>
               </div>
             </CardContent>
@@ -237,53 +229,95 @@ const BuyerDetails = () => {
               <CardTitle className="text-xl">Purchase History</CardTitle>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow className="border-b-accent-foreground">
-                    <TableHead className="text-center text-accent-foreground">Order ID</TableHead>
-                    <TableHead className="text-center text-accent-foreground">Date</TableHead>
-                    <TableHead className="text-center text-accent-foreground">Items</TableHead>
-                    <TableHead className="text-center text-accent-foreground">Total</TableHead>
-                    <TableHead className="text-center text-accent-foreground">Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {orderItems?.map((orderItem) => (
-                    <TableRow className="border-b-accent-foreground/35 hover:bg-primary/10" key={orderItem.id}>
-                      <TableCell className="text-center text-accent-foreground">{orderItem.id}</TableCell>
-                      <TableCell className="text-center text-accent-foreground">{formatDate(orderItem.createdAt)}</TableCell>
-                      <TableCell className="text-center text-accent-foreground">
-                        {orderItem.quantity}x{" "}
-                        {orderItem?.product?.name.substring(0, 60) ||
-                          "Unknown Product"}
-                      </TableCell>
-                      <TableCell className="text-center text-accent-foreground">
-                        ₹
-                        {formatPrice(
-                          orderItem.product.price -
-                          (orderItem.product.offerPercentage / 100) *
-                          orderItem.product.price
-                        )}
-                      </TableCell>
-                      <TableCell className="text-center text-accent-foreground">
-                        <Badge
-                          variant="outline"
-                          className={`mt-1 
-    ${orderItem.status === "Delivered" ? "bg-green-100 text-green-700 border-green-500" : ""} 
-    ${orderItem.status === "OrderConfirmed" ? "bg-blue-100 text-blue-700 border-blue-500" : ""} 
-    ${orderItem.status === "Shipped" ? "bg-yellow-100 text-yellow-700 border-yellow-500" : ""} 
-    ${orderItem.status === "Cancelled" ? "bg-red-100 text-red-700 border-red-500" : ""} 
-    ${orderItem.status === "Returned" ? "bg-purple-100 text-purple-700 border-purple-500" : ""} 
-  `}
-                        >
-                          {orderItem.status}
-                        </Badge>
-
-                      </TableCell>
+              {orderItems.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-b-accent-foreground">
+                      <TableHead className="text-center text-accent-foreground">
+                        Order ID
+                      </TableHead>
+                      <TableHead className="text-center text-accent-foreground">
+                        Date
+                      </TableHead>
+                      <TableHead className="text-center text-accent-foreground">
+                        Items
+                      </TableHead>
+                      <TableHead className="text-center text-accent-foreground">
+                        Total
+                      </TableHead>
+                      <TableHead className="text-center text-accent-foreground">
+                        Status
+                      </TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {orderItems?.map((orderItem) => (
+                      <TableRow
+                        className="border-b-accent-foreground/35 hover:bg-primary/10"
+                        key={orderItem.id}
+                      >
+                        <TableCell className="text-center text-accent-foreground">
+                          {orderItem.id}
+                        </TableCell>
+                        <TableCell className="text-center text-accent-foreground">
+                          {formatDate(orderItem.createdAt)}
+                        </TableCell>
+                        <TableCell className="text-center text-accent-foreground">
+                          {orderItem.quantity}x{" "}
+                          {orderItem?.product?.name.substring(0, 60) ||
+                            "Unknown Product"}
+                        </TableCell>
+                        <TableCell className="text-center text-accent-foreground">
+                          ₹
+                          {formatPrice(
+                            orderItem.product.price -
+                              (orderItem.product.offerPercentage / 100) *
+                                orderItem.product.price
+                          )}
+                        </TableCell>
+                        <TableCell className="text-center text-accent-foreground">
+                          <Badge
+                            variant="outline"
+                            className={`mt-1 
+   ${
+     orderItem.status === "Delivered"
+       ? "bg-green-100 text-green-700 border-green-500"
+       : ""
+   } 
+   ${
+     orderItem.status === "OrderConfirmed"
+       ? "bg-blue-100 text-blue-700 border-blue-500"
+       : ""
+   } 
+   ${
+     orderItem.status === "Shipped"
+       ? "bg-yellow-100 text-yellow-700 border-yellow-500"
+       : ""
+   } 
+   ${
+     orderItem.status === "Cancelled"
+       ? "bg-red-100 text-red-700 border-red-500"
+       : ""
+   } 
+   ${
+     orderItem.status === "Returned"
+       ? "bg-purple-100 text-purple-700 border-purple-500"
+       : ""
+   } 
+ `}
+                          >
+                            {orderItem.status}
+                          </Badge>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              ) : (
+                <div className="bg-primary/5 rounded-xl border border-primary/75 p-6 text-muted-foreground italic">
+                  Orders not available
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -294,50 +328,60 @@ const BuyerDetails = () => {
               <CardTitle className="text-xl">Product Reviews</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {user?.reviews?.map((review) => (
-                  <Card onClick={() => navigate(`/admin/productsmanage/${review.product.id}`)} className="hover:border-primary/55 cursor-pointer border-transparent shadow-none bg-primary/10 " key={review.productId}>
-                    <CardContent className="px-4 py-4 space-y-1.5">
-
-                      <div className="flex justify-between sapce-y-3 items-start">
-                        <div>
-
-                          <h4 className="font-semibold text-accent-foreground hover:text-primary">
-                            {review.product.name}
-                          </h4>
-                        </div>
-
-                        <div className="flex">
-                          <div className="flex items-center space-x-1">
-                            {Array.from({ length: 5 }).map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`h-4 w-4 ${i < review.rating
-                                  ? "fill-primary text-primary"
-                                  : "text-white fill-current"
-                                  }`}
-                              />
-                            ))}
+              {user!.reviews!.length > 0 ? (
+                <div className="space-y-4">
+                  {user?.reviews?.map((review) => (
+                    <Card
+                      onClick={() =>
+                        navigate(`/admin/productsmanage/${review.product.id}`)
+                      }
+                      className="hover:border-primary/55 cursor-pointer border-transparent shadow-none bg-primary/10 "
+                      key={review.productId}
+                    >
+                      <CardContent className="px-4 py-4 space-y-1.5">
+                        <div className="flex justify-between sapce-y-3 items-start">
+                          <div>
+                            <h4 className="font-semibold text-accent-foreground hover:text-primary">
+                              {review.product.name}
+                            </h4>
                           </div>
-                          <span className="ml-2 text-accent-foreground text-xs">{review.rating.toFixed(1)}/5</span>
+
+                          <div className="flex">
+                            <div className="flex items-center space-x-1">
+                              {Array.from({ length: 5 }).map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`h-4 w-4 ${
+                                    i < review.rating
+                                      ? "fill-primary text-primary"
+                                      : "text-white fill-current"
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                            <span className="ml-2 text-accent-foreground text-xs">
+                              {review.rating.toFixed(1)}/5
+                            </span>
+                          </div>
                         </div>
-
-                      </div>
-                      <p className="text-sm text-accenr-foreground/95">
-                        {review.content}
-                      </p>
-                      <div className="text-xs space-x-2 mt-3 flex items-center text-accent-foreground/90">
-                        <Calendar className="w-4 h-4" />
-                        <span className=" ">
-
-                          {formatDate(review.createdAt)}
-                        </span>
-                      </div>
-
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                        <p className="text-sm text-accenr-foreground/95">
+                          {review.content}
+                        </p>
+                        <div className="text-xs space-x-2 mt-3 flex items-center text-accent-foreground/90">
+                          <Calendar className="w-4 h-4" />
+                          <span className=" ">
+                            {formatDate(review.createdAt)}
+                          </span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="bg-primary/5 rounded-xl border border-primary/75 p-6 text-muted-foreground italic">
+                  Products not available
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -349,29 +393,51 @@ const BuyerDetails = () => {
               <CardTitle className="text-xl">Recent Transactions</CardTitle>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow className="border-b-accent-foreground">
-                    <TableHead className="text-center text-accent-foreground ">Transaction ID</TableHead>
-                    <TableHead className="text-center text-accent-foreground ">Date</TableHead>
-                    <TableHead className="text-center text-accent-foreground ">Amount</TableHead>
-                    <TableHead className="text-center text-accent-foreground ">Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {user?.orders?.map((order) => (
-                    <TableRow className="border-accent-foreground/45 hover:bg-primary/10" key={order.id}>
-                      <TableCell className="text-center">{order.id}</TableCell>
-                      <TableCell className="text-center">{formatDate(order.createdAt)}</TableCell>
-                      <TableCell className="text-center">₹{formatPrice(order.total)}</TableCell>
-                      <TableCell className="text-center">
-                        <Badge className="bg-primary/70">Completed</Badge>
-
-                      </TableCell>
+              {user!.orders!.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-b-accent-foreground">
+                      <TableHead className="text-center text-accent-foreground ">
+                        Transaction ID
+                      </TableHead>
+                      <TableHead className="text-center text-accent-foreground ">
+                        Date
+                      </TableHead>
+                      <TableHead className="text-center text-accent-foreground ">
+                        Amount
+                      </TableHead>
+                      <TableHead className="text-center text-accent-foreground ">
+                        Status
+                      </TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {user?.orders?.map((order) => (
+                      <TableRow
+                        className="border-accent-foreground/45 hover:bg-primary/10"
+                        key={order.id}
+                      >
+                        <TableCell className="text-center">
+                          {order.id}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {formatDate(order.createdAt)}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          ₹{formatPrice(order.total)}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <Badge className="bg-primary/70">Completed</Badge>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              ) : (
+                <div className="bg-primary/5 rounded-xl border border-primary/75 p-6 text-muted-foreground italic">
+                  Trnasctions not available
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
