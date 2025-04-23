@@ -100,8 +100,8 @@ export default function ProductList() {
       result = result.filter((product) => product.status === selectedTab);
     }
 
-    return result;
-  }, [searchTerm, selectedTab]);
+    return result;  
+  }, [searchTerm, selectedTab, products]);
 
   const totalPages = Math.ceil(filteredProducts?.length / productsPerPage);
   const paginatedProducts = (filteredProducts || []).slice(

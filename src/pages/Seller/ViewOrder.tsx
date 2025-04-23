@@ -217,58 +217,54 @@ const MainViewOrder = () => {
         {/* Product details card - takes 2 columns on large screens */}
         <div className="lg:flex grid-cols-1 space-y-4 lg:space-y-0  md:grid-cols-2 md:gap-4 ">
           {orderItem.product ? (
-            <div className=" lg:col-span-2 md:col-span-1 flex items-center bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-black to-primary/10 rounded-xl border border-primary/75 overflow-hidden">
+            <div className="lg:col-span-2 md:col-span-1 flex items-center bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-black to-primary/10 rounded-xl border border-primary/75 overflow-hidden">
               <div className="p-6">
                 <div className="flex flex-col md:flex-row items-center lg:items-start gap-6">
-                  <div className="lg:col-span-2 md:col-span-1 flex items-center">
-                    {/* Product image */}
-                    <Link
-                      to={`product/${orderItem.id}`}
-                      className="w-4/5 md:w-3/5 flex items-center  flex-row"
+                  {/* Product image */}
+                  <Link
+                    to={`product/${orderItem.id}`}
+                    className="w-4/5 md:w-3/5 flex items-center  flex-row"
+                  >
+                    <img
+                      src={orderItem.product.images[0].url}
+                      alt={orderItem.product.name}
+                      className="w-full h-auto object-cover rounded-lg"
+                    />
+                  </Link>
+
+                  {/* Product info */}
+                  <div className="w-full place-self-center space-y-2 md:space-y-4">
+                    <h3 className="text-2xl font-semibold text-foreground">
+                      {orderItem.product.name}
+                    </h3>
+                    <p
+                      onClick={handleShowDescription}
+                      className={`text-muted-foreground line-clamp-1 sm:line-clamp-2 md:line-clamp-3`}
                     >
-                      <img
-                        src={orderItem.product.images[0].url}
-                        alt={orderItem.product.name}
-                        className="w-full h-auto object-cover rounded-lg"
-                      />
-                    </Link>
+                      {orderItem.product.description}
+                    </p>
 
-                    {/* Product info */}
-                    <div className="w-full  space-y-2 md:space-y-4">
-                      <h3 className="text-2xl font-semibold text-foreground">
-                        {orderItem.product.name}
-                      </h3>
-                      <p
-                        onClick={handleShowDescription}
-                        className={`text-muted-foreground ${
-                          showDesc ? "" : "description"
-                        }`}
-                      >
-                        {orderItem.product.description}
-                      </p>
-
-                      <div className="flex justify-between px-1 ">
-                        <div className="flex items-center">
-                          <span className="text-accent-foreground/80 mr-1">
-                            Date:
-                          </span>
-                          <span className="font-medium whitespace-nowrap">
-                            {formatDate(orderItem.createdAt)}
-                          </span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="text-accent-foreground/80 mr-1">
-                            Price:
-                          </span>
-                          <span className="font-medium">
-                            ₹{" "}
-                            {formatPrice(
-                              orderItem.product.price -
-                                (orderItem.product.price / 100) *
-                                  orderItem.product.offerPercentage
-                            )}
-                          </span>
-                        </div>
+                    <div className="flex justify-between px-1 ">
+                      <div className="flex items-center">
+                        <span className="text-accent-foreground/80 mr-1">
+                          Date:
+                        </span>
+                        <span className="font-medium whitespace-nowrap">
+                          {formatDate(orderItem.createdAt)}
+                        </span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="text-accent-foreground/80 mr-1">
+                          Price:
+                        </span>
+                        <span className="font-medium">
+                          ₹{" "}
+                          {formatPrice(
+                            orderItem.product.price -
+                              (orderItem.product.price / 100) *
+                                orderItem.product.offerPercentage
+                          )}
+                        </span>
                       </div>
                     </div>
                   </div>
