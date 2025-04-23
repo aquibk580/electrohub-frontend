@@ -26,6 +26,7 @@ import type { AppDispatch, RootState } from "@/redux/store";
 import axios from "@/lib/axios";
 import { setSeller } from "@/redux/slices/seller";
 import { sellerSchema, type SellerFormData } from "./FormSchema";
+import { toast } from "react-toastify";
 
 export function SellerEditDialog() {
   const dispatch = useDispatch<AppDispatch>();
@@ -40,6 +41,7 @@ export function SellerEditDialog() {
       email: seller?.email || "",
       phone: seller?.phone || "",
       address: seller?.address || "",
+      answer: ".....",
     },
   });
 
@@ -50,6 +52,7 @@ export function SellerEditDialog() {
         email: seller?.email || "",
         phone: seller?.phone || "",
         address: seller?.address || "",
+        answer: ".....",
       });
     }
   }, [open, seller, form]);
@@ -69,6 +72,10 @@ export function SellerEditDialog() {
             ...response.data.seller,
           })
         );
+        toast.success("Profile updated successfully", {
+          position: "top-center",
+          theme: "dark",
+        });
         setOpen(false);
       }
     } catch (error) {
@@ -162,6 +169,24 @@ export function SellerEditDialog() {
                   <FormLabel>Company Address</FormLabel>
                   <FormControl>
                     <Textarea {...field} placeholder="Enter company address" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="answer"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Security question</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="password"
+                      placeholder="Enter your favourite word"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

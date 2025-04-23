@@ -136,7 +136,7 @@ const Signin = () => {
 
             <div className="flex items-center justify-start">
               <Link
-                to="/user/auth/forgot-password"
+                to="/admin/auth/forgot-password"
                 className="text-sm font-medium text-blue-950 dark:text-blue-500"
               >
                 Forgot password?

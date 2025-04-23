@@ -1,6 +1,28 @@
-import { Pencil, Mail, Phone, Building2, EllipsisVertical, MoveUp, IndianRupee, RotateCw, PackageMinus, Loader2, RefreshCcw, BadgeCheck } from "lucide-react";
+import {
+  Pencil,
+  Mail,
+  Phone,
+  Building2,
+  EllipsisVertical,
+  MoveUp,
+  IndianRupee,
+  RotateCw,
+  PackageMinus,
+  Loader2,
+  RefreshCcw,
+  BadgeCheck,
+} from "lucide-react";
 import { assets } from "@/assets/assets";
-import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -46,6 +68,7 @@ export default function Profile() {
         };
         sessionStorage.setItem("profileData", JSON.stringify(data));
         setProfileData(data);
+       
       }
     } catch (error: any) {
       setLoading(true);
@@ -86,6 +109,7 @@ export default function Profile() {
         );
 
         if (response.status === 200) {
+         
           dispatch(
             setSeller({
               ...seller!,
@@ -175,9 +199,13 @@ export default function Profile() {
   return (
     <div className="animate__animated animate__fadeIn">
       <Helmet>
-        <title>Profile - Seller</title> 
+        <title>Profile - Seller</title>
         <meta name="description" content="Electrohub Seller Profile Page" />
-        <meta name="og:url" property="og:url" content={`${import.meta.env.VITE_APP_URL}/seller/profile`} />
+        <meta
+          name="og:url"
+          property="og:url"
+          content={`${import.meta.env.VITE_APP_URL}/seller/profile`}
+        />
       </Helmet>
 
       {/* Banner section */}
@@ -212,9 +240,9 @@ export default function Profile() {
                 <Skeleton className="w-full h-full rounded-full " />
               ) : (
                 <Avatar className="w-full h-full ">
-                  <AvatarImage  
-                    src={profilePic ?? assets.account_icon} 
-                    alt="Profile_Picture" 
+                  <AvatarImage
+                    src={profilePic ?? assets.account_icon}
+                    alt="Profile_Picture"
                     className="object-cover "
                   />
                   <AvatarFallback>
@@ -332,21 +360,21 @@ export default function Profile() {
 
           <AlertDialog>
             <div className="flex  justify-center md:justify-start">
-            <AlertDialogTrigger  asChild>
-              <Button 
-                className="w-[100%] md:w-80 place-content-center bg-red-600 hover:bg-red-700 rounded-xl dark:text-white md:px-24 py-5"
-                disabled={isDeleting}
-              >
-                {isDeleting ? (
-                  <div className="flex items-center gap-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Deleting...
-                  </div>
-                ) : (
-                  "Delete Account Permanent"
-                )}
-              </Button>
-            </AlertDialogTrigger>
+              <AlertDialogTrigger asChild>
+                <Button
+                  className="w-[100%] md:w-80 place-content-center bg-red-600 hover:bg-red-700 rounded-xl dark:text-white md:px-24 py-5"
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? (
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Deleting...
+                    </div>
+                  ) : (
+                    "Delete Account Permanent"
+                  )}
+                </Button>
+              </AlertDialogTrigger>
             </div>
             <AlertDialogContent className="rounded-xl">
               <AlertDialogHeader>
@@ -358,7 +386,9 @@ export default function Profile() {
               </AlertDialogHeader>
 
               <AlertDialogFooter>
-                <AlertDialogCancel className="rounded-xl border-accent-foreground/50 hover:bg-gray-700/30">Cancel</AlertDialogCancel>
+                <AlertDialogCancel className="rounded-xl border-accent-foreground/50 hover:bg-gray-700/30">
+                  Cancel
+                </AlertDialogCancel>
 
                 <Button
                   variant="destructive"

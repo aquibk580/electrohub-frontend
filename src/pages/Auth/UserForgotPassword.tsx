@@ -42,7 +42,7 @@ const UserForgotPassword = () => {
           theme: "light",
         });
       }
-
+    } finally {
       setIsSubmitting(false);
     }
   };

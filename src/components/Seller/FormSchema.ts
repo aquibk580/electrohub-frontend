@@ -5,6 +5,7 @@ export const sellerSchema = z.object({
   email: z.string().email("Invalid email address"),
   phone: z.string().min(1, "Phone number is required"),
   address: z.string().min(1, "Company address is required"),
+  answer:z.string().min(1, "Answer is required")
 });
 
 export type SellerFormData = z.infer<typeof sellerSchema>;

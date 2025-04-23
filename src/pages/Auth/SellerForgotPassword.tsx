@@ -15,7 +15,7 @@ const SellerForgotPassword = () => {
     setIsSubmitting(true);
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/user/auth/forgot-password`,
+        `${import.meta.env.VITE_API_URL}/api/seller/auth/forgot-password`,
         data
       );
       if (response.status === 200) {
@@ -42,6 +42,8 @@ const SellerForgotPassword = () => {
           theme: "light",
         });
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (
