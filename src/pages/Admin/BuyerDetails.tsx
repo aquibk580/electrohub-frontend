@@ -267,14 +267,18 @@ const BuyerDetails = () => {
                           {orderItem?.product?.name.substring(0, 60) ||
                             "Unknown Product"}
                         </TableCell>
-                        <TableCell className="text-center text-accent-foreground">
-                          ₹
-                          {formatPrice(
-                            orderItem.product.price -
-                              (orderItem.product.offerPercentage / 100) *
-                                orderItem.product.price
-                          )}
-                        </TableCell>
+                        {orderItem.product ? (
+                          <TableCell className="text-center text-accent-foreground">
+                            ₹
+                            {formatPrice(
+                              orderItem.product.price -
+                                (orderItem.product.offerPercentage / 100) *
+                                  orderItem.product.price
+                            )}
+                          </TableCell>
+                        ) : (
+                          "N/A"
+                        )}
                         <TableCell className="text-center text-accent-foreground">
                           <Badge
                             variant="outline"
