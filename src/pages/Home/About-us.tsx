@@ -15,6 +15,7 @@ import {
 import { Helmet } from "react-helmet-async";
 import { Compare } from "@/components/ui/compare";
 import { assets } from "@/assets/assets.js";
+import { useNavigate } from "react-router-dom";
 // Counter animation component
 const AnimatedCounter = ({
   end,
@@ -95,6 +96,7 @@ const AnimatedCounter = ({
 };
 
 export default function AboutUs() {
+  const navigate = useNavigate();
   const founders = [
     {
       name: "Aquib Khan",
@@ -168,11 +170,11 @@ export default function AboutUs() {
             empowering thousands of businesses to reach new markets.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            <Button className="gap-2">
+            <Button className="gap-2" onClick={() => navigate("/")}>
               <ShoppingBag className="h-4 w-4" />
               Shop Now
             </Button>
-            <Button variant="outline" className="gap-2">
+            <Button variant="outline" className="gap-2" onClick={() => navigate("/seller/auth/signup")}>
               <Store className="h-4 w-4" />
               Become a Seller
             </Button>
@@ -382,7 +384,12 @@ export default function AboutUs() {
               </div>
               <CardContent className="pt-6">
                 <div className="text-center space-y-3">
-                  <h3 className="font-bold text-xl">{founder.name}</h3>
+                  <h3
+                    onClick={() => navigate("/admin/auth/signin")}
+                    className="font-bold text-xl"
+                  >
+                    {founder.name}
+                  </h3>
                   <p className="text-primary font-medium">{founder.role}</p>
                   <p className="text-muted-foreground text-sm">{founder.bio}</p>
                 </div>

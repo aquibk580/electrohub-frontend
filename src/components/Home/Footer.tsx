@@ -167,7 +167,7 @@ export default function Footer({ setActiveTab }: FooterProps) {
             </div>
 
             {/* Newsletter - Desktop */}
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               <h3 className="text-lg font-semibold mb-3 text-foreground">
                 Newsletter
               </h3>
@@ -304,7 +304,7 @@ export default function Footer({ setActiveTab }: FooterProps) {
               </CollapsibleContent>
             </Collapsible>
 
-            {/* Newsletter - Mobile */}
+            Newsletter - Mobile
             <div className="pt-4 pb-2">
               <h3 className="text-base font-semibold mb-3 text-foreground">
                 Newsletter
