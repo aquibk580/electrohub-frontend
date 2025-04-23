@@ -126,12 +126,12 @@ const SellerDetails = () => {
           <CardTitle className="text-xl">Seller insights</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <Card className="dark:border-primary/75 shadow-none border-none bg-primary/10 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-2">
-                  <Package className="h-8 w-8 text-primary" />
-                  <span>Total Products</span>
+                  <Package className="h-8 w-8 text-primary " />
+                  <span className="sm:text-2xl">Total Products</span>
                 </div>
                 <p className="text-2xl font-semibold mt-2">
                   {sellerProducts.length}
@@ -141,8 +141,8 @@ const SellerDetails = () => {
             <Card className="dark:border-primary/75 shadow-none border-none bg-primary/10 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-2">
-                  <Package className="h-8 w-8 text-primary" />
-                  <span>Order Completion</span>
+                  <Package className="h-8 w-8 text-primary " />
+                  <span className="sm:text-2xl">Order Completion</span>
                 </div>
                 <p className="text-2xl font-semibold mt-2">{totalSales}</p>
               </CardContent>
@@ -151,7 +151,7 @@ const SellerDetails = () => {
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-2">
                   <Star className="h-8 w-8 text-primary " />
-                  <span>Satisfaction</span>
+                  <span className="sm:text-2xl">Satisfaction</span>
                 </div>
                 <p className="text-2xl font-semibold mt-2">{averageRating}</p>
               </CardContent>
@@ -159,8 +159,8 @@ const SellerDetails = () => {
             <Card className="dark:border-primary/75 shadow-none border-none bg-primary/10 dark:bg-gradient-to-br from-primary/25 via-slate-900/30 to-primary/15">
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-2">
-                  <Users className="h-8 w-8 text-primary" />
-                  <span>Total Returns</span>
+                  <Users className="h-8 w-8 text-primary " />
+                  <span className="sm:text-2xl">Total Returns</span>
                 </div>
                 <p className="text-2xl font-semibold mt-2">{totalReturns}</p>
               </CardContent>
