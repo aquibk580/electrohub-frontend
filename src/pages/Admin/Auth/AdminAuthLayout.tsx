@@ -25,7 +25,7 @@ const AdminAuthLayout = () => {
             className="flex absolute items-center justify-center space-x-1.5 font-semibold text-md hover:bg-primary/15 cursor-pointer px-4 py-1.5 rounded-full"
           >
             <ArrowLeft className="h-5 w-5 cursor-pointer text-black dark:text-white" />
-            <span>Back</span>
+            <span className="hidden md:flex">Back</span>
           </div>
           <div className="text-3xl flex items-center justify-center gap-2 font-extrabold text-accent-foreground flex-grow text-center">
             <ShoppingCart className="text-green-500" /> Electrohub
