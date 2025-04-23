@@ -17,7 +17,7 @@ import { GoogleButton } from "@/components/Auth/GoogleButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { clearSeller } from "@/redux/slices/seller";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setUser } from "@/redux/slices/user";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -155,14 +155,12 @@ export default function UserLogin() {
             </div>
 
             <div className="flex items-center justify-start">
-              <Button
-                type="button"
-                variant="link"
-                className="p-0 h-auto font-medium text-blue-950 dark:text-blue-500"
-                onClick={() => navigate("/user/auth/forgot-password")}
+              <Link
+                to="/user/auth/forgot-password"
+                className="text-sm font-medium text-blue-950 dark:text-blue-500"
               >
                 Forgot password?
-              </Button>
+              </Link>
             </div>
 
             <Button

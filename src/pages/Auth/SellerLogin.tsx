@@ -1,14 +1,24 @@
 import "animate.css";
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription, } from "@/components/ui/card";
-import { LoginFormSchema, type LoginFormSchemaType, } from "@/components/Auth/FormSchema";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import {
+  LoginFormSchema,
+  type LoginFormSchemaType,
+} from "@/components/Auth/FormSchema";
 import { setSeller, setSellerIsAuthenticated } from "@/redux/slices/seller";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { GoogleButton } from "@/components/Auth/GoogleButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { clearUser } from "@/redux/slices/user";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { AppDispatch } from "@/redux/store";
@@ -144,14 +154,12 @@ export default function SellerLogin() {
             </div>
 
             <div className="flex items-center justify-start">
-              <Button
-                type="button"
-                variant="link"
-                className="p-0 h-auto font-medium text-blue-950 dark:text-blue-500"
-                onClick={() => navigate("/seller/auth/forgot-password")}
+              <Link
+                to="/user/auth/forgot-password"
+                className="text-sm font-medium text-blue-950 dark:text-blue-500"
               >
                 Forgot password?
-              </Button>
+              </Link>
             </div>
 
             <Button

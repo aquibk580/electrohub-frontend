@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
   LoginFormSchema,
@@ -26,7 +26,6 @@ import { setAdmin } from "@/redux/slices/admin";
 const Signin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  
 
   const {
     register,
@@ -136,14 +135,12 @@ const Signin = () => {
             </div>
 
             <div className="flex items-center justify-start">
-              <Button
-                type="button"
-                variant="link"
-                className="p-0 h-auto font-medium text-blue-800"
-                onClick={() => navigate("/admin/auth/forgot-password")}
+              <Link
+                to="/user/auth/forgot-password"
+                className="text-sm font-medium text-blue-950 dark:text-blue-500"
               >
                 Forgot password?
-              </Button>
+              </Link>
             </div>
 
             <Button
