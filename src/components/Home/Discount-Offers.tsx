@@ -8,7 +8,7 @@ import {
   Gift,
   Tag,
   ChevronDown,
-  Filter
+  Filter,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -209,10 +209,6 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
     }
   };
 
-  if (filteredProducts.length === 0) {
-    return null;
-  }
-
   return (
     <div className="w-full mx-auto  mt-5 rounded-xl">
       <div className="flex flex-col">
@@ -226,84 +222,98 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
               Electrifying savings you can't resist
             </p>
           </div>
-        
 
-        {/* Mobile filter dropdown */}
-        <div className="md:hidden mb-4 relative w-44">
-          <Button 
-            variant="outline" 
-            className="w-full justify-between rounded-lg" 
-            onClick={toggleFilterDropdown}
-          >
-            <div className="flex items-center">
-              <Filter className="h-4 w-4 mr-2" />
-              <span>{getActiveFilterLabel()}</span>
-            </div>
-            <ChevronDown className={cn("h-4 w-4 transition-transform", isFilterDropdownOpen ? "transform rotate-180" : "")} />
-          </Button>
-          
-          {isFilterDropdownOpen && (
-            <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg  w-44">
-              <div className="p-2 flex flex-col space-y-1">
-                <button 
-                  className={cn(
-                    "text-left px-3 py-2 rounded-md flex items-center",
-                    activeDiscount === "all" ? "bg-primary text-primary-foreground" : "hover:bg-muted"
-                  )}
-                  onClick={() => setFilterAndCloseDropdown("all")}
-                >
-                  All Deals
-                </button>
-                
-                {hasHotDeals && (
-                  <button 
-                    className={cn(
-                      "text-left px-3 py-2 rounded-md flex items-center text-[1px]",
-                      activeDiscount === "hot" ? "bg-red-500 text-white" : "hover:bg-muted"
-                    )}
-                    onClick={() => setFilterAndCloseDropdown("hot")}
-                  >
-                    <Flame className="mr-2 h-4 w-4" />
-                    Blazing Deals (60%+ Off)
-                  </button>
-                )}
-                
-                <button 
-                  className={cn(
-                    "text-left px-3 py-2 rounded-md flex items-center",
-                    activeDiscount === "high" ? "bg-primary text-primary-foreground" : "hover:bg-muted"
-                  )}
-                  onClick={() => setFilterAndCloseDropdown("high")}
-                >
-                  <Gift className="mr-2 h-4 w-4" />
-                  Epic Savings (30-59%)
-                </button>
-                
-                <button 
-                  className={cn(
-                    "text-left px-3 py-2 rounded-md flex items-center",
-                    activeDiscount === "medium" ? "bg-primary text-primary-foreground" : "hover:bg-muted"
-                  )}
-                  onClick={() => setFilterAndCloseDropdown("medium")}
-                >
-                  <Tag className="mr-2 h-4 w-4" />
-                  Flash Deals (15-29%)
-                </button>
-                
-                <button 
-                  className={cn(
-                    "text-left px-3 py-2 rounded-md flex items-center",
-                    activeDiscount === "low" ? "bg-primary text-primary-foreground" : "hover:bg-muted"
-                  )}
-                  onClick={() => setFilterAndCloseDropdown("low")}
-                >
-                  <Clock className="mr-2 h-4 w-4" />
-                  Today Only (Up to 15%)
-                </button>
+          {/* Mobile filter dropdown */}
+          <div className="md:hidden mb-4 relative w-44">
+            <Button
+              variant="outline"
+              className="w-full justify-between rounded-lg"
+              onClick={toggleFilterDropdown}
+            >
+              <div className="flex items-center">
+                <Filter className="h-4 w-4 mr-2" />
+                <span>{getActiveFilterLabel()}</span>
               </div>
-            </div>
-          )}
-        </div>
+              <ChevronDown
+                className={cn(
+                  "h-4 w-4 transition-transform",
+                  isFilterDropdownOpen ? "transform rotate-180" : ""
+                )}
+              />
+            </Button>
+
+            {isFilterDropdownOpen && (
+              <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg  w-44">
+                <div className="p-2 flex flex-col space-y-1">
+                  <button
+                    className={cn(
+                      "text-left px-3 py-2 rounded-md flex items-center",
+                      activeDiscount === "all"
+                        ? "bg-primary text-primary-foreground"
+                        : "hover:bg-muted"
+                    )}
+                    onClick={() => setFilterAndCloseDropdown("all")}
+                  >
+                    All Deals
+                  </button>
+
+                  {hasHotDeals && (
+                    <button
+                      className={cn(
+                        "text-left px-3 py-2 rounded-md flex items-center text-[1px]",
+                        activeDiscount === "hot"
+                          ? "bg-red-500 text-white"
+                          : "hover:bg-muted"
+                      )}
+                      onClick={() => setFilterAndCloseDropdown("hot")}
+                    >
+                      <Flame className="mr-2 h-4 w-4" />
+                      Blazing Deals (60%+ Off)
+                    </button>
+                  )}
+
+                  <button
+                    className={cn(
+                      "text-left px-3 py-2 rounded-md flex items-center",
+                      activeDiscount === "high"
+                        ? "bg-primary text-primary-foreground"
+                        : "hover:bg-muted"
+                    )}
+                    onClick={() => setFilterAndCloseDropdown("high")}
+                  >
+                    <Gift className="mr-2 h-4 w-4" />
+                    Epic Savings (30-59%)
+                  </button>
+
+                  <button
+                    className={cn(
+                      "text-left px-3 py-2 rounded-md flex items-center",
+                      activeDiscount === "medium"
+                        ? "bg-primary text-primary-foreground"
+                        : "hover:bg-muted"
+                    )}
+                    onClick={() => setFilterAndCloseDropdown("medium")}
+                  >
+                    <Tag className="mr-2 h-4 w-4" />
+                    Flash Deals (15-29%)
+                  </button>
+
+                  <button
+                    className={cn(
+                      "text-left px-3 py-2 rounded-md flex items-center",
+                      activeDiscount === "low"
+                        ? "bg-primary text-primary-foreground"
+                        : "hover:bg-muted"
+                    )}
+                    onClick={() => setFilterAndCloseDropdown("low")}
+                  >
+                    <Clock className="mr-2 h-4 w-4" />
+                    Today Only (Up to 15%)
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Desktop filter buttons - hidden on mobile */}
@@ -373,99 +383,105 @@ export default function ElectrohubOffers({ products }: ElectrohubOffersProps) {
         {/* Scrollable container */}
         <div
           ref={scrollContainerRef}
-          className="flex overflow-x-auto scrollbar-hide gap-4 pb-4 scroll-smooth snap-x px-2 smap-start snap-mandatory"
+          className="flex overflow-x-auto scrollbar-hide gap-4 pb-4 scroll-smooth snap-x px-2 snap-start snap-mandatory"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          {filteredProducts.map((product) => {
-            const discountedPrice =
-              product.price - product.price * (product.offerPercentage / 100);
-            const mainImageUrl =
-              product.images && product.images.length > 0
-                ? product.images[0].url
-                : "/api/placeholder/480/240";
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => {
+              const discountedPrice =
+                product.price - product.price * (product.offerPercentage / 100);
+              const mainImageUrl =
+                product.images && product.images.length > 0
+                  ? product.images[0].url
+                  : "/api/placeholder/480/240";
 
-            const isHotDeal = product.offerPercentage >= 60;
+              const isHotDeal = product.offerPercentage >= 60;
 
-            return (
-              <div
-                key={product.id}
-                className={cn(
-                  "relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shrink-0 snap-start mt-6",
-                  "w-[220px] sm:w-[280px] md:w-[260px] lg:w-[250px]",
-                  hoveredCard === product.id
-                    ? "shadow-xl scale-105"
-                    : "shadow-md",
-                  isHotDeal ? "ring-2 ring-red-500" : ""
-                )}
-                onMouseEnter={() => setHoveredCard(product.id)}
-                onMouseLeave={() => setHoveredCard(null)}
-                onClick={() => handleProductClick(product.id)}
-              >
-                <div className={cn("relative h-64 sm:h-72", product.bgColor)}>
-                  <img
-                    src={mainImageUrl}
-                    alt={product.name}
-                    className="w-full h-full object-contain p-4 "
-                  />
+              return (
+                <div
+                  key={product.id}
+                  className={cn(
+                    "relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shrink-0 snap-start mt-6",
+                    "w-[220px] sm:w-[280px] md:w-[260px] lg:w-[250px]",
+                    hoveredCard === product.id
+                      ? "shadow-xl scale-105"
+                      : "shadow-md",
+                    isHotDeal ? "ring-2 ring-red-500" : ""
+                  )}
+                  onMouseEnter={() => setHoveredCard(product.id)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                  onClick={() => handleProductClick(product.id)}
+                >
+                  <div className={cn("relative h-64 sm:h-72", product.bgColor)}>
+                    <img
+                      src={mainImageUrl}
+                      alt={product.name}
+                      className="w-full h-full object-contain p-4 "
+                    />
 
-                  {/* Floating discount tag */}
-                  <div
-                    className={cn(
-                      "absolute top-4 left-3 px-3 py-1 text-sm rounded-full font-bold text-white",
-                      isHotDeal ? "bg-red-500" : "bg-amber-500"
-                    )}
-                  >
-                    {product.offerPercentage}% OFF
-                  </div>
-
-                  {/* Deal name badge */}
-                  <div className="absolute top-4 right-3">
+                    {/* Floating discount tag */}
                     <div
                       className={cn(
-                        "px-3 py-1 rounded-lg font-bold text-white text-[11px]",
-                        isHotDeal
-                          ? "bg-gradient-to-r from-red-600 to-orange-500"
-                          : "bg-black/70"
+                        "absolute top-4 left-3 px-3 py-1 text-sm rounded-full font-bold text-white",
+                        isHotDeal ? "bg-red-500" : "bg-amber-500"
                       )}
                     >
-                      {product.dealName}
+                      {product.offerPercentage}% OFF
                     </div>
-                  </div>
 
-                  {/* Product info overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-black/0 p-4">
-                    <h3 className="text-white font-bold text-lg line-clamp-1">
-                      {product.name}
-                    </h3>
-
-                    <div className="flex items-center mt-2">
-                      <div className="text-white  font-semibold">
-                        ₹{formatPrice(discountedPrice)}
-                      </div>
-                      <div className="text-white/70 line-through ml-2 text-sm">
-                        ₹{formatPrice(product.price)}
+                    {/* Deal name badge */}
+                    <div className="absolute top-4 right-3">
+                      <div
+                        className={cn(
+                          "px-3 py-1 rounded-lg font-bold text-white text-[11px]",
+                          isHotDeal
+                            ? "bg-gradient-to-r from-red-600 to-orange-500"
+                            : "bg-black/70"
+                        )}
+                      >
+                        {product.dealName}
                       </div>
                     </div>
 
-                    {/* Save amount */}
-                    {product.offerPercentage >= 10 && (
-                      <div className="mt-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full w-fit">
-                        Save ₹{formatPrice(product.price - discountedPrice)}
+                    {/* Product info overlay */}
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-black/0 p-4">
+                      <h3 className="text-white font-bold text-lg line-clamp-1">
+                        {product.name}
+                      </h3>
+
+                      <div className="flex items-center mt-2">
+                        <div className="text-white  font-semibold">
+                          ₹{formatPrice(discountedPrice)}
+                        </div>
+                        <div className="text-white/70 line-through ml-2 text-sm">
+                          ₹{formatPrice(product.price)}
+                        </div>
                       </div>
-                    )}
+
+                      {/* Save amount */}
+                      {product.offerPercentage >= 10 && (
+                        <div className="mt-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full w-fit">
+                          Save ₹{formatPrice(product.price - discountedPrice)}
+                        </div>
+                      )}
+                    </div>
                   </div>
+
+                  {/* Hot deal indicator */}
+                  {isHotDeal && (
+                    <div className="absolute top-16 right-0 bg-red-600 text-white px-2 py-1 text-xs font-bold transform rotate-45 translate-x-6 shadow-lg">
+                      <Flame className="h-3 w-3 inline mr-1" />
+                      HOT!
+                    </div>
+                  )}
                 </div>
-
-                {/* Hot deal indicator */}
-                {isHotDeal && (
-                  <div className="absolute top-16 right-0 bg-red-600 text-white px-2 py-1 text-xs font-bold transform rotate-45 translate-x-6 shadow-lg">
-                    <Flame className="h-3 w-3 inline mr-1" />
-                    HOT!
-                  </div>
-                )}
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <h1 className="text-2xl font-bold">
+              Deals not available
+            </h1>
+          )}
         </div>
 
         {/* Right scroll button */}

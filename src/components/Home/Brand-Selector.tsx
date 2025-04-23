@@ -34,10 +34,10 @@ const SellerCard = ({
       onClick={onClick}
       className="
         group relative
-        flex items-center gap-4
+        flex items-center justify-center gap-4
         rounded-xl p-5
-        bg-white dark:bg-gradient-to-r from-gray-900 via-gray-950 to-black
-        border border-gray-300 dark:border-gray-700
+        sm:bg-white sm:dark:bg-gradient-to-r from-gray-900 via-gray-950 to-black
+        sm:border border-gray-300 dark:border-gray-700
         shadow-md  hover:shadow-lg
         transition-all duration-300 ease-in-out hover:scale-[1.01]
         cursor-pointer
@@ -45,7 +45,7 @@ const SellerCard = ({
       "
     >
       {/* Avatar Section */}
-      <div className="relative flex-shrink-0 w-16 h-16 md:w-20 md:h-20">
+      <div className="relative flex-shrink-0 w-20 h-20">
         <Avatar className="w-full h-full rounded-full border-2 border-gray-200 dark:border-gray-600">
           <AvatarImage
             src={logo}
@@ -67,7 +67,7 @@ const SellerCard = ({
       </div>
 
       {/* Seller Info */}
-      <div className="flex flex-col flex-1 min-w-0">
+      <div className=" hidden sm:flex flex-col flex-1 min-w-0">
         <h3 className=" font-semibold text-lg md:text-xl truncate text-gray-900 dark:text-white">
           {name}
         </h3>
@@ -129,7 +129,7 @@ export default function TopSellers() {
           <p className="text-muted-foreground">No sellers found</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4">
           {sellers.map((seller) => (
             <SellerCard
               key={seller.id}
