@@ -282,13 +282,13 @@ export default function ViewProduct() {
 
         {/* Product Details Tab */}
         <TabsContent value="details" className="space-y-4 ">
-          <Card className="shadow-sm border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-slate-900/30 to-primary/10 ">
-            <CardHeader>
+          <Card className="shadow-sm  border-primary/75 bg-primary/5 dark:bg-gradient-to-br from-primary/10 via-slate-900/30 to-primary/10 ">
+            <CardHeader className="p-3 md:p-5">
               <CardTitle className="bg-primary/30  text-primary py-3 px-2 rounded-md">
                 Product Information
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4  ">
+            <CardContent className="space-y-4  p-3 md:p-5 ">
               {/* Grid Layout for Product Details */}
               <div className="grid grid-cols-1 md:grid-cols-2 px-2 gap-4">
                 {/* Product Name - Full width on small screens, 1st column on md */}
@@ -343,7 +343,7 @@ export default function ViewProduct() {
                   {product!.description}
                 </label>
               </div>
-              <hr />
+              <hr className=" border-primary/35" />
               <div className="space-y-4 grid grid-cols ">
                 <Label className="font-semibold text-md bg-primary/30 text-primary py-2 rounded-md px-2">
                   Specifications
@@ -353,13 +353,13 @@ export default function ViewProduct() {
                     (detail: { key: string; value: string }, index: number) => (
                       <div
                         key={index}
-                        className="grid grid-cols-1 md:grid-cols-2 px-2 gap-2"
+                        className="grid grid-cols-1 md:grid-cols-2 px-2 gap-1"
                       >
                         <label className="font-medium  text-md">
                           {detail.key}
                         </label>
                         <div
-                          className="w-full  pl-4 bg-transparent text-accent-foreground/90 font-medium break-words"
+                          className="w-full  bg-transparent text-accent-foreground/80 font-medium break-words"
                         >
                           {detail.value}
                         </div>

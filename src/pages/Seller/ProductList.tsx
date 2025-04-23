@@ -283,10 +283,10 @@ export default function ProductList() {
                             product.images?.[0]?.url || assets.shoppingBoyGif
                           }
                           alt="Product"
-                          className={`w-16 md:w-20  mix-blend-multiply dark:mix-blend-difference rounded-xl`}
+                          className={`w-16 md:w-20  rounded-xl`}
                         />
                       </TableCell>
-                      <TableCell className="truncate max-w-[500px]">
+                      <TableCell className=" truncate max-w-[500px]">
                         {product.name}
                       </TableCell>
                       <TableCell className="whitespace-nowrap text-center">
@@ -365,6 +365,7 @@ export default function ProductList() {
               {/* Previous Button */}
               <PaginationItem>
                 <PaginationPrevious
+              
                   href="#"
                   onClick={() =>
                     setCurrentPage((prev) => Math.max(prev - 1, 1))
@@ -377,11 +378,11 @@ export default function ProductList() {
               {currentPage > 3 && (
                 <>
                   <PaginationItem>
-                    <PaginationLink href="#" onClick={() => setCurrentPage(1)}>
+                    <PaginationLink className="hidden " href="#" onClick={() => setCurrentPage(1)}>
                       1
                     </PaginationLink>
                   </PaginationItem>
-                  {currentPage > 4 && <PaginationItem>...</PaginationItem>}
+                  {currentPage > 2 && <PaginationItem>...</PaginationItem>}
                 </>
               )}
 
@@ -394,6 +395,7 @@ export default function ProductList() {
                 .map((page) => (
                   <PaginationItem key={page}>
                     <PaginationLink
+                    className="hidden"
                       href="#"
                       isActive={currentPage === page}
                       onClick={() => setCurrentPage(page)}
@@ -406,11 +408,12 @@ export default function ProductList() {
               {/* Last Page Button */}
               {currentPage < totalPages - 2 && (
                 <>
-                  {currentPage < totalPages - 3 && (
+                  {currentPage < totalPages - 1 && (
                     <PaginationItem>...</PaginationItem>
                   )}
                   <PaginationItem>
                     <PaginationLink
+                    className="hidden"
                       href="#"
                       onClick={() => setCurrentPage(totalPages)}
                     >

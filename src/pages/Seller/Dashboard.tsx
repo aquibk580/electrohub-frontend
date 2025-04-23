@@ -440,7 +440,7 @@ export default function Dashboard() {
                                 height={48}
                                 className="w-16"
                               />
-                              <div className="text-sm w-56">
+                              <div className="text-sm line-clamp-2 w-56">
                                 {orderItem.product.name}
                               </div>
                             </>
@@ -569,9 +569,10 @@ export default function Dashboard() {
                 </PaginationItem>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                   (page) => (
-                    <PaginationItem key={page}>
+                    <PaginationItem  key={page}>
                       <PaginationLink
                         href="#"
+                        className="hidden md:flex"
                         isActive={currentPage === page}
                         onClick={() => setCurrentPage(page)}
                       >

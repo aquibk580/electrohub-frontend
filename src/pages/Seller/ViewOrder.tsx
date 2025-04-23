@@ -234,7 +234,7 @@ const MainViewOrder = () => {
 
                   {/* Product info */}
                   <div className="w-full place-self-center space-y-2 md:space-y-4">
-                    <h3 className="text-2xl font-semibold text-foreground">
+                    <h3 className="md:text-2xl font-semibold text-foreground">
                       {orderItem.product.name}
                     </h3>
                     <p
@@ -246,18 +246,18 @@ const MainViewOrder = () => {
 
                     <div className="flex justify-between px-1 ">
                       <div className="flex items-center">
-                        <span className="text-accent-foreground/80 mr-1">
+                        <span className="text-accent-foreground/80 text-sm mr-1">
                           Date:
                         </span>
-                        <span className="font-medium whitespace-nowrap">
+                        <span className="font-medium whitespace-nowrap text-sm">
                           {formatDate(orderItem.createdAt)}
                         </span>
                       </div>
                       <div className="flex items-center">
-                        <span className="text-accent-foreground/80 mr-1">
+                        <span className="text-accent-foreground/80 text-sm mr-1">
                           Price:
                         </span>
-                        <span className="font-medium">
+                        <span className="font-medium text-sm">
                           ₹{" "}
                           {formatPrice(
                             orderItem.product.price -
@@ -340,7 +340,7 @@ const MainViewOrder = () => {
                 </h3>
               </div>
               {user ? (
-                <div className="space-y-3">
+                <div className="space-y-3 text-[16px] md:text-md lg:text-lg">
                   <div className="flex">
                     <span className="font-medium min-w-[80px]">Name:</span>
                     <span className="text-accent-foreground/85">

@@ -66,7 +66,7 @@ export default function SellerLayout() {
           ]}
         ></Helmet>
 
-        <div className=" p-1.5 md:p-6 bg-gray-50/15  h-[1000svh] dark:bg-muted/15">
+        <div className=" p-1.5 md:p-3.5 bg-gray-50/15  h-[1000svh] dark:bg-muted/15">
           <Outlet />
         </div>
       </MainNav>
