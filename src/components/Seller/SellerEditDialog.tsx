@@ -40,6 +40,7 @@ export function SellerEditDialog() {
       email: seller?.email || "",
       phone: seller?.phone || "",
       address: seller?.address || "",
+      answer: ".....",
     },
   });
 
@@ -50,6 +51,7 @@ export function SellerEditDialog() {
         email: seller?.email || "",
         phone: seller?.phone || "",
         address: seller?.address || "",
+        answer: ".....",
       });
     }
   }, [open, seller, form]);
@@ -162,6 +164,24 @@ export function SellerEditDialog() {
                   <FormLabel>Company Address</FormLabel>
                   <FormControl>
                     <Textarea {...field} placeholder="Enter company address" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="answer"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Security question</FormLabel>
+                  <FormControl>
+                  <Input
+                      {...field}
+                      type="password"
+                      placeholder="Enter your favourite word"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
