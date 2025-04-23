@@ -110,6 +110,7 @@ const Messages = () => {
 
     return result;
   }, [messages, searchTerm, sortBy, senderTypeFilter]);
+
   const handleDelete = async (id: number) => {
     try {
       const response = await axios.delete(
@@ -134,39 +135,44 @@ const Messages = () => {
   // Enhanced Message Card Component
   const MessageCard = ({ message }: { message: Message }) => (
     <div className="bg-primary/10 border border-primary/55 rounded-xl mb-4 overflow-hidden group">
-      <div className="p-4 flex items-start justify-between">
-        <div className="flex-1 space-y-2">
-          <div className="flex items-center justify-between">
+      <div className="p-2 sm:p-4 flex flex-col items-start justify-between">
+        <div className="flex-1 space-y-2 w-full">
+          {/* Header row with name and trash button */}
+          <div className="flex items-center justify-between w-full">
             <div className="flex items-center space-x-2">
-              <span className="p-1 bg-gradient-to-br from-primary to-blue-900 text-white font-bold px-2.5 rounded-full ">
+              <span className="p-1 bg-gradient-to-br from-primary to-blue-900 text-white font-bold px-2.5 rounded-full">
                 {message.name[0]}
               </span>
-              <h3 className="font-semibold text-lg text-accent-foreground">
+              <h3 className="font-semibold text-base sm:text-lg text-accent-foreground">
                 {message.name}
               </h3>
-              <Badge className="text-[8px] dark:bg-primary/35 text-white">
-                {message.email}
-              </Badge>
             </div>
             <Button
               variant="ghost"
               size="icon"
-              className="text-red-500 hover:bg-red-600 hover:text-white dark:hover:bg-red-700 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
+              className="text-red-500 hover:bg-red-600 hover:text-white dark:hover:bg-red-700 rounded-xl sm:opacity-0 group-hover:opacity-100 transition-opacity"
               onClick={() => handleDelete(message.id)}
             >
-              <Trash2 size={18} />
+              <Trash2 size={16} className="sm:size-18" />
             </Button>
           </div>
-
+          
+          {/* Email badge - responsive positioning */}
+          <Badge className="text-[8px] dark:bg-primary/35 text-white mb-1">
+            {message.email}
+          </Badge>
+  
+          {/* Content area */}
           <div className="space-y-1">
-            <p className="font-medium text-gray-700 dark:text-slate-300">
+            <p className="font-medium text-gray-700 dark:text-slate-300 text-sm sm:text-base">
               {message.subject}
             </p>
-            <p className="text-sm text-gray-500  dark:text-gray-300 line-clamp-2">
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-300 line-clamp-2">
               {message.message}
             </p>
           </div>
-
+  
+          {/* Timestamp */}
           <div className="flex items-center justify-between text-xs text-gray-400">
             <span>{new Date(message.createdAt).toLocaleString()}</span>
           </div>
@@ -251,8 +257,8 @@ const Messages = () => {
                           {senderTypeFilter === "all"
                             ? "All"
                             : senderTypeFilter === "User"
-                            ? "User"
-                            : "Seller"}
+                              ? "User"
+                              : "Seller"}
                         </span>
                       </div>
                     </SelectValue>
@@ -278,8 +284,8 @@ const Messages = () => {
                           {sortBy === "default"
                             ? "Default"
                             : sortBy === "newest"
-                            ? "Newest"
-                            : "Oldest"}
+                              ? "Newest"
+                              : "Oldest"}
                         </span>
                       </div>
                     </SelectValue>
@@ -299,7 +305,7 @@ const Messages = () => {
               </div>
             </div>
 
-            <ScrollArea className="h-[500px] pr-4">
+            <ScrollArea className="h-[500px] pr-4 no-scrollbar">
               <div className="space-y-4">
                 {isLoading ? (
                   <div className="flex flex-col justify-center items-center h-[300px]">
