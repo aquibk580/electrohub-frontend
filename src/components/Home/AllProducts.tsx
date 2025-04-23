@@ -1,21 +1,29 @@
-import type React from "react"
-
-import { useState, useCallback, useMemo } from "react"
-import { Loader2, Filter } from "lucide-react"
-import type { Category, Product } from "../../types/entityTypes"
-import ProductCard from "./ProductCard"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import type React from "react";
+import { useState, useCallback, useMemo } from "react";
+import { Loader2, Filter } from "lucide-react";
+import type { Category, Product } from "../../types/entityTypes";
+import ProductCard from "./ProductCard";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 interface AllProductsProps {
-  products: Product[]
-  categories: Category[]
-  wishlist: Set<number>
-  setWishlist: React.Dispatch<React.SetStateAction<Set<number>>>
-  onLoadMore: (nextPage: number) => Promise<boolean>
-  onCategoryChange: (category: string) => Promise<boolean>
-  hasMore: boolean
-  currentPage: number
+  products: Product[];
+  categories: Category[];
+  wishlist: Set<number>;
+  setWishlist: React.Dispatch<React.SetStateAction<Set<number>>>;
+  onLoadMore: (nextPage: number) => Promise<boolean>;
+  onCategoryChange: (category: string) => Promise<boolean>;
+  hasMore: boolean;
+  currentPage: number;
+  category: string
+  setCategory: React.Dispatch<React.SetStateAction<string>>
 }
 
 const AllProducts = ({
@@ -27,41 +35,44 @@ const AllProducts = ({
   onCategoryChange,
   hasMore,
   currentPage,
+  category,
+  setCategory
 }: AllProductsProps) => {
-  const [loadingMore, setLoadingMore] = useState(false)
-  const [category, setCategory] = useState<string>("All")
-  const [categoryLoading, setCategoryLoading] = useState(false)
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [categoryLoading, setCategoryLoading] = useState(false);
 
   const loadMoreProducts = async () => {
-    if (!hasMore || loadingMore) return
-    setLoadingMore(true)
+    if (!hasMore || loadingMore) return;
+    setLoadingMore(true);
 
     try {
-      await onLoadMore(currentPage + 1)
+      await onLoadMore(currentPage + 1);
     } finally {
-      setLoadingMore(false)
+      setLoadingMore(false);
     }
-  }
+  };
 
   const handleCategoryChange = useCallback(
     async (selectedCategory: string) => {
-      if (category === selectedCategory) return
+      if (category === selectedCategory) return;
 
-      setCategoryLoading(true)
-      setCategory(selectedCategory)
+      setCategoryLoading(true);
 
       try {
-        await onCategoryChange(selectedCategory)
+        const success = await onCategoryChange(selectedCategory);
+        if (success) {
+          setCategory(selectedCategory);
+        }
       } finally {
-        setCategoryLoading(false)
+        setCategoryLoading(false);
       }
     },
-    [category, onCategoryChange],
-  )
+    [category, onCategoryChange]
+  );
 
   const filteredProducts = useMemo(() => {
-    return products
-  }, [products])
+    return products;
+  }, [products]);
 
   return (
     <>
@@ -74,12 +85,19 @@ const AllProducts = ({
             <div className="block md:hidden">
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="outline" className="border-primary rounded-xl" size="sm">
+                  <Button
+                    variant="outline"
+                    className="border-primary rounded-xl"
+                    size="sm"
+                  >
                     <Filter className="h-4 w-4 mr-2" />
                     Filter
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="dark:bg-black/30 backdrop-blur-3xl">
+                <SheetContent
+                  side="right"
+                  className="dark:bg-black/30 backdrop-blur-3xl"
+                >
                   <SheetHeader>
                     <SheetTitle>Categories</SheetTitle>
                     <SheetDescription className="text-accent-foreground/85">
@@ -152,12 +170,21 @@ const AllProducts = ({
               ))
             ) : filteredProducts.length > 0 ? (
               filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} wishlist={wishlist} setWishlist={setWishlist} />
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  wishlist={wishlist}
+                  setWishlist={setWishlist}
+                />
               ))
             ) : (
               <div className="col-span-full py-12 text-center">
-                <h1 className="text-2xl font-semibold text-foreground">No products found for this category</h1>
-                <p className="mt-2 text-muted-foreground">Try selecting a different category</p>
+                <h1 className="text-2xl font-semibold text-foreground">
+                  No products found for this category
+                </h1>
+                <p className="mt-2 text-muted-foreground">
+                  Try selecting a different category
+                </p>
               </div>
             )}
           </div>
@@ -186,7 +213,7 @@ const AllProducts = ({
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default AllProducts
+export default AllProducts;

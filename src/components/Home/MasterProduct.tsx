@@ -17,6 +17,7 @@ const PRODUCTS_PER_PAGE = 12;
 
 const MasterProduct = () => {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [category, setCategory] = useState<string>("All");
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [wishlist, setWishlist] = useState<Set<number>>(new Set());
@@ -202,6 +203,8 @@ const MasterProduct = () => {
         onCategoryChange={fetchProductsByCategory}
         hasMore={hasMore}
         currentPage={page}
+        category={category}
+        setCategory={setCategory}
       />
       <Separator className="border" />
       {/* Top Deals */}
