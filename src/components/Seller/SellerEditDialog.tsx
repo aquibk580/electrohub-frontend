@@ -171,7 +171,7 @@ export function SellerEditDialog() {
             <DialogFooter className="mt-5">
               <Button
                 type="submit"
-                className="w-full bg-green-800 hover:bg-green-900 text-white py-2 rounded-lg"
+                className="w-full bg-primary/60 hover:bg-primary/80 text-white py-2 rounded-lg"
                 disabled={isSaving}
               >
                 {isSaving ? "Saving..." : "Save Changes"}

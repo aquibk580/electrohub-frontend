@@ -272,7 +272,7 @@ export default function Profile() {
                 </span>
                 +91 {seller!.phone}
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-start gap-2">
                 <span className="text-muted-foreground">
                   <Building2 />
                 </span>
