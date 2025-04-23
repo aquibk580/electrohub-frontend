@@ -26,6 +26,7 @@ import type { AppDispatch, RootState } from "@/redux/store";
 import axios from "@/lib/axios";
 import { setSeller } from "@/redux/slices/seller";
 import { sellerSchema, type SellerFormData } from "./FormSchema";
+import { toast } from "react-toastify";
 
 export function SellerEditDialog() {
   const dispatch = useDispatch<AppDispatch>();
@@ -71,6 +72,10 @@ export function SellerEditDialog() {
             ...response.data.seller,
           })
         );
+        toast.success("Profile updated successfully", {
+          position: "top-center",
+          theme: "dark",
+        });
         setOpen(false);
       }
     } catch (error) {
@@ -177,7 +182,7 @@ export function SellerEditDialog() {
                 <FormItem>
                   <FormLabel>Security question</FormLabel>
                   <FormControl>
-                  <Input
+                    <Input
                       {...field}
                       type="password"
                       placeholder="Enter your favourite word"
