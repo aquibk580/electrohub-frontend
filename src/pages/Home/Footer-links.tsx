@@ -67,69 +67,11 @@ export default function InfoPage() {
         <title>{renderTitle()}</title>
         <meta name="description" content="Powering Your Tech Life!" />
       </Helmet>
-      {/* <header className="sticky top-0 z-10 border-b bg-background rounded-lg">
-        <div className="container flex h-16 mx-5  items-center justify-between py-4">
-          <h1 className="text-2xl font-bold">{renderTitle()}</h1>
-        </div>
-      </header> */}
 
       <main className="  overflow">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full ">
           <div className="flex flex-col md:flex-row gap-6">
-            {/* <div className="md:w-1/4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Information</CardTitle>
-                  <CardDescription>Browse different sections</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <TabsList className="flex flex-col h-auto items-start justify-start display:none">
-                    <TabsTrigger value="warranty-information" className="w-full justify-start">
-                      Warranty Information
-                    </TabsTrigger>
-                    <TabsTrigger value="privacy-policy" className="w-full justify-start">
-                      Privacy Policy
-                    </TabsTrigger>
-                    <TabsTrigger value="terms-of-service" className="w-full justify-start">
-                      Terms of Service
-                    </TabsTrigger>
-                    <TabsTrigger value="financing-options" className="w-full justify-start">
-                      Financing Options
-                    </TabsTrigger>
-                    <TabsTrigger value="faqs" className="w-full justify-start">
-                      FAQs
-                    </TabsTrigger>
-                    <TabsTrigger value="careers" className="w-full justify-start">
-                      Careers
-                    </TabsTrigger>
-                    <TabsTrigger value="news-blog" className="w-full justify-start">
-                      News & Blog
-                    </TabsTrigger>
-                    <TabsTrigger value="help-center" className="w-full justify-start">
-                      Help
-                    </TabsTrigger>
-                    <TabsTrigger value="press-center" className="w-full justify-start">
-                      Press Center
-                    </TabsTrigger>
-                    <TabsTrigger value="locations" className="w-full justify-start">
-                      Shop By Location
-                    </TabsTrigger>
-                    <TabsTrigger value="brands" className="w-full justify-start">
-                      ElectroHub Brands
-                    </TabsTrigger>
-                    <TabsTrigger value="affiliate" className="w-full justify-start">
-                      Affiliate & Partners
-                    </TabsTrigger>
-                    <TabsTrigger value="ideas" className="w-full justify-start">
-                      Ideas & Guides
-                    </TabsTrigger>
-                  </TabsList>
-                </CardContent>
-              </Card>
-            </div> */}
-
             <div className=" w-full">
-
               <Card>
                 <CardContent className="pt-6">
                   <TabsContent value="warranty-information" className="mt-0">
