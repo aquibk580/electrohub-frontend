@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import { cn, formatDate } from "@/lib/utils";
 import { ViewOrderSkeleton } from "@/components/Seller/Skeletons";
 import { Helmet } from "react-helmet-async";
+import { formatPrice } from "@/utils/FormatPrice";
 
 interface Image {
   url: string;
@@ -54,6 +55,9 @@ export default function ViewProduct() {
   const [averageRating, setAverageRating] = useState(0);
   const [detailsArray, setDetailsArray] = useState([]);
   const [product, setProduct] = useState<Product | null>(null);
+  const [totalUnitsSold, setTotalUnitsSold] = useState(
+    Math.floor(Math.random() * 50) + 1
+  );
 
   const handleDelete = async (id: number) => {
     setIsDeleting(true);
@@ -83,7 +87,8 @@ export default function ViewProduct() {
     setIsDeleting(true);
     try {
       const response = await axios.delete(
-        `${import.meta.env.VITE_API_URL
+        `${
+          import.meta.env.VITE_API_URL
         }/api/seller/products/del-permanent/${id}`
       );
       if (response.status === 200) {
@@ -108,7 +113,8 @@ export default function ViewProduct() {
     const getProduct = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL
+          `${
+            import.meta.env.VITE_API_URL
           }/api/seller/products/single-product/${id}`
         );
         if (response.status === 200) {
@@ -129,9 +135,9 @@ export default function ViewProduct() {
       setAverageRating(
         product!.reviews.length > 0
           ? product!.reviews.reduce(
-            (acc: number, review: Review) => acc + review.rating,
-            0
-          ) / product!.reviews.length
+              (acc: number, review: Review) => acc + review.rating,
+              0
+            ) / product!.reviews.length
           : 0.0
       );
 
@@ -152,15 +158,14 @@ export default function ViewProduct() {
             {
               name: "og:url",
               property: "og:url",
-              content: `${import.meta.env.VITE_APP_URL}/seller/dashboard/products/view-product`,
-            }
-          ]}></Helmet>
+              content: `${
+                import.meta.env.VITE_APP_URL
+              }/seller/dashboard/products/view-product`,
+            },
+          ]}
+        ></Helmet>
         <ViewOrderSkeleton />
       </>
-      // <div className="flex flex-col justify-center items-center h-screen">
-      //   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-      //   <p className="text-muted-foreground">Loading Product Details...</p>
-      // </div>
     );
   }
 
@@ -232,8 +237,17 @@ export default function ViewProduct() {
           <CardContent className="pt-6 ">
             <div className="flex flex-wrap-reverse gap-2 justify-between items-center">
               <div>
-                <p className="text-sm font-medium text-accent-foreground/90">Total Sales</p>
-                <h3 className="text-2xl font-bold">₹2,45,000</h3>
+                <p className="text-sm font-medium text-accent-foreground/90">
+                  Total Sales
+                </p>
+                <h3 className="text-2xl font-bold">
+                  ₹
+                  {formatPrice(
+                    (product!.price -
+                      (product!.price / 100) * product!.offerPercentage) *
+                      totalUnitsSold
+                  )}
+                </h3>
               </div>
               <div className="p-2 bg-green-100 dark:bg-green-950 rounded-full">
                 <TrendingUp className="h-8 w-8 lg:h-10 lg:w-10 text-green-600" />
@@ -248,7 +262,7 @@ export default function ViewProduct() {
                 <p className="text-sm font-medium text-accent-foreground/90">
                   Total Units Sold
                 </p>
-                <h3 className="text-2xl font-bold">157</h3>
+                <h3 className="text-2xl font-bold">{totalUnitsSold}</h3>
               </div>
               <div className="p-2 bg-blue-100 dark:bg-blue-950 rounded-full">
                 <ShoppingBag className="h-8 w-8 lg:h-10 lg:w-10 text-blue-600" />
@@ -275,9 +289,27 @@ export default function ViewProduct() {
 
       <Tabs defaultValue="details" className="w-full space-y-4">
         <TabsList className="grid w-full rounded-xl grid-cols-3 space-x-1 ">
-          <TabsTrigger className="hover:bg-primary/15 rounded-lg" value="details"> Details </TabsTrigger>
-          <TabsTrigger className="hover:bg-primary/15 rounded-lg" value="images"> Images </TabsTrigger>
-          <TabsTrigger className="hover:bg-primary/15 rounded-lg" value="reviews"> Reviews </TabsTrigger>
+          <TabsTrigger
+            className="hover:bg-primary/15 rounded-lg"
+            value="details"
+          >
+            {" "}
+            Details{" "}
+          </TabsTrigger>
+          <TabsTrigger
+            className="hover:bg-primary/15 rounded-lg"
+            value="images"
+          >
+            {" "}
+            Images{" "}
+          </TabsTrigger>
+          <TabsTrigger
+            className="hover:bg-primary/15 rounded-lg"
+            value="reviews"
+          >
+            {" "}
+            Reviews{" "}
+          </TabsTrigger>
         </TabsList>
 
         {/* Product Details Tab */}
@@ -305,7 +337,10 @@ export default function ViewProduct() {
                     <Label htmlFor="price">Price (₹)</Label>
                     <input
                       id="price"
-                      value={product!.price}
+                      value={formatPrice(
+                        product!.price -
+                          (product!.price / 100) * product!.offerPercentage
+                      )}
                       disabled
                       className="outline-none bg-transparent  font-medium"
                     />
@@ -358,13 +393,9 @@ export default function ViewProduct() {
                         <label className="font-medium  text-md">
                           {detail.key}
                         </label>
-                        <div
-                          className="w-full  bg-transparent text-accent-foreground/80 font-medium break-words"
-                        >
+                        <div className="w-full  bg-transparent text-accent-foreground/80 font-medium break-words">
                           {detail.value}
                         </div>
-
-
                       </div>
                     )
                   )
@@ -411,17 +442,18 @@ export default function ViewProduct() {
               <div className="flex justify-between items-center">
                 <CardTitle className="text-xl">Customer Reviews</CardTitle>
                 <div className="flex items-center gap-2">
-                <div className="flex space-x-1">
-                {[...Array(5)].map((_, i) => (
-                                  <Star
-                                    key={i}
-                                    className={`h-3 w-3 md:h-5 md:w-5 ${i < averageRating
-                                      ? "fill-yellow-400 text-yellow-400"
-                                      : "text-gray-300 fill-current"
-                                      }`}
-                                  />
-                                ))}
-                </div>
+                  <div className="flex space-x-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`h-3 w-3 md:h-5 md:w-5 ${
+                          i < averageRating
+                            ? "fill-yellow-400 text-yellow-400"
+                            : "text-gray-300 fill-current"
+                        }`}
+                      />
+                    ))}
+                  </div>
                   <span className="text-sm md:text-xl font-semibold">
                     {averageRating}.0/5
                   </span>
@@ -435,12 +467,14 @@ export default function ViewProduct() {
               <div className="space-y-4">
                 {product!.reviews.length > 0 ? (
                   product!.reviews.map((review: Review) => (
-                    <Card className=" border-none shadow-none dark:border-primary/55  rounded-xl bg-primary/10" key={review.id}>
+                    <Card
+                      className=" border-none shadow-none dark:border-primary/55  rounded-xl bg-primary/10"
+                      key={review.id}
+                    >
                       <CardContent className="pt-4">
                         <div className="flex  ">
                           <div className=" w-full flex flex-col md:flex-row md:justify-between ">
                             <div className="flex items-center  gap-2">
-                              
                               <span className="bg-gradient-to-br from-primary/60 to-blue-800 p-1.5 text-center text-white  px-2 font-semibold rounded-full">
                                 {review.user.name
                                   .split(" ")
@@ -451,29 +485,33 @@ export default function ViewProduct() {
                               <div className="font-semibold whitespace-nowrap">
                                 {review.user.name}
                               </div>
-                              </div>
-                              <div className="space-x-1 ml-11 -mt-1.5 md:-mt-0 md:ml-0 flex items-center">
+                            </div>
+                            <div className="space-x-1 ml-11 -mt-1.5 md:-mt-0 md:ml-0 flex items-center">
                               <div className="flex gap-[3px] md:space-x-1">
                                 {[...Array(5)].map((_, i) => (
                                   <Star
                                     key={i}
-                                    className={`h-3 w-3 md:h-4 md:w-4 ${i < review.rating
-                                      ? "fill-yellow-400 text-yellow-400"
-                                      : "text-gray-300 fill-current"
-                                      }`}
+                                    className={`h-3 w-3 md:h-4 md:w-4 ${
+                                      i < review.rating
+                                        ? "fill-yellow-400 text-yellow-400"
+                                        : "text-gray-300 fill-current"
+                                    }`}
                                   />
                                 ))}
                               </div>
-                              <span className="font-medium text-sm">{review.rating}.0/5</span>
-                              </div>
-                            
+                              <span className="font-medium text-sm">
+                                {review.rating}.0/5
+                              </span>
+                            </div>
                           </div>
                         </div>
-                        <p className="mt-1 text-accent-foreground/95">{review.content}</p>
+                        <p className="mt-1 text-accent-foreground/95">
+                          {review.content}
+                        </p>
                         <div className="text-sm mt-1 flex items-center space-x-1 text-accent-foreground/85">
-                          <Calendar className="w-4 h-4"/>
-                            <span>{formatDate(review.createdAt)}</span>
-                            </div>
+                          <Calendar className="w-4 h-4" />
+                          <span>{formatDate(review.createdAt)}</span>
+                        </div>
                       </CardContent>
                     </Card>
                   ))
