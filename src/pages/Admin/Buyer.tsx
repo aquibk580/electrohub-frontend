@@ -17,7 +17,7 @@ const Buyer = () => {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
   const isMobile = useMediaQuery({ maxWidth: 768 });
-  const [itemsPerPage, setItemsPerPage] = useState(7);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const searchParams = new URLSearchParams(location.search);
   const initialPage = parseInt(searchParams.get("page") || "1");

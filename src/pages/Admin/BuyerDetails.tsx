@@ -138,12 +138,12 @@ const BuyerDetails = () => {
       </Card>
 
       {/* Main Content */}
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="orders">Orders</TabsTrigger>
-          <TabsTrigger value="reviews">Reviews</TabsTrigger>
-          <TabsTrigger value="payment">Payment Details</TabsTrigger>
+      <Tabs defaultValue="overview" className="space-y-4 w-full ">
+        <TabsList className="w-full flex justify-between overflow-y-hidden hide-scrollbar">
+          <TabsTrigger value="overview" className="w-[340px]">Overview</TabsTrigger>
+          <TabsTrigger value="orders" className="w-[340px]">Orders</TabsTrigger>
+          <TabsTrigger value="reviews" className="w-[340px]">Reviews</TabsTrigger>
+          <TabsTrigger value="payment" className="w-[340px]">Payment Details</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -224,16 +224,16 @@ const BuyerDetails = () => {
         </TabsContent>
 
         <TabsContent value="orders">
-          <Card className="border-primary/75 bg-primary/5  ">
+          <Card className="border-primary/75 bg-primary/5 ">
             <CardHeader>
               <CardTitle className="text-xl">Purchase History</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="overflow-x- hide-scrollbar ">
               {orderItems.length > 0 ? (
-                <Table>
+                <Table className="hide-scrollbar " >
                   <TableHeader>
-                    <TableRow className="border-b-accent-foreground">
-                      <TableHead className="text-center text-accent-foreground">
+                    <TableRow className="border-b-accent-foreground overflow-x-auto">
+                      <TableHead className="text-center whitespace-nowrap text-accent-foreground">
                         Order ID
                       </TableHead>
                       <TableHead className="text-center text-accent-foreground">
@@ -256,15 +256,15 @@ const BuyerDetails = () => {
                         className="border-b-accent-foreground/35 hover:bg-primary/10"
                         key={orderItem.id}
                       >
-                        <TableCell className="text-center text-accent-foreground">
+                        <TableCell className="text-center translate text-accent-foreground">
                           {orderItem.id}
                         </TableCell>
-                        <TableCell className="text-center text-accent-foreground">
+                        <TableCell className="text-center whitespace-nowrap text-accent-foreground">
                           {formatDate(orderItem.createdAt)}
                         </TableCell>
-                        <TableCell className="text-center text-accent-foreground">
+                        <TableCell className="text-center whitespace-nowrap  text-accent-foreground">
                           {orderItem.quantity}x{" "}
-                          {orderItem?.product?.name.substring(0, 60) ||
+                          {orderItem?.product?.name.substring(0, 35) ||
                             "Unknown Product"}
                         </TableCell>
                         {orderItem.product ? (
@@ -396,12 +396,12 @@ const BuyerDetails = () => {
             <CardHeader>
               <CardTitle className="text-xl">Recent Transactions</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="hide-scrollbar ">
               {user!.orders!.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow className="border-b-accent-foreground">
-                      <TableHead className="text-center text-accent-foreground ">
+                      <TableHead className="text-center whitespace-nowrap text-accent-foreground ">
                         Transaction ID
                       </TableHead>
                       <TableHead className="text-center text-accent-foreground ">
@@ -424,7 +424,7 @@ const BuyerDetails = () => {
                         <TableCell className="text-center">
                           {order.id}
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="text-center whitespace-nowrap">
                           {formatDate(order.createdAt)}
                         </TableCell>
                         <TableCell className="text-center">
