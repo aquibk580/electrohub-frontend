@@ -46,7 +46,6 @@ const ReviewForm = ({ productId }: { productId: number }) => {
 
   const onSubmit = async (data: ReviewFormData) => {
     try {
-      console.log(data);
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/user/products/${productId}/review`,
         data

@@ -10,5 +10,3 @@ const formatDate: FormatDate = (isoString) => {
   return `${day}/${month}/${year}`;
 };
 
-const formattedDate = formatDate("2025-02-14T15:49:28.815Z");
-console.log(formattedDate); // Output: 14/02/2025

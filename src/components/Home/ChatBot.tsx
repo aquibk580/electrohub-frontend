@@ -48,7 +48,6 @@ export function ChatBot({
           try {
             // Listen for messages from the bot
             clientRef.current.on("message", (message: any) => {
-              // console.log("Raw message from Botpress:", message)
 
               // Extract the message content properly based on the message structure
               let content = ""

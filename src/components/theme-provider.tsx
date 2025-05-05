@@ -255,7 +255,6 @@ const createSyncMechanism = (storageKey: string) => {
   return {
     channel: null,
     broadcast: (type: "theme" | "color", value: string) => {
-      // Use a timestamp to ensure the storage event fires even if the same value is set
       localStorage.setItem(
         `${storageKey}-${type}-sync`,
         `${value}:${Date.now()}`

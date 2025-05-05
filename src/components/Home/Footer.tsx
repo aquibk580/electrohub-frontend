@@ -56,7 +56,6 @@ export default function Footer({ setActiveTab }: FooterProps) {
   const handleClick = (tab: string) => {
     setActiveTab?.(tab);
     navigate(`/info/${tab}`);
-    console.log("clicked");
   };
   const toggleSection = (section: string) => {
     setOpenSections((prev) => ({

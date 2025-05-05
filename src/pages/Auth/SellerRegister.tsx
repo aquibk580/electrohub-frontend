@@ -44,7 +44,6 @@ export default function SellerRegister() {
     data: SellerRegFormSchemaType
   ) => {
     setIsSubmitting(true);
-    console.log(data);
     const formData = new FormData();
     formData.append("pfp", data.pfp as File);
     formData.append("name", data.name);

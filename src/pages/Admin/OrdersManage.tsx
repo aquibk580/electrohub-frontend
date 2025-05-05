@@ -33,7 +33,6 @@ const OrderDetails = () => {
         );
         if (response.status === 200) {
           setOrderItem(response.data);
-          console.log(response.data);
         }
       } catch (error) {
         console.log(error);
@@ -195,7 +194,7 @@ const OrderDetails = () => {
             </div>
           </div>
 
-          {orderItem?.product.seller ? (
+          {orderItem?.product?.seller ? (
             <div className="space-y-2">
               <h3 className="font-medium">Seller Information</h3>
               <div className="flex items-center space-x-2">

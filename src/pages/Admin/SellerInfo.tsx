@@ -47,7 +47,6 @@ const SellerDetails = () => {
     };
 
     getSellerData();
-    console.log(seller);
   }, []);
 
   const initials = seller?.name

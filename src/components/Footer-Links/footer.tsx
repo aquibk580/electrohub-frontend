@@ -10,9 +10,8 @@ export default function TFooter({ activeTab, setActiveTab }: FooterProps) {
   const navigate = useNavigate();
 
   const handleClick = (tab: string) => {
-    setActiveTab?.(tab); 
+    setActiveTab?.(tab);
     navigate(`/user/info/${tab}`);
-    console.log("clicked");
   };
   return (
     <footer className="border-t bg-muted">
@@ -24,7 +23,9 @@ export default function TFooter({ activeTab, setActiveTab }: FooterProps) {
               <li>
                 <Button
                   onClick={() => handleClick("warranty")}
-                  className={`text-sm hover:underline ${activeTab === "warranty" ? "font-medium" : ""}`}
+                  className={`text-sm hover:underline ${
+                    activeTab === "warranty" ? "font-medium" : ""
+                  }`}
                 >
                   Warranty Information
                 </Button>
@@ -32,7 +33,9 @@ export default function TFooter({ activeTab, setActiveTab }: FooterProps) {
               <li>
                 <Button
                   onClick={() => handleClick("privacy")}
-                  className={`text-sm hover:underline ${activeTab === "privacy" ? "font-medium" : ""}`}
+                  className={`text-sm hover:underline ${
+                    activeTab === "privacy" ? "font-medium" : ""
+                  }`}
                 >
                   Privacy Policy
                 </Button>
@@ -40,7 +43,9 @@ export default function TFooter({ activeTab, setActiveTab }: FooterProps) {
               <li>
                 <Button
                   onClick={() => handleClick("terms")}
-                  className={`text-sm hover:underline ${activeTab === "terms" ? "font-medium" : ""}`}
+                  className={`text-sm hover:underline ${
+                    activeTab === "terms" ? "font-medium" : ""
+                  }`}
                 >
                   Terms of Service
                 </Button>
@@ -48,7 +53,9 @@ export default function TFooter({ activeTab, setActiveTab }: FooterProps) {
               <li>
                 <Button
                   onClick={() => handleClick("financing")}
-                  className={`text-sm hover:underline ${activeTab === "financing" ? "font-medium" : ""}`}
+                  className={`text-sm hover:underline ${
+                    activeTab === "financing" ? "font-medium" : ""
+                  }`}
                 >
                   Financing Options
                 </Button>
@@ -61,7 +68,9 @@ export default function TFooter({ activeTab, setActiveTab }: FooterProps) {
               <li>
                 <Button
                   onClick={() => handleClick("faqs")}
-                  className={`text-sm hover:underline ${activeTab === "faqs" ? "font-medium" : ""}`}
+                  className={`text-sm hover:underline ${
+                    activeTab === "faqs" ? "font-medium" : ""
+                  }`}
                 >
                   FAQs
                 </Button>
@@ -69,7 +78,9 @@ export default function TFooter({ activeTab, setActiveTab }: FooterProps) {
               <li>
                 <Button
                   onClick={() => handleClick("careers")}
-                  className={`text-sm hover:underline ${activeTab === "careers" ? "font-medium" : ""}`}
+                  className={`text-sm hover:underline ${
+                    activeTab === "careers" ? "font-medium" : ""
+                  }`}
                 >
                   Careers
                 </Button>
@@ -77,7 +88,9 @@ export default function TFooter({ activeTab, setActiveTab }: FooterProps) {
               <li>
                 <Button
                   onClick={() => handleClick("news")}
-                  className={`text-sm hover:underline ${activeTab === "news" ? "font-medium" : ""}`}
+                  className={`text-sm hover:underline ${
+                    activeTab === "news" ? "font-medium" : ""
+                  }`}
                 >
                   News & Blog
                 </Button>
@@ -85,7 +98,9 @@ export default function TFooter({ activeTab, setActiveTab }: FooterProps) {
               <li>
                 <Button
                   onClick={() => handleClick("help")}
-                  className={`text-sm hover:underline ${activeTab === "help" ? "font-medium" : ""}`}
+                  className={`text-sm hover:underline ${
+                    activeTab === "help" ? "font-medium" : ""
+                  }`}
                 >
                   Help
                 </Button>
@@ -98,7 +113,9 @@ export default function TFooter({ activeTab, setActiveTab }: FooterProps) {
               <li>
                 <Button
                   onClick={() => handleClick("press")}
-                  className={`text-sm hover:underline ${activeTab === "press" ? "font-medium" : ""}`}
+                  className={`text-sm hover:underline ${
+                    activeTab === "press" ? "font-medium" : ""
+                  }`}
                 >
                   Press Center
                 </Button>
@@ -106,7 +123,9 @@ export default function TFooter({ activeTab, setActiveTab }: FooterProps) {
               <li>
                 <Button
                   onClick={() => handleClick("locations")}
-                  className={`text-sm hover:underline ${activeTab === "locations" ? "font-medium" : ""}`}
+                  className={`text-sm hover:underline ${
+                    activeTab === "locations" ? "font-medium" : ""
+                  }`}
                 >
                   Shop By Location
                 </Button>
@@ -114,7 +133,9 @@ export default function TFooter({ activeTab, setActiveTab }: FooterProps) {
               <li>
                 <Button
                   onClick={() => handleClick("brands")}
-                  className={`text-sm hover:underline ${activeTab === "brands" ? "font-medium" : ""}`}
+                  className={`text-sm hover:underline ${
+                    activeTab === "brands" ? "font-medium" : ""
+                  }`}
                 >
                   ElectroHub Brands
                 </Button>
@@ -127,7 +148,9 @@ export default function TFooter({ activeTab, setActiveTab }: FooterProps) {
               <li>
                 <Button
                   onClick={() => handleClick("affiliate")}
-                  className={`text-sm hover:underline ${activeTab === "affiliate" ? "font-medium" : ""}`}
+                  className={`text-sm hover:underline ${
+                    activeTab === "affiliate" ? "font-medium" : ""
+                  }`}
                 >
                   Affiliate & Partners
                 </Button>
@@ -135,7 +158,9 @@ export default function TFooter({ activeTab, setActiveTab }: FooterProps) {
               <li>
                 <Button
                   onClick={() => handleClick("ideas")}
-                  className={`text-sm hover:underline ${activeTab === "ideas" ? "font-medium" : ""}`}
+                  className={`text-sm hover:underline ${
+                    activeTab === "ideas" ? "font-medium" : ""
+                  }`}
                 >
                   Ideas & Guides
                 </Button>
@@ -150,6 +175,5 @@ export default function TFooter({ activeTab, setActiveTab }: FooterProps) {
         </div>
       </div>
     </footer>
-  )
+  );
 }
-

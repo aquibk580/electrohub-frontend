@@ -94,7 +94,6 @@ const BuyerDetails = () => {
   if (loading) {
     return <BuyerDetailsSkeleton />;
   }
-  console.log(user);
 
   return (
     <div className="container mx-auto p-4 space-y-6">

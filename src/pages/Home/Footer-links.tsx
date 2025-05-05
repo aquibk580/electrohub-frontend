@@ -24,7 +24,6 @@ export default function InfoPage() {
   useEffect(() => {
     if (section) {
       setActiveTab(section);
-      console.log(section)
     }
   }, [section]);
 
